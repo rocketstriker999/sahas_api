@@ -14,7 +14,10 @@ const sahasAPI = libExpress();
 
 //requests are only acceptable from UI
 //sahasAPI.use(require("./middlewares/device"));
-sahasAPI.use((req, res) => logger.info(`Incoming Request - ${req.method} ${req.url}`));
+sahasAPI.use((req, res, next) => {
+    logger.info(`Incoming Request - ${req.method} ${req.url}`);
+    next();
+});
 
 //allow json request payloads only
 sahasAPI.use(libExpress.json());

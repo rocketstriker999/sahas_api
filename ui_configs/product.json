@@ -1,0 +1,12 @@
+{
+  "navbar_visible": true,
+  "footer_visible": true,
+  "product_primary": {
+    "background_color": "bg-bluegray-900",
+    "visible": true
+  },
+  "product_secondary": {
+    "visible": true,
+    "title": "Product Content"
+  }
+}

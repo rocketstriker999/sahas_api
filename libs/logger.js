@@ -36,6 +36,14 @@ const success = (logStatement) => {
     saveLogs(currentTimeStamp, logStatement);
 };
 
+//print normal statments
+const error = (logStatement) => {
+    const { currentTimeStamp, logDateTime } = getCurrentDateTime();
+    logStatement = `[-]${logDateTime} ERROR -> ${logStatement}`;
+    log(libChalk.red(logStatement));
+    saveLogs(currentTimeStamp, logStatement);
+};
+
 const saveLogs = (currentTimeStamp, logStatement) => {
     if (process.env.SAVE_LOGS) {
         const logFileName = currentTimeStamp.toLocaleDateString("en-GB").split("/").join("-");
@@ -54,4 +62,4 @@ const saveLogs = (currentTimeStamp, logStatement) => {
     }
 };
 
-module.exports = { info, success };
+module.exports = { info, success, error };

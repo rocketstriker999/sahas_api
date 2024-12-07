@@ -1,0 +1,13 @@
+{
+  "navbar_visible": true,
+  "footer_visible": true,
+  "products_search": {
+    "visible": true
+  },
+  "products_list": {
+    "visible": true,
+    "title": "Found Products",
+    "multiple_list_style": true,
+    "items_per_page": 6
+  }
+}

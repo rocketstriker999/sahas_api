@@ -14,7 +14,7 @@
       "visible": true,
       "otp_length": 4,
       "resend_otp_time": 10,
-      "title": "Verify The OTP We have Sent to You"
+      "title": "Verify The OTP We have Sent to "
     }
   }
 }

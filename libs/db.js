@@ -13,23 +13,13 @@ const dbConnectionPool = mysql.createPool({
     queueLimit: 0, // Unlimited number of requests in the queue
 });
 
-// prepareTables(connection)
-//     .then(() => {
-//         logger.success("Tables Ready"); // Always release the connection after operations are done
-//     })
-//     .catch((error) => {
-//         logger.error(`Error while preparing tables: ${error.message}`); // Release connection even on error
-//     })
-//     .finally(() => connection.release());
-
-// Function to prepare tables (async)
-
 function generateDBTables() {
     const createUserTableQuery = [
         `CREATE TABLE IF NOT EXISTS USERS (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(100) NOT NULL,
-            email VARCHAR(100) NOT NULL UNIQUE
+            name VARCHAR(100) NULL,
+            email VARCHAR(100) NOT NULL UNIQUE,
+            otp VARCHAR(100) NOT NULL
           )
         `,
         `CREATE TABLE IF NOT EXISTS PRODUCTS (
@@ -44,11 +34,11 @@ function generateDBTables() {
           )`,
     ];
 
-    return Promise.all(createUserTableQuery.map((query) => executeSQLQuery(query)));
+    return Promise.all(createUserTableQuery.map((query) => executeSQLQueryRaw(query)));
 }
 
 // Utility function to execute SQL queries using promises
-function executeSQLQuery(query) {
+function executeSQLQueryRaw(query) {
     return new Promise((resolve, reject) => {
         dbConnectionPool.getConnection((error, dbConnection) => {
             if (error) {
@@ -68,5 +58,25 @@ function executeSQLQuery(query) {
     });
 }
 
+function executeSQLQueryParameterized(query, parameters) {
+    return new Promise((resolve, reject) => {
+        dbConnectionPool.getConnection((error, dbConnection) => {
+            if (error) {
+                logger.error(`Database Connection Failed ${error.message}`);
+            } else {
+                dbConnection.execute(query, parameters, (error, result) => {
+                    logger.info(`Executing ${query}`);
+                    if (error) {
+                        reject(error); // Reject the promise if the query fails
+                    } else {
+                        resolve(result); // Resolve the promise if the query succeeds
+                    }
+                    dbConnection.release();
+                });
+            }
+        });
+    });
+}
+
 // Export the pool to use in other files
-module.exports = { generateDBTables, executeSQLQuery };
+module.exports = { generateDBTables, executeSQLQueryRaw, executeSQLQueryParameterized };

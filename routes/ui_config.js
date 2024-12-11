@@ -8,7 +8,7 @@ const router = libExpress.Router();
 router.get("/navbar", async (req, res) => {
     try {
         const navbarConfig = await readConfig("navbar");
-        const product_categories = await executeSQLQueryRaw("SELECT * FROM CATEGORIES");
+        const product_categories = await executeSQLQueryRaw("SELECT * FROM PRODUCT_CATEGORIES");
         res.status(200).json({ ...navbarConfig, product_categories });
     } catch (error) {
         logger.error(error);
@@ -42,7 +42,7 @@ router.get("/login", async (req, res) => {
 router.get("/dashboard", async (req, res) => {
     try {
         const dashBoardConfig = await readConfig("dashboard");
-        dashBoardConfig.showcase.product_categories = await executeSQLQueryRaw("SELECT * FROM CATEGORIES");
+        dashBoardConfig.showcase.product_categories = await executeSQLQueryRaw("SELECT * FROM PRODUCT_CATEGORIES");
         res.status(200).json(dashBoardConfig);
     } catch (error) {
         logger.error(error);
@@ -65,7 +65,7 @@ router.get("/product", async (req, res) => {
 router.get("/products", async (req, res) => {
     try {
         const productsConfig = await readConfig("products");
-        productsConfig.products_search.product_categories = await executeSQLQueryRaw("SELECT name FROM CATEGORIES");
+        productsConfig.products_search.product_categories = await executeSQLQueryRaw("SELECT name FROM PRODUCT_CATEGORIES");
         res.status(200).json(productsConfig);
     } catch (error) {
         logger.error(error);

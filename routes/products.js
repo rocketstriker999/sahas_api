@@ -1,21 +1,15 @@
 const libExpress = require("express");
-const libCrypto = require("crypto");
 
 const router = libExpress.Router();
 
 router.get("/list", (req, res) => {
     const products = [
         {
-            product_id: 1,
-            title: "ChatGPT Complete Guide: Learn Generative AI, ChatGPT & More",
-            description:
-                "25+ Generative AI Tools to 10x Business, Productivity, Creativity | Prompt Engineering, ChatGPT, Custom GPTs, Midjourney",
-            language: "English",
-            hero: {
-                image: "https://placehold.co/320x180/green/FFFFFF/png",
-                video: "https://placehold.co/320x180/green/FFFFFF/png",
-            },
-            category: "cat-1",
+            id: 1,
+            title: "ChatGPT Complete Guide: Learn actionable",
+            image: "https://placehold.co/100x100/blue/FFFFFF/png",
+            description: "25+ Generative AI Tools to 10x Business, Productivity, Creativity | Prompt Engineering, ChatGPT, Custom GPTs, Midjourney",
+            image: "https://placehold.co/320x180/green/FFFFFF/png",
             price: {
                 discounted: 2000,
                 original: 2200,
@@ -23,10 +17,20 @@ router.get("/list", (req, res) => {
             },
         },
         {
+            product_id: 1,
+            title: "ChatGPT Complete Guide: Learn Generative AI, ChatGPT & More",
+            description: "25+ Generative AI Tools to 10x Business, Productivity, Creativity | Prompt Engineering, ChatGPT, Custom GPTs, Midjourney",
+            language: "English",
+            hero: {
+                image: "https://placehold.co/320x180/green/FFFFFF/png",
+                video: "https://placehold.co/320x180/green/FFFFFF/png",
+            },
+            category: "cat-1",
+        },
+        {
             product_id: 2,
             title: "ChatGPT Complete Guide: Learn Generative AI, ChatGPT & More",
-            description:
-                "25+ Generative AI Tools to 10x Business, Productivity, Creativity | Prompt Engineering, ChatGPT, Custom GPTs, Midjourney",
+            description: "25+ Generative AI Tools to 10x Business, Productivity, Creativity | Prompt Engineering, ChatGPT, Custom GPTs, Midjourney",
             language: "English",
             hero: {
                 image: "https://placehold.co/320x180/green/FFFFFF/png",
@@ -48,8 +52,7 @@ router.get("/:id/primary-details", (req, res) => {
     res.status(200).json({
         product_id: 1,
         title: "ChatGPT Complete Guide: Learn Generative AI, ChatGPT & More",
-        description:
-            "25+ Generative AI Tools to 10x Business, Productivity, Creativity | Prompt Engineering, ChatGPT, Custom GPTs, Midjourney",
+        description: "25+ Generative AI Tools to 10x Business, Productivity, Creativity | Prompt Engineering, ChatGPT, Custom GPTs, Midjourney",
         language: "English",
         hero: {
             image: "https://placehold.co/320x180/green/FFFFFF/png",
@@ -177,32 +180,6 @@ router.get("/:id/demo", (req, res) => {
 
         audios: [],
         pdfs: [],
-    });
-});
-
-router.post("/:id/price", (req, res) => {
-    const input = `${process.env.MERCHANT_KEY}|t6svtqtjRdl4ws1|10|iPhone|Ashish|test@gmail.com|||||||||||${process.env.MERCHANT_SALT}`;
-
-    res.status(200).json({
-        product_name: "iPhone",
-        discounted: 10,
-        original: 2200,
-        discount: 20,
-        payment_gateway: {
-            success_url: "https://apiplayground-response.herokuapp.com/",
-            failure_url: "https://apiplayground-response.herokuapp.com/",
-            hash: libCrypto.createHash("sha512").update(input).digest("hex"),
-            gateway_url: "https://test.payu.in/_payment",
-            merchant_key: process.env.MERCHANT_KEY,
-            transaction_id: "t6svtqtjRdl4ws1",
-        },
-
-        user: {
-            phone: "9988776655",
-            email: "test@gmail.com",
-            firstname: "Ashish",
-            lastname: "Kumar",
-        },
     });
 });
 

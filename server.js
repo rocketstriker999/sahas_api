@@ -14,6 +14,7 @@ sahasAPI.use((req, res, next) => {
 
 //allow json request payloads only
 sahasAPI.use(libExpress.json());
+sahasAPI.use(libExpress.urlencoded({ extended: true }));
 //parse the cookies
 sahasAPI.use(libCookieParser());
 
@@ -26,13 +27,14 @@ const routers = {
     "/device": require("./routes/device"),
     "/products": require("./routes/products"),
     "/courses": require("./routes/courses"),
+    "/transactions": require("./routes/transaction"),
 };
 
 //apply all routes
 Object.entries(routers).forEach(([path, router]) => sahasAPI.use(path, router));
 
 //if api path is not processable
-sahasAPI.use((req, res) => res.status(404));
+sahasAPI.use((req, res) => res.status(400).json({ error: "Bad Request" }));
 
 const allowTraffic = () => {
     //APP Port and start app

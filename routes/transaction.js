@@ -4,6 +4,7 @@ const { getUserByToken } = require("../db/users");
 const { getProductForTransaction } = require("../db/products");
 const { createTransaction, updateTransactionStatus, getTransactionDetails } = require("../db/transactions");
 const { addAccess } = require("../db/accesses");
+const { addInvoice } = require("../db/invoices");
 
 const router = libExpress.Router();
 
@@ -16,15 +17,16 @@ router.post("/", async (req, res) => {
 
         const transaction = await getTransactionDetails(transactionIdSahas);
 
-        if (await updateTransactionStatus(transactionIdSahas, req.body.status)) {
+        if (transaction && (await updateTransactionStatus(transactionIdSahas, req.body.status))) {
             //transaction updated - need to give access
-            addAccess(transaction);
-            res.redirect(`/products/${req.body.productinfo}/courses`);
+            await addAccess(transaction);
+            await addInvoice(transaction.id);
+            res.redirect(`/products/${transaction.product_id}/courses`);
         } else {
-            res.redirect(`/purchase/${req.body.productinfo}`);
+            res.redirect(`/purchase/${transaction.product_id}`);
         }
     } else {
-        res.redirect(`/purchase/${req.body.productinfo}`);
+        res.redirect(`/forbidden`);
     }
 });
 

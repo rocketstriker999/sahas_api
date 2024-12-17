@@ -1,186 +1,92 @@
 const libExpress = require("express");
+const { getAllCategories } = require("../db/categories");
+const { getProductsByCategory, getProductsByCategoryAndUser, getProductsByToken, getProductById } = require("../db/products");
+const { getUserByToken } = require("../db/users");
+const { getAccessByProductIdAndToken } = require("../db/accesses");
+const { getInvoiceByTransactionId } = require("../db/invoices");
+const { getCoursesByProductId } = require("../db/courses");
+const { getSubjectsCountByProductId, getSubjectsByCourseId } = require("../db/subjects");
+const { getCourseByProductIdAndCourseId } = require("../db/courses");
+const { getChaptersBySubjectId } = require("../db/chapters");
 
 const router = libExpress.Router();
 
-router.get("/list", (req, res) => {
-    const products = [
-        {
-            id: 1,
-            title: "ChatGPT Complete Guide: Learn actionable",
-            image: "https://placehold.co/100x100/blue/FFFFFF/png",
-            description: "25+ Generative AI Tools to 10x Business, Productivity, Creativity | Prompt Engineering, ChatGPT, Custom GPTs, Midjourney",
-            image: "https://placehold.co/320x180/green/FFFFFF/png",
-            price: {
-                discounted: 2000,
-                original: 2200,
-                discount: 20,
-            },
-        },
-        {
-            product_id: 1,
-            title: "ChatGPT Complete Guide: Learn Generative AI, ChatGPT & More",
-            description: "25+ Generative AI Tools to 10x Business, Productivity, Creativity | Prompt Engineering, ChatGPT, Custom GPTs, Midjourney",
-            language: "English",
-            hero: {
-                image: "https://placehold.co/320x180/green/FFFFFF/png",
-                video: "https://placehold.co/320x180/green/FFFFFF/png",
-            },
-            category: "cat-1",
-        },
-        {
-            product_id: 2,
-            title: "ChatGPT Complete Guide: Learn Generative AI, ChatGPT & More",
-            description: "25+ Generative AI Tools to 10x Business, Productivity, Creativity | Prompt Engineering, ChatGPT, Custom GPTs, Midjourney",
-            language: "English",
-            hero: {
-                image: "https://placehold.co/320x180/green/FFFFFF/png",
-                video: "https://placehold.co/320x180/green/FFFFFF/png",
-            },
-            category: "cat-1",
-            price: {
-                discounted: 2000,
-                original: 2200,
-                discount: 20,
-            },
-        },
-    ];
+router.get("/catelogue", async (req, res) => {
+    const categories = await getAllCategories();
+    const catelogue = [];
+    let user = false;
 
-    res.status(200).json({ products });
+    if (req.cookies.token) {
+        user = await getUserByToken(req.cookies.token);
+    }
+
+    for await (const category of categories) {
+        if (user.id) {
+            catelogue.push({ ...category, products: await getProductsByCategoryAndUser(category.id, user.id) });
+        } else {
+            catelogue.push({ ...category, products: await getProductsByCategory(category.id) });
+        }
+    }
+
+    res.status(200).json(catelogue);
 });
 
-router.get("/:id/primary-details", (req, res) => {
-    res.status(200).json({
-        product_id: 1,
-        title: "ChatGPT Complete Guide: Learn Generative AI, ChatGPT & More",
-        description: "25+ Generative AI Tools to 10x Business, Productivity, Creativity | Prompt Engineering, ChatGPT, Custom GPTs, Midjourney",
-        language: "English",
-        hero: {
-            image: "https://placehold.co/320x180/green/FFFFFF/png",
-            video: "https://placehold.co/320x180/green/FFFFFF/png",
-        },
-        category: "cat-1",
-        key_points: [
-            "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.",
-            "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.",
-            "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.",
-            "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.",
-        ],
-    });
+router.get("/mine", async (req, res) => {
+    if (req.cookies.token) {
+        return res.status(200).json(await getProductsByToken(req.cookies.token));
+    }
+    res.status(401).json({});
 });
 
-router.get("/:id/secondary-details", (req, res) => {
-    res.status(200).json({
-        has_access: false,
-        courses: [
-            {
-                name: "course_1",
-                subjects: [
-                    {
-                        name: "Subject 1",
-                        chapters: [
-                            {
-                                name: "chap-1",
-                                tagline: "this is a sample line",
-                            },
-                            {
-                                name: "chap-2",
-                                tagline: "this is a sample line",
-                            },
-                            {
-                                name: "chap-3",
-                                tagline: "this is a sample line",
-                            },
-                            {
-                                name: "chap-4",
-                                tagline: "this is a sample line",
-                            },
-                        ],
-                    },
-                    {
-                        name: "Subject 2",
-                        chapters: [
-                            {
-                                name: "chap-1",
-                                tagline: "this is a sample line",
-                            },
-                            {
-                                name: "chap-2",
-                                tagline: "this is a sample line",
-                            },
-                            {
-                                name: "chap-3",
-                                tagline: "this is a sample line",
-                            },
-                            {
-                                name: "chap-4",
-                                tagline: "this is a sample line",
-                            },
-                        ],
-                    },
-                ],
-            },
-            {
-                name: "course_2",
-                subjects: [
-                    {
-                        name: "Econmoics",
-                        chapters: [
-                            {
-                                name: "chapter 1",
-                                tagline: "any single line for chapter 1",
-                            },
-                            {
-                                name: "chap-2",
-                                tagline: "this is a sample line",
-                            },
-                            {
-                                name: "chap-3",
-                                tagline: "this is a sample line",
-                            },
-                            {
-                                name: "chap-4",
-                                tagline: "this is a sample line",
-                            },
-                        ],
-                    },
-                    {
-                        name: "Subject 2",
-                        chapters: [
-                            {
-                                name: "chap-1",
-                                tagline: "this is a sample line",
-                            },
-                            {
-                                name: "chap-2",
-                                tagline: "this is a sample line",
-                            },
-                            {
-                                name: "chap-3",
-                                tagline: "this is a sample line",
-                            },
-                            {
-                                name: "chap-4",
-                                tagline: "this is a sample line",
-                            },
-                        ],
-                    },
-                ],
-            },
-        ],
-    });
+router.get("/:id", async (req, res) => {
+    if (req.params.id) {
+        const product = await getProductById(req.params.id);
+        console.log(product);
+        if (req.cookies.token) {
+            product.access = await getAccessByProductIdAndToken(product.id, req.cookies.token);
+            if (product.access && product.access.transaction_id) {
+                product.invoice = await getInvoiceByTransactionId(product.access.transaction_id);
+            }
+        }
+        return res.status(200).json({ ...product });
+    }
+    res.status(400).json({ error: "Missing Product ID" });
 });
 
-router.get("/:id/demo", (req, res) => {
-    res.status(200).json({
-        title: "Title For Your Porudct Name",
-        videos: [
-            { id: 1, title: "title1", url: "dwaadw", duration: "01:00" },
-            { id: 2, title: "title2", url: "dawdsefsrgf" },
-        ],
+router.get("/:id/courses", async (req, res) => {
+    if (req.params.id) {
+        const courses = await getCoursesByProductId(req.params.id);
+        for await (const course of courses) {
+            course.subjects = await getSubjectsCountByProductId(course.id);
+        }
+        return res.status(200).json(courses);
+    }
+    res.status(400).json({ error: "Missing Product ID" });
+});
 
-        audios: [],
-        pdfs: [],
-    });
+router.get("/:productId/courses/:courseId", async (req, res) => {
+    if (req.params.productId && req.params.courseId) {
+        //check if course is inside the product
+        //if product's access is there or not
+        //get the subjects add demo false or true
+        const course = await getCourseByProductIdAndCourseId(req.params.productId, req.params.courseId);
+
+        if (course) {
+            course.has_access = req.cookies.token ? await getAccessByProductIdAndToken(req.params.productId, req.cookies.token) : false;
+            //get subjects
+            course.subjects = await getSubjectsByCourseId(course.id);
+            //get all the subjects and contents
+            for (const subject of course.subjects) {
+                //get the chapters
+                subject.chapters = await getChaptersBySubjectId(subject.id);
+            }
+
+            return res.status(200).json({ ...course });
+        } else {
+            return res.status(400).json({ error: "Product Is not having this course" });
+        }
+    }
+    res.status(400).json({ error: "Missing CourseId" });
 });
 
 module.exports = router;

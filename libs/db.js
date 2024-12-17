@@ -39,27 +39,62 @@ function generateDBTables() {
           )
         `,
         `CREATE TABLE IF NOT EXISTS USER_USAGE(user_id INT NOT NULL,activity VARCHAR(16) NOT NULL,time_stamp DATETIME DEFAULT CURRENT_TIMESTAMP)`,
-        `CREATE TABLE IF NOT EXISTS USER_PURCHASES (
+        `CREATE TABLE IF NOT EXISTS USER_INVOICES (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            user_id INT NOT NULL,
-            product_id INT NOT NULL,
-            START DATETIME DEFAULT CURRENT_TIMESTAMP,
-            END DATETIME DEFAULT CURRENT_TIMESTAMP
-          )
+            transaction_id INT NOT NULL,
+            downloadable BOOLEAN DEFAULT TRUE
+            )
         `,
         `CREATE TABLE IF NOT EXISTS PRODUCT_CATEGORIES(id INT AUTO_INCREMENT PRIMARY KEY,title VARCHAR(100) NOT NULL UNIQUE)`,
+
         `CREATE TABLE IF NOT EXISTS PRODUCTS (
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(128) NOT NULL,
+            description VARCHAR(256) NOT NULL,
             price DECIMAL(8, 2) NOT NULL,
             discounted DECIMAL(8, 2) NOT NULL,
             category_id INT NOT NULL
           )`,
-
-        `CREATE TABLE IF NOT EXISTS USER_TRANSACTIONS (
+        `CREATE TABLE IF NOT EXISTS PRODUCT_COURSES (
             id INT AUTO_INCREMENT PRIMARY KEY,
             product_id INT NOT NULL,
+            title VARCHAR(128) NOT NULL
+          )`,
+        `CREATE TABLE IF NOT EXISTS COURSE_SUBJECTS (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            course_id INT NOT NULL,
+            title VARCHAR(128) NOT NULL,
+            demo_content_id INT NULL
+          )`,
+        `CREATE TABLE IF NOT EXISTS SUBJECT_CHAPTERS(
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            subject_id INT NOT NULL,
+            title VARCHAR(128) NOT NULL,
+            content_id INT NULL
+        )`,
+
+        `CREATE TABLE IF NOT EXISTS CONTENT_VIDEOS(
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            title VARCHAR(128) NOT NULL,
+            content_id INT NULL,
+            yt_id VARCHAR(16) NOT NULL
+        )`,
+        `CREATE TABLE IF NOT EXISTS CONTENT_AUDIOS(
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            title VARCHAR(128) NOT NULL,
+            content_id INT NULL,
+            source VARCHAR(16) NOT NULL
+        )`,
+        `CREATE TABLE IF NOT EXISTS CONTENT_PDFS(
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            title VARCHAR(128) NOT NULL,
+            content_id INT NULL,
+            source VARCHAR(16) NOT NULL
+        )`,
+        `CREATE TABLE IF NOT EXISTS USER_TRANSACTIONS (
+            id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
+            product_id INT NOT NULL,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             status VARCHAR(16) DEFAULT 'IN_PROGRESS',
             price DECIMAL(8, 2) DEFAULT 0,
@@ -70,7 +105,7 @@ function generateDBTables() {
             cgst DECIMAL(8, 2) DEFAULT 0,
             pay DECIMAL(8, 2) NOT NULL
         )`,
-        `CREATE TABLE IF NOT EXISTS USER_PRODUCT_ACCESS (
+        `CREATE TABLE IF NOT EXISTS USER_PRODUCT_ACCESSES (
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
             product_id INT NOT NULL,
@@ -78,24 +113,6 @@ function generateDBTables() {
             validity DATETIME NOT NULL,
             active BOOLEAN NOT NULL DEFAULT TRUE
         );`,
-
-        `INSERT INTO PRODUCTS (title, price, discounted, category_id)
-        VALUES ('Product 1', 100.00, 80.00, 1)`,
-
-        `INSERT INTO PRODUCTS (title, price, discounted, category_id)
-        VALUES ('Product 2', 150.00, 120.00, 2)`,
-
-        `INSERT INTO PRODUCTS (title, price, discounted, category_id)
-        VALUES ('Product 3', 200.00, 180.00, 1)`,
-
-        `INSERT INTO PRODUCTS (title, price, discounted, category_id)
-        VALUES ('Product 4', 250.00, 200.00, 3)`,
-
-        `INSERT INTO PRODUCTS (title, price, discounted, category_id)
-        VALUES ('Product 5', 50.00, 40.00, 2)`,
-
-        `INSERT INTO USER_GROUPS (user_id, title) VALUES(1, 'USER'),(2, 'HADMIN'),(3, 'FADMIN'),(4, 'USER')`,
-        `INSERT INTO USER_AUTHORITIES (user_id, title) VALUES (1, 'read_tickets'), (1, 'write_tickets'), (2, 'read_tickets'), (2, 'write_tickets'), (3, 'read_tickets'), (3, 'write_tickets'), (3, 'update_tickets'), (4, 'read_tickets'), (4, 'delete_tickets')`,
     ];
 
     return Promise.all(createUserTableQuery.map((query) => executeSQLQueryRaw(query)));

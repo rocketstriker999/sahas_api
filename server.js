@@ -26,8 +26,8 @@ const routers = {
     "/otp": require("./routes/otp"),
     "/device": require("./routes/device"),
     "/products": require("./routes/products"),
-    "/courses": require("./routes/courses"),
     "/transactions": require("./routes/transaction"),
+    "/content": require("./routes/content"),
 };
 
 //apply all routes

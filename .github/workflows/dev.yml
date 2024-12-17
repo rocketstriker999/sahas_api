@@ -30,7 +30,7 @@ jobs:
                         kill -9 $pid
                       fi
                     fi
-                    git pull origin main
+                    git pull origin dev
                     npm install
                     nohup node app.js > process.log 2>&1 &
                     new_pid=$!

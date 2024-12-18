@@ -51,6 +51,7 @@ function generateDBTables() {
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(128) NOT NULL,
             description VARCHAR(256) NOT NULL,
+            image VARCHAR(32) NOT NULL UNIQUE,
             price DECIMAL(8, 2) NOT NULL,
             discounted DECIMAL(8, 2) NOT NULL,
             category_id INT NOT NULL

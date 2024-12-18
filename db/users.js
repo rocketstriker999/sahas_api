@@ -3,7 +3,7 @@ const logger = require("../libs/logger");
 
 function updateUserToken(email, token) {
     return executeSQLQueryParameterized(`UPDATE USERS SET token=? WHERE email=?`, [token, email]).catch((error) => {
-        logger.error(`Error While Updating Token: ${error}`);
+        logger.error(`updateUserToken: ${error}`);
         return false;
     });
 }
@@ -12,7 +12,7 @@ function getUserByEmail(email) {
     return executeSQLQueryParameterized(`SELECT * FROM USERS WHERE email=?`, [email])
         .then((user) => (user && user.length > 0 ? user[0] : false))
         .catch((error) => {
-            logger.error(`Error While Getting User: ${error}`);
+            logger.error(`getUserByEmail: ${error}`);
             return false;
         });
 }
@@ -21,7 +21,7 @@ function getUserByToken(token) {
     return executeSQLQueryParameterized(`SELECT * FROM USERS WHERE token=?`, [token])
         .then((user) => (user && user.length > 0 ? user[0] : false))
         .catch((error) => {
-            logger.error(`Error While Getting User: ${error}`);
+            logger.error(`getUserByToken: ${error}`);
             return false;
         });
 }
@@ -30,7 +30,7 @@ function getGroupsById(id) {
     return executeSQLQueryParameterized("SELECT DISTINCT(title) FROM USER_GROUPS WHERE user_id=?", [id])
         .then((groups) => (groups && groups.length > 0 ? groups.map((row) => row.title) : []))
         .catch((error) => {
-            logger.error(`Error While Getting User: ${error}`);
+            logger.error(`getGroupsById: ${error}`);
             return false;
         });
 }
@@ -39,7 +39,7 @@ function getAuthoritiesById(id) {
     return executeSQLQueryParameterized(`SELECT DISTINCT(title) FROM USER_AUTHORITIES WHERE user_id=?`, [id])
         .then((authorities) => (authorities && authorities.length > 0 ? authorities.map((row) => row.title) : []))
         .catch((error) => {
-            logger.error(`Error While Getting User: ${error}`);
+            logger.error(`getAuthoritiesById: ${error}`);
             return false;
         });
 }
@@ -58,7 +58,7 @@ function validateUserOTP(email, otp) {
             return false; // OTP is invalid
         })
         .catch((error) => {
-            logger.error(`Error validating OTP: ${error}`);
+            logger.error(`validateUserOTP: ${error}`);
             return false;
         });
 }

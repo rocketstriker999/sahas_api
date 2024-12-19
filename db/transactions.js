@@ -2,14 +2,13 @@ const { executeSQLQueryParameterized } = require("../libs/db");
 const logger = require("../libs/logger");
 
 function createTransaction(product, userId) {
-    return executeSQLQueryParameterized(`INSERT INTO USER_TRANSACTIONS ( user_id,product_id, price, discounted, sgst, cgst, pay) VALUES (?,?, ?, ?, ?, ?, ?)`, [
+    return executeSQLQueryParameterized(`INSERT INTO USER_TRANSACTIONS ( user_id,product_id, price, discounted, sgst, cgst) VALUES (?,?,?,?,?,?)`, [
         userId,
         product.id,
         product.price,
         product.discounted,
         product.sgst,
         product.cgst,
-        product.pay,
     ])
         .then((result) => result.insertId)
         .catch((error) => {

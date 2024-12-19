@@ -37,16 +37,19 @@ router.get("/:productId", async (req, res) => {
         if (user) {
             if (req.params.productId) {
                 const product = await getProductForTransaction(req.params.productId);
-                console.log(product);
-                const sgst = (product.discounted * 18) / 100,
+                const sgst = Number((product.discounted * 18) / 100),
                     cgst = sgst;
-                const pay = Number(product.discounted) + Number(sgst) + Number(cgst);
-                const transactionId = await createTransaction({ ...product, sgst, cgst, pay }, user.id);
+
+                const pay = product.discounted;
+
+                product.discounted = parseFloat(Number(product.discounted) - sgst - cgst).toFixed(2);
+
+                const transactionId = await createTransaction({ ...product, sgst, cgst }, user.id);
+
                 if (product && transactionId) {
                     const input = `${process.env.MERCHANT_KEY}|${transactionId}|${pay}|${product.title}|${user.name}|${user.email}|||||||||||${process.env.MERCHANT_SALT}`;
-
                     res.status(200).json({
-                        product: { ...product, pay },
+                        product: { ...product, sgst, cgst, pay },
                         payment_gateway: {
                             success_url: process.env.TRANSACTION_SUCCESS_URL,
                             failure_url: process.env.TRANSACTION_FAILURE_URL,

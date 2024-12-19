@@ -103,8 +103,7 @@ function generateDBTables() {
             coupon VARCHAR(16) DEFAULT NULL,
             benifit DECIMAL(8, 2) DEFAULT 0,
             sgst DECIMAL(8, 2) DEFAULT 0,
-            cgst DECIMAL(8, 2) DEFAULT 0,
-            pay DECIMAL(8, 2) NOT NULL
+            cgst DECIMAL(8, 2) DEFAULT 0
         )`,
         `CREATE TABLE IF NOT EXISTS USER_PRODUCT_ACCESSES (
             id INT AUTO_INCREMENT PRIMARY KEY,

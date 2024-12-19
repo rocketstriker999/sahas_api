@@ -42,6 +42,7 @@ router.get("/:productId", async (req, res) => {
 
                 const pay = product.discounted;
 
+                //calculate gst and cgst values
                 product.discounted = parseFloat(Number(product.discounted) - sgst - cgst).toFixed(2);
 
                 const transactionId = await createTransaction({ ...product, sgst, cgst }, user.id);

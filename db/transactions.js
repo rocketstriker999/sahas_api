@@ -47,5 +47,3 @@ function getTransactionById(transactionId) {
 }
 
 module.exports = { createTransaction, updateTransactionStatus, getTransactionDetails: getTransactionById, updateTransactionHash };
-
-//id - primary key auto increment ,porudct id , userid , request date time - should system date and time , status default in_progress ,amount , coupon - null

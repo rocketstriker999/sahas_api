@@ -28,6 +28,7 @@ const routers = {
     "/products": require("./routes/products"),
     "/transactions": require("./routes/transaction"),
     "/content": require("./routes/content"),
+    "/access": require("./routes/access"),
 };
 
 //apply all routes

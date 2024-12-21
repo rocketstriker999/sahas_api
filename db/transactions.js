@@ -1,15 +1,21 @@
 const { executeSQLQueryParameterized } = require("../libs/db");
 const logger = require("../libs/logger");
 
-function createTransaction(product, userId) {
-    return executeSQLQueryParameterized(`INSERT INTO USER_TRANSACTIONS ( user_id,product_id, price, discounted, sgst, cgst) VALUES (?,?,?,?,?,?)`, [
-        userId,
-        product.id,
-        product.price,
-        product.discounted,
-        product.sgst,
-        product.cgst,
-    ])
+function createTransaction(transaction) {
+    return executeSQLQueryParameterized(
+        `INSERT INTO USER_TRANSACTIONS ( user_id,product_id, price, discounted,coupon,benifit, sgst, cgst,pay) VALUES (?,?,?,?,?,?,?,?,?)`,
+        [
+            transaction.userId,
+            transaction.productId,
+            transaction.price,
+            transaction.discounted,
+            transaction.couponCode,
+            transaction.benifit,
+            transaction.sgst,
+            transaction.cgst,
+            transaction.pay,
+        ]
+    )
         .then((result) => result.insertId)
         .catch((error) => {
             logger.error(`createTransaction: ${error}`);
@@ -24,6 +30,13 @@ function updateTransactionStatus(transactionId, status) {
     });
 }
 
+function updateTransactionHash(transactionId, hash) {
+    return executeSQLQueryParameterized(`UPDATE USER_TRANSACTIONS SET hash='${hash}' WHERE id=?`, [transactionId]).catch((error) => {
+        logger.error(`updateTransactionHash: ${error}`);
+        return false;
+    });
+}
+
 function getTransactionById(transactionId) {
     return executeSQLQueryParameterized(`SELECT * FROM USER_TRANSACTIONS WHERE id=?`, [transactionId])
         .then((result) => (result.length > 0 ? result[0] : false))
@@ -33,6 +46,6 @@ function getTransactionById(transactionId) {
         });
 }
 
-module.exports = { createTransaction, updateTransactionStatus, getTransactionDetails: getTransactionById };
+module.exports = { createTransaction, updateTransactionStatus, getTransactionDetails: getTransactionById, updateTransactionHash };
 
 //id - primary key auto increment ,porudct id , userid , request date time - should system date and time , status default in_progress ,amount , coupon - null

@@ -8,6 +8,13 @@ function updateUserToken(email, token) {
     });
 }
 
+function updateUserPrimaryDetails(id, name, phone) {
+    return executeSQLQueryParameterized(`UPDATE USERS SET name=?, phone=? WHERE id=?`, [name, phone, id]).catch((error) => {
+        logger.error(`updateUserPrimaryDetails: ${error}`);
+        return false;
+    });
+}
+
 function getUserByEmail(email) {
     return executeSQLQueryParameterized(`SELECT * FROM USERS WHERE email=?`, [email])
         .then((user) => (user && user.length > 0 ? user[0] : false))
@@ -63,4 +70,13 @@ function validateUserOTP(email, otp) {
         });
 }
 
-module.exports = { updateUserOTP, validateUserOTP, updateUserToken, getUserByEmail, getUserByToken, getGroupsById, getAuthoritiesById };
+module.exports = {
+    updateUserOTP,
+    validateUserOTP,
+    updateUserToken,
+    getUserByEmail,
+    getUserByToken,
+    getGroupsById,
+    getAuthoritiesById,
+    updateUserPrimaryDetails,
+};

@@ -41,7 +41,6 @@ router.get("/mine", async (req, res) => {
 router.get("/:id", async (req, res) => {
     if (req.params.id) {
         const product = await getProductById(req.params.id);
-        console.log(product);
         if (req.cookies.token) {
             product.access = await getAccessByProductIdAndToken(product.id, req.cookies.token);
             if (product.access && product.access.transaction_id) {

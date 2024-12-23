@@ -1,23 +1,22 @@
 const libExpress = require("express");
+const { updateUserPrimaryDetails, getUserByToken } = require("../db/users");
 
 const router = libExpress.Router();
 
-router.get("/:id/products", (req, res) => {
-    const userId = req.params.id;
-    res.status(200).json([
-        {
-            id: 1,
-            title: "ChatGPT Complete Guide: Learn actionable",
-            image: "https://placehold.co/100x100/blue/FFFFFF/png",
-            description: "25+ Generative AI Tools to 10x Business, Productivity, Creativity | Prompt Engineering, ChatGPT, Custom GPTs, Midjourney",
-        },
-        {
-            id: 2,
-            title: "ChatGPT Complete Guide: Learn actionable",
-            image: "https://placehold.co/100x100/yellow/FFFFFF/png",
-            description: "25+ Generative AI Tools to 10x Business, Productivity, Creativity | Prompt Engineering, ChatGPT, Custom GPTs, Midjourney",
-        },
-    ]);
+//update user's details before purchase if user is missing primary details
+router.patch("/:id/primary-details", async (req, res) => {
+    if (req.params.id && req.body.name && req.body.phone) {
+        if (req.cookies.token) {
+            const user = await getUserByToken(req.cookies.token);
+
+            if (user && updateUserPrimaryDetails(user.id, req.body.name, req.body.phone)) {
+                return res.status(200).json(await getUserByToken(req.cookies.token));
+            }
+        }
+        return res.status(401).json({ error: "Missing Authentication" });
+    }
+
+    res.status(400).json({ error: "Invalid/Missing Parameters" });
 });
 
 module.exports = router;

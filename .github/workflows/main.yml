@@ -20,7 +20,7 @@ jobs:
                     DIR="sahas_api"
                     if [ ! -d "$DIR" ]; then
                       echo "Fetching Source - $DIR"
-                      git clone https://github.com/rocketstriker999/$DIR
+                      git clone https://github.com/rocketstriker999/sahas_api
                     fi
                     cd "$DIR"
                     if [ -f process.id ]; then

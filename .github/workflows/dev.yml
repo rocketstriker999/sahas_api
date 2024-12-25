@@ -1,4 +1,4 @@
-name: Remote Server Management
+name: sahas_api Dev Deployment
 
 on:
     push:
@@ -20,7 +20,7 @@ jobs:
                     DIR="sahas_api"
                     if [ ! -d "$DIR" ]; then
                       echo "Fetching Source - $DIR"
-                      git clone https://github.com/rocketstriker999/$DIR
+                      git clone --branch dev https://github.com/rocketstriker999/$DIR
                     fi
                     cd "$DIR"
                     if [ -f process.id ]; then
@@ -30,7 +30,7 @@ jobs:
                         kill -9 $pid
                       fi
                     fi
-                    git pull origin dev
+                    git pull
                     npm install
                     nohup node app.js > process.log 2>&1 &
                     new_pid=$!

@@ -1,4 +1,4 @@
-name: Remote Server Management
+name: sahas_api Prod Deployment
 
 on:
     push:
@@ -16,11 +16,11 @@ jobs:
               run: |
                   sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no root@46.202.164.212 << 'EOF'
                     set -e
-                    cd /root/dev
+                    cd /root/prod
                     DIR="sahas_api"
                     if [ ! -d "$DIR" ]; then
                       echo "Fetching Source - $DIR"
-                      git clone https://github.com/rocketstriker999/sahas_api
+                      git clone --branch main https://github.com/rocketstriker999/sahas_api
                     fi
                     cd "$DIR"
                     if [ -f process.id ]; then
@@ -30,7 +30,7 @@ jobs:
                         kill -9 $pid
                       fi
                     fi
-                    git pull origin dev
+                    git pull
                     npm install
                     nohup node app.js > process.log 2>&1 &
                     new_pid=$!

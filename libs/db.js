@@ -51,6 +51,7 @@ function generateDBTables() {
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(128) NOT NULL,
             description VARCHAR(256) NOT NULL,
+            image VARCHAR(32) NOT NULL UNIQUE,
             price DECIMAL(8, 2) NOT NULL,
             discounted DECIMAL(8, 2) NOT NULL,
             category_id INT NOT NULL
@@ -103,7 +104,8 @@ function generateDBTables() {
             benifit DECIMAL(8, 2) DEFAULT 0,
             sgst DECIMAL(8, 2) DEFAULT 0,
             cgst DECIMAL(8, 2) DEFAULT 0,
-            pay DECIMAL(8, 2) NOT NULL
+            pay DECIMAL(8, 2) DEFAULT 0,
+            hash VARCHAR(128) NULL
         )`,
         `CREATE TABLE IF NOT EXISTS USER_PRODUCT_ACCESSES (
             id INT AUTO_INCREMENT PRIMARY KEY,

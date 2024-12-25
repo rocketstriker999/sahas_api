@@ -2,66 +2,62 @@ const libExpress = require("express");
 const libCrypto = require("crypto");
 const { getUserByToken } = require("../db/users");
 const { getProductForTransaction } = require("../db/products");
-const { createTransaction, updateTransactionStatus, getTransactionDetails } = require("../db/transactions");
-const { addAccess } = require("../db/accesses");
-const { addInvoice } = require("../db/invoices");
+const { createTransaction, updateTransactionHash } = require("../db/transactions");
 
 const router = libExpress.Router();
 
+//create new transactions
 router.post("/", async (req, res) => {
-    //receiev information
-    if (req.body.mihpayid && req.body.txnid && req.body.productinfo) {
-        //Need to Verify the transaction from payu as well
-        const transactionIdPayu = req.body.mihpayid;
-        const transactionIdSahas = req.body.txnid;
-
-        const transaction = await getTransactionDetails(transactionIdSahas);
-
-        if (transaction && (await updateTransactionStatus(transactionIdSahas, req.body.status))) {
-            //transaction updated - need to give access
-            await addAccess(transaction);
-            await addInvoice(transaction.id);
-            res.redirect(`/products/${transaction.product_id}/courses`);
-        } else {
-            res.redirect(`/purchase/${transaction.product_id}`);
-        }
-    } else {
-        res.redirect(`/forbidden`);
-    }
-});
-
-router.get("/:productId", async (req, res) => {
     if (req.cookies.token) {
         const user = await getUserByToken(req.cookies.token);
-
         if (user) {
-            if (req.params.productId) {
-                const product = await getProductForTransaction(req.params.productId);
-                console.log(product);
-                const sgst = (product.discounted * 18) / 100,
-                    cgst = sgst;
-                const pay = Number(product.discounted) + Number(sgst) + Number(cgst);
-                const transactionId = await createTransaction({ ...product, sgst, cgst, pay }, user.id);
-                if (product && transactionId) {
-                    const input = `${process.env.MERCHANT_KEY}|${transactionId}|${pay}|${product.title}|${user.name}|${user.email}|||||||||||${process.env.MERCHANT_SALT}`;
+            if (req.body.productId) {
+                //oroginal product
+                const product = await getProductForTransaction(req.body.productId);
+                const transaction = {};
+                transaction.productId = product.id;
+                transaction.productTitle = product.title;
+                transaction.price = product.price;
+                transaction.pay = product.discounted;
+                if (req.body.couponCode && req.body.couponCode === "TEST20") {
+                    transaction.pay = transaction.pay - 20;
+                    transaction.couponCode = req.body.couponCode;
+                    transaction.benifit = 20;
+                } else {
+                    transaction.couponCode = null;
+                    transaction.benifit = 0;
+                }
 
+                transaction.sgst = Number((transaction.pay * 18) / 100);
+                transaction.cgst = Number((transaction.pay * 18) / 100);
+                transaction.discounted = parseFloat(transaction.pay - transaction.sgst - transaction.cgst + transaction.benifit).toFixed(2);
+                transaction.userId = user.id;
+                transaction.payuMerchantKey = process.env.MERCHANT_KEY;
+                transaction.successURL = process.env.TRANSACTION_SUCCESS_URL;
+                transaction.failureURL = process.env.TRANSACTION_FAILURE_URL;
+                transaction.payuURL = process.env.PAYU_URL;
+
+                transaction.id = await createTransaction(transaction);
+
+                transaction.hash = libCrypto
+                    .createHash("sha512")
+                    .update(
+                        `${transaction.payuMerchantKey}|${transaction.id}|${transaction.pay}|${product.title}|${user.name}|${user.email}|||||||||||${process.env.MERCHANT_SALT}`
+                    )
+                    .digest("hex");
+
+                await updateTransactionHash(transaction.id, transaction.hash);
+
+                if (transaction.id) {
                     res.status(200).json({
-                        product: { ...product, pay },
-                        payment_gateway: {
-                            success_url: process.env.TRANSACTION_SUCCESS_URL,
-                            failure_url: process.env.TRANSACTION_FAILURE_URL,
-                            hash: libCrypto.createHash("sha512").update(input).digest("hex"),
-                            gateway_url: process.env.PAYU_URL,
-                            merchant_key: process.env.MERCHANT_KEY,
-                            transaction_id: transactionId,
-                        },
-                        user,
+                        ...transaction,
+                        user: { name: user.name, phone: user.phone, email: user.email },
                     });
                 } else {
                     res.status(400).json({ error: "Couldn't Create Transaction For This Product, Please Try again later" });
                 }
             } else {
-                res.status(400).json({ error: "Misisng Prodict Details" });
+                res.status(400).json({ error: "Missing Prodict Details" });
             }
         } else {
             res.status(401).json({ error: "Invalid Token" });

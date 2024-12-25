@@ -19,22 +19,22 @@ jobs:
                     cd /root/dev
                     DIR="sahas_api"
                     if [ ! -d "$DIR" ]; then
-                      echo "Fetching Source - sahas_gateway"
+                      echo "Fetching Source - $DIR"
                       git clone https://github.com/rocketstriker999/sahas_api
                     fi
                     cd "$DIR"
                     if [ -f process.id ]; then
                       pid=$(cat process.id)
                       if ps -p $pid > /dev/null; then
-                        echo "Terminating sahas_gateway - pid $pid"
+                        echo "Terminating $DIR - pid $pid"
                         kill -9 $pid
                       fi
                     fi
-                    git pull origin main
+                    git pull origin dev
                     npm install
                     nohup node app.js > process.log 2>&1 &
                     new_pid=$!
-                    echo "Starting sahas_api - pid $new_pid"
+                    echo "Starting $DIR - pid $new_pid"
                     echo $new_pid > process.id
                     echo "Deployed & Disconnecting SSH"
                     exit 0

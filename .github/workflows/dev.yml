@@ -1,4 +1,4 @@
-name: sahas_api Dev Deployment
+name: sahas_api DEV Deployment
 
 on:
     push:

@@ -10,7 +10,7 @@ function addInvoice(transactionId) {
 function getInvoiceByTransactionId(transactionId) {
     return executeSQLQueryParameterized(`SELECT * FROM USER_INVOICES WHERE transaction_id=?`, [transactionId])
         .then((result) => (result.length > 0 ? result[0] : false))
-        .catch((error) => logger.error(`addInvoice: ${error}`));
+        .catch((error) => logger.error(`getInvoiceByTransactionId: ${error}`));
 }
 
 module.exports = { addInvoice, getInvoiceByTransactionId };

@@ -76,9 +76,15 @@ function generateDBTables() {
             title VARCHAR(128) NOT NULL,
             demo_content_id INT NULL
           )`,
-        `CREATE TABLE IF NOT EXISTS SUBJECT_CHAPTERS(
+
+        `CREATE TABLE IF NOT EXISTS MAPPING_SUBJECT_CHAPTERS(
             id INT AUTO_INCREMENT PRIMARY KEY,
             subject_id INT NOT NULL,
+            chapter_id INT NOT NULL
+        )`,
+
+        `CREATE TABLE IF NOT EXISTS CHAPTERS(
+            id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(128) NOT NULL,
             content_id INT NULL
         )`,

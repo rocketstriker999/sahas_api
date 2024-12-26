@@ -3,6 +3,8 @@ const libCrypto = require("crypto");
 const { getUserByToken } = require("../db/users");
 const { getProductForTransaction } = require("../db/products");
 const { createTransaction, updateTransactionHash } = require("../db/transactions");
+const libOS = require("os");
+const networkInterfaces = os.networkInterfaces();
 
 const router = libExpress.Router();
 

@@ -3,7 +3,7 @@ const logger = require("../libs/logger");
 
 function getCoursesByProductId(productId) {
     return executeSQLQueryParameterized(
-        `SELECT  table_courses.id , table_courses.title from MAPPING_PRODUCT_COURSES table_mapping_product_courses INNER JOIN COURSES table_courses ON table_mapping_product_courses.course_id=table_courses.id where table_mapping_product_courses.id=?`,
+        `SELECT  table_courses.id , table_courses.title from MAPPING_PRODUCT_COURSES table_mapping_product_courses INNER JOIN COURSES table_courses ON table_mapping_product_courses.course_id=table_courses.id where table_mapping_product_courses.product_id=?`,
         [productId]
     ).catch((error) => {
         logger.error(`getCoursesByProductId: ${error}`);
@@ -12,10 +12,13 @@ function getCoursesByProductId(productId) {
 }
 
 function getCourseByProductIdAndCourseId(productId, courseId) {
-    return executeSQLQueryParameterized(`SELECT * FROM COURSES WHERE id=? AND product_id=?`, [courseId, productId])
+    return executeSQLQueryParameterized(
+        `SELECT  table_courses.id , table_courses.title from MAPPING_PRODUCT_COURSES table_mapping_product_courses INNER JOIN COURSES table_courses ON table_mapping_product_courses.course_id=table_courses.id where table_mapping_product_courses.course_id=? AND table_mapping_product_courses.product_id=?`,
+        [courseId, productId]
+    )
         .then((result) => (result.length > 0 ? result[0] : false))
         .catch((error) => {
-            logger.error(`getCoursesByProductId: ${error}`);
+            logger.error(`getCourseByProductIdAndCourseId: ${error}`);
             return [];
         });
 }

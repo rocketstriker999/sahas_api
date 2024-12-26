@@ -64,7 +64,6 @@ function generateDBTables() {
 
         `CREATE TABLE IF NOT EXISTS COURSES (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            product_id INT NOT NULL,
             title VARCHAR(128) NOT NULL
           )`,
         `CREATE TABLE IF NOT EXISTS COURSE_SUBJECTS (

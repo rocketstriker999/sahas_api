@@ -52,6 +52,7 @@ router.get("/:id", async (req, res) => {
     res.status(400).json({ error: "Missing Product ID" });
 });
 
+//give back courses associated to product id
 router.get("/:id/courses", async (req, res) => {
     if (req.params.id) {
         const courses = await getCoursesByProductId(req.params.id);

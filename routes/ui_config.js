@@ -7,9 +7,9 @@ const router = libExpress.Router();
 //NAVBR WIDGET
 router.get("/navbar", async (req, res) => {
     try {
-        const navbarConfig = await readConfig("navbar");
-        const product_categories = await executeSQLQueryRaw("SELECT * FROM PRODUCT_CATEGORIES");
-        res.status(200).json({ ...navbarConfig, product_categories });
+        const config = await readConfig("navbar");
+        const categories = await executeSQLQueryRaw("SELECT * FROM CATEGORIES");
+        res.status(200).json({ ...config, categories });
     } catch (error) {
         logger.error(error);
         res.status(500).json({ error: error });
@@ -19,8 +19,8 @@ router.get("/navbar", async (req, res) => {
 //Carousel WIDGET
 router.get("/carousel", async (req, res) => {
     try {
-        const carouselConfig = await readConfig("carousel");
-        res.status(200).json(carouselConfig);
+        const config = await readConfig("carousel");
+        res.status(200).json(config);
     } catch (error) {
         logger.error(error);
         res.status(500).json({ error: error });
@@ -30,8 +30,8 @@ router.get("/carousel", async (req, res) => {
 //FOOTER WIDGET
 router.get("/footer", async (req, res) => {
     try {
-        const footerConfig = await readConfig("footer");
-        res.status(200).json(footerConfig);
+        const config = await readConfig("footer");
+        res.status(200).json(config);
     } catch (error) {
         logger.error(error);
         res.status(500).json({ error: error });

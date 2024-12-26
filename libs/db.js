@@ -45,7 +45,7 @@ function generateDBTables() {
             downloadable BOOLEAN DEFAULT TRUE
             )
         `,
-        `CREATE TABLE IF NOT EXISTS PRODUCT_CATEGORIES(id INT AUTO_INCREMENT PRIMARY KEY,title VARCHAR(100) NOT NULL UNIQUE)`,
+        `CREATE TABLE IF NOT EXISTS CATEGORIES(id INT AUTO_INCREMENT PRIMARY KEY,title VARCHAR(100) NOT NULL UNIQUE)`,
 
         `CREATE TABLE IF NOT EXISTS PRODUCTS (
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -56,7 +56,13 @@ function generateDBTables() {
             discounted DECIMAL(8, 2) NOT NULL,
             category_id INT NOT NULL
           )`,
-        `CREATE TABLE IF NOT EXISTS PRODUCT_COURSES (
+        `CREATE TABLE IF NOT EXISTS MAPPING_PRODUCT_COURSES(
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            product_id INT NOT NULL,
+            course_id INT NOT NULL
+        )`,
+
+        `CREATE TABLE IF NOT EXISTS COURSES (
             id INT AUTO_INCREMENT PRIMARY KEY,
             product_id INT NOT NULL,
             title VARCHAR(128) NOT NULL

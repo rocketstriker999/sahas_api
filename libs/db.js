@@ -66,9 +66,13 @@ function generateDBTables() {
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(128) NOT NULL
           )`,
-        `CREATE TABLE IF NOT EXISTS COURSE_SUBJECTS (
+        `CREATE TABLE IF NOT EXISTS MAPPING_COURSE_SUBJECTS(
             id INT AUTO_INCREMENT PRIMARY KEY,
             course_id INT NOT NULL,
+            subject_id INT NOT NULL
+        )`,
+        `CREATE TABLE IF NOT EXISTS SUBJECTS (
+            id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(128) NOT NULL,
             demo_content_id INT NULL
           )`,

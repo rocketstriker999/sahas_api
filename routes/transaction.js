@@ -30,8 +30,8 @@ router.post("/", async (req, res) => {
                     transaction.benifit = 0;
                 }
 
-                transaction.sgst = Number((transaction.pay * 18) / 100);
-                transaction.cgst = Number((transaction.pay * 18) / 100);
+                transaction.sgst = Number((transaction.pay * 9) / 100);
+                transaction.cgst = Number((transaction.pay * 9) / 100);
                 transaction.discounted = parseFloat(transaction.pay - transaction.sgst - transaction.cgst + transaction.benifit).toFixed(2);
                 transaction.userId = user.id;
                 transaction.payuMerchantKey = process.env.MERCHANT_KEY;

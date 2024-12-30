@@ -129,7 +129,18 @@ function generateDBTables() {
             transaction_id INT NOT NULL,
             validity DATETIME NOT NULL,
             active BOOLEAN NOT NULL DEFAULT TRUE
-        );`,
+        )`,
+        `CREATE TABLE IF NOT EXISTS COUPON_CODES (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            coupon VARCHAR(8) NOT NULL,
+            active BOOLEAN NOT NULL DEFAULT TRUE,
+            type VARCHAR(12) NOT NULL DEFAULT 'PERCENTAGE',
+            value DECIMAL(8, 2) DEFAULT 0,
+            validity DATETIME DEFAULT CURRENT_TIMESTAMP,
+            beneficiary_user_id INT DEFAULT 0,
+            benifit_type VARCHAR(12) DEFAULT 'PERCENTAGE',
+            benifit_value DECIMAL(8, 2) DEFAULT 0
+        )`,
     ];
 
     return Promise.all(createUserTableQuery.map((query) => executeSQLQueryRaw(query)));

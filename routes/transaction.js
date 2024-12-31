@@ -1,6 +1,6 @@
 const libExpress = require("express");
 const libCrypto = require("crypto");
-const { getUserByToken } = require("../db/users");
+const { getUserByToken, creditCuponReward } = require("../db/users");
 const { getProductForTransaction } = require("../db/products");
 const { createTransaction, updateTransactionHash } = require("../db/transactions");
 const { validateCouponCode } = require("../db/coupon");
@@ -20,14 +20,12 @@ router.post("/", async (req, res) => {
                 transaction.productTitle = product.title;
                 transaction.price = product.price;
                 transaction.pay = product.discounted;
-                transaction.couponCode = null;
+                transaction.couponCode = req.body.couponCode;
                 transaction.benifit = 0;
                 //validate coupon
-                if (req.body.couponCode && (appliedCoupon = await validateCouponCode(req.body.couponCode))) {
-                    transaction.couponCode = req.body.couponCode;
+                if (req.body.couponCode && (appliedCoupon = await validateCouponCode(req.body.couponCode, product.id))) {
                     transaction.benifit = appliedCoupon.type == "PERCENTAGE" ? (transaction.pay * appliedCoupon.value) / 100 : appliedCoupon.value;
                     transaction.pay -= transaction.benifit;
-                    console.log(transaction);
                 }
                 transaction.sgst = Number((transaction.pay * 9) / 100);
                 transaction.cgst = Number((transaction.pay * 9) / 100);

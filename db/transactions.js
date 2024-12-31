@@ -46,4 +46,4 @@ function getTransactionById(transactionId) {
         });
 }
 
-module.exports = { createTransaction, updateTransactionStatus, getTransactionDetails: getTransactionById, updateTransactionHash };
+module.exports = { createTransaction, updateTransactionStatus, getTransactionById, updateTransactionHash };

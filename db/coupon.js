@@ -1,7 +1,7 @@
 const { executeSQLQueryParameterized } = require("../libs/db");
 const logger = require("../libs/logger");
 
-function validateCouponCode(couponCode) {
+function validateCouponCode(couponCode, productId) {
     return executeSQLQueryParameterized(`SELECT * FROM COUPON_CODES WHERE coupon=? AND active=TRUE AND validity>=CURRENT_DATE AND value>0`, [couponCode])
         .then((result) => (result.length > 0 ? result[0] : false))
         .catch((error) => {

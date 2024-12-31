@@ -21,7 +21,8 @@ function generateDBTables() {
             email VARCHAR(48) NOT NULL UNIQUE,
             phone VARCHAR(13) NULL UNIQUE,
             address VARCHAR(256) NULL,
-            branch VARCHAR(16) NULL, 
+            branch VARCHAR(16) NULL,
+            wallet DECIMAL(8, 2) DEFAULT 0,
             otp VARCHAR(4) NOT NULL,
             token VARCHAR(36) NULL UNIQUE,
             is_blocked BOOLEAN DEFAULT FALSE,
@@ -140,6 +141,11 @@ function generateDBTables() {
             beneficiary_user_id INT DEFAULT 0,
             benifit_type VARCHAR(12) DEFAULT 'PERCENTAGE',
             benifit_value DECIMAL(8, 2) DEFAULT 0
+        )`,
+        `CREATE TABLE IF NOT EXISTS MAPPING_COUPON_CODES_PRODUCTS (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            coupon_code_id INT NOT NULL,
+            product_id INT NOT NULL
         )`,
     ];
 

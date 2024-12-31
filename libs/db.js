@@ -21,7 +21,8 @@ function generateDBTables() {
             email VARCHAR(48) NOT NULL UNIQUE,
             phone VARCHAR(13) NULL UNIQUE,
             address VARCHAR(256) NULL,
-            branch VARCHAR(16) NULL, 
+            branch VARCHAR(16) NULL,
+            wallet DECIMAL(8, 2) DEFAULT 0,
             otp VARCHAR(4) NOT NULL,
             token VARCHAR(36) NULL UNIQUE,
             is_blocked BOOLEAN DEFAULT FALSE,
@@ -115,7 +116,7 @@ function generateDBTables() {
             status VARCHAR(16) DEFAULT 'IN_PROGRESS',
             price DECIMAL(8, 2) DEFAULT 0,
             discounted DECIMAL(8, 2) DEFAULT 0,
-            coupon VARCHAR(16) DEFAULT NULL,
+            coupon_id VARCHAR(16) DEFAULT NULL,
             benifit DECIMAL(8, 2) DEFAULT 0,
             sgst DECIMAL(8, 2) DEFAULT 0,
             cgst DECIMAL(8, 2) DEFAULT 0,
@@ -129,7 +130,21 @@ function generateDBTables() {
             transaction_id INT NOT NULL,
             validity DATETIME NOT NULL,
             active BOOLEAN NOT NULL DEFAULT TRUE
-        );`,
+        )`,
+        `CREATE TABLE IF NOT EXISTS COUPONS (
+            id VARCHAR(8) PRIMARY KEY,
+            active BOOLEAN NOT NULL DEFAULT TRUE,
+            benifit DECIMAL(8, 2) NOT NULL DEFAULT 0,
+            benifit_type VARCHAR(12)  DEFAULT 'PERCENTAGE',
+            validity DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            beneficiary_user_id INT DEFAULT 0,
+            beneficiary_benifit DECIMAL(8, 2) DEFAULT 0,
+            beneficiary_benifit_type VARCHAR(12) DEFAULT 'PERCENTAGE'
+        )`,
+        `CREATE TABLE IF NOT EXISTS MAPPING_COUPON_PRODUCTS (
+            coupon_id VARCHAR(8) NOT NULL,
+            product_id INT NOT NULL
+        )`,
     ];
 
     return Promise.all(createUserTableQuery.map((query) => executeSQLQueryRaw(query)));

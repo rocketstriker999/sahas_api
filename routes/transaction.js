@@ -1,8 +1,9 @@
 const libExpress = require("express");
 const libCrypto = require("crypto");
-const { getUserByToken } = require("../db/users");
+const { getUserByToken, creditCuponReward } = require("../db/users");
 const { getProductForTransaction } = require("../db/products");
 const { createTransaction, updateTransactionHash } = require("../db/transactions");
+const { validateCouponId } = require("../db/coupon");
 
 const router = libExpress.Router();
 
@@ -19,15 +20,13 @@ router.post("/", async (req, res) => {
                 transaction.productTitle = product.title;
                 transaction.price = product.price;
                 transaction.pay = product.discounted;
-                if (req.body.couponCode && req.body.couponCode === "TEST20") {
-                    transaction.pay = transaction.pay - 20;
-                    transaction.couponCode = req.body.couponCode;
-                    transaction.benifit = 20;
-                } else {
-                    transaction.couponCode = null;
-                    transaction.benifit = 0;
+                transaction.couponId = req.body.coupon;
+                transaction.benifit = 0;
+                //validate coupon
+                if (transaction.couponId && (appliedCoupon = await validateCouponId(transaction.couponId, product.id))) {
+                    transaction.benifit = appliedCoupon.benifit_type == "PERCENTAGE" ? (transaction.pay * appliedCoupon.benifit) / 100 : appliedCoupon.benifit;
+                    transaction.pay -= transaction.benifit;
                 }
-
                 transaction.sgst = Number((transaction.pay * 9) / 100);
                 transaction.cgst = Number((transaction.pay * 9) / 100);
                 transaction.discounted = parseFloat(transaction.pay - transaction.sgst - transaction.cgst + transaction.benifit).toFixed(2);

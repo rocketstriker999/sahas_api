@@ -3,13 +3,13 @@ const logger = require("../libs/logger");
 
 function createTransaction(transaction) {
     return executeSQLQueryParameterized(
-        `INSERT INTO USER_TRANSACTIONS ( user_id,product_id, price, discounted,coupon,benifit, sgst, cgst,pay) VALUES (?,?,?,?,?,?,?,?,?)`,
+        `INSERT INTO USER_TRANSACTIONS ( user_id,product_id, price, discounted,coupon_id,benifit, sgst, cgst,pay) VALUES (?,?,?,?,?,?,?,?,?)`,
         [
             transaction.userId,
             transaction.productId,
             transaction.price,
             transaction.discounted,
-            transaction.couponCode,
+            transaction.couponId || null,
             transaction.benifit,
             transaction.sgst,
             transaction.cgst,

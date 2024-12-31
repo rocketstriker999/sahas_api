@@ -4,7 +4,7 @@ const { creditCuponReward } = require("../db/users");
 const { updateTransactionStatus, getTransactionById } = require("../db/transactions");
 const { addAccess } = require("../db/accesses");
 const { addInvoice } = require("../db/invoices");
-const { validateCouponCode } = require("../db/coupon");
+const { validateCouponId, getCouponById } = require("../db/coupon");
 
 const router = libExpress.Router();
 
@@ -25,14 +25,16 @@ router.post("/", async (req, res) => {
             addInvoice(transaction.id);
             //Need to give benifit - if coupon was used
             if (
-                (appliedCoupon = await validateCouponCode(transaction.coupon, transaction.product_id)) &&
-                appliedCoupon.benifit_value > 0 &&
+                (appliedCoupon = await getCouponById(transaction.coupon_id)) &&
+                appliedCoupon.beneficiary_benifit > 0 &&
                 appliedCoupon.beneficiary_user_id > 0
             ) {
                 //credit this to user's wallet money
                 creditCuponReward(
                     appliedCoupon.beneficiary_user_id,
-                    appliedCoupon.benifit_type === "PERCENTAGE" ? (transaction.pay * appliedCoupon.benifit_value) / 100 : appliedCoupon.benifit_value
+                    appliedCoupon.benifit_type === "PERCENTAGE"
+                        ? (transaction.pay * appliedCoupon.beneficiary_benifit) / 100
+                        : appliedCoupon.beneficiary_benifit
                 );
             }
 

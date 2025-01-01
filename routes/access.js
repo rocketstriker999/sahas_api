@@ -4,24 +4,26 @@ const { creditCuponReward } = require("../db/users");
 const { updateTransactionStatus, getTransactionById } = require("../db/transactions");
 const { addAccess } = require("../db/accesses");
 const { addInvoice } = require("../db/invoices");
-const { validateCouponId, getCouponById } = require("../db/coupon");
+const { getCouponById } = require("../db/coupon");
+const { requestPayUVerification } = require("../utils");
 
 const router = libExpress.Router();
 
 //verify transaction and create new access
 router.post("/", async (req, res) => {
-    //receiev information
-    if (req.body.mihpayid && req.body.txnid && req.body.productinfo) {
-        //Need to Verify the transaction from payu as well
-        const transactionIdPayu = req.body.mihpayid;
-        const transactionIdSahas = req.body.txnid;
+    //get information
+    if (req.body.txnid) {
+        //we have transaction which is requested
+        const transaction = await getTransactionById(req.body.txnid);
+        //verify with PAyu once
+        const transactionVerification = await requestPayUVerification({ transaction, command: process.env.TRANSACTION_VERIFICATION_COMMAND });
 
-        const transaction = await getTransactionById(transactionIdSahas);
-
-        if (transaction && (await updateTransactionStatus(transactionIdSahas, req.body.status))) {
+        if (transactionVerification?.transaction_details[transaction.id]?.status === "success") {
+            //verified from payu
+            await updateTransactionStatus(transaction.id, transactionVerification.transaction_details[transaction.id].status);
             //transaction updated - need to give access
             await addAccess(transaction);
-            //geenrate invoice as well
+            //generate invoice as well
             addInvoice(transaction.id);
             //Need to give benifit - if coupon was used
             if (
@@ -38,13 +40,10 @@ router.post("/", async (req, res) => {
                 );
             }
 
-            res.redirect(`/products/${transaction.product_id}/courses`);
-        } else {
-            res.redirect(`/purchase/${transaction.product_id}`);
+            return res.redirect(`/products/${transaction.product_id}/courses`);
         }
-    } else {
-        res.redirect(`/forbidden`);
     }
+    res.redirect(`/forbidden`);
 });
 
 module.exports = router;

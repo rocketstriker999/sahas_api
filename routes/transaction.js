@@ -1,9 +1,9 @@
 const libExpress = require("express");
-const libCrypto = require("crypto");
-const { getUserByToken, creditCuponReward } = require("../db/users");
+const { getUserByToken } = require("../db/users");
 const { getProductForTransaction } = require("../db/products");
 const { createTransaction, updateTransactionHash } = require("../db/transactions");
 const { validateCouponId } = require("../db/coupon");
+const { generateSHA512 } = require("../utils");
 
 const router = libExpress.Router();
 
@@ -38,12 +38,9 @@ router.post("/", async (req, res) => {
 
                 transaction.id = await createTransaction(transaction);
 
-                transaction.hash = libCrypto
-                    .createHash("sha512")
-                    .update(
-                        `${transaction.payuMerchantKey}|${transaction.id}|${transaction.pay}|${product.title}|${user.name}|${user.email}|||||||||||${process.env.MERCHANT_SALT}`
-                    )
-                    .digest("hex");
+                transaction.hash = generateSHA512(
+                    `${transaction.payuMerchantKey}|${transaction.id}|${transaction.pay}|${product.title}|${user.name}|${user.email}|||||||||||${process.env.MERCHANT_SALT}`
+                );
 
                 await updateTransactionHash(transaction.id, transaction.hash);
 

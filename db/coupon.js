@@ -8,12 +8,10 @@ function validateCouponId(couponId, productId) {
     )
         .then((result) => (result.length > 0 ? result[0] : false))
         .catch((error) => {
-            logger.error(`getCoupon: ${error}`);
+            logger.error(`validateCouponId: ${error}`);
             return false;
         });
 }
-
-//SELECT * FROM
 
 function getCouponById(couponId) {
     return executeSQLQueryParameterized(`SELECT * FROM COUPONS WHERE id=?`, [couponId])

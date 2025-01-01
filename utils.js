@@ -1,5 +1,7 @@
 const libFs = require("fs");
 const libPath = require("path");
+const { logger } = require("sequelize/lib/utils/logger");
+const libCrypto = require("crypto");
 
 const prepareDirectories = (directories) =>
     directories.forEach((directory) => libFs.existsSync(libPath.join(process.cwd(), directory)) || libFs.mkdirSync(libPath.join(process.cwd(), directory)));
@@ -9,6 +11,34 @@ function generateToken() {
     const randomPart = Math.random().toString(36).substring(2, 18); // Random alphanumeric string
     const token = (timestamp + randomPart).substring(0, 36); // Ensure token is 32 characters long
     return token;
+}
+
+function generateSHA512(targetString) {
+    return libCrypto.createHash("sha512").update(targetString).digest("hex");
+}
+
+async function requestPayUVerification({ transaction, command }) {
+    const headers = new Headers();
+    headers.append("Content-Type", "application/x-www-form-urlencoded");
+    const urlencoded = new URLSearchParams();
+    urlencoded.append("key", process.env.MERCHANT_KEY);
+    urlencoded.append("command", command);
+    urlencoded.append("var1", transaction.id);
+    urlencoded.append("hash", generateSHA512(`${process.env.MERCHANT_KEY}|${command}|${transaction.id}|${process.env.MERCHANT_SALT}`));
+
+    const fetchOptions = {
+        method: "POST",
+        headers: headers,
+        body: urlencoded,
+        redirect: "follow",
+    };
+    try {
+        const response = await fetch(process.env.TRANSACTION_VERIFICATION_URL, fetchOptions);
+        return await response.json();
+    } catch {
+        logger.error(`Failed to Check Status For Transaction - ${transaction.id}`);
+        return false;
+    }
 }
 
 async function requestService({
@@ -37,8 +67,6 @@ async function requestService({
     }
 
     const fetchOptions = {
-        // Adding headers to the request
-        //headers: {requestHeaders,...currentDevice},
         headers: {
             "Content-Type": "application/json",
             ...requestHeaders,
@@ -61,4 +89,4 @@ async function requestService({
     if (onRequestEnd) onRequestEnd();
 }
 
-module.exports = { prepareDirectories, requestService, generateToken };
+module.exports = { prepareDirectories, requestService, generateToken, requestPayUVerification, generateSHA512 };

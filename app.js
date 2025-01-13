@@ -11,7 +11,7 @@ prepareDirectories([process.env.DIRECTORY_LOGS, process.env.DIR_CONFIGS]);
 // Test and Prepare Required Tables
 generateDBTables()
     .then(() => {
-        logger.success("[+]Tables Ready");
+        logger.success("[+]Database Ready");
         allowTraffic();
     })
-    .catch((error) => logger.error(`[-]Failed To Generate Tables ${error}`));
+    .catch((error) => logger.error(`[-]Failed To Prepare Database ${error}`));

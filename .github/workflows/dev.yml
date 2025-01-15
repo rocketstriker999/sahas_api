@@ -5,7 +5,7 @@ on:
         branches:
             - dev
     schedule:
-        - cron: "0 */8 * * *"
+        - cron: "30 18 * * *"
 
 jobs:
     deploy:
@@ -39,7 +39,7 @@ jobs:
                       mkdir logs
                     fi
                     log_date=$(date +"%d-%m-%Y")
-                    
+
                     nohup node app.js > "$log_date.log" 2>&1 &
                     new_pid=$!
                     echo "Starting $DIR - pid $new_pid"

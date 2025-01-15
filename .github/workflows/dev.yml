@@ -39,8 +39,7 @@ jobs:
                       mkdir logs
                     fi
                     log_date=$(date +"%d-%m-%Y")
-
-                    nohup node app.js > "logs/$log_date.log" 2>&1 &
+                    nohup node app.js > logs/"$log_date".log 2>&1 &
                     new_pid=$!
                     echo "Starting $DIR - pid $new_pid"
                     echo $new_pid > process.id

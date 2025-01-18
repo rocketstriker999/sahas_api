@@ -3,8 +3,14 @@ const libPath = require("path");
 const { logger } = require("sequelize/lib/utils/logger");
 const libCrypto = require("crypto");
 
-const prepareDirectories = (directories) =>
-    directories.forEach((directory) => libFs.existsSync(libPath.join(process.cwd(), directory)) || libFs.mkdirSync(libPath.join(process.cwd(), directory)));
+const prepareDirectories = (directories) => {
+    directories.forEach((directory) => {
+        const fullPath = libPath.join(process.cwd(), directory);
+        if (!libFs.existsSync(fullPath)) {
+            libFs.mkdirSync(fullPath, { recursive: true });
+        }
+    });
+};
 
 function generateToken() {
     const timestamp = Date.now().toString(); // Current timestamp in milliseconds

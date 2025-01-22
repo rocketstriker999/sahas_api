@@ -20,7 +20,7 @@ router.get("/catelogue", async (req, res) => {
         user = await getUserByToken(req.cookies.token);
     }
 
-    for await (const category of categories) {
+    for (const category of categories) {
         if (user.id) {
             catelogue.push({ ...category, products: await getProductsByCategoryAndUser(category.id, user.id) });
         } else {
@@ -47,46 +47,42 @@ router.get("/:id", async (req, res) => {
                 product.invoice = await getInvoiceByTransactionId(product.access.transaction_id);
             }
         }
+        product.courses = await getCoursesByProductId(product.id);
+        for (const course of product.courses) {
+            //get the subjects
+            course.subjects = await getSubjectsByCourseId(course.id);
+            //get chapters
+            for (const subject of course.subjects) {
+                subject.chapters = await getChaptersBySubjectId(subject.id);
+            }
+        }
         return res.status(200).json({ ...product });
     }
     res.status(400).json({ error: "Missing Product ID" });
 });
 
-//give back courses associated to product id
-router.get("/:id/courses", async (req, res) => {
-    if (req.params.id) {
-        const courses = await getCoursesByProductId(req.params.id);
-        for await (const course of courses) {
-            course.subjects = await getSubjectsCountByProductId(course.id);
-        }
-        return res.status(200).json(courses);
-    }
-    res.status(400).json({ error: "Missing Product ID" });
-});
+// router.get("/:productId/courses/:courseId", async (req, res) => {
+//     if (req.params.productId && req.params.courseId) {
+//         //check if course is inside the product
+//         //if product's access is there or not
+//         //get the subjects add demo false or true
 
-router.get("/:productId/courses/:courseId", async (req, res) => {
-    if (req.params.productId && req.params.courseId) {
-        //check if course is inside the product
-        //if product's access is there or not
-        //get the subjects add demo false or true
-        const course = await getCourseByProductIdAndCourseId(req.params.productId, req.params.courseId);
+//         if (course) {
+//             course.has_access = req.cookies.token ? await getAccessByProductIdAndToken(req.params.productId, req.cookies.token) : false;
+//             //get subjects
+//             course.subjects = await getSubjectsByCourseId(course.id);
+//             //get all the subjects and contents
+//             for (const subject of course.subjects) {
+//                 //get the chapters
+//                 subject.chapters = await getChaptersBySubjectId(subject.id);
+//             }
 
-        if (course) {
-            course.has_access = req.cookies.token ? await getAccessByProductIdAndToken(req.params.productId, req.cookies.token) : false;
-            //get subjects
-            course.subjects = await getSubjectsByCourseId(course.id);
-            //get all the subjects and contents
-            for (const subject of course.subjects) {
-                //get the chapters
-                subject.chapters = await getChaptersBySubjectId(subject.id);
-            }
-
-            return res.status(200).json({ ...course });
-        } else {
-            return res.status(400).json({ error: "Product Is not having this course" });
-        }
-    }
-    res.status(400).json({ error: "Missing CourseId" });
-});
+//             return res.status(200).json({ ...course });
+//         } else {
+//             return res.status(400).json({ error: "Product Is not having this course" });
+//         }
+//     }
+//     res.status(400).json({ error: "Missing CourseId" });
+// });
 
 module.exports = router;

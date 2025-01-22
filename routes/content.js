@@ -4,15 +4,17 @@ const { getAccessByTokenAndContentId } = require("../db/accesses");
 
 const router = libExpress.Router();
 
-router.get("/public/:id", async (req, res) => {
-    if (req.params.id) {
-        const content = await getContentById(req.params.id);
+//a subject id and associated content id should be there
+router.get("/subjects/:id", async (req, res) => {
+    if (req.params.subjectId) {
+        const content = await getContentById(req.params.subjectId);
         return res.status(200).json(content);
     }
-    return res.status(400).json({ error: "Missing Content Id" });
+    return res.status(400).json({ error: "Missing Content subjectId" });
 });
 
-router.get("/private/:id", async (req, res) => {
+// a chpater id and associated contentid should be there
+router.get("/chapters/:id", async (req, res) => {
     if (req.cookies.token && req.params.id) {
         if (await getAccessByTokenAndContentId(req.cookies.token, req.params.id)) {
             const content = await getContentById(req.params.id);
@@ -24,3 +26,7 @@ router.get("/private/:id", async (req, res) => {
 });
 
 module.exports = router;
+
+// /content/demos/1
+
+// /content/chapters/1

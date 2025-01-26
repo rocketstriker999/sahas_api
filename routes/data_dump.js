@@ -46,7 +46,7 @@ router.post("/subjects", async (req, res) => {
 
         logger.info(JSON.stringify(subjectInsertArray));
         try {
-            await executeSQLQueryParameterized("INSERT INTO SUBJECTS(id,title) VALUES ?", JSON.stringify(subjectInsertArray));
+            await executeSQLQueryParameterized("INSERT INTO SUBJECTS(id,title) VALUES ?", subjectInsertArray);
         } catch (e) {
             logger.error(e);
         }

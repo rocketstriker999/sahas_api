@@ -38,11 +38,7 @@ router.post("/subjects", async (req, res) => {
             coursesToSubjectMapping.push([element.couse_id, element.subject_id]);
         });
 
-        const subjectInsertArray = [
-            [1, "Mathematics"],
-            [2, "Science"],
-            [3, "History"],
-        ];
+        const subjectInsertArray = [[[1, "Mathematics"]], [2, "Science"], [3, "History"]];
 
         logger.info(subjectInsertArray);
         try {

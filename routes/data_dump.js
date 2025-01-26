@@ -1,5 +1,6 @@
 const libExpress = require("express");
 const { executeSQLQueryRaw } = require("../libs/db");
+const logger = require("../libs/logger");
 
 const router = libExpress.Router();
 
@@ -27,11 +28,9 @@ router.post("/subjects", async (req, res) => {
     //truncate subjects
     await executeSQLQueryRaw("TRUNCATE TABLE SUBJECTS");
 
-    console.log(req.body);
+    logger.info(req.body);
 
-    console.log("CALLED 2");
-
-    res.status(200).json({ msg: "Subjects synced" + JSON.stringify(req.body) });
+    res.status(200).json({ msg: "Subjects synced" });
 
     //insert into subjects
     //insert into course to subject mapping

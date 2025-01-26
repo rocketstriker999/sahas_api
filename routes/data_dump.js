@@ -32,8 +32,8 @@ router.post("/subjects", async (req, res) => {
         const subjectsInsertionPromises = [];
         const coursesToSubjectMapping = [];
 
-        req.body.forEach((values) => {
-            subjectsInsertionPromises.push(executeSQLQueryParameterized("INSERT INTO SUBJECTS(id,title) VALUES (?,?)", [...values]));
+        req.body.forEach((element) => {
+            subjectsInsertionPromises.push(executeSQLQueryParameterized("INSERT INTO SUBJECTS(id,title) VALUES (?,?)", [element.subject_id, element.title]));
             coursesToSubjectMapping.push([element.couse_id, element.subject_id]);
         });
 

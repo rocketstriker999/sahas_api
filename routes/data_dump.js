@@ -54,7 +54,7 @@ router.post("/chapters", async (req, res) => {
         req.body.forEach((element) => {
             chaptersInsertionPromises.push(executeSQLQueryParameterized("INSERT INTO CHAPTERS(id,title) VALUES (?,?)", [element.chapter_id, element.title]));
             SubjectToChaptersMappingPromises.push(
-                executeSQLQueryParameterized("INSERT INTO MAPPING_COURSE_SUBJECTS(subject_id,chapter_id) VALUES (?,?)", [
+                executeSQLQueryParameterized("INSERT INTO MAPPING_SUBJECT_CHAPTERS(subject_id,chapter_id) VALUES (?,?)", [
                     element.subject_id,
                     element.chapter_id,
                 ])

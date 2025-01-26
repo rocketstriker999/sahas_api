@@ -177,7 +177,7 @@ function executeSQLQueryParameterized(query, parameters) {
             if (error) {
                 logger.error(`Database Connection Failed ${error.message}`);
             } else {
-                dbConnection.execute(query, [parameters], (error, result) => {
+                dbConnection.execute(query, parameters, (error, result) => {
                     logger.info(`Executing ${query} [${parameters}]`);
                     if (error) {
                         logger.error(error);

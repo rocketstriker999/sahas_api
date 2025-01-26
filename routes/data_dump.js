@@ -27,7 +27,7 @@ router.post("/subjects", async (req, res) => {
     //truncate subjects
     await executeSQLQueryRaw("TRUNCATE TABLE SUBJECTS");
 
-    console.log("CALLED 1");
+    console.log(req.body);
 
     if (req.body.data) {
         console.log(req.body.data);

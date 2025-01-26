@@ -24,6 +24,14 @@ router.post("/subjects", async (req, res) => {
             executeSQLQueryParameterized(`INSERT INTO MAPPING_COURSE_SUBJECTS (course_id, subject_id)
                 SELECT 8, subject_id FROM MAPPING_COURSE_SUBJECTS WHERE course_id in(6,7)`)
         );
+        coursesToSubjectMappingPromises.push(
+            executeSQLQueryParameterized(`INSERT INTO MAPPING_COURSE_SUBJECTS (course_id, subject_id)
+                SELECT 9, subject_id FROM MAPPING_COURSE_SUBJECTS WHERE course_id in(10,11)`)
+        );
+        coursesToSubjectMappingPromises.push(
+            executeSQLQueryParameterized(`INSERT INTO MAPPING_COURSE_SUBJECTS (course_id, subject_id)
+                SELECT 12, subject_id FROM MAPPING_COURSE_SUBJECTS WHERE course_id in(13,14)`)
+        );
 
         Promise.all([...subjectsInsertionPromises, ...coursesToSubjectMappingPromises, ,])
             .then((results) => res.status(200).json({ msg: "Subjects Synced" }))
@@ -44,14 +52,17 @@ router.post("/chapters", async (req, res) => {
         const SubjectToChaptersMappingPromises = [];
 
         req.body.forEach((element) => {
-            subjectsInsertionPromises.push(executeSQLQueryParameterized("INSERT INTO SUBJECTS(id,title) VALUES (?,?)", [element.subject_id, element.title]));
-            coursesToSubjectMappingPromises.push(
-                executeSQLQueryParameterized("INSERT INTO MAPPING_COURSE_SUBJECTS(course_id,subject_id) VALUES (?,?)", [element.couse_id, element.subject_id])
+            chaptersInsertionPromises.push(executeSQLQueryParameterized("INSERT INTO CHAPTERS(id,title) VALUES (?,?)", [element.chapter_id, element.title]));
+            SubjectToChaptersMappingPromises.push(
+                executeSQLQueryParameterized("INSERT INTO MAPPING_COURSE_SUBJECTS(subject_id,chapter_id) VALUES (?,?)", [
+                    element.subject_id,
+                    element.chapter_id,
+                ])
             );
         });
 
-        Promise.all([...subjectsInsertionPromises, ...coursesToSubjectMappingPromises])
-            .then((results) => res.status(200).json({ msg: "Subjects Synced" }))
+        Promise.all([...chaptersInsertionPromises, ...SubjectToChaptersMappingPromises])
+            .then((results) => res.status(200).json({ msg: "Chapters Synced" }))
             .catch((error) => {
                 logger.error(error);
                 res.status(400).json({ msg: error });

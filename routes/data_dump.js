@@ -34,7 +34,7 @@ router.post("/subjects", async (req, res) => {
         const coursesToSubjectMapping = [];
 
         req.body.forEach((element) => {
-            subjectInsertArray.push([element.subject_id, element.title]);
+            subjectInsertArray.push(new Array(element.subject_id, element.title));
             coursesToSubjectMapping.push([element.couse_id, element.subject_id]);
         });
 

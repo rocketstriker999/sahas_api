@@ -27,6 +27,7 @@ router.post("/subjects", async (req, res) => {
 
     //truncate subjects
     await executeSQLQueryRaw("TRUNCATE TABLE SUBJECTS");
+    await executeSQLQueryRaw("TRUNCATE TABLE MAPPING_COURSE_SUBJECTS");
 
     if (req.body) {
         const subjectsInsertionPromises = [];

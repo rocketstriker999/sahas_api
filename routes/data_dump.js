@@ -29,13 +29,9 @@ router.post("/subjects", async (req, res) => {
 
     console.log(req.body);
 
-    if (req.body.data) {
-        console.log(req.body.data);
-    }
-
     console.log("CALLED 2");
 
-    res.status(200).json({ msg: "Subjects synced" + req.body.data?.length });
+    res.status(200).json({ msg: "Subjects synced" + JSON.stringify(req.body) });
 
     //insert into subjects
     //insert into course to subject mapping

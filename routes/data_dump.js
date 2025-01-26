@@ -28,27 +28,19 @@ router.post("/subjects", async (req, res) => {
     //truncate subjects
     await executeSQLQueryRaw("TRUNCATE TABLE SUBJECTS");
 
-    //logger.info(JSON.stringify(req.body));
     if (req.body) {
-        //const subjectInsertArray = [];
+        const subjectInsertArray = [];
         const coursesToSubjectMapping = [];
 
         req.body.forEach((element) => {
-            //subjectInsertArray.push(new Array(element.subject_id, element.title));
+            subjectInsertArray.push(new Array(element.subject_id, element.title));
             coursesToSubjectMapping.push([element.couse_id, element.subject_id]);
         });
 
-        const subjectInsertArray = [
-            [1, "Mathematics"],
-            [2, "Science"],
-            [3, "History"],
-        ];
-
-        try {
-            await executeSQLQueryParameterized("INSERT INTO SUBJECTS(id,title) VALUES ?", subjectInsertArray);
-        } catch (e) {
-            logger.error(e);
-        }
+        subjectInsertArray.forEach((values) => {
+            logger.info(values);
+            executeSQLQueryParameterized("INSERT INTO SUBJECTS(id,title) VALUES ?", [...values]);
+        });
     }
 
     res.status(200).json({ msg: "Subjects synced" });

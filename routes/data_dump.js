@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const { executeSQLQueryRaw } = require("../libs/db");
+const { executeSQLQueryRaw, executeSQLQueryParameterized } = require("../libs/db");
 const logger = require("../libs/logger");
 
 const router = libExpress.Router();
@@ -28,7 +28,18 @@ router.post("/subjects", async (req, res) => {
     //truncate subjects
     await executeSQLQueryRaw("TRUNCATE TABLE SUBJECTS");
 
-    logger.info(JSON.stringify(req.body));
+    //logger.info(JSON.stringify(req.body));
+    if (req.body) {
+        const subjectInsertArray = [];
+        const coursesToSubjectMapping = [];
+
+        req.body.forEach((element) => {
+            subjectInsertArray.push([element.subject_id, element.title]);
+            coursesToSubjectMapping.push([element.couse_id, element.subject_id]);
+        });
+
+        await executeSQLQueryParameterized("INSERT INTO SUBJECTS(id,title) VALUES ?", subjectInsertArray);
+    }
 
     res.status(200).json({ msg: "Subjects synced" });
 

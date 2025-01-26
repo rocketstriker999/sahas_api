@@ -73,7 +73,35 @@ router.post("/chapters", async (req, res) => {
     }
 });
 
-router.post("/videos", async (req, res) => {});
+router.post("/videos", async (req, res) => {
+    if (req.body.is_first_request) {
+        await executeSQLQueryRaw("TRUNCATE TABLE CONTENT_VIDEOS");
+    }
+
+    if (req.body.data) {
+        const videosInsertionPromises = [];
+        const chapterContentIdUpdationPromises = [];
+
+        req.body.data.forEach((element) => {
+            chaptersInsertionPromises.push(
+                executeSQLQueryParameterized("INSERT INTO CONTENT_VIDEOS(title,content_id,yt_id) VALUES (?,?)", [element.chapter_id, element.title])
+            );
+            SubjectToChaptersMappingPromises.push(
+                executeSQLQueryParameterized("INSERT INTO MAPPING_SUBJECT_CHAPTERS(subject_id,chapter_id) VALUES (?,?)", [
+                    element.subject_id,
+                    element.chapter_id,
+                ])
+            );
+        });
+
+        Promise.all([...chaptersInsertionPromises, ...SubjectToChaptersMappingPromises])
+            .then((results) => res.status(200).json({ msg: "Chapters Synced" }))
+            .catch((error) => {
+                logger.error(error);
+                res.status(400).json({ msg: error });
+            });
+    }
+});
 
 router.post("/pdfs", async (req, res) => {});
 

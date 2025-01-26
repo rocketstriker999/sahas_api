@@ -25,12 +25,15 @@ function getUserByEmail(email) {
 }
 
 function getUserByToken(token) {
-    return executeSQLQueryParameterized(`SELECT * FROM USERS WHERE token=?`, [token])
-        .then((user) => (user && user.length > 0 ? user[0] : false))
-        .catch((error) => {
-            logger.error(`getUserByToken: ${error}`);
-            return false;
-        });
+    return (
+        token &&
+        executeSQLQueryParameterized(`SELECT * FROM USERS WHERE token=?`, [token])
+            .then((user) => (user && user.length > 0 ? user[0] : false))
+            .catch((error) => {
+                logger.error(`getUserByToken: ${error}`);
+                return false;
+            })
+    );
 }
 
 function getGroupsById(id) {

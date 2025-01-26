@@ -13,6 +13,4 @@ function getContentById(contentId) {
         .catch((error) => logger.error(`addInvoice: ${error}`));
 }
 
-function verifyContentAccess(contentId) {}
-
 module.exports = { getContentById };

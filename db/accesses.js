@@ -35,4 +35,15 @@ function getAccessByTokenAndContentId(token, contentId) {
         });
 }
 
-module.exports = { addAccess, getAccessByProductIdAndToken, getAccessByTokenAndContentId };
+function getAccessesByToken(token) {
+    if (!token) return [];
+    return executeSQLQueryParameterized(
+        `SELECT USER_PRODUCT_ACCESSES.id,USER_PRODUCT_ACCESSES.product_id FROM USER_PRODUCT_ACCESSES JOIN USERS ON USER_PRODUCT_ACCESSES.user_id = USERS.id AND USERS.token = ?`,
+        [token]
+    ).catch((error) => {
+        logger.error(`getAccessByContentId: ${error}`);
+        return [];
+    });
+}
+
+module.exports = { addAccess, getAccessByProductIdAndToken, getAccessByTokenAndContentId, getAccessesByToken };

@@ -158,7 +158,7 @@ function executeSQLQueryRaw(query) {
                 logger.error(`Database Connection Failed ${error.message}`);
             } else {
                 dbConnection.query(query, (error, result) => {
-                    logger.info(`Executing ${query}`);
+                    console.log(`Executing ${query}`);
                     if (error) {
                         reject(error); // Reject the promise if the query fails
                     } else {

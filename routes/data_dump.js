@@ -25,7 +25,7 @@ router.post("/subjects", async (req, res) => {
     // };
 
     //truncate subjects
-    executeSQLQueryRaw("TRUNCATE TABLE SUBJECTS");
+    await executeSQLQueryRaw("TRUNCATE TABLE SUBJECTS");
 
     console.log("CALLED 1");
 
@@ -35,7 +35,7 @@ router.post("/subjects", async (req, res) => {
 
     console.log("CALLED 2");
 
-    res.status(200).json({ msg: "Subjects synced" });
+    res.status(200).json({ msg: "Subjects synced" + req.body.data?.length });
 
     //insert into subjects
     //insert into course to subject mapping

@@ -44,14 +44,17 @@ router.post("/subjects", async (req, res) => {
 
 router.post("/chapters", async (req, res) => {
     //truncate chapters
-    await executeSQLQueryRaw("TRUNCATE TABLE CHAPTERS");
-    await executeSQLQueryRaw("TRUNCATE TABLE MAPPING_SUBJECT_CHAPTERS");
 
-    if (req.body) {
+    if (req.body.is_first_request) {
+        await executeSQLQueryRaw("TRUNCATE TABLE CHAPTERS");
+        await executeSQLQueryRaw("TRUNCATE TABLE MAPPING_SUBJECT_CHAPTERS");
+    }
+
+    if (req.body.data) {
         const chaptersInsertionPromises = [];
         const SubjectToChaptersMappingPromises = [];
 
-        req.body.forEach((element) => {
+        req.body.data.forEach((element) => {
             chaptersInsertionPromises.push(executeSQLQueryParameterized("INSERT INTO CHAPTERS(id,title) VALUES (?,?)", [element.chapter_id, element.title]));
             SubjectToChaptersMappingPromises.push(
                 executeSQLQueryParameterized("INSERT INTO MAPPING_SUBJECT_CHAPTERS(subject_id,chapter_id) VALUES (?,?)", [

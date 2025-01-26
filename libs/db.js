@@ -180,6 +180,7 @@ function executeSQLQueryParameterized(query, parameters) {
                 dbConnection.execute(query, parameters, (error, result) => {
                     logger.info(`Executing ${query} [${parameters}]`);
                     if (error) {
+                        logger.error(error);
                         reject(error); // Reject the promise if the query fails
                     } else {
                         resolve(result); // Resolve the promise if the query succeeds

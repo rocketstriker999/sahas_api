@@ -37,9 +37,13 @@ router.post("/subjects", async (req, res) => {
             coursesToSubjectMapping.push([element.couse_id, element.subject_id]);
         });
 
-        subjectInsertArray.forEach((values) => {
+        subjectInsertArray.forEach(async (values) => {
             logger.info(values);
-            executeSQLQueryParameterized("INSERT INTO SUBJECTS(id,title) VALUES ?", [...values]);
+            try {
+                await executeSQLQueryParameterized("INSERT INTO SUBJECTS(id,title) VALUES (?,?)", [...values]);
+            } catch (e) {
+                logger.error(e);
+            }
         });
     }
 

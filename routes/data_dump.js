@@ -43,6 +43,8 @@ router.post("/subjects", async (req, res) => {
             [2, "Science"],
             [3, "History"],
         ];
+
+        console.log(subjectInsertArray);
         try {
             await executeSQLQueryParameterized("INSERT INTO SUBJECTS(id,title) VALUES ?", subjectInsertArray);
         } catch (e) {

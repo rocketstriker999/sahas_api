@@ -35,13 +35,16 @@ router.post("/subjects", async (req, res) => {
         req.body.forEach((element) => {
             subjectsInsertionPromises.push(executeSQLQueryParameterized("INSERT INTO SUBJECTS(id,title) VALUES (?,?)", [element.subject_id, element.title]));
             coursesToSubjectMappingPromises.push(
-                executeSQLQueryParameterized("INSERT INTO MAPPING_COURSE_SUBJECTS(course_id,subject_id) VALUES (?,?)", [(element.couse_id, element.subject_id)])
+                executeSQLQueryParameterized("INSERT INTO MAPPING_COURSE_SUBJECTS(course_id,subject_id) VALUES (?,?)", [element.couse_id, element.subject_id])
             );
         });
 
         Promise.all([...subjectsInsertionPromises, ...coursesToSubjectMappingPromises])
             .then((results) => res.status(200).json({ msg: "Subjects Synced" }))
-            .catch((error) => res.status(400).json({ msg: error }));
+            .catch((error) => {
+                logger.error(error);
+                res.status(400).json({ msg: error });
+            });
     }
 
     //insert into subjects

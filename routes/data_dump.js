@@ -27,9 +27,13 @@ router.post("/subjects", async (req, res) => {
     //truncate subjects
     executeSQLQueryRaw("TRUNCATE TABLE SUBJECTS");
 
+    console.log("CALLED 1");
+
     if (req.body.data) {
         console.log(req.body.data);
     }
+
+    console.log("CALLED 2");
 
     res.status(200).json({ msg: "Subjects synced" });
 

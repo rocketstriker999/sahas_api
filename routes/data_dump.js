@@ -74,4 +74,8 @@ router.post("/videos", async (req, res) => {});
 
 router.post("/pdfs", async (req, res) => {});
 
+router.post("/demo-videos", async (req, res) => {});
+
+router.post("/demo-pdfs", async (req, res) => {});
+
 module.exports = router;

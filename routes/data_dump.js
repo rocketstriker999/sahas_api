@@ -38,7 +38,11 @@ router.post("/subjects", async (req, res) => {
             coursesToSubjectMapping.push([element.couse_id, element.subject_id]);
         });
 
-        await executeSQLQueryParameterized("INSERT INTO SUBJECTS(id,title) VALUES ?", subjectInsertArray);
+        try {
+            await executeSQLQueryParameterized("INSERT INTO SUBJECTS(id,title) VALUES ?", [subjectInsertArray]);
+        } catch (e) {
+            logger.error(e);
+        }
     }
 
     res.status(200).json({ msg: "Subjects synced" });

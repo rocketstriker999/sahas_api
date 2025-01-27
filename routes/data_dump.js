@@ -65,7 +65,7 @@ router.post("/chapters", async (req, res) => {
         });
 
         Promise.all([...chaptersInsertionPromises, ...SubjectToChaptersMappingPromises])
-            .then((results) => res.status(200).json({ msg: "Chapters Synced" }))
+            .then(() => res.status(200).json({ msg: "Chapters Synced" }))
             .catch((error) => {
                 logger.error(error);
                 res.status(400).json({ msg: error });
@@ -92,7 +92,7 @@ router.post("/videos", async (req, res) => {
         });
 
         Promise.all(videosInsertionPromises)
-            .then((results) => res.status(200).json({ msg: "Videos Synced" }))
+            .then(() => res.status(200).json({ msg: "Videos Synced" }))
             .catch((error) => {
                 logger.error(error);
                 res.status(400).json({ msg: error });

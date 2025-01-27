@@ -93,7 +93,7 @@ function generateDBTables() {
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(128) NOT NULL,
             content_id CHAR(36) NULL,
-            yt_id VARCHAR(16) NOT NULL
+            yt_id VARCHAR(32) NOT NULL
         )`,
         `CREATE TABLE IF NOT EXISTS CONTENT_AUDIOS(
             id INT AUTO_INCREMENT PRIMARY KEY,

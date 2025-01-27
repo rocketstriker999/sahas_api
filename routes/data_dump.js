@@ -84,9 +84,9 @@ router.post("/videos", async (req, res) => {
         req.body.data.forEach((element) => {
             videosInsertionPromises.push(
                 executeSQLQueryParameterized("INSERT INTO CONTENT_VIDEOS(title, content_id, yt_id) SELECT ?, content_id, ? FROM CHAPTERS WHERE id = ?", [
-                    element.title, // for title
-                    element.yt_id, // for yt_id
-                    element.chapter_id, // for id in CHAPTERS table
+                    element.title,
+                    element.yt_id,
+                    element.chapter_id,
                 ])
             );
         });

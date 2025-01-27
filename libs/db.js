@@ -89,7 +89,6 @@ function generateDBTables() {
             title VARCHAR(128) NOT NULL,
             content_id BIGINT UNSIGNED UNIQUE DEFAULT (UNIX_TIMESTAMP())
         )`,
-
         `CREATE TABLE IF NOT EXISTS CONTENT_VIDEOS(
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(128) NOT NULL,

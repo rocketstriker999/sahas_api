@@ -105,7 +105,7 @@ function generateDBTables() {
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(128) NOT NULL,
             content_id CHAR(36) NULL,
-            gd_id VARCHAR(32) NOT NULL
+            gd_id VARCHAR(36) NOT NULL
         )`,
         `CREATE TABLE IF NOT EXISTS USER_TRANSACTIONS (
             id INT AUTO_INCREMENT PRIMARY KEY,

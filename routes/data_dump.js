@@ -80,22 +80,19 @@ router.post("/videos", async (req, res) => {
 
     if (req.body.data) {
         const videosInsertionPromises = [];
-        const chapterContentIdUpdationPromises = [];
 
         req.body.data.forEach((element) => {
-            chaptersInsertionPromises.push(
-                executeSQLQueryParameterized("INSERT INTO CONTENT_VIDEOS(title,content_id,yt_id) VALUES (?,?)", [element.chapter_id, element.title])
-            );
-            SubjectToChaptersMappingPromises.push(
-                executeSQLQueryParameterized("INSERT INTO MAPPING_SUBJECT_CHAPTERS(subject_id,chapter_id) VALUES (?,?)", [
-                    element.subject_id,
+            videosInsertionPromises.push(
+                executeSQLQueryParameterized("INSERT INTO CONTENT_VIDEOS(title,content_id,yt_id)  SELECT ?,content_id from CHAPTERS WHERE id=?,? ", [
+                    element.title,
                     element.chapter_id,
+                    element.yt_id,
                 ])
             );
         });
 
-        Promise.all([...chaptersInsertionPromises, ...SubjectToChaptersMappingPromises])
-            .then((results) => res.status(200).json({ msg: "Chapters Synced" }))
+        Promise.all(videosInsertionPromises)
+            .then((results) => res.status(200).json({ msg: "Videos Synced" }))
             .catch((error) => {
                 logger.error(error);
                 res.status(400).json({ msg: error });

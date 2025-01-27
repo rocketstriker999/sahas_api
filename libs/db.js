@@ -75,7 +75,7 @@ function generateDBTables() {
         `CREATE TABLE IF NOT EXISTS SUBJECTS (
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(128) NOT NULL,
-            demo_content_id BIGINT UNSIGNED UNIQUE DEFAULT (UNIX_TIMESTAMP())
+            demo_content_id CHAR(36) DEFAULT (UUID()) UNIQUE
           )`,
 
         `CREATE TABLE IF NOT EXISTS MAPPING_SUBJECT_CHAPTERS(
@@ -87,24 +87,24 @@ function generateDBTables() {
         `CREATE TABLE IF NOT EXISTS CHAPTERS(
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(128) NOT NULL,
-            content_id BIGINT UNSIGNED UNIQUE DEFAULT (UNIX_TIMESTAMP())
+            content_id CHAR(36) DEFAULT (UUID()) UNIQUE
         )`,
         `CREATE TABLE IF NOT EXISTS CONTENT_VIDEOS(
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(128) NOT NULL,
-            content_id BIGINT NULL,
+            content_id CHAR(36) NULL,
             yt_id VARCHAR(16) NOT NULL
         )`,
         `CREATE TABLE IF NOT EXISTS CONTENT_AUDIOS(
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(128) NOT NULL,
-            content_id BIGINT NULL,
+            content_id CHAR(36) NULL,
             source VARCHAR(16) NOT NULL
         )`,
         `CREATE TABLE IF NOT EXISTS CONTENT_PDFS(
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(128) NOT NULL,
-            content_id BIGINT NULL,
+            content_id CHAR(36) NULL,
             gd_id VARCHAR(32) NOT NULL
         )`,
         `CREATE TABLE IF NOT EXISTS USER_TRANSACTIONS (

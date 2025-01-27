@@ -100,7 +100,32 @@ router.post("/videos", async (req, res) => {
     }
 });
 
-router.post("/pdfs", async (req, res) => {});
+router.post("/pdfs", async (req, res) => {
+    if (req.body.is_first_request) {
+        await executeSQLQueryRaw("TRUNCATE TABLE CONTENT_PDFS");
+    }
+
+    if (req.body.data) {
+        const pdfsInsertionPromises = [];
+
+        req.body.data.forEach((element) => {
+            pdfsInsertionPromises.push(
+                executeSQLQueryParameterized("INSERT INTO CONTENT_PDFS(title, content_id, gd_id) SELECT ?, content_id, ? FROM CHAPTERS WHERE id = ?", [
+                    element.title,
+                    element.gd_id,
+                    element.chapter_id,
+                ])
+            );
+        });
+
+        Promise.all(pdfsInsertionPromises)
+            .then(() => res.status(200).json({ msg: "PDFs Synced" }))
+            .catch((error) => {
+                logger.error(error);
+                res.status(400).json({ msg: error });
+            });
+    }
+});
 
 router.post("/demo-videos", async (req, res) => {});
 

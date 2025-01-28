@@ -25,16 +25,16 @@ router.post("/subjects", async (req, res) => {
         });
 
         coursesToSubjectMappingPromises.push(
-            executeSQLQueryParameterized(`INSERT INTO MAPPING_COURSE_SUBJECTS (course_id, subject_id,view_index)
-                SELECT 8, subject_id FROM MAPPING_COURSE_SUBJECTS WHERE course_id in(6,7),0`)
+            executeSQLQueryParameterized(`INSERT INTO MAPPING_COURSE_SUBJECTS (view_index,course_id, subject_id)
+                SELECT 0,8, subject_id FROM MAPPING_COURSE_SUBJECTS WHERE course_id in(6,7)`)
         );
         coursesToSubjectMappingPromises.push(
-            executeSQLQueryParameterized(`INSERT INTO MAPPING_COURSE_SUBJECTS (course_id, subject_id,view_index)
-                SELECT 9, subject_id FROM MAPPING_COURSE_SUBJECTS WHERE course_id in(10,11),0`)
+            executeSQLQueryParameterized(`INSERT INTO MAPPING_COURSE_SUBJECTS (view_index,course_id, subject_id)
+                SELECT 0,9, (subject_id FROM MAPPING_COURSE_SUBJECTS WHERE course_id in(10,11))`)
         );
         coursesToSubjectMappingPromises.push(
-            executeSQLQueryParameterized(`INSERT INTO MAPPING_COURSE_SUBJECTS (course_id, subject_id,view_index)
-                SELECT 12, subject_id FROM MAPPING_COURSE_SUBJECTS WHERE course_id in(13,14),0`)
+            executeSQLQueryParameterized(`INSERT INTO MAPPING_COURSE_SUBJECTS (view_index,course_id, subject_id)
+                SELECT 0,12, subject_id FROM MAPPING_COURSE_SUBJECTS WHERE course_id in(13,14)`)
         );
 
         Promise.all([...subjectsInsertionPromises, ...coursesToSubjectMappingPromises, ,])
@@ -61,7 +61,7 @@ router.post("/chapters", async (req, res) => {
         req.body.data.forEach((element) => {
             chaptersInsertionPromises.push(executeSQLQueryParameterized("INSERT INTO CHAPTERS(id,title) VALUES (?,?)", [element.chapter_id, element.title]));
             SubjectToChaptersMappingPromises.push(
-                executeSQLQueryParameterized("INSERT INTO MAPPING_SUBJECT_CHAPTERS(subject_id,chapter_id) VALUES (?,?)", [
+                executeSQLQueryParameterized("INSERT INTO MAPPING_SUBJECT_CHAPTERS(subject_id,chapter_id,view_index) VALUES (?,?,?)", [
                     element.subject_id,
                     element.chapter_id,
                 ])

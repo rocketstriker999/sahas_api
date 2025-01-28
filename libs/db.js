@@ -70,7 +70,8 @@ function generateDBTables() {
         `CREATE TABLE IF NOT EXISTS MAPPING_COURSE_SUBJECTS(
             id INT AUTO_INCREMENT PRIMARY KEY,
             course_id INT NOT NULL,
-            subject_id INT NOT NULL
+            subject_id INT NOT NULL,
+            view_index INT NULL
         )`,
         `CREATE TABLE IF NOT EXISTS SUBJECTS (
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -81,7 +82,8 @@ function generateDBTables() {
         `CREATE TABLE IF NOT EXISTS MAPPING_SUBJECT_CHAPTERS(
             id INT AUTO_INCREMENT PRIMARY KEY,
             subject_id INT NOT NULL,
-            chapter_id INT NOT NULL
+            chapter_id INT NOT NULL,
+            view_index INT NULL
         )`,
 
         `CREATE TABLE IF NOT EXISTS CHAPTERS(
@@ -93,7 +95,8 @@ function generateDBTables() {
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(128) NOT NULL,
             content_id CHAR(36) NULL,
-            yt_id VARCHAR(32) NOT NULL
+            yt_id VARCHAR(32) NOT NULL,
+            view_index INT NULL
         )`,
         `CREATE TABLE IF NOT EXISTS CONTENT_AUDIOS(
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -105,7 +108,8 @@ function generateDBTables() {
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(128) NOT NULL,
             content_id CHAR(36) NULL,
-            gd_id VARCHAR(36) NOT NULL
+            gd_id VARCHAR(36) NOT NULL,
+            view_index INT NULL
         )`,
         `CREATE TABLE IF NOT EXISTS USER_TRANSACTIONS (
             id INT AUTO_INCREMENT PRIMARY KEY,

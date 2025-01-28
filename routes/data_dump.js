@@ -30,7 +30,7 @@ router.post("/subjects", async (req, res) => {
         );
         coursesToSubjectMappingPromises.push(
             executeSQLQueryParameterized(`INSERT INTO MAPPING_COURSE_SUBJECTS (view_index,course_id, subject_id)
-                SELECT 0,9, (subject_id FROM MAPPING_COURSE_SUBJECTS WHERE course_id in(10,11))`)
+                SELECT 0,9, subject_id FROM MAPPING_COURSE_SUBJECTS WHERE course_id in(10,11)`)
         );
         coursesToSubjectMappingPromises.push(
             executeSQLQueryParameterized(`INSERT INTO MAPPING_COURSE_SUBJECTS (view_index,course_id, subject_id)

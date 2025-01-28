@@ -64,6 +64,7 @@ router.post("/chapters", async (req, res) => {
                 executeSQLQueryParameterized("INSERT INTO MAPPING_SUBJECT_CHAPTERS(subject_id,chapter_id,view_index) VALUES (?,?,?)", [
                     element.subject_id,
                     element.chapter_id,
+                    element.view_index,
                 ])
             );
         });

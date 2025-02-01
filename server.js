@@ -26,7 +26,6 @@ const routers = {
     "/token": require("./routes/token"),
     "/otp": require("./routes/otp"),
     "/device": require("./routes/device"),
-    "/products": require("./routes/products"),
     "/transactions": require("./routes/transaction"),
     "/content": require("./routes/content"),
     "/access": require("./routes/access"),

@@ -46,4 +46,11 @@ function getProductById(id) {
         });
 }
 
-module.exports = { getProductForTransaction, getProductsByCategory, getProductsByCategoryAndUser, getProductsByToken, getProductById };
+function getAllProducts() {
+    return executeSQLQueryParameterized("SELECT * FROM PRODUCTS").catch((error) => {
+        logger.error(`getAllCourses: ${error}`);
+        return [];
+    });
+}
+
+module.exports = { getAllProducts, getProductForTransaction, getProductsByCategory, getProductsByCategoryAndUser, getProductsByToken, getProductById };

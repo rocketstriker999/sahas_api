@@ -12,7 +12,7 @@ function getSubjectsCountByProductId(courseId) {
 
 function getSubjectsByCourseId(courseId) {
     return executeSQLQueryParameterized(
-        `SELECT  table_subjects.id , table_subjects.title ,table_subjects.demo_content_id from MAPPING_COURSE_SUBJECTS table_mapping_course_subjects INNER JOIN SUBJECTS table_subjects ON table_mapping_course_subjects.subject_id=table_subjects.id where table_mapping_course_subjects.course_id=?`,
+        `SELECT  table_subjects.id , table_subjects.title ,table_subjects.demo_content_id,table_mapping_course_subjects.view_index from MAPPING_COURSE_SUBJECTS table_mapping_course_subjects INNER JOIN SUBJECTS table_subjects ON table_mapping_course_subjects.subject_id=table_subjects.id where table_mapping_course_subjects.course_id=?`,
         [courseId]
     ).catch((error) => {
         logger.error(`getSubjectsByCourseId: ${error}`);

@@ -21,7 +21,7 @@ sahasAPI.use(libCookieParser());
 //api end points and routers
 const routers = {
     "/data-dump": require("./routes/data_dump"),
-    "/ui-config": require("./routes/ui_config"),
+    "/config": require("./routes/config"),
     "/users": require("./routes/users"),
     "/token": require("./routes/token"),
     "/otp": require("./routes/otp"),
@@ -29,6 +29,7 @@ const routers = {
     "/transactions": require("./routes/transaction"),
     "/content": require("./routes/content"),
     "/access": require("./routes/access"),
+    "/catelogue": require("./routes/catelogue"),
 };
 
 //apply all routes

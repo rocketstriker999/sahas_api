@@ -1,5 +1,6 @@
 {
-"share_message":"https://api.whatsapp.com/send?text=🚀 Check out this amazing Platform Sahas Smart Studies for Quality Education! https://linktr.ee/SahasInstituteOfCommerce",
-"whatsapp_connect":"https://wa.me/7600749804"
-
+    "navbar": {
+        "share_message": "https://api.whatsapp.com/send?text=🚀 Check out this amazing Platform Sahas Smart Studies for Quality Education! https://linktr.ee/SahasInstituteOfCommerce",
+        "whatsapp_connect": "https://wa.me/7600749804"
+    }
 }

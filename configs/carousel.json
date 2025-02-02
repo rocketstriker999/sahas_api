@@ -1,20 +1,22 @@
 {
-   "carouse_images":[
-   {
-      "type":"image",
-      "image":"Frame59.png"
-   },
-   {
-      "type":"image",
-      "image":"Frame60.png"
-   },
-   {
-      "type":"image",
-      "image":"Frame61.png"
-   },
-   {
-      "type":"image",
-      "image":"Frame62.png"
-   }
-	]
+    "carousel": {
+        "images": [
+            {
+                "type": "image",
+                "image": "Frame59.png"
+            },
+            {
+                "type": "image",
+                "image": "Frame60.png"
+            },
+            {
+                "type": "image",
+                "image": "Frame61.png"
+            },
+            {
+                "type": "image",
+                "image": "Frame62.png"
+            }
+        ]
+    }
 }

@@ -21,7 +21,7 @@ sahasAPI.use(libCookieParser());
 //api end points and routers
 const routers = {
     "/data-dump": require("./routes/data_dump"),
-    "/config": require("./routes/config"),
+    "/configs": require("./routes/configs"),
     "/users": require("./routes/users"),
     "/token": require("./routes/token"),
     "/otp": require("./routes/otp"),

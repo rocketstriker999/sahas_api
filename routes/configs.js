@@ -16,7 +16,7 @@ router.get("/template", async (req, res) => {
         res.status(200).json(allConfigs);
     } catch (error) {
         logger.error(error);
-        res.status(500).json({ error: "Erro While Parsing Configs" });
+        res.status(500).json({ error: "Error While Parsing Configs" });
     }
 });
 

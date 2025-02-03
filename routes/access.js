@@ -40,7 +40,7 @@ router.post("/", async (req, res) => {
                 );
             }
 
-            return res.redirect(`/products/${transaction.product_id}/courses`);
+            return res.redirect(`/products/${transaction.product_id}`);
         }
     }
     res.redirect(`/forbidden`);

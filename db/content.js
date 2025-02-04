@@ -1,16 +1,18 @@
 const { executeSQLQueryParameterized } = require("../libs/db");
 const logger = require("../libs/logger");
 
-function getContentById(contentId) {
-    const content = {};
-    return executeSQLQueryParameterized(`SELECT * FROM CONTENT_VIDEOS WHERE content_id=?`, [contentId])
-        .then((result) => (content.videos = result))
-        .then(() => executeSQLQueryParameterized(`SELECT * FROM CONTENT_PDFS WHERE content_id=?`, [contentId]))
-        .then((result) => (content.pdfs = result))
-        .then(() => executeSQLQueryParameterized(`SELECT * FROM CONTENT_AUDIOS WHERE content_id=?`, [contentId]))
-        .then((result) => (content.audios = result))
-        .then(() => content)
-        .catch((error) => logger.error(`addInvoice: ${error}`));
+function getDemoContentBySubjectId(subjectId) {
+    return executeSQLQueryParameterized(
+        `SELECT table_media.* FROM SUBJECTS table_subjects INNER JOIN MEDIA table_media ON table_subjects.demo_content_id=table_media.content_id WHERE table_subjects.id=?`,
+        [subjectId]
+    ).catch((error) => logger.error(`getDemoContentBySubjectId: ${error}`));
 }
 
-module.exports = { getContentById };
+function getChapterContentByChapterId(chapterId) {
+    return executeSQLQueryParameterized(
+        `SELECT table_media.* FROM CHAPTERS table_chapters INNER JOIN MEDIA table_media ON table_chapters.content_id=table_media.content_id WHERE table_chapters.id=?`,
+        [chapterId]
+    ).catch((error) => logger.error(`getChapterContentByChapterId: ${error}`));
+}
+
+module.exports = { getDemoContentBySubjectId, getChapterContentByChapterId };

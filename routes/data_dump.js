@@ -89,8 +89,8 @@ router.post("/videos", async (req, res) => {
         req.body.data.forEach((element) => {
             videosInsertionPromises.push(
                 executeSQLQueryParameterized(
-                    "INSERT INTO CONTENT_VIDEOS(view_index,title, content_id, yt_id) SELECT ?,?, content_id, ? FROM CHAPTERS WHERE id = ?",
-                    [element.view_index, element.title, element.yt_id, element.chapter_id]
+                    "INSERT INTO CONTENT_VIDEOS(type,view_index,title, content_id, source) SELECT ?,?,?, content_id, ? FROM CHAPTERS WHERE id = ?",
+                    ["video", element.view_index, element.title, element.yt_id, element.chapter_id]
                 )
             );
         });
@@ -115,8 +115,8 @@ router.post("/pdfs", async (req, res) => {
         req.body.data.forEach((element) => {
             pdfsInsertionPromises.push(
                 executeSQLQueryParameterized(
-                    "INSERT INTO CONTENT_PDFS(view_index,title, content_id, gd_id) SELECT ?,?, content_id, ? FROM CHAPTERS WHERE id = ?",
-                    [element.view_index, element.title, element.gd_id, element.chapter_id]
+                    "INSERT INTO CONTENT_PDFS(type,view_index,title, content_id, source) SELECT ?,?,?, content_id, ? FROM CHAPTERS WHERE id = ?",
+                    ["pdf", element.view_index, element.title, element.gd_id, element.chapter_id]
                 )
             );
         });

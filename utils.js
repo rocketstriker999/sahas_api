@@ -94,5 +94,4 @@ async function requestService({
     }
     if (onRequestEnd) onRequestEnd();
 }
-//temp1
 module.exports = { prepareDirectories, requestService, generateToken, requestPayUVerification, generateSHA512 };

@@ -1,23 +1,23 @@
 const libExpress = require("express");
-const { getContentById } = require("../db/content");
-const { getAccessByTokenAndContentId } = require("../db/accesses");
+const { getDemoContentBySubjectId } = require("../db/content");
+const { verifyAccessByTokenForChapter, getAccessByTokenAndChapterId } = require("../db/accesses");
 
 const router = libExpress.Router();
 
-//a subject id and associated content id should be there
-router.get("/subjects/:id", async (req, res) => {
+//request for demo content from subjectid
+router.get("/demo/:subjectId", async (req, res) => {
     if (req.params.subjectId) {
-        const content = await getContentById(req.params.subjectId);
+        const content = await getDemoContentBySubjectId(req.params.subjectId);
         return res.status(200).json(content);
     }
     return res.status(400).json({ error: "Missing Content subjectId" });
 });
 
-// a chpater id and associated contentid should be there
-router.get("/chapters/:id", async (req, res) => {
+//request for content from chapterId
+router.get("/content/:chapterId", async (req, res) => {
     if (req.cookies.token && req.params.id) {
-        if (await getAccessByTokenAndContentId(req.cookies.token, req.params.id)) {
-            const content = await getContentById(req.params.id);
+        if (await verifyAccessByTokenForChapter(req.cookies.token, req.params.chapterId)) {
+            const content = await getAccessByTokenAndChapterId(req.params.chapterId);
             return res.status(200).json(content);
         }
         return res.status(401).json({ error: "You Don't Have access to this content" });
@@ -26,7 +26,3 @@ router.get("/chapters/:id", async (req, res) => {
 });
 
 module.exports = router;
-
-// /content/demos/1
-
-// /content/chapters/1

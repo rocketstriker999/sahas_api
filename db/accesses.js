@@ -23,7 +23,7 @@ function getAccessByProductIdAndToken(productId, token) {
         });
 }
 
-function getAccessByTokenAndChapterId(token, chapterId) {
+function verifyAccessByTokenForChapter(token, chapterId) {
     return executeSQLQueryParameterized(
         `SELECT USER_PRODUCT_ACCESSES.id FROM USER_PRODUCT_ACCESSES JOIN USERS ON USER_PRODUCT_ACCESSES.user_id = USERS.id JOIN MAPPING_PRODUCT_COURSES ON USER_PRODUCT_ACCESSES.product_id = MAPPING_PRODUCT_COURSES.product_id JOIN MAPPING_COURSE_SUBJECTS ON MAPPING_PRODUCT_COURSES.course_id = MAPPING_COURSE_SUBJECTS.course_id JOIN MAPPING_SUBJECT_CHAPTERS ON MAPPING_COURSE_SUBJECTS.subject_id = MAPPING_SUBJECT_CHAPTERS.subject_id JOIN CHAPTERS ON MAPPING_SUBJECT_CHAPTERS.chapter_id = CHAPTERS.id WHERE USER_PRODUCT_ACCESSES.validity >= CURDATE() AND USERS.token = ? AND CHAPTERS.id = ?`,
         [token, chapterId]
@@ -46,4 +46,4 @@ function getAccessesByToken(token) {
     });
 }
 
-module.exports = { addAccess, getAccessByProductIdAndToken, getAccessByTokenAndChapterId, getAccessesByToken };
+module.exports = { addAccess, getAccessByProductIdAndToken, verifyAccessByTokenForChapter, getAccessesByToken };

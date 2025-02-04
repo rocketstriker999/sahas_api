@@ -1,6 +1,6 @@
 const libExpress = require("express");
-const { getDemoContentBySubjectId } = require("../db/content");
-const { verifyAccessByTokenForChapter, getAccessByTokenAndChapterId } = require("../db/accesses");
+const { getDemoContentBySubjectId, getChapterContentByChapterId } = require("../db/content");
+const { verifyAccessByTokenForChapter } = require("../db/accesses");
 
 const router = libExpress.Router();
 
@@ -17,7 +17,7 @@ router.get("/demo/:subjectId", async (req, res) => {
 router.get("/content/:chapterId", async (req, res) => {
     if (req.cookies.token && req.params.id) {
         if (await verifyAccessByTokenForChapter(req.cookies.token, req.params.chapterId)) {
-            const content = await getAccessByTokenAndChapterId(req.params.chapterId);
+            const content = await getChapterContentByChapterId(req.params.chapterId);
             return res.status(200).json(content);
         }
         return res.status(401).json({ error: "You Don't Have access to this content" });

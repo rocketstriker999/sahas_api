@@ -49,6 +49,7 @@ async function requestPayUVerification({ transaction, command }) {
 
 async function requestService({
     requestHeaders = {},
+    requestService,
     requestPath = "/",
     requestMethod = "GET",
     requestGetQuery = false,
@@ -61,7 +62,7 @@ async function requestService({
     if (onRequestStart) await onRequestStart();
 
     //api specific path
-    requestPath = process.env.SERVICE_GATEWAY.concat(requestPath);
+    requestPath = process.env.SERVICE_GATEWAY.concat(requestService).concat(requestPath);
 
     if (requestGetQuery) {
         requestPath = requestPath + "?";

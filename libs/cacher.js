@@ -1,5 +1,8 @@
-const { getAllCategories } = require("../db/categories");
-const { getProductsByCategory } = require("../db/products");
+const { getAllCategories, getAllCategoriesForCache } = require("../db/categories");
+const { getAllChaptersForCache } = require("../db/chapters");
+const { getAllCoursesForCache } = require("../db/courses");
+const { getAllProducts } = require("../db/products");
+const { getAllSubjectsForCache } = require("../db/subjects");
 
 const cache = {};
 
@@ -18,4 +21,12 @@ const refresh = (key) =>
         console.log(`[+]Cache Refreshed - KEY:${key} DATA:${data}`);
     });
 
-module.exports = { add, get, refresh };
+const generateCaches = () => {
+    add(process.env.CACHE_KEYS_CATEGORIES, getAllCategoriesForCache());
+    add(process.env.CACHE_KEYS_PRODUCTS, getAllProducts());
+    add(process.env.CACHE_KEYS_COURSES, getAllCoursesForCache());
+    add(process.env.CACHE_KEYS_SUBJECTS, getAllSubjectsForCache());
+    add(process.env.CACHE_KEYS_CHAPTERS, getAllChaptersForCache());
+};
+
+module.exports = { add, get, refresh, generateCaches };

@@ -1,18 +1,7 @@
 const libExpress = require("express");
-const { getAllCategoriesForCache } = require("../db/categories");
-const { getAllProducts } = require("../db/products");
 const { getAccessesByToken } = require("../db/accesses");
-const { getAllCoursesForCache } = require("../db/courses");
-const { getAllSubjectsForCache } = require("../db/subjects");
-const { getAllChaptersForCache } = require("../db/chapters");
 const cacher = require("../libs/cacher");
 const router = libExpress.Router();
-
-cacher.add(process.env.CACHE_KEYS_CATEGORIES, getAllCategoriesForCache());
-cacher.add(process.env.CACHE_KEYS_PRODUCTS, getAllProducts());
-cacher.add(process.env.CACHE_KEYS_COURSES, getAllCoursesForCache());
-cacher.add(process.env.CACHE_KEYS_SUBJECTS, getAllSubjectsForCache());
-cacher.add(process.env.CACHE_KEYS_CHAPTERS, getAllChaptersForCache());
 
 //get catelogue for user
 router.get("/", async (req, res) => {

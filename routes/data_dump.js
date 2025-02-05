@@ -78,25 +78,25 @@ router.post("/chapters", async (req, res) => {
     }
 });
 
-router.post("/videos", async (req, res) => {
+router.post("/media", async (req, res) => {
     if (req.body.is_first_request) {
-        await executeSQLQueryRaw("TRUNCATE TABLE CONTENT_VIDEOS");
+        await executeSQLQueryRaw("TRUNCATE TABLE MEDIA");
     }
 
     if (req.body.data) {
-        const videosInsertionPromises = [];
+        const mediaInsertionPromises = [];
 
         req.body.data.forEach((element) => {
-            videosInsertionPromises.push(
+            mediaInsertionPromises.push(
                 executeSQLQueryParameterized(
-                    "INSERT INTO CONTENT_VIDEOS(type,view_index,title, content_id, source) SELECT ?,?,?, content_id, ? FROM CHAPTERS WHERE id = ?",
-                    ["video", element.view_index, element.title, element.yt_id, element.chapter_id]
+                    "INSERT INTO MEDIA(type,view_index,title, content_id, source) SELECT ?,?,?, content_id, ? FROM CHAPTERS WHERE id = ?",
+                    [element.type, element.view_index, element.title, element.yt_id, element.chapter_id]
                 )
             );
         });
 
-        Promise.all(videosInsertionPromises)
-            .then(() => res.status(200).json({ msg: "Videos Synced" }))
+        Promise.all(mediaInsertionPromises)
+            .then(() => res.status(200).json({ msg: "Media Synced" }))
             .catch((error) => {
                 logger.error(error);
                 res.status(400).json({ msg: error });
@@ -104,34 +104,34 @@ router.post("/videos", async (req, res) => {
     }
 });
 
-router.post("/pdfs", async (req, res) => {
-    if (req.body.is_first_request) {
-        await executeSQLQueryRaw("TRUNCATE TABLE CONTENT_PDFS");
-    }
+// router.post("/pdfs", async (req, res) => {
+//     if (req.body.is_first_request) {
+//         await executeSQLQueryRaw("TRUNCATE TABLE CONTENT_PDFS");
+//     }
 
-    if (req.body.data) {
-        const pdfsInsertionPromises = [];
+//     if (req.body.data) {
+//         const pdfsInsertionPromises = [];
 
-        req.body.data.forEach((element) => {
-            pdfsInsertionPromises.push(
-                executeSQLQueryParameterized(
-                    "INSERT INTO CONTENT_PDFS(type,view_index,title, content_id, source) SELECT ?,?,?, content_id, ? FROM CHAPTERS WHERE id = ?",
-                    ["pdf", element.view_index, element.title, element.gd_id, element.chapter_id]
-                )
-            );
-        });
+//         req.body.data.forEach((element) => {
+//             pdfsInsertionPromises.push(
+//                 executeSQLQueryParameterized(
+//                     "INSERT INTO CONTENT_PDFS(type,view_index,title, content_id, source) SELECT ?,?,?, content_id, ? FROM CHAPTERS WHERE id = ?",
+//                     ["pdf", element.view_index, element.title, element.gd_id, element.chapter_id]
+//                 )
+//             );
+//         });
 
-        Promise.all(pdfsInsertionPromises)
-            .then(() => res.status(200).json({ msg: "PDFs Synced" }))
-            .catch((error) => {
-                logger.error(error);
-                res.status(400).json({ msg: error });
-            });
-    }
-});
+//         Promise.all(pdfsInsertionPromises)
+//             .then(() => res.status(200).json({ msg: "PDFs Synced" }))
+//             .catch((error) => {
+//                 logger.error(error);
+//                 res.status(400).json({ msg: error });
+//             });
+//     }
+// });
 
-router.post("/demo-videos", async (req, res) => {});
+// router.post("/demo-videos", async (req, res) => {});
 
-router.post("/demo-pdfs", async (req, res) => {});
+// router.post("/demo-pdfs", async (req, res) => {});
 
 module.exports = router;

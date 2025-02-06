@@ -12,7 +12,7 @@ prepareDirectories([process.env.DIRECTORY_LOGS, process.env.DIR_CONFIGS]);
 // Test and Prepare Required Tables
 generateDBTables()
     .then(() => {
-        console.log("[+]Database Ready");
+        logger.success("[+]Database Ready");
         allowTraffic();
         generateCaches();
     })

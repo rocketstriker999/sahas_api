@@ -9,7 +9,6 @@ router.get("/template", async (req, res) => {
     try {
         let allConfigs = {};
         const configs = await getConfigs();
-        console.log(configs);
         for await (config of configs) {
             allConfigs = { ...allConfigs, ...(await readConfig(config)) };
         }

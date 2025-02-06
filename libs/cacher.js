@@ -3,13 +3,14 @@ const { getAllChaptersForCache } = require("../db/chapters");
 const { getAllCoursesForCache } = require("../db/courses");
 const { getAllProducts } = require("../db/products");
 const { getAllSubjectsForCache } = require("../db/subjects");
+const logger = require("./logger");
 
 const cache = {};
 
 const add = (key, dataGenerator) => {
     dataGenerator.then((data) => {
         cache[key] = { data, dataGenerator };
-        console.log(`[+]Cache Added - KEY:${key} `);
+        logger.info(`[+]Cache Added - KEY:${key} `);
     });
 };
 
@@ -18,7 +19,7 @@ const get = (key) => cache[key]?.data;
 const refresh = (key) =>
     cache[key]?.dataGenerator.then((data) => {
         cache[key]["data"] = data;
-        console.log(`[+]Cache Refreshed - KEY:${key} DATA:${data}`);
+        logger.success(`[+]Cache Refreshed - KEY:${key} DATA:${data}`);
     });
 
 const generateCaches = () => {

@@ -78,7 +78,7 @@ router.post("/chapters", async (req, res) => {
     }
 });
 
-router.post("/media", async (req, res) => {
+router.post("/chapter-media", async (req, res) => {
     if (req.body.is_first_request) {
         await executeSQLQueryRaw("TRUNCATE TABLE MEDIA");
     }
@@ -103,6 +103,33 @@ router.post("/media", async (req, res) => {
             });
     }
 });
+
+router.post("/demo-media", async (req, res) => {
+    if (req.body.is_first_request) {
+        await executeSQLQueryRaw("TRUNCATE TABLE MEDIA");
+    }
+
+    if (req.body.data) {
+        const mediaInsertionPromises = [];
+
+        req.body.data.forEach((element) => {
+            mediaInsertionPromises.push(
+                executeSQLQueryParameterized(
+                    "INSERT INTO MEDIA(type,view_index,title, content_id, source) SELECT ?,?,?, content_id, ? FROM CHAPTERS WHERE id = ?",
+                    [element.type, element.view_index, element.title, element.source, element.subject_id]
+                )
+            );
+        });
+
+        Promise.all(mediaInsertionPromises)
+            .then(() => res.status(200).json({ msg: "Media Synced" }))
+            .catch((error) => {
+                logger.error(error);
+                res.status(400).json({ msg: error });
+            });
+    }
+});
+
 //d1
 
 // router.post("/demo-videos", async (req, res) => {});

@@ -1,6 +1,5 @@
 const libFs = require("fs");
 const libPath = require("path");
-const { logger } = require("sequelize/lib/utils/logger");
 const libCrypto = require("crypto");
 
 const prepareDirectories = (directories) => {
@@ -88,6 +87,9 @@ async function requestService({
 
     try {
         const response = await fetch(requestPath, fetchOptions);
+        console.log(requestPath);
+        console.log(response);
+
         const jsonResponse = await response.json();
         if (onResponseReceieved) onResponseReceieved(jsonResponse, response.status);
     } catch (e) {

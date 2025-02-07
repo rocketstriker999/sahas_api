@@ -55,6 +55,7 @@ router.post("/create", async (req, res) => {
                         message: `OTP Is been sent to ${req.body.email} Please Enter to Add it`,
                     });
                 } else {
+                    logger.error(otpDetails, responseCode);
                     res.status(500).json({ error: "Something Seems to be Broken , Please Try Again Later" });
                 }
             },

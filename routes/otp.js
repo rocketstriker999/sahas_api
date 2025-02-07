@@ -42,6 +42,7 @@ router.post("/create", async (req, res) => {
         const otp = Math.floor(1000 + Math.random() * 9000);
 
         requestService({
+            requestService: process.env.SERVICE_MAILER,
             requestPath: "otp",
             requestMethod: "POST",
             requestPostBody: { to: req.body.email, body_paramters: { verification_code: otp, validity_duration: 5 } },

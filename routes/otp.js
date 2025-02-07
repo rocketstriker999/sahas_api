@@ -3,7 +3,6 @@ const { requestService } = require("../utils");
 const { updateUserOTP, validateUserOTP, updateUserToken, getUserByEmail, getGroupsById, getAuthoritiesById } = require("../db/users");
 const libValidator = require("validator");
 const { generateToken } = require("../utils");
-const logger = require("../libs/logger");
 
 const router = libExpress.Router();
 
@@ -49,14 +48,12 @@ router.post("/create", async (req, res) => {
             onRequestStart: () => {
                 updateUserOTP(req.body.email, otp);
             },
-            onRequestFailure: (error) => logger.error(error),
             onResponseReceieved: (otpDetails, responseCode) => {
                 if (otpDetails && responseCode === 200) {
                     res.status(200).json({
                         message: `OTP Is been sent to ${req.body.email} Please Enter to Add it`,
                     });
                 } else {
-                    logger.error(otpDetails, responseCode);
                     res.status(500).json({ error: "Something Seems to be Broken , Please Try Again Later" });
                 }
             },

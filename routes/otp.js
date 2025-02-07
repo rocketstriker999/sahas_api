@@ -3,6 +3,7 @@ const { requestService } = require("../utils");
 const { updateUserOTP, validateUserOTP, updateUserToken, getUserByEmail, getGroupsById, getAuthoritiesById } = require("../db/users");
 const libValidator = require("validator");
 const { generateToken } = require("../utils");
+const { logger } = require("sequelize/lib/utils/logger");
 
 const router = libExpress.Router();
 
@@ -47,6 +48,7 @@ router.post("/create", async (req, res) => {
             onRequestStart: () => {
                 updateUserOTP(req.body.email, otp);
             },
+            onRequestFailure: (error) => logger.error(error),
             onResponseReceieved: (otpDetails, responseCode) => {
                 if (otpDetails && responseCode === 200) {
                     res.status(200).json({

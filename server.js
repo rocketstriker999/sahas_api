@@ -46,4 +46,6 @@ const allowTraffic = () => {
     sahasAPI.listen(process.env.SERVER_PORT, () => logger.success(`APIs started at ${process.env.SERVER_PORT}`));
 };
 
+process.on("uncaughtException", (error) => logger.error(error));
+
 module.exports = { allowTraffic };

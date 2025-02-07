@@ -38,7 +38,7 @@ jobs:
                     if [ ! -d "logs" ]; then
                       mkdir logs
                     fi
-                    node app.js > process.log &
+                    nohup node app.js > logs/process.log 2>&1 &
                     new_pid=$!
                     echo "Starting $DIR - pid $new_pid"
                     echo $new_pid > process.id

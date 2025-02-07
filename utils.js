@@ -62,6 +62,7 @@ async function requestService({
 
     //api specific path
     requestPath = process.env.SERVICE_NGINX.concat(requestService).concat(requestPath);
+    console.log(requestPath);
 
     if (requestGetQuery) {
         requestPath = requestPath + "?";

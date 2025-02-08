@@ -105,10 +105,6 @@ router.post("/chapter-media", async (req, res) => {
 });
 
 router.post("/demo-media", async (req, res) => {
-    if (req.body.is_first_request) {
-        await executeSQLQueryRaw("TRUNCATE TABLE MEDIA");
-    }
-
     if (req.body.data) {
         const mediaInsertionPromises = [];
 

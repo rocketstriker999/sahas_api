@@ -126,10 +126,4 @@ router.post("/demo-media", async (req, res) => {
     }
 });
 
-//d1
-
-// router.post("/demo-videos", async (req, res) => {});
-
-// router.post("/demo-pdfs", async (req, res) => {});
-
 module.exports = router;

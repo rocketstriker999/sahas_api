@@ -115,7 +115,7 @@ router.post("/demo-media", async (req, res) => {
         req.body.data.forEach((element) => {
             mediaInsertionPromises.push(
                 executeSQLQueryParameterized(
-                    "INSERT INTO MEDIA(type,view_index,title, content_id, source) SELECT ?,?,?, content_id, ? FROM CHAPTERS WHERE id = ?",
+                    "INSERT INTO MEDIA(type,view_index,title, content_id, source) SELECT ?,?,?, demo_content_id, ? FROM SUBJECTS WHERE id = ?",
                     [element.type, element.view_index, element.title, element.source, element.subject_id]
                 )
             );

@@ -95,7 +95,7 @@ function generateDBTables() {
             source CHAR(48) NOT NULL,
             type CHAR(12) NULL,
             view_index INT NULL,
-            downloadable BOOLEAN DEFAULT FALSE,
+            downloadable BOOLEAN DEFAULT FALSE
         )`,
         `CREATE TABLE IF NOT EXISTS USER_TRANSACTIONS (
             id INT AUTO_INCREMENT PRIMARY KEY,

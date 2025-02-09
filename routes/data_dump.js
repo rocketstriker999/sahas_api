@@ -89,8 +89,8 @@ router.post("/chapter-media", async (req, res) => {
         req.body.data.forEach((element) => {
             mediaInsertionPromises.push(
                 executeSQLQueryParameterized(
-                    "INSERT INTO MEDIA(type,view_index,title, content_id, source) SELECT ?,?,?, content_id, ? FROM CHAPTERS WHERE id = ?",
-                    [element.type, element.view_index, element.title, element.source, element.chapter_id]
+                    "INSERT INTO MEDIA(downloadable,type,view_index,title, content_id, source) SELECT ?,?,?, content_id, ? FROM CHAPTERS WHERE id = ?",
+                    [element.downloadable, element.type, element.view_index, element.title, element.source, element.chapter_id]
                 )
             );
         });
@@ -111,8 +111,8 @@ router.post("/demo-media", async (req, res) => {
         req.body.data.forEach((element) => {
             mediaInsertionPromises.push(
                 executeSQLQueryParameterized(
-                    "INSERT INTO MEDIA(type,view_index,title, content_id, source) SELECT ?,?,?, demo_content_id, ? FROM SUBJECTS WHERE id = ?",
-                    [element.type, element.view_index, element.title, element.source, element.subject_id]
+                    "INSERT INTO MEDIA(downloadable,type,view_index,title, content_id, source,downloadable) SELECT ?,?,?, demo_content_id, ? FROM SUBJECTS WHERE id = ?",
+                    [element.downloadable, element.type, element.view_index, element.title, element.source, element.subject_id]
                 )
             );
         });

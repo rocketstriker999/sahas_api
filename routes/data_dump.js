@@ -118,7 +118,7 @@ router.post("/demo-media", async (req, res) => {
         });
 
         Promise.all(mediaInsertionPromises)
-            .then(() => res.status(200).json({ msg: "Media Synced" }))
+            .then(() => res.status(200).json({ msg: "Demo Media Synced" }))
             .catch((error) => {
                 logger.error(error);
                 res.status(400).json({ msg: error });

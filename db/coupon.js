@@ -15,7 +15,7 @@ function getBenifitByCouponCodeIdAndProductId(couponCodeId, productId) {
 
 function getDistributorByCouponCodeIdAndProductId(couponCodeId, productId) {
     return executeSQLQueryParameterized(
-        `SELECT MAPPING_COUPON_CODES_DISTRIBUTOR_BENIFIT.user_id,MAPPING_COUPON_CODES_DISTRIBUTOR_BENIFIT.commision,MAPPING_COUPON_CODES_BENEFICIARY.commision_type FROM MAPPING_COUPON_CODES_DISTRIBUTOR_BENIFIT WHERE coupon_code_id=? AND product_id=? AND commision>0`,
+        `SELECT MAPPING_COUPON_CODES_DISTRIBUTOR_BENIFIT.user_id,MAPPING_COUPON_CODES_DISTRIBUTOR_BENIFIT.commision,MAPPING_COUPON_CODES_DISTRIBUTOR_BENIFIT.commision_type FROM MAPPING_COUPON_CODES_DISTRIBUTOR_BENIFIT WHERE coupon_code_id=? AND product_id=? AND commision>0`,
         [couponCodeId, productId]
     )
         .then((result) => (result.length > 0 ? result[0] : false))

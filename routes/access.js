@@ -28,8 +28,9 @@ router.post("/", async (req, res) => {
 
             //Need to give benifit - if coupon was used
             logger.info(JSON.stringify(transaction));
-            if ((couponCodeDistributor = await getDistributorByCouponCodeIdAndProductId(transaction.coupon_id, transactionVerification.product_id))) {
-                //credit this to user's wallet money whoes code was used
+
+            //credit this to user's wallet money whoes code was used
+            if ((couponCodeDistributor = await getDistributorByCouponCodeIdAndProductId(transaction["coupon_id"], transactionVerification.product_id))) {
                 creditUserWallet(
                     couponCodeDistributor.user_id,
                     couponCodeDistributor.commision_type === "PERCENTAGE"

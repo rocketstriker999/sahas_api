@@ -21,10 +21,10 @@ router.post("/", async (req, res) => {
                 transaction.productTitle = product.title;
                 transaction.price = product.price;
                 transaction.pay = product.discounted;
-                transaction.couponCodeId = req.body.couponCode && (await getCouponCodeIdByCouponCode(req.body.couponCode));
+                transaction.couponId = req.body.couponCode && (await getCouponCodeIdByCouponCode(req.body.couponCode));
                 transaction.benifit = 0;
                 //validate coupon and check if coupon can  be used
-                if (transaction.couponCodeId && (couponCodeBenifit = await getBenifitByCouponCodeIdAndProductId(transaction.couponCodeId, product.id))) {
+                if (transaction.couponId && (couponCodeBenifit = await getBenifitByCouponCodeIdAndProductId(transaction.couponId, product.id))) {
                     transaction.benifit = couponCodeBenifit.type == "PERCENTAGE" ? (transaction.pay * couponCodeBenifit.value) / 100 : couponCodeBenifit.value;
                     transaction.pay -= transaction.benifit;
                 }

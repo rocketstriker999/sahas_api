@@ -25,7 +25,6 @@ router.post("/", async (req, res) => {
             addAccess(transaction);
             //generate invoice as well
             addInvoice(transaction.id);
-            logger.info("F!");
 
             //Need to give benifit - if coupon was used
             if ((couponCodeDistributor = await getDistributorByCouponCodeIdAndProductId(transaction.coupon_id, transactionVerification.product_id))) {

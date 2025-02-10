@@ -190,6 +190,7 @@ function executeSQLQueryParameterized(query, parameters) {
                     logger.info(`Executing ${query} [${parameters}]`);
                     if (error) {
                         reject(error); // Reject the promise if the query fails
+                        console.error("FAILED - ", query, error);
                     } else {
                         resolve(result); // Resolve the promise if the query succeeds
                     }

@@ -1,27 +1,37 @@
 const { executeSQLQueryParameterized } = require("../libs/db");
 const logger = require("../libs/logger");
 
-function getBenifitByCouponCodeAndProductId(couponCode, productId) {
+function getBenifitByCouponCodeIdAndProductId(couponCodeId, productId) {
     return executeSQLQueryParameterized(
-        `SELECT MAPPING_COUPON_CODES_BENIFIT.benifit,MAPPING_COUPON_CODES_BENIFIT.benifit_type FROM MAPPING_COUPON_CODES_BENIFIT INNER JOIN COUPON_CODES ON MAPPING_COUPON_CODES_BENIFIT.coupon_code_id=COUPON_CODES.id  WHERE COUPON_CODES.coupon_code=? AND MAPPING_COUPON_CODES_BENIFIT.product_id=? AND COUPON_CODES.active=TRUE AND COUPON_CODES.validity>=CURRENT_DATE AND MAPPING_COUPON_CODES_BENIFIT.benifit>0`,
-        [couponCode, productId]
+        `SELECT MAPPING_COUPON_CODES_BENIFIT.value,MAPPING_COUPON_CODES_BENIFIT.type FROM MAPPING_COUPON_CODES_BENIFIT INNER JOIN COUPON_CODES ON MAPPING_COUPON_CODES_BENIFIT.coupon_code_id=COUPON_CODES.id  WHERE COUPON_CODES.id=? AND MAPPING_COUPON_CODES_BENIFIT.product_id=? AND COUPON_CODES.active=TRUE AND COUPON_CODES.validity>=CURRENT_DATE AND MAPPING_COUPON_CODES_BENIFIT.value>0`,
+        [couponCodeId, productId]
     )
         .then((result) => (result.length > 0 ? result[0] : false))
         .catch((error) => {
-            logger.error(`getBenifitByCouponCodeAndProductId: ${error}`);
+            logger.error(`getBenifitByCouponCodeIdAndProductId: ${error}`);
             return false;
         });
 }
 
-function getBenificiaryByCouponIdAndProductId(couponId, productId) {
+function getDistributorByCouponCodeIdAndProductId(couponCodeId, productId) {
     return executeSQLQueryParameterized(
-        `SELECT MAPPING_COUPON_CODES_BENEFICIARY.benifit,MAPPING_COUPON_CODES_BENEFICIARY.benifit_type FROM MAPPING_COUPON_CODES_BENEFICIARY INNER JOIN COUPON_CODES ON MAPPING_COUPON_CODES_BENEFICIARY.coupon_code_id=COUPON_CODES.id WHERE MAPPING_COUPON_CODES_BENEFICIARY.coupon_id=? MAPPING_COUPON_CODES_BENEFICIARY.product_id=? AND COUPON_CODES.active=TRUE AND COUPON_CODES.validity>=CURRENT_DATE AND COUPON_CODES.user_id!=NULL AND  MAPPING_COUPON_CODES_BENEFICIARY.benifit>0`,
-        [couponId, productId]
+        `SELECT MAPPING_COUPON_CODES_DISTRIBUTOR_BENIFIT.user_id,MAPPING_COUPON_CODES_DISTRIBUTOR_BENIFIT.commision,MAPPING_COUPON_CODES_BENEFICIARY.commision_type FROM MAPPING_COUPON_CODES_DISTRIBUTOR_BENIFIT WHERE coupon_code_id=? AND product_id=? AND commision>0`,
+        [couponCodeId, productId]
     )
         .then((result) => (result.length > 0 ? result[0] : false))
         .catch((error) => {
-            logger.error(`getBenificiaryByCouponIdAndProductId: ${error}`);
+            logger.error(`getDistributorByCouponCodeIdAndProductId: ${error}`);
             return [];
         });
 }
-module.exports = { getBenifitByCouponCodeAndProductId, getBenificiaryByCouponIdAndProductId };
+
+function getCouponCodeIdByCouponCode(couponCode) {
+    return executeSQLQueryParameterized(`SELECT id FROM COUPON_CODES WHERE coupon_code=?`, [couponCode])
+        .then((result) => (result.length > 0 ? result[0].id : null))
+        .catch((error) => {
+            logger.error(`getCouponCodeIdByCouponCode: ${error}`);
+            return [];
+        });
+}
+
+module.exports = { getBenifitByCouponCodeIdAndProductId, getDistributorByCouponCodeIdAndProductId, getCouponCodeIdByCouponCode };

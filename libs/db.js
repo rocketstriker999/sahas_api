@@ -111,7 +111,7 @@ function generateDBTables() {
             gd_id VARCHAR(36) NOT NULL,
             view_index INT NULL
         )`,
-        `CREATE TABLE IF NOT EXISTS USER_TRANSACTIONS (
+        `CREATE TABLE IF NOT EXISTS TRANSACTIONS (
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
             product_id INT NOT NULL,
@@ -119,7 +119,7 @@ function generateDBTables() {
             status VARCHAR(16) DEFAULT 'IN_PROGRESS',
             price DECIMAL(8, 2) DEFAULT 0,
             discounted DECIMAL(8, 2) DEFAULT 0,
-            coupon_id VARCHAR(16) DEFAULT NULL,
+            coupon_id INT DEFAULT NULL,
             benifit DECIMAL(8, 2) DEFAULT 0,
             sgst DECIMAL(8, 2) DEFAULT 0,
             cgst DECIMAL(8, 2) DEFAULT 0,
@@ -138,20 +138,20 @@ function generateDBTables() {
             id INT AUTO_INCREMENT PRIMARY KEY,
             coupon_code VARCHAR(8) UNIQUE,
             validity DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            user_id INT NULL,
             active BOOLEAN NOT NULL DEFAULT TRUE
         )`,
         `CREATE TABLE IF NOT EXISTS MAPPING_COUPON_CODES_BENIFIT (
             coupon_code_id INT NOT NULL,
             product_id INT NOT NULL,
-            benifit DECIMAL(8, 2) NOT NULL DEFAULT 0,
-            benifit_type VARCHAR(12)  DEFAULT 'PERCENTAGE'
+            value DECIMAL(8, 2) NOT NULL DEFAULT 0,
+            type VARCHAR(12)  DEFAULT 'PERCENTAGE'
         )`,
-        `CREATE TABLE IF NOT EXISTS MAPPING_COUPON_CODES_BENEFICIARY (
+        `CREATE TABLE IF NOT EXISTS MAPPING_COUPON_CODES_DISTRIBUTOR_BENIFIT(
             coupon_code_id INT NOT NULL,
+            user_id INT NOT NULL,
             product_id INT NOT NULL,
-            benifit DECIMAL(8, 2) DEFAULT 0,
-            benifit_type VARCHAR(12) DEFAULT 'PERCENTAGE'
+            commision DECIMAL(8, 2) DEFAULT 0,
+            commision_type VARCHAR(12) DEFAULT 'PERCENTAGE'
         )`,
     ];
 

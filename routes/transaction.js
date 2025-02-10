@@ -2,7 +2,7 @@ const libExpress = require("express");
 const { getUserByToken } = require("../db/users");
 const { getProductForTransaction } = require("../db/products");
 const { createTransaction, updateTransactionHash } = require("../db/transactions");
-const { getBenifitByCouponCodeAndProductId } = require("../db/coupon");
+const { getBenifitByCouponCodeIdAndProductId, getCouponCodeIdByCouponCode } = require("../db/coupon");
 const { generateSHA512 } = require("../utils");
 
 const router = libExpress.Router();
@@ -21,12 +21,11 @@ router.post("/", async (req, res) => {
                 transaction.productTitle = product.title;
                 transaction.price = product.price;
                 transaction.pay = product.discounted;
-                transaction.couponCode = req.body.couponCode;
+                transaction.couponCodeId = req.body.couponCode && (await getCouponCodeIdByCouponCode(req.body.couponCode));
                 transaction.benifit = 0;
                 //validate coupon and check if coupon can  be used
-                if (transaction.couponCode && (verifiedCouponCode = await getBenifitByCouponCodeAndProductId(transaction.couponCode, product.id))) {
-                    transaction.benifit =
-                        verifiedCouponCode.benifit_type == "PERCENTAGE" ? (transaction.pay * verifiedCouponCode.benifit) / 100 : verifiedCouponCode.benifit;
+                if (transaction.couponCodeId && (couponCodeBenifit = await getBenifitByCouponCodeIdAndProductId(transaction.couponCodeId, product.id))) {
+                    transaction.benifit = couponCodeBenifit.type == "PERCENTAGE" ? (transaction.pay * couponCodeBenifit.value) / 100 : couponCodeBenifit.value;
                     transaction.pay -= transaction.benifit;
                 }
                 transaction.sgst = Number((transaction.pay * 9) / 100);

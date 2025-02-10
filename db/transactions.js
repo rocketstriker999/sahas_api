@@ -3,7 +3,7 @@ const logger = require("../libs/logger");
 
 function createTransaction(transaction) {
     return executeSQLQueryParameterized(
-        `INSERT INTO USER_TRANSACTIONS ( user_id,product_id, price, discounted,coupon_id,benifit, sgst, cgst,pay) VALUES (?,?,?,?,?,?,?,?,?)`,
+        `INSERT INTO TRANSACTIONS ( user_id,product_id, price, discounted,coupon_id,benifit, sgst, cgst,pay) VALUES (?,?,?,?,?,?,?,?,?)`,
         [
             transaction.userId,
             transaction.productId,
@@ -24,21 +24,21 @@ function createTransaction(transaction) {
 }
 
 function updateTransactionStatus(transactionId, status) {
-    return executeSQLQueryParameterized(`UPDATE USER_TRANSACTIONS SET status='${status.toUpperCase()}' WHERE id=?`, [transactionId]).catch((error) => {
+    return executeSQLQueryParameterized(`UPDATE TRANSACTIONS SET status='${status.toUpperCase()}' WHERE id=?`, [transactionId]).catch((error) => {
         logger.error(`updateTransactionStatus: ${error}`);
         return false;
     });
 }
 
 function updateTransactionHash(transactionId, hash) {
-    return executeSQLQueryParameterized(`UPDATE USER_TRANSACTIONS SET hash='${hash}' WHERE id=?`, [transactionId]).catch((error) => {
+    return executeSQLQueryParameterized(`UPDATE TRANSACTIONS SET hash='${hash}' WHERE id=?`, [transactionId]).catch((error) => {
         logger.error(`updateTransactionHash: ${error}`);
         return false;
     });
 }
 
 function getTransactionById(transactionId) {
-    return executeSQLQueryParameterized(`SELECT * FROM USER_TRANSACTIONS WHERE id=?`, [transactionId])
+    return executeSQLQueryParameterized(`SELECT * FROM TRANSACTIONS WHERE id=?`, [transactionId])
         .then((result) => (result.length > 0 ? result[0] : false))
         .catch((error) => {
             logger.error(`getTransactionById: ${error}`);

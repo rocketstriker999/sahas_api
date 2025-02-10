@@ -70,8 +70,8 @@ function validateUserOTP(email, otp) {
         });
 }
 
-function creditCuponReward(userId, reward) {
-    executeSQLQueryParameterized(`UPDATE USERS SET wallet = wallet + ? WHERE id = ?`, [reward, userId]).catch((error) =>
+function creditUserWallet(userId, credit) {
+    executeSQLQueryParameterized(`UPDATE USERS SET wallet = wallet + ? WHERE id = ?`, [credit, userId]).catch((error) =>
         logger.error(`creditCuponReward: ${error}`)
     );
 }
@@ -85,5 +85,5 @@ module.exports = {
     getGroupsById,
     getAuthoritiesById,
     updateUserPrimaryDetails,
-    creditCuponReward,
+    creditUserWallet,
 };

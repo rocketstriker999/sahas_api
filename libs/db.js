@@ -130,23 +130,28 @@ function generateDBTables() {
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
             product_id INT NOT NULL,
-            transaction_id INT NOT NULL,
+            transaction_id INT NULL,
             validity DATETIME NOT NULL,
             active BOOLEAN NOT NULL DEFAULT TRUE
         )`,
-        `CREATE TABLE IF NOT EXISTS COUPONS (
-            id VARCHAR(8) PRIMARY KEY,
-            active BOOLEAN NOT NULL DEFAULT TRUE,
-            benifit DECIMAL(8, 2) NOT NULL DEFAULT 0,
-            benifit_type VARCHAR(12)  DEFAULT 'PERCENTAGE',
+        `CREATE TABLE IF NOT EXISTS COUPON_CODES (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            coupon_code VARCHAR(8) UNIQUE,
             validity DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            beneficiary_user_id INT DEFAULT 0,
-            beneficiary_benifit DECIMAL(8, 2) DEFAULT 0,
-            beneficiary_benifit_type VARCHAR(12) DEFAULT 'PERCENTAGE'
+            user_id INT NULL,
+            active BOOLEAN NOT NULL DEFAULT TRUE
         )`,
-        `CREATE TABLE IF NOT EXISTS MAPPING_COUPON_PRODUCTS (
-            coupon_id VARCHAR(8) NOT NULL,
-            product_id INT NOT NULL
+        `CREATE TABLE IF NOT EXISTS MAPPING_COUPON_CODES_BENIFIT (
+            coupon_code_id INT NOT NULL,
+            product_id INT NOT NULL,
+            benifit DECIMAL(8, 2) NOT NULL DEFAULT 0,
+            benifit_type VARCHAR(12)  DEFAULT 'PERCENTAGE'
+        )`,
+        `CREATE TABLE IF NOT EXISTS MAPPING_COUPON_CODES_BENEFICIARY (
+            coupon_code_id INT NOT NULL,
+            product_id INT NOT NULL,
+            benifit DECIMAL(8, 2) DEFAULT 0,
+            benifit_type VARCHAR(12) DEFAULT 'PERCENTAGE'
         )`,
     ];
 

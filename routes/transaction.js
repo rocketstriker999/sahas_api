@@ -2,7 +2,7 @@ const libExpress = require("express");
 const { getUserByToken } = require("../db/users");
 const { getProductForTransaction } = require("../db/products");
 const { createTransaction, updateTransactionHash } = require("../db/transactions");
-const { validateCouponId } = require("../db/coupon");
+const { getBenifitByCouponCodeAndProductId } = require("../db/coupon");
 const { generateSHA512 } = require("../utils");
 
 const router = libExpress.Router();
@@ -20,11 +20,12 @@ router.post("/", async (req, res) => {
                 transaction.productTitle = product.title;
                 transaction.price = product.price;
                 transaction.pay = product.discounted;
-                transaction.couponId = req.body.coupon;
+                transaction.couponCode = req.body.couponCode;
                 transaction.benifit = 0;
                 //validate coupon
-                if (transaction.couponId && (appliedCoupon = await validateCouponId(transaction.couponId, product.id))) {
-                    transaction.benifit = appliedCoupon.benifit_type == "PERCENTAGE" ? (transaction.pay * appliedCoupon.benifit) / 100 : appliedCoupon.benifit;
+                if (transaction.couponCode && (verifiedCouponCode = await getBenifitByCouponCodeAndProductId(transaction.couponCode, product.id))) {
+                    transaction.benifit =
+                        verifiedCouponCode.benifit_type == "PERCENTAGE" ? (transaction.pay * verifiedCouponCode.benifit) / 100 : verifiedCouponCode.benifit;
                     transaction.pay -= transaction.benifit;
                 }
                 transaction.sgst = Number((transaction.pay * 9) / 100);

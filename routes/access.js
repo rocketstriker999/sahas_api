@@ -27,7 +27,7 @@ router.post("/", async (req, res) => {
             addInvoice(transaction.id);
 
             //Need to give benifit - if coupon was used
-            logger.info(transaction);
+            logger.info(JSON.stringify(transaction));
             if ((couponCodeDistributor = await getDistributorByCouponCodeIdAndProductId(transaction.coupon_id, transactionVerification.product_id))) {
                 //credit this to user's wallet money whoes code was used
                 creditUserWallet(

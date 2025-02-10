@@ -3,8 +3,9 @@ const { creditUserWallet } = require("../db/users");
 const { updateTransactionStatus, getTransactionById } = require("../db/transactions");
 const { addAccess } = require("../db/accesses");
 const { addInvoice } = require("../db/invoices");
-const { getBenificiaryByCouponIdAndProductId, getDistributorByCouponCodeIdAndProductId } = require("../db/coupon");
+const { getDistributorByCouponCodeIdAndProductId } = require("../db/coupon");
 const { requestPayUVerification } = require("../utils");
+const logger = require("../libs/logger");
 
 const router = libExpress.Router();
 
@@ -19,11 +20,12 @@ router.post("/", async (req, res) => {
 
         if (transactionVerification?.transaction_details[transaction.id]?.status === "success") {
             //verified from payu
-            await updateTransactionStatus(transaction.id, transactionVerification.transaction_details[transaction.id].status);
+            updateTransactionStatus(transaction.id, transactionVerification.transaction_details[transaction.id].status);
             //transaction updated - need to give access
-            await addAccess(transaction);
+            addAccess(transaction);
             //generate invoice as well
             addInvoice(transaction.id);
+            logger.info("F!");
 
             //Need to give benifit - if coupon was used
             if ((couponCodeDistributor = await getDistributorByCouponCodeIdAndProductId(transaction.coupon_id, transactionVerification.product_id))) {

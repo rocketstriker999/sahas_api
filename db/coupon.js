@@ -14,9 +14,6 @@ function getBenifitByCouponCodeIdAndProductId(couponCodeId, productId) {
 }
 
 function getDistributorByCouponCodeIdAndProductId(couponCodeId, productId) {
-    logger.info("couponCodeId", couponCodeId);
-    logger.info("productId", productId);
-
     return executeSQLQueryParameterized(
         `SELECT MAPPING_COUPON_CODES_DISTRIBUTOR_BENIFIT.user_id,MAPPING_COUPON_CODES_DISTRIBUTOR_BENIFIT.commision,MAPPING_COUPON_CODES_BENEFICIARY.commision_type FROM MAPPING_COUPON_CODES_DISTRIBUTOR_BENIFIT WHERE coupon_code_id=? AND product_id=? AND commision>0`,
         [couponCodeId, productId]

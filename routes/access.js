@@ -27,10 +27,10 @@ router.post("/", async (req, res) => {
             addInvoice(transaction.id);
 
             logger.info(transaction.coupon_id);
-            logger.info(transactionVerification.product_id);
+            logger.info(transaction.product_id);
 
             //credit this to user's wallet money whoes code was used
-            if ((couponCodeDistributor = await getDistributorByCouponCodeIdAndProductId(transaction["coupon_id"], transactionVerification.product_id))) {
+            if ((couponCodeDistributor = await getDistributorByCouponCodeIdAndProductId(transaction.coupon_id, transaction.product_id))) {
                 creditUserWallet(
                     couponCodeDistributor.user_id,
                     couponCodeDistributor.commision_type === "PERCENTAGE"

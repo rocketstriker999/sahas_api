@@ -22,7 +22,7 @@ router.post("/", async (req, res) => {
                 transaction.pay = product.discounted;
                 transaction.couponCode = req.body.couponCode;
                 transaction.benifit = 0;
-                //validate coupon
+                //validate coupon and check if coupon can  be used
                 if (transaction.couponCode && (verifiedCouponCode = await getBenifitByCouponCodeAndProductId(transaction.couponCode, product.id))) {
                     transaction.benifit =
                         verifiedCouponCode.benifit_type == "PERCENTAGE" ? (transaction.pay * verifiedCouponCode.benifit) / 100 : verifiedCouponCode.benifit;

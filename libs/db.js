@@ -97,7 +97,7 @@ function generateDBTables() {
             view_index INT NULL,
             downloadable BOOLEAN DEFAULT FALSE
         )`,
-        `CREATE TABLE IF NOT EXISTS USER_TRANSACTIONS (
+        `CREATE TABLE IF NOT EXISTS TRANSACTIONS (
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
             product_id INT NOT NULL,
@@ -105,7 +105,7 @@ function generateDBTables() {
             status VARCHAR(16) DEFAULT 'IN_PROGRESS',
             price DECIMAL(8, 2) DEFAULT 0,
             discounted DECIMAL(8, 2) DEFAULT 0,
-            coupon_id VARCHAR(16) DEFAULT NULL,
+            coupon_id INT DEFAULT NULL,
             benifit DECIMAL(8, 2) DEFAULT 0,
             sgst DECIMAL(8, 2) DEFAULT 0,
             cgst DECIMAL(8, 2) DEFAULT 0,
@@ -116,23 +116,28 @@ function generateDBTables() {
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
             product_id INT NOT NULL,
-            transaction_id INT NOT NULL,
+            transaction_id INT NULL,
             validity DATETIME NOT NULL,
             active BOOLEAN NOT NULL DEFAULT TRUE
         )`,
-        `CREATE TABLE IF NOT EXISTS COUPONS (
-            id VARCHAR(8) PRIMARY KEY,
-            active BOOLEAN NOT NULL DEFAULT TRUE,
-            benifit DECIMAL(8, 2) NOT NULL DEFAULT 0,
-            benifit_type VARCHAR(12)  DEFAULT 'PERCENTAGE',
+        `CREATE TABLE IF NOT EXISTS COUPON_CODES (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            coupon_code VARCHAR(8) UNIQUE,
             validity DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            beneficiary_user_id INT DEFAULT 0,
-            beneficiary_benifit DECIMAL(8, 2) DEFAULT 0,
-            beneficiary_benifit_type VARCHAR(12) DEFAULT 'PERCENTAGE'
+            active BOOLEAN NOT NULL DEFAULT TRUE
         )`,
-        `CREATE TABLE IF NOT EXISTS MAPPING_COUPON_PRODUCTS (
-            coupon_id VARCHAR(8) NOT NULL,
-            product_id INT NOT NULL
+        `CREATE TABLE IF NOT EXISTS MAPPING_COUPON_CODES_BENIFIT (
+            coupon_code_id INT NOT NULL,
+            product_id INT NOT NULL,
+            value DECIMAL(8, 2) NOT NULL DEFAULT 0,
+            type VARCHAR(12)  DEFAULT 'PERCENTAGE'
+        )`,
+        `CREATE TABLE IF NOT EXISTS MAPPING_COUPON_CODES_DISTRIBUTOR_BENIFIT(
+            coupon_code_id INT NOT NULL,
+            user_id INT NOT NULL,
+            product_id INT NOT NULL,
+            commision DECIMAL(8, 2) DEFAULT 0,
+            commision_type VARCHAR(12) DEFAULT 'PERCENTAGE'
         )`,
     ];
 
@@ -149,6 +154,7 @@ function executeSQLQueryRaw(query) {
                 dbConnection.query(query, (error, result) => {
                     logger.info(`Executing ${query}`);
                     if (error) {
+                        console.error("FAILED - ", query, error);
                         reject(error); // Reject the promise if the query fails
                     } else {
                         resolve(result); // Resolve the promise if the query succeeds
@@ -170,6 +176,7 @@ function executeSQLQueryParameterized(query, parameters) {
                     logger.info(`Executing ${query} [${parameters}]`);
                     if (error) {
                         reject(error); // Reject the promise if the query fails
+                        console.error("FAILED - ", query, error);
                     } else {
                         resolve(result); // Resolve the promise if the query succeeds
                     }

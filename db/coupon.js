@@ -1,24 +1,37 @@
 const { executeSQLQueryParameterized } = require("../libs/db");
 const logger = require("../libs/logger");
 
-function validateCouponId(couponId, productId) {
+function getBenifitByCouponCodeIdAndProductId(couponCodeId, productId) {
     return executeSQLQueryParameterized(
-        `SELECT table_coupons.* FROM COUPONS table_coupons JOIN MAPPING_COUPON_PRODUCTS table_mapping_coupon_products WHERE table_mapping_coupon_products.coupon_id=? AND table_mapping_coupon_products.product_id=? AND table_coupons.active=TRUE AND table_coupons.validity>=CURRENT_DATE AND table_coupons.benifit>0`,
-        [couponId, productId]
+        `SELECT MAPPING_COUPON_CODES_BENIFIT.value,MAPPING_COUPON_CODES_BENIFIT.type FROM MAPPING_COUPON_CODES_BENIFIT INNER JOIN COUPON_CODES ON MAPPING_COUPON_CODES_BENIFIT.coupon_code_id=COUPON_CODES.id  WHERE COUPON_CODES.id=? AND MAPPING_COUPON_CODES_BENIFIT.product_id=? AND COUPON_CODES.active=TRUE AND COUPON_CODES.validity>=CURRENT_DATE AND MAPPING_COUPON_CODES_BENIFIT.value>0`,
+        [couponCodeId, productId]
     )
         .then((result) => (result.length > 0 ? result[0] : false))
         .catch((error) => {
-            logger.error(`validateCouponId: ${error}`);
+            logger.error(`getBenifitByCouponCodeIdAndProductId: ${error}`);
             return false;
         });
 }
 
-function getCouponById(couponId) {
-    return executeSQLQueryParameterized(`SELECT * FROM COUPONS WHERE id=?`, [couponId])
+function getDistributorByCouponCodeIdAndProductId(couponCodeId, productId) {
+    return executeSQLQueryParameterized(
+        `SELECT MAPPING_COUPON_CODES_DISTRIBUTOR_BENIFIT.user_id,MAPPING_COUPON_CODES_DISTRIBUTOR_BENIFIT.commision,MAPPING_COUPON_CODES_DISTRIBUTOR_BENIFIT.commision_type FROM MAPPING_COUPON_CODES_DISTRIBUTOR_BENIFIT WHERE coupon_code_id=? AND product_id=? AND commision>0`,
+        [couponCodeId, productId]
+    )
         .then((result) => (result.length > 0 ? result[0] : false))
         .catch((error) => {
-            logger.error(`getCoupon: ${error}`);
+            logger.error(`getDistributorByCouponCodeIdAndProductId: ${error}`);
             return [];
         });
 }
-module.exports = { validateCouponId, getCouponById };
+
+function getCouponCodeIdByCouponCode(couponCode) {
+    return executeSQLQueryParameterized(`SELECT id FROM COUPON_CODES WHERE coupon_code=?`, [couponCode])
+        .then((result) => (result.length > 0 ? result[0].id : null))
+        .catch((error) => {
+            logger.error(`getCouponCodeIdByCouponCode: ${error}`);
+            return [];
+        });
+}
+
+module.exports = { getBenifitByCouponCodeIdAndProductId, getDistributorByCouponCodeIdAndProductId, getCouponCodeIdByCouponCode };

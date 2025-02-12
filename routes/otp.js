@@ -13,7 +13,13 @@ router.post("/verify", async (req, res) => {
             await updateUserToken(req.body.email, generateToken());
             const user = await getUserByEmail(req.body.email);
             if (user) {
-                res.cookie("token", user.token, { httpOnly: true, maxAge: process.env.TOKEN_AGE });
+                res.cookie("token", user.token, {
+                    httpOnly: true,
+                    maxAge: process.env.TOKEN_AGE,
+                    sameSite: "None",
+                    secure: true,
+                    domain: "dev.sahasinstitute.com",
+                });
                 res.status(200).json({
                     user: {
                         ...user,

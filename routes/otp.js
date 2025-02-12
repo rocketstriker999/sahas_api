@@ -18,7 +18,6 @@ router.post("/verify", async (req, res) => {
                     maxAge: process.env.TOKEN_AGE,
                     sameSite: "None",
                     secure: true,
-                    domain: "dev.sahasinstitute.com",
                 });
                 res.status(200).json({
                     user: {

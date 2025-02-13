@@ -7,7 +7,7 @@ const cors = require("cors");
 const sahasAPI = libExpress();
 
 // Use the CORS middleware to allow cross origin request in case of testing UI and Backend
-sahasAPI.use(cors({ credentials: true }));
+sahasAPI.use(cors({ origin: "http://localhost:3000", credentials: true }));
 
 //sahasAPI.use(require("./middlewares/device"));
 sahasAPI.use((req, res, next) => {

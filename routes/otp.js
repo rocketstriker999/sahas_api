@@ -18,6 +18,7 @@ router.post("/verify", async (req, res) => {
                     maxAge: process.env.TOKEN_AGE,
                     secure: true, // Set to true if using HTTPS
                     sameSite: "None", // Required for cross-origin requests
+                    domain: "dev.sahasinstitute.com",
                 });
                 res.status(200).json({
                     user: {

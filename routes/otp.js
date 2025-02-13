@@ -16,8 +16,6 @@ router.post("/verify", async (req, res) => {
                 res.cookie("token", user.token, {
                     httpOnly: true,
                     maxAge: process.env.TOKEN_AGE,
-                    sameSite: "None",
-                    secure: true,
                 });
                 res.status(200).json({
                     user: {

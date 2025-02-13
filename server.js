@@ -32,7 +32,7 @@ const routers = {
     "/access": require("./routes/access"),
 };
 
-//apply all routes
+//apply all routes -
 Object.entries(routers).forEach(([path, router]) => sahasAPI.use(path, router));
 
 //if api path is not processable

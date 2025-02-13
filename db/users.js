@@ -79,6 +79,19 @@ function creditUserWallet(userId, credit) {
     );
 }
 
+// Temporary need to be removed Find user_id by email
+function getUserIdByEmail(email) {
+    return executeSQLQueryParameterized(
+        `SELECT id FROM USERS WHERE email = ?`, 
+        [email]
+    ).then((results) => {
+        return results.length > 0 ? results[0].id : null;
+    }).catch((error) => {
+        logger.error(`getUserIdByEmail: ${error}`);
+        return null;
+    });
+}
+
 module.exports = {
     updateUserOTP,
     validateUserOTP,
@@ -89,4 +102,5 @@ module.exports = {
     getAuthoritiesById,
     updateUserPrimaryDetails,
     creditUserWallet,
+    getUserIdByEmail,
 };

@@ -16,6 +16,9 @@ router.post("/verify", async (req, res) => {
                 res.cookie("token", user.token, {
                     httpOnly: true,
                     maxAge: process.env.TOKEN_AGE,
+                    secure: false, // Set to true if using HTTPS
+                    sameSite: "None", // Required for cross-origin requests
+                    domain: "dev.sahasinstitute.com", // Make sure this matches your API domain
                 });
                 res.status(200).json({
                     user: {

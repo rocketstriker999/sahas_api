@@ -3,7 +3,7 @@ const libCookieParser = require("cookie-parser");
 const logger = require("./libs/logger");
 const cors = require("cors");
 
-//api server
+//api server -1
 const sahasAPI = libExpress();
 
 // Use the CORS middleware to allow cross origin request in case of testing UI Localhost and Cookies as well --

@@ -5,7 +5,7 @@ const { verifyAccessByTokenForChapter } = require("../db/accesses");
 const router = libExpress.Router();
 
 //request for demo content from subjectid
-router.get("/subject/:subjectId", async (req, res) => {
+router.get("/subjects/:subjectId", async (req, res) => {
     if (req.params.subjectId) {
         const content = await getMediaBySubjectId(req.params.subjectId);
         return res.status(200).json(content);
@@ -14,7 +14,7 @@ router.get("/subject/:subjectId", async (req, res) => {
 });
 
 //request for content from chapterId
-router.get("/chapter/:chapterId", async (req, res) => {
+router.get("/chapters/:chapterId", async (req, res) => {
     if (req.cookies.token && req.params.chapterId) {
         if (await verifyAccessByTokenForChapter(req.cookies.token, req.params.chapterId)) {
             const content = await getMediaByChapterId(req.params.chapterId);

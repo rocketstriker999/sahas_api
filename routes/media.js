@@ -26,6 +26,7 @@ router.get("/chapters/:chapterId", async (req, res) => {
     return res.status(400).json({ error: "Missing Required Details" });
 });
 
+//get the media source for a video and pdf
 router.get("/source/subjects/:subjectId/:mediaId", async (req, res) => {
     if (req.params.subjectId && req.params.mediaId) {
         const media = await extractMediaBySubjectIdAndMediaId(req.params.subjectId, req.params.mediaId);

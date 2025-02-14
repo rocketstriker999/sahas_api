@@ -1,6 +1,7 @@
 const libExpress = require("express");
-const { getMediaBySubjectId, getMediaByChapterId } = require("../db/content");
+const { getMediaBySubjectId, getMediaByChapterId, extractMediaBySubjectIdAndMediaId } = require("../db/media");
 const { verifyAccessByTokenForChapter } = require("../db/accesses");
+const { requestService } = require("../utils");
 
 const router = libExpress.Router();
 
@@ -25,4 +26,19 @@ router.get("/chapters/:chapterId", async (req, res) => {
     return res.status(400).json({ error: "Missing Required Details" });
 });
 
+router.get("/source/subjects/:subjectId/:mediaId", async (req, res) => {
+    if (req.params.subjectId && req.params.mediaId) {
+        const media = await extractMediaBySubjectIdAndMediaId(req.params.subjectId, req.params.mediaId);
+        if (media)
+            return requestService({
+                requestServiceName: process.env.SERVICE_MEDIA,
+                requestPath: "extract",
+                requestMethod: "POST",
+                requestPostBody: media,
+                onResponseReceieved: (sources, responseCode) => res.status(responseCode).json({ sources }),
+            });
+        return res.status(400).json({ error: "Invalid Media Request - Media Not Avaialabale" });
+    }
+    return res.status(400).json({ error: "Missing Required Details" });
+});
 module.exports = router;

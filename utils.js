@@ -48,7 +48,7 @@ async function requestPayUVerification({ transaction, command }) {
 
 async function requestService({
     requestHeaders = {},
-    requestService,
+    requestServiceName,
     requestPath = "/",
     requestMethod = "GET",
     requestGetQuery = false,
@@ -61,7 +61,7 @@ async function requestService({
     if (onRequestStart) await onRequestStart();
 
     //api specific path
-    requestPath = process.env.SERVICE_NGINX.concat(requestService).concat(requestPath);
+    requestPath = process.env.SERVICE_NGINX.concat(requestServiceName).concat(requestPath);
     console.log(requestPath);
 
     if (requestGetQuery) {

@@ -75,7 +75,7 @@ function generateDBTables() {
         `CREATE TABLE IF NOT EXISTS SUBJECTS (
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(128) NOT NULL,
-            demo_content_id CHAR(36) DEFAULT (UUID()) UNIQUE
+            media_group_id CHAR(36) DEFAULT (UUID()) UNIQUE
           )`,
         `CREATE TABLE IF NOT EXISTS MAPPING_SUBJECT_CHAPTERS(
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -86,12 +86,12 @@ function generateDBTables() {
         `CREATE TABLE IF NOT EXISTS CHAPTERS(
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(128) NOT NULL,
-            content_id CHAR(36) DEFAULT (UUID()) UNIQUE
+            media_group_id CHAR(36) DEFAULT (UUID()) UNIQUE
         )`,
         `CREATE TABLE IF NOT EXISTS MEDIA(
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(128) NOT NULL,
-            content_id CHAR(36) NULL,
+            media_group_id CHAR(36) NULL,
             source CHAR(48) NOT NULL,
             type CHAR(12) NULL,
             view_index INT NULL,

@@ -1,6 +1,7 @@
 const libFs = require("fs");
 const libPath = require("path");
 const libCrypto = require("crypto");
+const logger = require("./libs/logger");
 
 const prepareDirectories = (directories) => {
     directories.forEach((directory) => {
@@ -87,7 +88,9 @@ async function requestService({
     }
     try {
         const response = await fetch(requestPath, fetchOptions);
+        logger.info(JSON.stringify(response));
         const jsonResponse = await response.json();
+
         if (onResponseReceieved) onResponseReceieved(jsonResponse, response.status);
     } catch (e) {
         if (onRequestFailure) onRequestFailure(e);

@@ -37,6 +37,7 @@ router.get("/subjects/:subjectId/extract/:mediaId", async (req, res) => {
                 requestMethod: "POST",
                 requestPostBody: media,
                 onResponseReceieved: (sources, responseCode) => res.status(responseCode).json({ sources }),
+                onRequestFailure: () => res.status(500).json({ error: "Media Item Not Ready For Stream" }),
             });
         return res.status(400).json({ error: "Invalid Media Request - Media Not Avaialabale" });
     }

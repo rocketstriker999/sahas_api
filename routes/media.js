@@ -27,7 +27,7 @@ router.get("/chapters/:chapterId", async (req, res) => {
 });
 
 //get the media source for a video and pdf
-router.get("/source/subjects/:subjectId/:mediaId", async (req, res) => {
+router.get("/subjects/:subjectId/extract/:mediaId", async (req, res) => {
     if (req.params.subjectId && req.params.mediaId) {
         const media = await extractMediaBySubjectIdAndMediaId(req.params.subjectId, req.params.mediaId);
         if (media)

@@ -33,7 +33,7 @@ router.get("/subjects/:subjectId/extract/:mediaId", async (req, res) => {
         if (media)
             return requestService({
                 requestServiceName: process.env.SERVICE_MEDIA,
-                requestPath: `extract/`,
+                requestPath: `extract`,
                 requestMethod: "POST",
                 requestPostBody: media,
                 onResponseReceieved: (sources, responseCode) => res.status(responseCode).json({ sources }),

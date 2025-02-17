@@ -39,7 +39,7 @@ router.get("/subjects/:subjectId/extract/:mediaId", async (req, res) => {
                 onResponseReceieved: (sources, responseCode) => res.status(responseCode).json({ sources }),
                 onRequestFailure: (e) => res.status(500).json({ error: `Media Item Not Ready For Stream ${e}` }),
             });
-        return res.status(400).json({ error: "Invalid Media Request - Media Not Avaialabale" });
+        return res.status(400).json({ error: "Invalid Media Request" });
     }
     return res.status(400).json({ error: "Missing Required Details" });
 });

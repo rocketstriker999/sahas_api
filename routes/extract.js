@@ -9,6 +9,7 @@ const router = libExpress.Router();
 router.get("/subjects/:subjectId/:mediaId", async (req, res) => {
     if (req.params.subjectId && req.params.mediaId) {
         const media = await extractMediaBySubjectIdAndMediaId(req.params.subjectId, req.params.mediaId);
+
         if (media)
             return requestService({
                 requestServiceName: process.env.SERVICE_MEDIA,

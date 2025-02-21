@@ -31,6 +31,7 @@ const routers = {
     "/device": require("./routes/device"),
     "/transactions": require("./routes/transaction"),
     "/media": require("./routes/media"),
+    "/extract": require("./routes/extract"),
     "/access": require("./routes/access"),
     "/catelogue": require("./routes/catelogue"),
 };

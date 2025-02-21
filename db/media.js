@@ -24,4 +24,13 @@ function extractMediaBySubjectIdAndMediaId(subjectId, mediaId) {
         .catch((error) => logger.error(`extractMediaBySubjectIdAndMediaId: ${error}`));
 }
 
-module.exports = { getMediaBySubjectId, getMediaByChapterId, extractMediaBySubjectIdAndMediaId };
+function extractMediaByChapterIdAndMediaId(chapterId, mediaId) {
+    return executeSQLQueryParameterized(
+        `SELECT MEDIA.* FROM CHAPTERS INNER JOIN MEDIA ON CHAPTERS.media_group_id=MEDIA.media_group_id WHERE CHAPTERS.id=? AND MEDIA.id=?`,
+        [subjectId, mediaId]
+    )
+        .then((result) => (result.length > 0 ? result[0] : false))
+        .catch((error) => logger.error(`extractMediaBySubjectIdAndMediaId: ${error}`));
+}
+
+module.exports = { getMediaBySubjectId, getMediaByChapterId, extractMediaBySubjectIdAndMediaId, extractMediaByChapterIdAndMediaId };

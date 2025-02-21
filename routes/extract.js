@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const { extractMediaBySubjectIdAndMediaId } = require("../db/media");
+const { extractMediaBySubjectIdAndMediaId, extractMediaByChapterIdAndMediaId } = require("../db/media");
 
 const { requestService } = require("../utils");
 
@@ -24,8 +24,8 @@ router.get("/subjects/:subjectId/:mediaId", async (req, res) => {
 });
 
 router.get("/chapters/:chapterId/:mediaId", async (req, res) => {
-    if (req.params.subjectId && req.params.mediaId) {
-        const media = await extractMediaBySubjectIdAndMediaId(req.params.subjectId, req.params.mediaId);
+    if (req.params.chapterId && req.params.mediaId) {
+        const media = await extractMediaByChapterIdAndMediaId(req.params.chapterId, req.params.mediaId);
         if (media)
             return requestService({
                 requestServiceName: process.env.SERVICE_MEDIA,

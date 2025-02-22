@@ -84,7 +84,6 @@ async function requestService({
 
     if (requestPostBody) {
         fetchOptions.body = JSON.stringify(requestPostBody);
-        logger.info(JSON.stringify(fetchOptions.body));
     }
     try {
         const response = await fetch(requestPath, fetchOptions);

@@ -7,7 +7,7 @@ const prepareDirectories = (directories) =>
     directories.forEach((directory) => libFs.existsSync(libPath.join(process.cwd(), directory)) || libFs.mkdirSync(libPath.join(process.cwd(), directory)));
 
 function generateToken() {
-    const timestamp = Date.now().toString(); // Current timestamp in milliseconds
+    const timestamp = Date.now().toString(); // Current timestamp in milliseconds - 1
     const randomPart = Math.random().toString(36).substring(2, 18); // Random alphanumeric string
     const token = (timestamp + randomPart).substring(0, 36); // Ensure token is 32 characters long
     return token;

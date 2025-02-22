@@ -28,7 +28,7 @@ router.get("/chapters/:chapterId/:mediaId", async (req, res) => {
     if (req.params.chapterId && req.params.mediaId) {
         const media = await extractMediaByChapterIdAndMediaId(req.params.chapterId, req.params.mediaId);
 
-        return res.redirect(301, `/${process.env.SERVICE_MEDIA}/${media.type}/${media.cdn_id}`);
+        return res.redirect(301, `/${process.env.SERVICE_MEDIA}${media.type}/${media.cdn_id}`);
 
         // if (media.type === "video")
         //     return requestService({

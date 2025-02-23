@@ -59,7 +59,7 @@ router.post("/", async (req, res) => {
             res.status(401).json({ error: "Invalid Token" });
         }
     } else {
-        res.status(401).json({ error: "Invalid Token" });
+        res.status(401).json({ error: "Missing Token" });
     }
 });
 

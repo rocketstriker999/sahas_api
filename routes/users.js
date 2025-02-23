@@ -3,7 +3,7 @@ const { updateUserPrimaryDetails, getUserByToken } = require("../db/users");
 
 const router = libExpress.Router();
 
-//update user's details before purchase if user is missing primary details
+//update user's details before purchase if user is missing primary details -1
 router.patch("/:id/primary-details", async (req, res) => {
     if (req.params.id && req.body.name && req.body.phone && req.cookies.token) {
         const user = await getUserByToken(req.cookies.token);

@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const { creditUserWallet } = require("../db/users");
+const { creditUserWallet, getUserIdByEmail } = require("../db/users");
 const { updateTransactionStatus, getTransactionById } = require("../db/transactions");
 const { addAccess } = require("../db/accesses");
 const { addInvoice } = require("../db/invoices");
@@ -39,10 +39,35 @@ router.post("/", async (req, res) => {
                 );
             }
 
-            return res.redirect(`/products/${transaction.product_id}/courses`);
+            return res.redirect(`/products/${transaction.product_id}`);
         }
     }
     res.redirect(`/forbidden`);
 });
+
+//Need to remove this router it is temporary
+router.post("/temp-addUserProductAccess", async (req, res) => {
+    try {
+        const { email, product_id } = req.body;
+
+        // Validate input
+        if (!email || !product_id) {
+            return res.status(400).json({ error: "Email and product ID are required." });
+        }
+
+        // Call function to add access
+        const result = await addAccess({ user_id: await getUserIdByEmail(email), product_id, id: null});
+        
+        if (result) {
+            return res.status(201).json({ message: "Access granted successfully!" });
+        } else {
+            return res.status(500).json({ error: "Failed to grant access." });
+        }
+    } catch (error) {
+        console.error("Server error:", error);
+        return res.status(500).json({ error: "Internal server error." });
+    }
+});
+
 
 module.exports = router;

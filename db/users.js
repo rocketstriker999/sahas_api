@@ -25,12 +25,15 @@ function getUserByEmail(email) {
 }
 
 function getUserByToken(token) {
-    return executeSQLQueryParameterized(`SELECT * FROM USERS WHERE token=?`, [token])
-        .then((user) => (user && user.length > 0 ? user[0] : false))
-        .catch((error) => {
-            logger.error(`getUserByToken: ${error}`);
-            return false;
-        });
+    return (
+        token &&
+        executeSQLQueryParameterized(`SELECT * FROM USERS WHERE token=?`, [token])
+            .then((user) => (user && user.length > 0 ? user[0] : false))
+            .catch((error) => {
+                logger.error(`getUserByToken: ${error}`);
+                return false;
+            })
+    );
 }
 
 function getGroupsById(id) {
@@ -76,6 +79,19 @@ function creditUserWallet(userId, credit) {
     );
 }
 
+// Temporary need to be removed Find user_id by email
+function getUserIdByEmail(email) {
+    return executeSQLQueryParameterized(
+        `SELECT id FROM USERS WHERE email = ?`, 
+        [email]
+    ).then((results) => {
+        return results.length > 0 ? results[0].id : null;
+    }).catch((error) => {
+        logger.error(`getUserIdByEmail: ${error}`);
+        return null;
+    });
+}
+
 module.exports = {
     updateUserOTP,
     validateUserOTP,
@@ -86,4 +102,5 @@ module.exports = {
     getAuthoritiesById,
     updateUserPrimaryDetails,
     creditUserWallet,
+    getUserIdByEmail,
 };

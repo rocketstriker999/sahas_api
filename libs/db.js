@@ -62,10 +62,10 @@ function generateDBTables() {
             product_id INT NOT NULL,
             course_id INT NOT NULL
         )`,
-
         `CREATE TABLE IF NOT EXISTS COURSES (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            title VARCHAR(128) NOT NULL
+            title VARCHAR(128) NOT NULL,
+            whatsapp_group VARCHAR(98) NULL
           )`,
         `CREATE TABLE IF NOT EXISTS MAPPING_COURSE_SUBJECTS(
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -76,40 +76,27 @@ function generateDBTables() {
         `CREATE TABLE IF NOT EXISTS SUBJECTS (
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(128) NOT NULL,
-            demo_content_id CHAR(36) DEFAULT (UUID()) UNIQUE
+            media_group_id CHAR(36) DEFAULT (UUID()) UNIQUE
           )`,
-
         `CREATE TABLE IF NOT EXISTS MAPPING_SUBJECT_CHAPTERS(
             id INT AUTO_INCREMENT PRIMARY KEY,
             subject_id INT NOT NULL,
             chapter_id INT NOT NULL,
             view_index INT NULL
         )`,
-
         `CREATE TABLE IF NOT EXISTS CHAPTERS(
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(128) NOT NULL,
-            content_id CHAR(36) DEFAULT (UUID()) UNIQUE
+            media_group_id CHAR(36) DEFAULT (UUID()) UNIQUE
         )`,
-        `CREATE TABLE IF NOT EXISTS CONTENT_VIDEOS(
+        `CREATE TABLE IF NOT EXISTS MEDIA(
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(128) NOT NULL,
-            content_id CHAR(36) NULL,
-            yt_id VARCHAR(32) NOT NULL,
-            view_index INT NULL
-        )`,
-        `CREATE TABLE IF NOT EXISTS CONTENT_AUDIOS(
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            title VARCHAR(128) NOT NULL,
-            content_id CHAR(36) NULL,
-            source VARCHAR(16) NOT NULL
-        )`,
-        `CREATE TABLE IF NOT EXISTS CONTENT_PDFS(
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            title VARCHAR(128) NOT NULL,
-            content_id CHAR(36) NULL,
-            gd_id VARCHAR(36) NOT NULL,
-            view_index INT NULL
+            media_group_id CHAR(36) NULL,
+            cdn_id CHAR(48) NOT NULL,
+            type CHAR(12) NULL,
+            view_index INT NULL,
+            downloadable BOOLEAN DEFAULT FALSE
         )`,
         `CREATE TABLE IF NOT EXISTS TRANSACTIONS (
             id INT AUTO_INCREMENT PRIMARY KEY,

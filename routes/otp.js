@@ -13,7 +13,13 @@ router.post("/verify", async (req, res) => {
             await updateUserToken(req.body.email, generateToken());
             const user = await getUserByEmail(req.body.email);
             if (user) {
-                res.cookie("token", user.token, { httpOnly: true, maxAge: process.env.TOKEN_AGE });
+                res.cookie("token", user.token, {
+                    httpOnly: true,
+                    maxAge: process.env.TOKEN_AGE,
+                    secure: true, // Set to true if using HTTPS
+                    sameSite: "None", // Required for cross-origin requests
+                    domain: "dev.sahasinstitute.com",
+                });
                 res.status(200).json({
                     user: {
                         ...user,
@@ -41,7 +47,8 @@ router.post("/create", async (req, res) => {
         const otp = Math.floor(1000 + Math.random() * 9000);
 
         requestService({
-            requestPath: "/mailer/otp",
+            requestServiceName: process.env.SERVICE_MAILER,
+            requestPath: "otp",
             requestMethod: "POST",
             requestPostBody: { to: req.body.email, body_paramters: { verification_code: otp, validity_duration: 5 } },
             onRequestStart: () => {

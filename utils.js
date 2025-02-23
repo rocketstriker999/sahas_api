@@ -1,10 +1,16 @@
 const libFs = require("fs");
 const libPath = require("path");
-const { logger } = require("sequelize/lib/utils/logger");
 const libCrypto = require("crypto");
+const logger = require("./libs/logger");
 
-const prepareDirectories = (directories) =>
-    directories.forEach((directory) => libFs.existsSync(libPath.join(process.cwd(), directory)) || libFs.mkdirSync(libPath.join(process.cwd(), directory)));
+const prepareDirectories = (directories) => {
+    directories.forEach((directory) => {
+        const fullPath = libPath.join(process.cwd(), directory);
+        if (!libFs.existsSync(fullPath)) {
+            libFs.mkdirSync(fullPath, { recursive: true });
+        }
+    });
+};
 
 function generateToken() {
     const timestamp = Date.now().toString(); // Current timestamp in milliseconds - 1
@@ -43,6 +49,7 @@ async function requestPayUVerification({ transaction, command }) {
 
 async function requestService({
     requestHeaders = {},
+    requestServiceName,
     requestPath = "/",
     requestMethod = "GET",
     requestGetQuery = false,
@@ -55,7 +62,7 @@ async function requestService({
     if (onRequestStart) await onRequestStart();
 
     //api specific path
-    requestPath = process.env.SERVICE_GATEWAY.concat(requestPath);
+    requestPath = process.env.SERVICE_NGINX.concat(requestServiceName).concat(requestPath);
 
     if (requestGetQuery) {
         requestPath = requestPath + "?";
@@ -78,15 +85,14 @@ async function requestService({
     if (requestPostBody) {
         fetchOptions.body = JSON.stringify(requestPostBody);
     }
-
     try {
         const response = await fetch(requestPath, fetchOptions);
         const jsonResponse = await response.json();
+
         if (onResponseReceieved) onResponseReceieved(jsonResponse, response.status);
     } catch (e) {
         if (onRequestFailure) onRequestFailure(e);
     }
     if (onRequestEnd) onRequestEnd();
 }
-
 module.exports = { prepareDirectories, requestService, generateToken, requestPayUVerification, generateSHA512 };

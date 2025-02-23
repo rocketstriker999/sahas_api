@@ -11,6 +11,19 @@ function addAccess(transaction) {
     });
 }
 
+//temporarty and need to remove later
+function addAccess(transaction) {
+    return executeSQLQueryParameterized(`INSERT INTO USER_PRODUCT_ACCESSES (user_id, product_id, transaction_id, validity) VALUES (?, ?, ?, ?)`, [
+        transaction.user_id,
+        transaction.product_id,
+        transaction.id,
+        transaction.validity,
+    ]).catch((error) => {
+        logger.error(`addAccess: ${error}`);
+        return false;
+    });
+}
+
 function getAccessByProductIdAndToken(productId, token) {
     return executeSQLQueryParameterized(
         `SELECT USER_PRODUCT_ACCESSES.transaction_id, USER_PRODUCT_ACCESSES.validity FROM USERS JOIN USER_PRODUCT_ACCESSES ON USERS.id = USER_PRODUCT_ACCESSES.user_id WHERE USERS.token = ? AND USER_PRODUCT_ACCESSES.product_id = ? AND USER_PRODUCT_ACCESSES.validity >= CURRENT_DATE AND USER_PRODUCT_ACCESSES.active = true`,

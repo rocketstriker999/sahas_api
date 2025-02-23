@@ -48,16 +48,16 @@ router.post("/", async (req, res) => {
 //Need to remove this router it is temporary
 router.post("/temp-addUserProductAccess", async (req, res) => {
     try {
-        const { email, product_id } = req.body;
+        const { email, product_id, validity } = req.body;
 
         // Validate input
-        if (!email || !product_id) {
-            return res.status(400).json({ error: "Email and product ID are required." });
+        if (!email || !product_id || !validity) {
+            return res.status(400).json({ error: "Email and product ID and validity are required." });
         }
 
         // Call function to add access
-        const result = await addAccess({ user_id: await getUserIdByEmail(email), product_id, id: null});
-        
+        const result = await addAccess({ user_id: await getUserIdByEmail(email), product_id, id: null, validity });
+
         if (result) {
             return res.status(201).json({ message: "Access granted successfully!" });
         } else {
@@ -68,6 +68,5 @@ router.post("/temp-addUserProductAccess", async (req, res) => {
         return res.status(500).json({ error: "Internal server error." });
     }
 });
-
 
 module.exports = router;

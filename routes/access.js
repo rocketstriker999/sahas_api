@@ -1,7 +1,7 @@
 const libExpress = require("express");
 const { creditUserWallet, getUserIdByEmail } = require("../db/users");
 const { updateTransactionStatus, getTransactionById } = require("../db/transactions");
-const { addAccess } = require("../db/accesses");
+const { addAccess, addAccessTemp } = require("../db/accesses");
 const { addInvoice } = require("../db/invoices");
 const { getDistributorByCouponCodeIdAndProductId } = require("../db/coupon");
 const { requestPayUVerification } = require("../utils");
@@ -56,7 +56,7 @@ router.post("/temp-addUserProductAccess", async (req, res) => {
         }
 
         // Call function to add access
-        const result = await addAccess({ user_id: await getUserIdByEmail(email), product_id, id: null, validity });
+        const result = await addAccessTemp({ user_id: await getUserIdByEmail(email), product_id, id: null, validity });
 
         if (result) {
             return res.status(201).json({ message: "Access granted successfully!" });

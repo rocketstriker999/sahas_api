@@ -19,7 +19,7 @@ router.get("/verify", async (req, res) => {
 });
 
 router.post("/invalidate", async (req, res) => {
-    await res.clearCookie("token", {
+    res.clearCookie("token", {
         httpOnly: true,
         secure: true, // Set to true if using HTTPS
         sameSite: "None", // Required for cross-origin requests

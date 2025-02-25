@@ -56,7 +56,12 @@ router.post("/create", async (req, res) => {
             },
             onResponseReceieved: (otpDetails, responseCode) => {
                 if (otpDetails && responseCode === 200) {
-                    res.clearCookie("token");
+                    res.clearCookie("token", {
+                        httpOnly: true,
+                        secure: true, // Set to true if using HTTPS
+                        sameSite: "None", // Required for cross-origin requests
+                        domain: process.env.CURRENT_DOMAIN,
+                    });
                     res.status(200).json({
                         message: `OTP Is been sent to ${req.body.email} Please Enter to Add it`,
                     });

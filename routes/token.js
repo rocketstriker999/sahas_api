@@ -18,7 +18,7 @@ router.get("/verify", async (req, res) => {
     }
 });
 
-router.delete("/invalidate", async (req, res) => {
+router.post("/invalidate", async (req, res) => {
     await res.clearCookie("token");
     return res.status(200).json({
         message: "Token Invalidated",

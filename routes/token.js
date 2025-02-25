@@ -19,12 +19,7 @@ router.get("/verify", async (req, res) => {
 });
 
 router.post("/invalidate", async (req, res) => {
-    await res.clearCookie("token",{
-        httpOnly: true,
-        secure: true,
-        sameSite: "None",
-        domain: process.env.CURRENT_DOMAIN,
-    });
+    await res.clearCookie("token");
     return res.status(200).json({
         message: "Token Invalidated",
     });

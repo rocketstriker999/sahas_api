@@ -19,7 +19,10 @@ router.get("/verify", async (req, res) => {
 });
 
 router.delete("/invalidate", async (req, res) => {
-    res.clearCookie("token");
+    Object.keys(req.cookies).forEach(cookieName => {
+        res.clearCookie(cookieName);
+      });
+    //res.clearCookie("token");
     return res.status(200).json({
         message: "Token Invalidated",
     });

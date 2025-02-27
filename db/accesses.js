@@ -19,7 +19,7 @@ function addAccessTemp(transaction) {
         transaction.id,
         transaction.validity,
     ]).catch((error) => {
-        logger.error(`addAccess: ${error}`);
+        logger.error(`addAccessTemp: ${error}`);
         return false;
     });
 }
@@ -43,7 +43,7 @@ function verifyAccessByTokenForChapter(token, chapterId) {
     )
         .then((result) => (result.length > 0 ? true : false))
         .catch((error) => {
-            logger.error(`getAccessByContentId: ${error}`);
+            logger.error(`verifyAccessByTokenForChapter: ${error}`);
             return false;
         });
 }
@@ -51,10 +51,10 @@ function verifyAccessByTokenForChapter(token, chapterId) {
 function getAccessesByToken(token) {
     if (!token) return [];
     return executeSQLQueryParameterized(
-        `SELECT USER_PRODUCT_ACCESSES.id,USER_PRODUCT_ACCESSES.product_id FROM USER_PRODUCT_ACCESSES JOIN USERS ON USER_PRODUCT_ACCESSES.user_id = USERS.id AND USERS.token = ?`,
+        `SELECT TRANSACTIONS.invoice, USER_PRODUCT_ACCESSES.id,USER_PRODUCT_ACCESSES.product_id FROM USERS JOIN USER_PRODUCT_ACCESSES ON USERS.id = USER_PRODUCT_ACCESSES.user_id AND USERS.token = ? INNER JOIN TRANSACTIONS ON TRANSACTIONS.product_id=USER_PRODUCT_ACCESSES.product_id`,
         [token]
     ).catch((error) => {
-        logger.error(`getAccessByContentId: ${error}`);
+        logger.error(`getAccessesByToken: ${error}`);
         return [];
     });
 }

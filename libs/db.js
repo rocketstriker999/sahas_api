@@ -40,12 +40,7 @@ function generateDBTables() {
           )
         `,
         `CREATE TABLE IF NOT EXISTS USER_USAGE(user_id INT NOT NULL,activity VARCHAR(16) NOT NULL,time_stamp DATETIME DEFAULT CURRENT_TIMESTAMP)`,
-        `CREATE TABLE IF NOT EXISTS USER_INVOICES (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            transaction_id INT NOT NULL,
-            downloadable BOOLEAN DEFAULT TRUE
-            )
-        `,
+
         `CREATE TABLE IF NOT EXISTS CATEGORIES(id INT AUTO_INCREMENT PRIMARY KEY,title VARCHAR(100) NOT NULL UNIQUE)`,
 
         `CREATE TABLE IF NOT EXISTS PRODUCTS (
@@ -111,7 +106,8 @@ function generateDBTables() {
             sgst DECIMAL(8, 2) DEFAULT 0,
             cgst DECIMAL(8, 2) DEFAULT 0,
             pay DECIMAL(8, 2) DEFAULT 0,
-            hash VARCHAR(128) NULL
+            hash VARCHAR(128) NULL,
+            invoice CHAR(36) DEFAULT (UUID()) UNIQUE
         )`,
         `CREATE TABLE IF NOT EXISTS USER_PRODUCT_ACCESSES (
             id INT AUTO_INCREMENT PRIMARY KEY,

@@ -1,6 +1,6 @@
 const libExpress = require("express");
 const { creditUserWallet, getUserIdByEmail } = require("../db/users");
-const { updateTransactionStatus, getTransactionById } = require("../db/transactions");
+const { updateTransactionStatus, getTransactionById, updateTransactionInvoice } = require("../db/transactions");
 const { addAccess, addAccessTemp } = require("../db/accesses");
 const { addInvoice } = require("../db/invoices");
 const { getDistributorByCouponCodeIdAndProductId } = require("../db/coupon");
@@ -24,10 +24,15 @@ router.post("/", async (req, res) => {
             //transaction updated - need to give access
             addAccess(transaction);
             //generate invoice as well
-            addInvoice(transaction.id);
-
-            logger.info(transaction.coupon_id);
-            logger.info(transaction.product_id);
+            requestService({
+                requestServiceName: process.env.SERVICE_MEDIA,
+                requestPath: "generate/invoice",
+                requestMethod: "POST",
+                requestPostBody: transaction,
+                onRequestFailure: (error) => {
+                    logger.error(`Failed To generate Invoice for transcation - ${transaction.id} error - ${error}`);
+                },
+            });
 
             //credit this to user's wallet money whoes code was used
             if ((couponCodeDistributor = await getDistributorByCouponCodeIdAndProductId(transaction.coupon_id, transaction.product_id))) {

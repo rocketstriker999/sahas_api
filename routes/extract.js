@@ -3,7 +3,7 @@ const { extractMediaBySubjectIdAndMediaId, extractMediaByChapterIdAndMediaId } =
 
 const router = libExpress.Router();
 
-//get the media source for a video and pdf
+//Subject Content extractions
 router.get("/subjects/:subjectId/:mediaId", async (req, res) => {
     if (req.params.subjectId && req.params.mediaId) {
         const media = await extractMediaBySubjectIdAndMediaId(req.params.subjectId, req.params.mediaId);
@@ -13,6 +13,7 @@ router.get("/subjects/:subjectId/:mediaId", async (req, res) => {
     return res.status(400).json({ error: "Missing Required Details" });
 });
 
+//Chapter Content extractions
 router.get("/chapters/:chapterId/:mediaId", async (req, res) => {
     if (req.params.chapterId && req.params.mediaId) {
         const media = await extractMediaByChapterIdAndMediaId(req.params.chapterId, req.params.mediaId);

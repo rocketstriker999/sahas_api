@@ -51,7 +51,7 @@ function verifyAccessByTokenForChapter(token, chapterId) {
 function getAccessesByToken(token) {
     if (!token) return [];
     return executeSQLQueryParameterized(
-        `SELECT TRANSACTIONS.invoice, USER_PRODUCT_ACCESSES.id,USER_PRODUCT_ACCESSES.product_id FROM USERS JOIN USER_PRODUCT_ACCESSES ON USERS.id = USER_PRODUCT_ACCESSES.user_id AND USERS.token = ? INNER JOIN TRANSACTIONS ON TRANSACTIONS.product_id=USER_PRODUCT_ACCESSES.product_id`,
+        `SELECT TRANSACTIONS.invoice, USER_PRODUCT_ACCESSES.id,USER_PRODUCT_ACCESSES.product_id FROM USERS JOIN USER_PRODUCT_ACCESSES ON USERS.id = USER_PRODUCT_ACCESSES.user_id AND USERS.token = ? JOIN TRANSACTIONS ON TRANSACTIONS.product_id=USER_PRODUCT_ACCESSES.product_id`,
         [token]
     ).catch((error) => {
         logger.error(`getAccessesByToken: ${error}`);

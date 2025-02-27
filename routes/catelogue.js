@@ -8,6 +8,8 @@ router.get("/", async (req, res) => {
     //get user's accesses
     const userAccesses = (await getAccessesByToken(req.cookies.token))?.map((access) => ({ [access.product_id]: access.invoice }));
 
+    console.log(userAccesses);
+
     //prepare and return catelogue
     res.status(200).json({
         categories: cacher.get(process.env.CACHE_KEYS_CATEGORIES),

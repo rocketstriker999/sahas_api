@@ -6,7 +6,9 @@ const router = libExpress.Router();
 //get catelogue for user
 router.get("/", async (req, res) => {
     //get user's accesses
-    const userAccesses = (await getAccessesByToken(req.cookies.token))?.map((access) => ({ [access.product_id]: access.invoice }));
+    //const userAccesses = (await getAccessesByToken(req.cookies.token))?.map((access) => ({ [access.product_id]: access.invoice }));
+
+    const userAccesses = Object.assign({}, ...(await getAccessesByToken(req.cookies.token)));
 
     console.log(userAccesses);
 

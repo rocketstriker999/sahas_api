@@ -6,17 +6,15 @@ const router = libExpress.Router();
 //get catelogue for user
 router.get("/", async (req, res) => {
     //get user's accesses
-    const userAccesses = await getAccessesByToken(req.cookies.token)?.map((access) => ({ [access.product_id]: access.invoice }));
+    const userAccesses = (await getAccessesByToken(req.cookies.token))?.map((access) => ({ [access.product_id]: access.invoice }));
 
     //prepare and return catelogue
     res.status(200).json({
         categories: cacher.get(process.env.CACHE_KEYS_CATEGORIES),
-        products: cacher
-            .get(process.env.CACHE_KEYS_PRODUCTS)
-            ?.map((product) => ({
-                ...product,
-                ...(Object.keys(userAccesses)?.includes(product.id) && { has_access: true, invoice: userAccesses[product.id] }),
-            })),
+        products: cacher.get(process.env.CACHE_KEYS_PRODUCTS)?.map((product) => ({
+            ...product,
+            ...(Object.keys(userAccesses)?.includes(product.id) && { has_access: true, invoice: userAccesses[product.id] }),
+        })),
         courses: cacher.get(process.env.CACHE_KEYS_COURSES),
         subjects: cacher.get(process.env.CACHE_KEYS_SUBJECTS),
         chapters: cacher.get(process.env.CACHE_KEYS_CHAPTERS),

@@ -3,7 +3,7 @@ const { creditUserWallet, getUserIdByEmail } = require("../db/users");
 const { updateTransactionStatus, getTransactionById, updateTransactionInvoice } = require("../db/transactions");
 const { addAccess, addAccessTemp } = require("../db/accesses");
 const { getDistributorByCouponCodeIdAndProductId } = require("../db/coupon");
-const { requestPayUVerification } = require("../utils");
+const { requestPayUVerification, requestService } = require("../utils");
 const logger = require("../libs/logger");
 
 const router = libExpress.Router();

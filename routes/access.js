@@ -1,10 +1,11 @@
 const libExpress = require("express");
-const { creditUserWallet, getUserIdByEmail } = require("../db/users");
-const { updateTransactionStatus, getTransactionById, updateTransactionInvoice } = require("../db/transactions");
+const { creditUserWallet, getUserIdByEmail, getUserByTransactionId } = require("../db/users");
+const { updateTransactionStatus, getTransactionById } = require("../db/transactions");
 const { addAccess, addAccessTemp } = require("../db/accesses");
 const { getDistributorByCouponCodeIdAndProductId } = require("../db/coupon");
 const { requestPayUVerification, requestService } = require("../utils");
 const logger = require("../libs/logger");
+const { getProductById } = require("../db/products");
 
 const router = libExpress.Router();
 
@@ -27,7 +28,7 @@ router.post("/", async (req, res) => {
                 requestServiceName: process.env.SERVICE_MEDIA,
                 requestPath: "generate/invoice",
                 requestMethod: "POST",
-                requestPostBody: transaction,
+                requestPostBody: { transaction, user: await getUserByTransactionId(transaction.id), product: await getProductById(transaction.product_id) },
                 onRequestFailure: (error) => {
                     logger.error(`Failed To generate Invoice for transcation - ${transaction.id} error - ${error}`);
                 },

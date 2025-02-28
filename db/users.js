@@ -81,15 +81,26 @@ function creditUserWallet(userId, credit) {
 
 // Temporary need to be removed Find user_id by email
 function getUserIdByEmail(email) {
-    return executeSQLQueryParameterized(
-        `SELECT id FROM USERS WHERE email = ?`, 
-        [email]
-    ).then((results) => {
-        return results.length > 0 ? results[0].id : null;
-    }).catch((error) => {
-        logger.error(`getUserIdByEmail: ${error}`);
-        return null;
-    });
+    return executeSQLQueryParameterized(`SELECT id FROM USERS WHERE email = ?`, [email])
+        .then((results) => {
+            return results.length > 0 ? results[0].id : null;
+        })
+        .catch((error) => {
+            logger.error(`getUserIdByEmail: ${error}`);
+            return null;
+        });
+}
+
+//get user by transaction id
+function getUserByTransactionId(transactionId) {
+    return executeSQLQueryParameterized(`SELECT * FROM USERS INNER JOIN TRANSACTIONS ON USERS.id=TRANSACTIONS.user_id WHERE TRANSACTIONS.id=?`, [transactionId])
+        .then((results) => {
+            return results.length > 0 ? results[0] : null;
+        })
+        .catch((error) => {
+            logger.error(`getUserByTransactionId: ${error}`);
+            return null;
+        });
 }
 
 module.exports = {
@@ -103,4 +114,5 @@ module.exports = {
     updateUserPrimaryDetails,
     creditUserWallet,
     getUserIdByEmail,
+    getUserByTransactionId,
 };

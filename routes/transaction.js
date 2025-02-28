@@ -27,8 +27,8 @@ router.post("/", async (req, res) => {
                     transaction.benifit = couponCodeBenifit.type == "PERCENTAGE" ? (transaction.pay * couponCodeBenifit.value) / 100 : couponCodeBenifit.value;
                     transaction.pay -= transaction.benifit;
                 }
-                transaction.sgst = Number((transaction.pay * 9) / 100);
-                transaction.cgst = Number((transaction.pay * 9) / 100);
+                transaction.sgst = Number((transaction.pay * process.env.SGST) / 100);
+                transaction.cgst = Number((transaction.pay * process.env.CGST) / 100);
                 transaction.discounted = parseFloat(transaction.pay - transaction.sgst - transaction.cgst + transaction.benifit).toFixed(2);
                 transaction.userId = user.id;
                 transaction.payuMerchantKey = process.env.MERCHANT_KEY;

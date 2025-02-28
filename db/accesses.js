@@ -63,7 +63,7 @@ JOIN
     AND USERS.token = ?
 LEFT JOIN 
     TRANSACTIONS 
-    ON TRANSACTIONS.id = USER_PRODUCT_ACCESSES.transaction_id;`,
+    ON TRANSACTIONS.id = USER_PRODUCT_ACCESSES.transaction_id`,
         [token]
     ).catch((error) => {
         logger.error(`getAccessesByToken: ${error}`);
@@ -71,4 +71,13 @@ LEFT JOIN
     });
 }
 
-module.exports = { addAccess, addAccessTemp, getAccessByProductIdAndToken, verifyAccessByTokenForChapter, getAccessesByToken };
+function getAccessByTransactionId(transactionId) {
+    return executeSQLQueryParameterized(`SELECT * FROM USER_PRODUCT_ACCESSES WHERE transaction_id=?`, [transactionId])
+        .then((result) => (result.length > 0 ? result[0] : false))
+        .catch((error) => {
+            logger.error(`getAccessByTransactionId: ${error}`);
+            return false;
+        });
+}
+
+module.exports = { addAccess, addAccessTemp, getAccessByProductIdAndToken, verifyAccessByTokenForChapter, getAccessesByToken, getAccessByTransactionId };

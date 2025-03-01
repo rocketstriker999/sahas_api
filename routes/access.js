@@ -23,6 +23,7 @@ router.post("/", async (req, res) => {
             updateTransactionStatus(transaction.id, transactionVerification.transaction_details[transaction.id].status);
             //transaction updated - need to give access
             addAccess(transaction);
+            console.log(transaction);
             //generate invoice as well
             requestService({
                 requestServiceName: process.env.SERVICE_MEDIA,

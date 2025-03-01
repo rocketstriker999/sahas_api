@@ -110,7 +110,7 @@ function generateDBTables() {
             invoice CHAR(36) DEFAULT (UUID()) UNIQUE
         )`,
         `CREATE TABLE IF NOT EXISTS TEMPO (
-            invoice CHAR(36) DEFAULT (CONCAT(UUID(),'.pdf')) UNIQUE
+            invoice CHAR(36) DEFAULT (CONCAT(REPLACE(UUID(), '-', ''), '.pdf')) UNIQUE
         )`,
         `CREATE TABLE IF NOT EXISTS USER_PRODUCT_ACCESSES (
             id INT AUTO_INCREMENT PRIMARY KEY,

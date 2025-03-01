@@ -107,7 +107,7 @@ function generateDBTables() {
             cgst DECIMAL(8, 2) DEFAULT 0,
             pay DECIMAL(8, 2) DEFAULT 0,
             hash VARCHAR(128) NULL,
-            invoice CHAR(36) DEFAULT (UUID()) UNIQUE
+            invoice CHAR(36) DEFAULT (CONCAT(REPLACE(UUID(), '-', ''), '.pdf')) UNIQUE
         )`,
         `CREATE TABLE IF NOT EXISTS USER_PRODUCT_ACCESSES (
             id INT AUTO_INCREMENT PRIMARY KEY,

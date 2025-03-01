@@ -36,6 +36,9 @@ router.post("/", async (req, res) => {
                     percent_sgst: process.env.SGST,
                     percent_cgst: process.env.CGST,
                 },
+                onResponseReceieved: () => {
+                    //send email
+                },
                 onRequestFailure: (error) => {
                     logger.error(`Failed To generate Invoice for transcation - ${transaction.id} error - ${error}`);
                 },

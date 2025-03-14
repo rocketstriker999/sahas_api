@@ -50,7 +50,7 @@ router.post("/create", async (req, res) => {
             requestServiceName: process.env.SERVICE_MAILER,
             requestPath: "otp",
             requestMethod: "POST",
-            requestPostBody: { to: req.body.email, body_paramters: { verification_code: otp, validity_duration: 5 } },
+            requestPostBody: { to: req.body.email, body_paramters: { verification_code: otp, validity_duration: 5,requested_email:req.body.email} },
             onRequestStart: () => {
                 updateUserOTP(req.body.email, otp);
             },

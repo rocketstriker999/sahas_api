@@ -23,13 +23,13 @@ function generateSHA512(targetString) {
     return libCrypto.createHash("sha512").update(targetString).digest("hex");
 }
 
-async function requestPayUVerification(transaction) {
+async function requestPayUVerification(transaction, command = process.env.TRANSACTION_VERIFICATION_COMMAND) {
     if (transaction.pay > 0) {
         const headers = new Headers();
         headers.append("Content-Type", "application/x-www-form-urlencoded");
         const urlencoded = new URLSearchParams();
         urlencoded.append("key", process.env.MERCHANT_KEY);
-        urlencoded.append("command", process.env.TRANSACTION_VERIFICATION_COMMAND);
+        urlencoded.append("command", command);
         urlencoded.append("var1", transaction.id);
         urlencoded.append("hash", generateSHA512(`${process.env.MERCHANT_KEY}|${command}|${transaction.id}|${process.env.MERCHANT_SALT}`));
 

@@ -23,28 +23,32 @@ function generateSHA512(targetString) {
     return libCrypto.createHash("sha512").update(targetString).digest("hex");
 }
 
-async function requestPayUVerification({ transaction, command }) {
-    const headers = new Headers();
-    headers.append("Content-Type", "application/x-www-form-urlencoded");
-    const urlencoded = new URLSearchParams();
-    urlencoded.append("key", process.env.MERCHANT_KEY);
-    urlencoded.append("command", command);
-    urlencoded.append("var1", transaction.id);
-    urlencoded.append("hash", generateSHA512(`${process.env.MERCHANT_KEY}|${command}|${transaction.id}|${process.env.MERCHANT_SALT}`));
+async function requestPayUVerification(transaction, command = process.env.TRANSACTION_VERIFICATION_COMMAND) {
+    if (transaction.pay > 0) {
+        const headers = new Headers();
+        headers.append("Content-Type", "application/x-www-form-urlencoded");
+        const urlencoded = new URLSearchParams();
+        urlencoded.append("key", process.env.MERCHANT_KEY);
+        urlencoded.append("command", command);
+        urlencoded.append("var1", transaction.id);
+        urlencoded.append("hash", generateSHA512(`${process.env.MERCHANT_KEY}|${command}|${transaction.id}|${process.env.MERCHANT_SALT}`));
 
-    const fetchOptions = {
-        method: "POST",
-        headers: headers,
-        body: urlencoded,
-        redirect: "follow",
-    };
-    try {
-        const response = await fetch(process.env.TRANSACTION_VERIFICATION_URL, fetchOptions);
-        return await response.json();
-    } catch {
-        logger.error(`Failed to Check Status For Transaction - ${transaction.id}`);
-        return false;
+        const fetchOptions = {
+            method: "POST",
+            headers: headers,
+            body: urlencoded,
+            redirect: "follow",
+        };
+        try {
+            const response = await fetch(process.env.TRANSACTION_VERIFICATION_URL, fetchOptions);
+            const payuVerification = await response.json();
+            return payuVerification?.transaction_details[transaction.id]?.status === "success";
+        } catch {
+            logger.error(`Failed to Check Status For Transaction - ${transaction.id}`);
+            return false;
+        }
     }
+    return true;
 }
 
 async function requestService({

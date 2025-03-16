@@ -16,11 +16,9 @@ router.post("/", async (req, res) => {
         //we have transaction which is requested
         const transaction = await getTransactionById(req.body.txnid);
         //verify with PAyu once
-        const transactionVerification = await requestPayUVerification({ transaction, command: process.env.TRANSACTION_VERIFICATION_COMMAND });
-
-        if (transactionVerification?.transaction_details[transaction.id]?.status === "success") {
+        if (await requestPayUVerification(transaction)) {
             //verified from payu
-            updateTransactionStatus(transaction.id, transactionVerification.transaction_details[transaction.id].status);
+            updateTransactionStatus(transaction.id, "SUCCESS");
             //transaction updated - need to give access
             addAccess(transaction);
             //generate invoice as well

@@ -27,7 +27,10 @@ router.post("/", async (req, res) => {
                 if (transaction.couponId && (couponCodeBenifit = await getBenifitByCouponCodeIdAndProductId(transaction.couponId, product.id))) {
                     transaction.benifit = couponCodeBenifit.type == "PERCENTAGE" ? (transaction.pay * couponCodeBenifit.value) / 100 : couponCodeBenifit.value;
                     transaction.pay -= transaction.benifit;
-                    if (couponCodeBenifit.product_access_validity) transaction.productAccessValidity = couponCodeBenifit.product_access_validity;
+                    if (couponCodeBenifit.product_access_validity) {
+                        console.log("PICKED FROM COUPON BENIFIT");
+                        transaction.productAccessValidity = couponCodeBenifit.product_access_validity;
+                    }
                 }
                 transaction.sgst = Number((transaction.pay * process.env.SGST) / 100);
                 transaction.cgst = Number((transaction.pay * process.env.CGST) / 100);

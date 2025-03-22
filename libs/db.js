@@ -50,7 +50,8 @@ function generateDBTables() {
             image VARCHAR(32) NOT NULL UNIQUE,
             price DECIMAL(8, 2) NOT NULL,
             discounted DECIMAL(8, 2) NOT NULL,
-            category_id INT NOT NULL
+            category_id INT NOT NULL,
+            access_validity INT DEFAULT 365
           )`,
         `CREATE TABLE IF NOT EXISTS MAPPING_PRODUCT_COURSES(
             id INT AUTO_INCREMENT PRIMARY KEY,

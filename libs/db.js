@@ -11,6 +11,7 @@ const dbConnectionPool = mysql.createPool({
     waitForConnections: true, // Enable queuing of requests if the pool is busy
     connectionLimit: 10, // Max number of connections in the pool
     queueLimit: 0, // Unlimited number of requests in the queue
+    dateStrings: true,
 });
 
 function generateDBTables() {

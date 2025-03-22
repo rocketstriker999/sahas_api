@@ -11,6 +11,7 @@ const dbConnectionPool = mysql.createPool({
     waitForConnections: true, // Enable queuing of requests if the pool is busy
     connectionLimit: 10, // Max number of connections in the pool
     queueLimit: 0, // Unlimited number of requests in the queue
+    dateStrings: true,
 });
 
 function generateDBTables() {
@@ -51,7 +52,7 @@ function generateDBTables() {
             price DECIMAL(8, 2) NOT NULL,
             discounted DECIMAL(8, 2) NOT NULL,
             category_id INT NOT NULL,
-            access_validity INT DEFAULT 365
+            access_validity INT NOT NULL DEFAULT 365
           )`,
         `CREATE TABLE IF NOT EXISTS MAPPING_PRODUCT_COURSES(
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -108,7 +109,8 @@ function generateDBTables() {
             cgst DECIMAL(8, 2) DEFAULT 0,
             pay DECIMAL(8, 2) DEFAULT 0,
             hash VARCHAR(128) NULL,
-            invoice CHAR(36) DEFAULT (CONCAT(REPLACE(UUID(), '-', ''), '.pdf')) UNIQUE
+            invoice CHAR(36) DEFAULT (CONCAT(REPLACE(UUID(), '-', ''), '.pdf')) UNIQUE,
+            product_access_validity DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
         )`,
 
         `CREATE TABLE IF NOT EXISTS USER_PRODUCT_ACCESSES (
@@ -128,6 +130,7 @@ function generateDBTables() {
         `CREATE TABLE IF NOT EXISTS MAPPING_COUPON_CODES_BENIFIT (
             coupon_code_id INT NOT NULL,
             product_id INT NOT NULL,
+            product_access_validity DATETIME NULL,
             value DECIMAL(8, 2) NOT NULL DEFAULT 0,
             type VARCHAR(12)  DEFAULT 'PERCENTAGE'
         )`,

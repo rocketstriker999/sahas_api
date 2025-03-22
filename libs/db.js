@@ -51,7 +51,7 @@ function generateDBTables() {
             price DECIMAL(8, 2) NOT NULL,
             discounted DECIMAL(8, 2) NOT NULL,
             category_id INT NOT NULL,
-            access_validity INT DEFAULT 365
+            access_duration INT NOT NULL DEFAULT 365
           )`,
         `CREATE TABLE IF NOT EXISTS MAPPING_PRODUCT_COURSES(
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -128,6 +128,7 @@ function generateDBTables() {
         `CREATE TABLE IF NOT EXISTS MAPPING_COUPON_CODES_BENIFIT (
             coupon_code_id INT NOT NULL,
             product_id INT NOT NULL,
+            product_access_duration INT NULL,
             value DECIMAL(8, 2) NOT NULL DEFAULT 0,
             type VARCHAR(12)  DEFAULT 'PERCENTAGE'
         )`,

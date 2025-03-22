@@ -3,7 +3,7 @@ const logger = require("../libs/logger");
 
 function addAccess(transaction) {
     return executeSQLQueryParameterized(
-        `INSERT INTO USER_PRODUCT_ACCESSES (user_id, product_id, transaction_id, validity) VALUES (?, ?, ?, DATE_ADD(NOW(), INTERVAL 365 DAY))`,
+        `INSERT INTO USER_PRODUCT_ACCESSES (user_id, product_id, transaction_id, validity) VALUES (?, ?, ?, DATE_ADD(NOW(), INTERVAL ${transaction.accessDuration} DAY))`,
         [transaction.user_id, transaction.product_id, transaction.id]
     ).catch((error) => {
         logger.error(`addAccess: ${error}`);

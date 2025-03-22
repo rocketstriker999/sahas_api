@@ -35,7 +35,7 @@ router.post("/", async (req, res) => {
                 transaction.successURL = process.env.TRANSACTION_SUCCESS_URL;
                 transaction.failureURL = process.env.TRANSACTION_FAILURE_URL;
                 transaction.payuURL = process.env.PAYU_URL;
-
+                transaction.accessDuration = product.access_duration;
                 transaction.id = await createTransaction(transaction);
 
                 transaction.hash = generateSHA512(

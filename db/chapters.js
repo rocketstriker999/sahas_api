@@ -10,7 +10,7 @@ function getChaptersBySubjectId(subjectId) {
 
 function getAllChaptersForCache() {
     return executeSQLQueryParameterized(
-        "SELECT MAPPING_SUBJECT_CHAPTERS.subject_id, CHAPTERS.id, CHAPTERS.title, (SELECT COUNT(*) FROM MEDIA WHERE MEDIA.media_group_id = CHAPTERS.media_group_id AND MEDIA.type='video') AS videos_count, (SELECT COUNT(*) FROM MEDIA WHERE MEDIA.media_group_id = CHAPTERS.media_group_id AND MEDIA.type='pdf') AS pdfs_count FROM MAPPING_SUBJECT_CHAPTERS INNER JOIN CHAPTERS ON MAPPING_SUBJECT_CHAPTERS.chapter_id = CHAPTERS.id"
+        "SELECT MAPPING_SUBJECT_CHAPTERS.subject_id, CHAPTERS.id, CHAPTERS.title, (SELECT COUNT(*) FROM MEDIA WHERE MEDIA.media_group_id = CHAPTERS.media_group_id AND MEDIA.type='video') AS videos_count, (SELECT COUNT(*) FROM MEDIA WHERE MEDIA.media_group_id = CHAPTERS.media_group_id AND MEDIA.type='pdf') AS pdfs_count FROM MAPPING_SUBJECT_CHAPTERS INNER JOIN CHAPTERS ON MAPPING_SUBJECT_CHAPTERS.chapter_id = CHAPTERS.id ORDER BY MAPPING_SUBJECT_CHAPTERS.view_index"
     ).catch((error) => {
         logger.error(`getAllChaptersForCache: ${error}`);
         return [];

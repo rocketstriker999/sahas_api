@@ -28,7 +28,7 @@ router.post("/", async (req, res) => {
                     transaction.benifit = couponCodeBenifit.type == "PERCENTAGE" ? (transaction.pay * couponCodeBenifit.value) / 100 : couponCodeBenifit.value;
                     transaction.pay -= transaction.benifit;
                     if (couponCodeBenifit.product_access_validity) {
-                        console.log("PICKED FROM COUPON BENIFIT");
+                        console.log(product_access_validity);
                         transaction.productAccessValidity = couponCodeBenifit.product_access_validity;
                     }
                 }

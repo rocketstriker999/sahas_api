@@ -22,10 +22,12 @@ router.post("/", async (req, res) => {
                 transaction.pay = product.discounted;
                 transaction.couponId = req.body.couponCode && (await getCouponCodeIdByCouponCode(req.body.couponCode));
                 transaction.benifit = 0;
+                transaction.productAccessDuration = product.access_duration;
                 //validate coupon and check if coupon can  be used
                 if (transaction.couponId && (couponCodeBenifit = await getBenifitByCouponCodeIdAndProductId(transaction.couponId, product.id))) {
                     transaction.benifit = couponCodeBenifit.type == "PERCENTAGE" ? (transaction.pay * couponCodeBenifit.value) / 100 : couponCodeBenifit.value;
                     transaction.pay -= transaction.benifit;
+                    if (couponCodeBenifit.product_access_duration) transaction.productAccessDuration = couponCodeBenifit.product_access_duration;
                 }
                 transaction.sgst = Number((transaction.pay * process.env.SGST) / 100);
                 transaction.cgst = Number((transaction.pay * process.env.CGST) / 100);
@@ -35,7 +37,7 @@ router.post("/", async (req, res) => {
                 transaction.successURL = process.env.TRANSACTION_SUCCESS_URL;
                 transaction.failureURL = process.env.TRANSACTION_FAILURE_URL;
                 transaction.payuURL = process.env.PAYU_URL;
-                transaction.accessDuration = product.access_duration;
+
                 transaction.id = await createTransaction(transaction);
 
                 transaction.hash = generateSHA512(

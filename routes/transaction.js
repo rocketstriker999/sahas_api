@@ -22,14 +22,13 @@ router.post("/", async (req, res) => {
                 transaction.pay = product.discounted;
                 transaction.couponId = req.body.couponCode && (await getCouponCodeIdByCouponCode(req.body.couponCode));
                 transaction.benifit = 0;
-                transaction.productAccessDuration = product.access_duration;
+                transaction.productAccessValidity = product.access_validity;
                 //validate coupon and check if coupon can  be used
                 if (transaction.couponId && (couponCodeBenifit = await getBenifitByCouponCodeIdAndProductId(transaction.couponId, product.id))) {
                     transaction.benifit = couponCodeBenifit.type == "PERCENTAGE" ? (transaction.pay * couponCodeBenifit.value) / 100 : couponCodeBenifit.value;
                     transaction.pay -= transaction.benifit;
-                    if (couponCodeBenifit.product_access_duration) transaction.productAccessDuration = couponCodeBenifit.product_access_duration;
+                    if (couponCodeBenifit.product_access_validity) transaction.productAccessValidity = couponCodeBenifit.product_access_validity;
                 }
-                console.log(transaction.productAccessDuration);
                 transaction.sgst = Number((transaction.pay * process.env.SGST) / 100);
                 transaction.cgst = Number((transaction.pay * process.env.CGST) / 100);
                 transaction.discounted = parseFloat(transaction.pay - transaction.sgst - transaction.cgst + transaction.benifit).toFixed(2);

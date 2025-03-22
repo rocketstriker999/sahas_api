@@ -2,7 +2,10 @@ const { executeSQLQueryParameterized } = require("../libs/db");
 const logger = require("../libs/logger");
 
 function getProductForTransaction(productId) {
-    return executeSQLQueryParameterized(`SELECT id,title,price,discounted,access_duration FROM PRODUCTS WHERE id=?`, [productId])
+    return executeSQLQueryParameterized(
+        `SELECT id,title,price,discounted,DATE_ADD(CURDATE(), INTERVAL access_validity DAY) AS access_validity  FROM PRODUCTS WHERE id=?`,
+        [productId]
+    )
         .then((result) => result.length > 0 && result[0])
         .catch((error) => {
             logger.error(`getProductForTransaction: ${error}`);

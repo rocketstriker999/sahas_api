@@ -3,7 +3,7 @@ const logger = require("../libs/logger");
 
 function createTransaction(transaction) {
     return executeSQLQueryParameterized(
-        `INSERT INTO TRANSACTIONS ( user_id,product_id, price, discounted,coupon_id,benifit, sgst, cgst,pay,product_access_duration) VALUES (?,?,?,?,?,?,?,?,?,?)`,
+        `INSERT INTO TRANSACTIONS ( user_id,product_id, price, discounted,coupon_id,benifit, sgst, cgst,pay,DATE_ADD(NOW(), INTERVAL ${transaction.productAccessValidity} DAY)) VALUES (?,?,?,?,?,?,?,?,?)`,
         [
             transaction.userId,
             transaction.productId,
@@ -14,7 +14,6 @@ function createTransaction(transaction) {
             transaction.sgst,
             transaction.cgst,
             transaction.pay,
-            transaction.productAccessDuration,
         ]
     )
         .then((result) => result.insertId)

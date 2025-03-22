@@ -30,7 +30,6 @@ router.post("/", async (req, res) => {
                     transaction,
                     user: await getUserByTransactionId(transaction.id),
                     product: await getProductById(transaction.product_id),
-                    access: await getAccessByTransactionId(transaction.id),
                     percent_sgst: process.env.SGST,
                     percent_cgst: process.env.CGST,
                 },

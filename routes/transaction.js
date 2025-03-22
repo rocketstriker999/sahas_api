@@ -29,6 +29,7 @@ router.post("/", async (req, res) => {
                     transaction.pay -= transaction.benifit;
                     if (couponCodeBenifit.product_access_duration) transaction.productAccessDuration = couponCodeBenifit.product_access_duration;
                 }
+                console.log(transaction.productAccessDuration);
                 transaction.sgst = Number((transaction.pay * process.env.SGST) / 100);
                 transaction.cgst = Number((transaction.pay * process.env.CGST) / 100);
                 transaction.discounted = parseFloat(transaction.pay - transaction.sgst - transaction.cgst + transaction.benifit).toFixed(2);

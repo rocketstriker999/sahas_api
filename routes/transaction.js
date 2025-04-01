@@ -15,7 +15,6 @@ router.post("/", async (req, res) => {
             if (req.body.productId) {
                 //oroginal product
                 const product = await getProductForTransaction(req.body.productId);
-                console.log(product);
                 const transaction = {};
                 transaction.productId = product.id;
                 transaction.productTitle = product.title;
@@ -40,6 +39,8 @@ router.post("/", async (req, res) => {
                 transaction.successURL = process.env.TRANSACTION_SUCCESS_URL;
                 transaction.failureURL = process.env.TRANSACTION_FAILURE_URL;
                 transaction.payuURL = process.env.PAYU_URL;
+
+                console.log(transaction);
 
                 transaction.id = await createTransaction(transaction);
 

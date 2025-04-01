@@ -32,15 +32,10 @@ router.post("/", async (req, res) => {
                         transaction.productAccessValidity = couponCodeBenifit.product_access_validity;
                     }
                 }
-
-                console.log("flag -1 ", transaction);
-
                 transaction.pay = Number(transaction.discounted);
                 transaction.sgst = Number((transaction.pay * process.env.SGST) / 100);
                 transaction.cgst = Number((transaction.pay * process.env.CGST) / 100);
                 transaction.pay = parseFloat(transaction.pay + transaction.sgst + transaction.cgst).toFixed(2);
-                console.log("flag -2 ", transaction);
-
                 transaction.userId = user.id;
                 transaction.payuMerchantKey = process.env.MERCHANT_KEY;
                 transaction.successURL = process.env.TRANSACTION_SUCCESS_URL;

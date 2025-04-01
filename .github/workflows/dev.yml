@@ -3,10 +3,8 @@ name: sahas_api DEV Deployment
 on:
     push:
         branches:
-            - dev
             - dev_abhishek
-    schedule:
-        - cron: "30 18 * * *"
+    
 
 jobs:
     deploy:

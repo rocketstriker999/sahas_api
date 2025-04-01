@@ -19,8 +19,8 @@ router.post("/", async (req, res) => {
                 transaction.productId = product.id;
                 transaction.productTitle = product.title;
                 transaction.price = product.price;
-                transaction.discounted = product.discounted;
-                transaction.pay = product.discounted;
+                transaction.discounted = Number(product.discounted);
+                transaction.pay = Number(product.discounted);
                 console.log("flag-1", transaction);
                 transaction.couponId = req.body.couponCode && (await getCouponCodeIdByCouponCode(req.body.couponCode));
                 transaction.benifit = 0;

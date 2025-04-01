@@ -43,7 +43,7 @@ router.post("/", async (req, res) => {
                 transaction.payuURL = process.env.PAYU_URL;
 
                 transaction.id = await createTransaction(transaction);
-
+                console.log("transaction", transaction);
                 transaction.hash = generateSHA512(
                     `${transaction.payuMerchantKey}|${transaction.id}|${transaction.pay}|${product.title}|${user.name}|${user.email}|||||||||||${process.env.MERCHANT_SALT}`
                 );

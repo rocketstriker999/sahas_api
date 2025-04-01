@@ -19,7 +19,8 @@ router.post("/", async (req, res) => {
                 transaction.productId = product.id;
                 transaction.productTitle = product.title;
                 transaction.price = product.price;
-                transaction.pay = product.discounted;
+                transaction.discounted = product.discounted;
+                transaction.pay = transaction.discounted;
                 transaction.couponId = req.body.couponCode && (await getCouponCodeIdByCouponCode(req.body.couponCode));
                 transaction.benifit = 0;
                 transaction.productAccessValidity = product.access_validity;
@@ -39,8 +40,6 @@ router.post("/", async (req, res) => {
                 transaction.successURL = process.env.TRANSACTION_SUCCESS_URL;
                 transaction.failureURL = process.env.TRANSACTION_FAILURE_URL;
                 transaction.payuURL = process.env.PAYU_URL;
-
-                console.log(transaction);
 
                 transaction.id = await createTransaction(transaction);
 

@@ -15,6 +15,7 @@ router.post("/", async (req, res) => {
             if (req.body.productId) {
                 //oroginal product
                 const product = await getProductForTransaction(req.body.productId);
+                console.log(product);
                 const transaction = {};
                 transaction.productId = product.id;
                 transaction.productTitle = product.title;

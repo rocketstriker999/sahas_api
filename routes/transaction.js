@@ -18,10 +18,9 @@ router.post("/", async (req, res) => {
                 const transaction = {};
                 transaction.productId = product.id;
                 transaction.productTitle = product.title;
-                transaction.price = product.price;
+                transaction.price = Number(product.price);
                 transaction.discounted = Number(product.discounted);
                 transaction.pay = Number(product.discounted);
-                console.log("flag-1", transaction);
                 transaction.couponId = req.body.couponCode && (await getCouponCodeIdByCouponCode(req.body.couponCode));
                 transaction.benifit = 0;
                 transaction.productAccessValidity = product.access_validity;
@@ -33,13 +32,9 @@ router.post("/", async (req, res) => {
                         transaction.productAccessValidity = couponCodeBenifit.product_access_validity;
                     }
                 }
-                console.log("flag-2", transaction);
-
                 transaction.sgst = Number((transaction.pay * process.env.SGST) / 100);
                 transaction.cgst = Number((transaction.pay * process.env.CGST) / 100);
                 transaction.pay = parseFloat(transaction.pay + transaction.sgst + transaction.cgst).toFixed(2);
-                console.log("flag-3", transaction);
-
                 transaction.userId = user.id;
                 transaction.payuMerchantKey = process.env.MERCHANT_KEY;
                 transaction.successURL = process.env.TRANSACTION_SUCCESS_URL;

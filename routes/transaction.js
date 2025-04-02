@@ -18,23 +18,24 @@ router.post("/", async (req, res) => {
                 const transaction = {};
                 transaction.productId = product.id;
                 transaction.productTitle = product.title;
-                transaction.price = product.price;
-                transaction.pay = product.discounted;
+                transaction.price = Number(product.price);
+                transaction.discounted = Number(product.discounted);
                 transaction.couponId = req.body.couponCode && (await getCouponCodeIdByCouponCode(req.body.couponCode));
                 transaction.benifit = 0;
                 transaction.productAccessValidity = product.access_validity;
                 //validate coupon and check if coupon can  be used
                 if (transaction.couponId && (couponCodeBenifit = await getBenifitByCouponCodeIdAndProductId(transaction.couponId, product.id))) {
-                    transaction.benifit = couponCodeBenifit.type == "PERCENTAGE" ? (transaction.pay * couponCodeBenifit.value) / 100 : couponCodeBenifit.value;
-                    transaction.pay -= transaction.benifit;
+                    transaction.benifit =
+                        couponCodeBenifit.type == "PERCENTAGE" ? (transaction.discounted * couponCodeBenifit.value) / 100 : couponCodeBenifit.value;
+                    transaction.discounted -= transaction.benifit;
                     if (couponCodeBenifit.product_access_validity) {
-                        console.log("couponCodeBenifit", couponCodeBenifit.product_access_validity);
                         transaction.productAccessValidity = couponCodeBenifit.product_access_validity;
                     }
                 }
+                transaction.pay = Number(transaction.discounted);
                 transaction.sgst = Number((transaction.pay * process.env.SGST) / 100);
                 transaction.cgst = Number((transaction.pay * process.env.CGST) / 100);
-                transaction.discounted = parseFloat(transaction.pay - transaction.sgst - transaction.cgst + transaction.benifit).toFixed(2);
+                transaction.pay = parseFloat(transaction.pay + transaction.sgst + transaction.cgst).toFixed(2);
                 transaction.userId = user.id;
                 transaction.payuMerchantKey = process.env.MERCHANT_KEY;
                 transaction.successURL = process.env.TRANSACTION_SUCCESS_URL;

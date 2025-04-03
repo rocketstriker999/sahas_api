@@ -47,4 +47,30 @@ function getTransactionById(transactionId) {
         });
 }
 
-module.exports = { createTransaction, updateTransactionStatus, getTransactionById, updateTransactionHash };
+function getAllTransaction() {
+    return executeSQLQueryParameterized(`SELECT 
+    table_transactions.*, 
+    table_users.name AS user_name, 
+    table_users.email AS user_email, 
+    table_users.phone AS user_phone, 
+    table_users.address AS user_address, 
+    table_products.title AS product_title, 
+    table_products.description AS product_description, 
+    table_products.image AS product_image, 
+    table_products.price AS product_price, 
+    table_products.discounted AS product_discounted, 
+    table_products.access_validity AS product_access_validity 
+    FROM TRANSACTIONS table_transactions 
+    INNER JOIN USERS table_users 
+    ON table_transactions.user_id = table_users.id 
+    INNER JOIN PRODUCTS table_products 
+    ON table_transactions.product_id = table_products.id`)
+        .then((result) => (result.length > 0 ? result[0] : false))
+        .catch((error) => {
+            logger.error(`getAllTransaction: ${error}`);
+            return false;
+        });
+}
+
+
+module.exports = { createTransaction, updateTransactionStatus, getTransactionById, updateTransactionHash, getAllTransaction };

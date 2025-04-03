@@ -1,7 +1,7 @@
 const libExpress = require("express");
 const { getUserByToken } = require("../db/users");
 const { getProductForTransaction } = require("../db/products");
-const { createTransaction, updateTransactionHash } = require("../db/transactions");
+const { createTransaction, updateTransactionHash, getAllTransaction } = require("../db/transactions");
 const { getBenifitByCouponCodeIdAndProductId, getCouponCodeIdByCouponCode } = require("../db/coupon");
 const { generateSHA512 } = require("../utils");
 
@@ -66,6 +66,17 @@ router.post("/", async (req, res) => {
         }
     } else {
         res.status(401).json({ error: "Missing Token" });
+    }
+});
+
+//getAllTransaction all data 
+router.get("/getAllTransaction", async (req, res) => {
+    const transactions = await getAllTransaction();
+    if (transactions.length > 0) {
+        console.log("transactions", transactions);
+        return res.status(200).json(transactions);
+    } else {
+        return res.status(404).json({ error: "No transactions found" });
     }
 });
 

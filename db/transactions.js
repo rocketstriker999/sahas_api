@@ -91,4 +91,4 @@ function getAllTransactionData() {
 //     });
 // }
 
-module.exports = { createTransaction, updateTransactionStatus, getTransactionById, updateTransactionHash, getAllTransaction };
+module.exports = { createTransaction, updateTransactionStatus, getTransactionById, updateTransactionHash, getAllTransactionData };

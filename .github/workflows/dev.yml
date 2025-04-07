@@ -31,7 +31,7 @@ jobs:
                         kill -9 $pid
                       fi
                     fi
-                    git pull
+                    git checkout dev_abhishek
                     npm install
 
                     if [ ! -d "logs" ]; then

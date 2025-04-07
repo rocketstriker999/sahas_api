@@ -47,7 +47,7 @@ function getTransactionById(transactionId) {
         });
 }
 
-function getAllTransaction() {
+function getAllTransactionData() {
     console.log("getAllTransaction query function called");
     return executeSQLQueryParameterized(`SELECT * FROM TRANSACTIONS`)
     .then((result) => {

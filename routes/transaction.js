@@ -71,6 +71,7 @@ router.post("/", async (req, res) => {
 
 //getAllTransaction all data 
 router.get("/getAllTransaction", async (req, res) => {
+    console.log("getAllTransaction is called");
     const transactions = await getAllTransaction();
     if (transactions.length > 0) {
         console.log("transactions", transactions);

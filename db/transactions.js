@@ -48,6 +48,7 @@ function getTransactionById(transactionId) {
 }
 
 function getAllTransaction() {
+    console.log("getAllTransaction query function called");
     return executeSQLQueryParameterized(`SELECT 
         table_transactions.*, 
         table_users.name AS user_name, 
@@ -67,15 +68,14 @@ function getAllTransaction() {
     ON table_transactions.product_id = table_products.id`)
     .then((result) => {
         console.log("SQL result:", result); 
-        logger.error(`SQL result: ${error}`);
+        // Removed incorrect logger.error line
         return result;
     })
     .catch((error) => {
         console.log("Error in getAllTransaction:", error);
         logger.error(`getAllTransaction: ${error}`);
-        return false;
+        return []; 
     });
 }
-
 
 module.exports = { createTransaction, updateTransactionStatus, getTransactionById, updateTransactionHash, getAllTransaction };

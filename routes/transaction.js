@@ -70,14 +70,20 @@ router.post("/", async (req, res) => {
 });
 
 //getAllTransaction all data 
+
 router.get("/getAllTransaction", async (req, res) => {
     console.log("getAllTransaction is called");
-    const transactions = await getAllTransaction();
-    if (transactions.length > 0) {
-        console.log("transactions", transactions);
-        return res.status(200).json(transactions);
-    } else {
-        return res.status(404).json({ error: "No transactions found" });
+    try {
+        const transactions = await getAllTransaction();
+        if (transactions.length > 0) {
+            console.log("transactions", transactions);
+            return res.status(200).json(transactions);
+        } else {
+            return res.status(404).json({ error: "No transactions found" });
+        }
+    } catch (error) {
+        console.error("Error in /getAllTransaction route:", error);
+        return res.status(500).json({ error: "Internal server error" });
     }
 });
 

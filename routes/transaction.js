@@ -8,6 +8,17 @@ const { generateSHA512 } = require("../utils");
 const router = libExpress.Router();
 
 //create new transactions
+
+router.get("/getAllTransaction", async (req, res) => {
+    try {
+        const transactions = await getAllTransactionData();
+        return res.status(200).json(transactions);
+    } catch (error) {
+        console.error("Transaction error:", error);
+        return res.status(500).json({ error: "Server error" });
+    }
+});
+
 router.post("/", async (req, res) => {
     if (req.cookies.token) {
         const user = await getUserByToken(req.cookies.token);
@@ -66,16 +77,6 @@ router.post("/", async (req, res) => {
         }
     } else {
         res.status(401).json({ error: "Missing Token" });
-    }
-});
-
-router.get("getAllTransaction", async (req, res) => {
-    try {
-        const transactions = await getAllTransactionData();
-        return res.status(200).json(transactions);
-    } catch (error) {
-        console.error("Transaction error:", error);
-        return res.status(500).json({ error: "Server error" });
     }
 });
 

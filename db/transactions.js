@@ -47,6 +47,7 @@ function getTransactionById(transactionId) {
         });
 }
 
+//temp
 function getAllTransactionData(params) {
     let query = `SELECT
             TRANSACTIONS.id AS transaction_id,

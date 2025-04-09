@@ -72,7 +72,7 @@ function getAllTransactionData(params) {
                 ...params,
                 "TRANSACTIONS.status": "SUCCESS",
             })
-                .map(([key, value]) => `${key}='${value}'`)
+                .map(([key, value]) => `${key} LIKE '%${value}%'`)
                 .join(" AND "),
         ].join(" WHERE "),
         []

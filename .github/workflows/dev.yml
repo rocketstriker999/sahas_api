@@ -3,8 +3,9 @@ name: sahas_api DEV Deployment
 on:
     push:
         branches:
-            - dev_abhishek
-    
+            - dev
+    schedule:
+        - cron: "30 18 * * *"
 
 jobs:
     deploy:
@@ -21,7 +22,7 @@ jobs:
                     DIR="sahas_api"
                     if [ ! -d "$DIR" ]; then
                       echo "Fetching Source - $DIR"
-                      git clone --branch dev_abhishek https://github.com/rocketstriker999/$DIR
+                      git clone --branch dev https://github.com/rocketstriker999/$DIR
                     fi
                     cd "$DIR"
                     if [ -f process.id ]; then
@@ -31,9 +32,7 @@ jobs:
                         kill -9 $pid
                       fi
                     fi
-                    git checkout dev_abhishek
-                    git fetch origin dev_abhishek
-                    git pull origin dev_abhishek
+                    git pull
                     npm install
 
                     if [ ! -d "logs" ]; then

@@ -48,10 +48,12 @@ function getTransactionById(transactionId) {
 }
 
 function getAllTransactionData(params) {
-
     const wherClause = Object.entries(params)
         .map(([key, value]) => `${key}='${value}'`)
         .join(" AND ");
+
+    console.log("wherClause", wherClause);
+
     const query = `SELECT
             TRANSACTIONS.id AS transaction_id,
             TRANSACTIONS.status AS transaction_status,
@@ -69,17 +71,17 @@ function getAllTransactionData(params) {
         INNER JOIN USERS ON TRANSACTIONS.user_id = USERS.id
         INNER JOIN PRODUCTS ON TRANSACTIONS.product_id = PRODUCTS.id
         WHERE TRANSACTIONS.status = 'SUCCESS' `;
-        const finalQuery = [query,wherClause].join("AND");
-        console.log(finalQuery);
+    const finalQuery = [query, wherClause].join("AND");
+    console.log(finalQuery);
     return executeSQLQueryParameterized(finalQuery, [])
-    .then((result) => {
-        console.log("SQL result:", result); 
-        return result;
-    })
-    .catch((error) => {
-        logger.error(`getAllTransactionData: ${error}`);
-        return false;
-    });
+        .then((result) => {
+            console.log("SQL result:", result);
+            return result;
+        })
+        .catch((error) => {
+            logger.error(`getAllTransactionData: ${error}`);
+            return false;
+        });
 }
 
 module.exports = { createTransaction, updateTransactionStatus, getTransactionById, updateTransactionHash, getAllTransactionData };

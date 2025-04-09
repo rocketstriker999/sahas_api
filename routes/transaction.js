@@ -1,13 +1,24 @@
 const libExpress = require("express");
 const { getUserByToken } = require("../db/users");
 const { getProductForTransaction } = require("../db/products");
-const { createTransaction, updateTransactionHash } = require("../db/transactions");
+const { createTransaction, updateTransactionHash, getAllTransactionData } = require("../db/transactions");
 const { getBenifitByCouponCodeIdAndProductId, getCouponCodeIdByCouponCode } = require("../db/coupon");
 const { generateSHA512 } = require("../utils");
 
 const router = libExpress.Router();
 
-//create new transactions
+//temp
+router.get("/all", async (req, res) => {
+    try {
+        const transactions = await getAllTransactionData(req.query);
+        return res.status(200).json(transactions);
+    } catch (error) {
+        console.error("Transaction error:", error);
+        return res.status(500).json({ error: "Server error" });
+    }
+});
+
+//create new transactions1
 router.post("/", async (req, res) => {
     if (req.cookies.token) {
         const user = await getUserByToken(req.cookies.token);
@@ -43,7 +54,6 @@ router.post("/", async (req, res) => {
                 transaction.payuURL = process.env.PAYU_URL;
 
                 transaction.id = await createTransaction(transaction);
-
                 transaction.hash = generateSHA512(
                     `${transaction.payuMerchantKey}|${transaction.id}|${transaction.pay}|${product.title}|${user.name}|${user.email}|||||||||||${process.env.MERCHANT_SALT}`
                 );

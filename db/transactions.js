@@ -48,14 +48,7 @@ function getTransactionById(transactionId) {
 }
 
 function getAllTransactionData(params) {
-    console.log("param", params);
-    const wherClause = Object.entries(params)
-        .map(([key, value]) => `${key}='${value}'`)
-        .join(" AND ");
-
-    console.log("wherClause", wherClause);
-
-    const query = `SELECT
+    let query = `SELECT
             TRANSACTIONS.id AS transaction_id,
             TRANSACTIONS.status AS transaction_status,
             TRANSACTIONS.pay AS transaction_pay,
@@ -70,11 +63,20 @@ function getAllTransactionData(params) {
             PRODUCTS.title AS product_title
         FROM TRANSACTIONS
         INNER JOIN USERS ON TRANSACTIONS.user_id = USERS.id
-        INNER JOIN PRODUCTS ON TRANSACTIONS.product_id = PRODUCTS.id
-        WHERE TRANSACTIONS.status = 'SUCCESS' `;
-    const finalQuery = [query, wherClause].join("AND");
-    console.log(finalQuery);
-    return executeSQLQueryParameterized(finalQuery, [])
+        INNER JOIN PRODUCTS ON TRANSACTIONS.product_id = PRODUCTS.id`;
+
+    return executeSQLQueryParameterized(
+        [
+            query,
+            Object.entries({
+                ...params,
+                "TRANSACTIONS.status": "SUCCESS",
+            })
+                .map(([key, value]) => `${key}='${value}'`)
+                .join(" AND "),
+        ].join(" WHERE  =   "),
+        []
+    )
         .then((result) => {
             console.log("SQL result:", result);
             return result;

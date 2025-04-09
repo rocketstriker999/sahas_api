@@ -7,7 +7,7 @@ const { generateSHA512 } = require("../utils");
 
 const router = libExpress.Router();
 
-//create new transactions
+//create new transactions1
 
 router.get("/all", async (req, res) => {
     try {

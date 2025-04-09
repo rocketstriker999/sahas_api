@@ -47,42 +47,29 @@ function getTransactionById(transactionId) {
         });
 }
 
-function getAllTransactionData() {
-    return executeSQLQueryParameterized(`SELECT * FROM TRANSACTIONS WHERE id=?`, [transactionId])
-        .then((result) => (result.length > 0 ? result[0] : false))
-        .catch((error) => {
-            logger.error(`getTransactionById: ${error}`);
-            return false;
-        });
-}
+function getAllTransactionData(params) {
 
-function getAllTransactionData() {
-    return executeSQLQueryParameterized(`
-       SELECT
+    const wherClause = Object.entries(params)
+        .map(([key, value]) => `${key}='${value}'`)
+        .join(" AND ");
+    const query = `SELECT
             TRANSACTIONS.id AS transaction_id,
             TRANSACTIONS.status AS transaction_status,
-            TRANSACTIONS.price AS transaction_price,
-            TRANSACTIONS.discounted AS transaction_discounted,
             TRANSACTIONS.pay AS transaction_pay,
+            TRANSACTIONS.updated_at AS transaction_date,
+            TRANSACTIONS.invoice AS transaction_invoice,
+            TRANSACTIONS.product_access_validity AS transaction_product_access_validity,          
             USERS.id AS user_id,
             USERS.name AS user_name,
             USERS.email AS user_email,
             USERS.phone AS user_phone,
-            USERS.address AS user_address,
-            USERS.branch AS user_branch,
-            USERS.wallet AS user_wallet,
             PRODUCTS.id AS product_id,
-            PRODUCTS.title AS product_title,
-            PRODUCTS.price AS product_price,
-            PRODUCTS.discounted AS product_discounted,
-            PRODUCTS.category_id AS product_category_id,
-            PRODUCTS.access_validity AS product_access_validity
-        FROM
-            TRANSACTIONS
-            INNER JOIN USERS ON TRANSACTIONS.user_id = USERS.id
-            INNER JOIN PRODUCTS ON TRANSACTIONS.product_id = PRODUCTS.id
-        WHERE
-            TRANSACTIONS.status = 'SUCCESS';`)
+            PRODUCTS.title AS product_title
+        FROM TRANSACTIONS
+        INNER JOIN USERS ON TRANSACTIONS.user_id = USERS.id
+        INNER JOIN PRODUCTS ON TRANSACTIONS.product_id = PRODUCTS.id
+        WHERE TRANSACTIONS.status = 'SUCCESS' `;
+    return executeSQLQueryParameterized([query,wherClause].join("AND"), [])
     .then((result) => {
         console.log("SQL result:", result); 
         return result;

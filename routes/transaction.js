@@ -11,11 +11,11 @@ const router = libExpress.Router();
 
 router.get("/all", async (req, res) => {
     try {
-        const transactions = await getAllTransactionData();
+        const transactions = await getAllTransactionData(req.query);
         return res.status(200).json(transactions);
     } catch (error) {
         console.error("Transaction error:", error);
-        return res.status(500).json({ error: "Server error" });
+        return res.status(500).json({ error: "Server error" });
     }
 });
 

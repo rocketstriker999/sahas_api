@@ -78,7 +78,6 @@ function getAllTransactionData(params) {
         []
     )
         .then((result) => {
-            console.log("SQL result:", result);
             return result;
         })
         .catch((error) => {

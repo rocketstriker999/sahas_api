@@ -69,8 +69,7 @@ router.post("/", async (req, res) => {
     }
 });
 
-
-router.get("/getAllTransaction", async (req, res) => {
+router.get("getAllTransaction", async (req, res) => {
     try {
         const transactions = await getAllTransactionData();
         return res.status(200).json(transactions);

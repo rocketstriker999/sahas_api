@@ -77,7 +77,7 @@ function getAllTransactionData(params) {
                 .join(" AND "),
         ]
             .join(" WHERE ")
-            .concat(" ORDER BY id DESC"),
+            .concat(" ORDER BY TRANSACTIONS.id DESC"),
         []
     )
         .then((result) => {

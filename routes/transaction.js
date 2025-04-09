@@ -71,27 +71,12 @@ router.post("/", async (req, res) => {
 
 
 router.get("/getAllTransaction", async (req, res) => {
-    console.log("getAllTransaction is called");
     try {
-        // Add token validation
-        if (!req.cookies.token) {
-            return res.status(401).json({ error: "Missing Token" });
-        }
-        const user = await getUserByToken(req.cookies.token);
-        if (!user) {
-            return res.status(401).json({ error: "Invalid Token" });
-        }
-
         const transactions = await getAllTransactionData();
-        if (transactions.length > 0) {
-            console.log("transactions", transactions);
-            return res.status(200).json(transactions);
-        } else {
-            return res.status(404).json({ error: "No transactions found" });
-        }
+        return res.status(200).json(transactions);
     } catch (error) {
-        console.error("Error in /getAllTransaction route:", error);
-        return res.status(500).json({ error: "Internal server error" });
+        console.error("Transaction error:", error);
+        return res.status(500).json({ error: "Server error" });
     }
 });
 

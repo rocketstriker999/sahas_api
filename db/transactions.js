@@ -48,7 +48,15 @@ function getTransactionById(transactionId) {
 }
 
 function getAllTransactionData() {
-    console.log("getAllTransaction query function called");
+    return executeSQLQueryParameterized(`SELECT * FROM TRANSACTIONS WHERE id=?`, [transactionId])
+        .then((result) => (result.length > 0 ? result[0] : false))
+        .catch((error) => {
+            logger.error(`getTransactionById: ${error}`);
+            return false;
+        });
+}
+
+function getAllTransactionData() {
     return executeSQLQueryParameterized(`
        SELECT
             TRANSACTIONS.id AS transaction_id,
@@ -74,16 +82,14 @@ function getAllTransactionData() {
             INNER JOIN USERS ON TRANSACTIONS.user_id = USERS.id
             INNER JOIN PRODUCTS ON TRANSACTIONS.product_id = PRODUCTS.id
         WHERE
-            TRANSACTIONS.status = 'SUCCESS';
-    `)
+            TRANSACTIONS.status = 'SUCCESS';`)
     .then((result) => {
         console.log("SQL result:", result); 
         return result;
     })
     .catch((error) => {
-        console.log("Error in getAllTransaction:", error);
-        logger.error(`getAllTransaction: ${error}`);
-        return []; 
+        logger.error(`getAllTransactionData: ${error}`);
+        return false;
     });
 }
 

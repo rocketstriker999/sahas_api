@@ -50,23 +50,31 @@ function getTransactionById(transactionId) {
 function getAllTransactionData() {
     console.log("getAllTransaction query function called");
     return executeSQLQueryParameterized(`
-        SELECT 
-            table_transactions.*, 
-            table_users.name AS user_name, 
-            table_users.email AS user_email, 
-            table_users.phone AS user_phone, 
-            table_users.address AS user_address, 
-            table_products.title AS product_title, 
-            table_products.description AS product_description, 
-            table_products.price AS product_price, 
-            table_products.discounted AS product_discounted, 
-            table_products.access_validity AS product_access_validity 
-        FROM TRANSACTIONS table_transactions 
-        INNER JOIN USERS table_users 
-            ON table_transactions.user_id = table_users.id 
-        INNER JOIN PRODUCTS table_products 
-            ON table_transactions.product_id = table_products.id
-        WHERE TRIM(UPPER(table_transactions.status)) = 'SUCCESS';
+       SELECT
+            TRANSACTIONS.id AS transaction_id,
+            TRANSACTIONS.status AS transaction_status,
+            TRANSACTIONS.price AS transaction_price,
+            TRANSACTIONS.discounted AS transaction_discounted,
+            TRANSACTIONS.pay AS transaction_pay,
+            USERS.id AS user_id,
+            USERS.name AS user_name,
+            USERS.email AS user_email,
+            USERS.phone AS user_phone,
+            USERS.address AS user_address,
+            USERS.branch AS user_branch,
+            USERS.wallet AS user_wallet,
+            PRODUCTS.id AS product_id,
+            PRODUCTS.title AS product_title,
+            PRODUCTS.price AS product_price,
+            PRODUCTS.discounted AS product_discounted,
+            PRODUCTS.category_id AS product_category_id,
+            PRODUCTS.access_validity AS product_access_validity
+        FROM
+            TRANSACTIONS
+            INNER JOIN USERS ON TRANSACTIONS.user_id = USERS.id
+            INNER JOIN PRODUCTS ON TRANSACTIONS.product_id = PRODUCTS.id
+        WHERE
+            TRANSACTIONS.status = 'SUCCESS';
     `)
     .then((result) => {
         console.log("SQL result:", result); 

@@ -47,4 +47,44 @@ function getTransactionById(transactionId) {
         });
 }
 
-module.exports = { createTransaction, updateTransactionStatus, getTransactionById, updateTransactionHash };
+//temp
+function getAllTransactionData(params) {
+    let query = `SELECT
+            TRANSACTIONS.id AS transaction_id,
+            TRANSACTIONS.status AS transaction_status,
+            TRANSACTIONS.pay AS transaction_pay,
+            TRANSACTIONS.updated_at AS transaction_date,
+            TRANSACTIONS.invoice AS transaction_invoice,
+            TRANSACTIONS.product_access_validity AS transaction_product_access_validity,          
+            USERS.id AS user_id,
+            USERS.name AS name,
+            USERS.email AS email,
+            USERS.phone AS phone,
+            PRODUCTS.id AS product_id,
+            PRODUCTS.title AS product_title
+        FROM TRANSACTIONS
+        INNER JOIN USERS ON TRANSACTIONS.user_id = USERS.id
+        INNER JOIN PRODUCTS ON TRANSACTIONS.product_id = PRODUCTS.id`;
+
+    return executeSQLQueryParameterized(
+        [
+            query,
+            Object.entries({
+                ...params,
+                "TRANSACTIONS.status": "SUCCESS",
+            })
+                .map(([key, value]) => `${key} LIKE '%${value}%'`)
+                .join(" AND "),
+        ].join(" WHERE "),
+        []
+    )
+        .then((result) => {
+            return result;
+        })
+        .catch((error) => {
+            logger.error(`getAllTransactionData: ${error}`);
+            return false;
+        });
+}
+
+module.exports = { createTransaction, updateTransactionStatus, getTransactionById, updateTransactionHash, getAllTransactionData };

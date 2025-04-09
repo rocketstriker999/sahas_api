@@ -48,6 +48,7 @@ function getTransactionById(transactionId) {
 }
 
 function getAllTransactionData(params) {
+    console.log(params);
     let query = `SELECT
             TRANSACTIONS.id AS transaction_id,
             TRANSACTIONS.status AS transaction_status,

@@ -75,7 +75,9 @@ function getAllTransactionData(params) {
             })
                 .map(([key, value]) => `${key} LIKE '%${value}%'`)
                 .join(" AND "),
-        ].join(" WHERE "),
+        ]
+            .join(" WHERE ")
+            .concat(" ORDER BY id DESC"),
         []
     )
         .then((result) => {

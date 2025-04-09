@@ -9,7 +9,7 @@ const router = libExpress.Router();
 
 //create new transactions
 
-router.get("/getAllTransaction", async (req, res) => {
+router.get("/getAllTransactions", async (req, res) => {
     try {
         const transactions = await getAllTransactionData();
         return res.status(200).json(transactions);

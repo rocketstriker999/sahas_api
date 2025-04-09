@@ -56,9 +56,9 @@ function getAllTransactionData(params) {
             TRANSACTIONS.invoice AS transaction_invoice,
             TRANSACTIONS.product_access_validity AS transaction_product_access_validity,          
             USERS.id AS user_id,
-            USERS.name AS user_name,
-            USERS.email AS user_email,
-            USERS.phone AS user_phone,
+            USERS.name AS name,
+            USERS.email AS email,
+            USERS.phone AS phone,
             PRODUCTS.id AS product_id,
             PRODUCTS.title AS product_title
         FROM TRANSACTIONS
@@ -74,7 +74,7 @@ function getAllTransactionData(params) {
             })
                 .map(([key, value]) => `${key}='${value}'`)
                 .join(" AND "),
-        ].join(" WHERE     "),
+        ].join(" WHERE "),
         []
     )
         .then((result) => {

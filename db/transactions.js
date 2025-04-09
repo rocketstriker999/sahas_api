@@ -69,7 +69,9 @@ function getAllTransactionData(params) {
         INNER JOIN USERS ON TRANSACTIONS.user_id = USERS.id
         INNER JOIN PRODUCTS ON TRANSACTIONS.product_id = PRODUCTS.id
         WHERE TRANSACTIONS.status = 'SUCCESS' `;
-    return executeSQLQueryParameterized([query,wherClause].join("AND"), [])
+        const finalQuery = [query,wherClause].join("AND");
+        console.log(finalQuery);
+    return executeSQLQueryParameterized(finalQuery, [])
     .then((result) => {
         console.log("SQL result:", result); 
         return result;

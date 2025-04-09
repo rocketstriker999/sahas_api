@@ -65,7 +65,7 @@ function getAllTransactionData() {
                 ON table_transactions.user_id = table_users.id 
             INNER JOIN PRODUCTS table_products 
                 ON table_transactions.product_id = table_products.id
-            WHERE table_transactions.status = 'SUCCESS';`)
+            WHERE UPPER(table_transactions.status) = 'SUCCESS'`)
         .then((result) => {
         console.log("SQL result:", result); 
         return result;

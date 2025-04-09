@@ -74,7 +74,7 @@ function getAllTransactionData(params) {
             })
                 .map(([key, value]) => `${key}='${value}'`)
                 .join(" AND "),
-        ].join(" WHERE  =   "),
+        ].join(" WHERE     "),
         []
     )
         .then((result) => {

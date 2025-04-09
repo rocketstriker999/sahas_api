@@ -48,6 +48,7 @@ function getTransactionById(transactionId) {
 }
 
 function getAllTransactionData(params) {
+    console.log("param", params);
     const wherClause = Object.entries(params)
         .map(([key, value]) => `${key}='${value}'`)
         .join(" AND ");

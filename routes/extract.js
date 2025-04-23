@@ -15,10 +15,12 @@ router.get("/subjects/:subjectId/:mediaId", async (req, res) => {
 //Chapter Content extractions
 router.get("/chapters/:chapterId/:mediaId", async (req, res) => {
     if (req.params.chapterId && req.params.mediaId) {
-        console.log("CALLED", req.query);
-
+        const query = new URLSearchParams(req.query).toString();
+        console.log("######################### CALLED", query);
         const media = await extractMediaByChapterIdAndMediaId(req.params.chapterId, req.params.mediaId);
-        return res.redirect(301, `/${process.env.SERVICE_MEDIA}extract/${media.type}/${media.cdn_id}`);
+        const redirectUrl = `/${process.env.SERVICE_MEDIA}extract/${media.type}/${media.cdn_id}${query ? `?${query}` : ""}`;
+
+        return res.redirect(301, redirectUrl);
     }
     return res.status(400).json({ error: "Missing Required Details" });
 });

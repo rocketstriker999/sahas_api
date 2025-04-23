@@ -19,7 +19,7 @@ router.get("/chapters/:chapterId/:mediaId", async (req, res) => {
         console.log("######################### CALLED", query);
         const media = await extractMediaByChapterIdAndMediaId(req.params.chapterId, req.params.mediaId);
         const redirectUrl = `/${process.env.SERVICE_MEDIA}extract/${media.type}/${media.cdn_id}${query ? `?${query}` : ""}`;
-
+        console.log(redirectUrl);
         return res.redirect(301, redirectUrl);
     }
     return res.status(400).json({ error: "Missing Required Details" });

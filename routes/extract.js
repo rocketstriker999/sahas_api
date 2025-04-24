@@ -27,7 +27,7 @@ router.get("/chapters/:chapterId/:mediaId", async (req, res) => {
 
     requestService({
         requestServiceName: process.env.SERVICE_MEDIA,
-        requestPath: `extract/video/${media.cdn_id}`,
+        requestPath: `extract/${media.type}/${media.cdn_id}`,
         onRequestStart: () => {
             logger.info(`Extracting Media - CDN ID ${media.cdn_id}`);
         },

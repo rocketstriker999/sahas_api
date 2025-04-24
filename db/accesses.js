@@ -95,6 +95,7 @@ function getUserProductAccessData(params) {
                 .join(" AND "),
         ].join(" WHERE ")
     }
+    query = query + ' Order By USER_PRODUCT_ACCESSES.id DESC'
     return executeSQLQueryParameterized(
             query,
         []

@@ -33,7 +33,7 @@ router.get("/chapters/:chapterId/:mediaId", async (req, res) => {
         },
         onResponseReceieved: (sources, responseCode) => {
             if (responseCode === 200 && sources.length) {
-                logger.info(sources);
+                logger.info(JSON.stringify(sources));
                 return res.status(200).json(sources);
             }
             return res.status(500).json({ error: "Error While Generating Sources" });

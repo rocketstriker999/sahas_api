@@ -20,12 +20,12 @@ router.get("/chapters/:chapterId/:mediaId", async (req, res) => {
         return res.status(400).json({ error: "Missing Required Details" });
     }
 
-    logger.info("######################### CALLED");
-    logger.info(JSON.stringify(req.query));
+    logger.info("#########################");
 
     const media = await extractMediaByChapterIdAndMediaId(req.params.chapterId, req.params.mediaId);
 
     requestService({
+        requestGetQuery: req.query,
         requestServiceName: process.env.SERVICE_MEDIA,
         requestPath: `extract/${media.type}/${media.cdn_id}`,
         onRequestStart: () => {

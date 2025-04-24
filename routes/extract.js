@@ -32,7 +32,10 @@ router.get("/chapters/:chapterId/:mediaId", async (req, res) => {
             logger.info(`Extracting Media - CDN ID ${media.cdn_id}`);
         },
         onResponseReceieved: (sources, responseCode) => {
-            if (responseCode === 200 && sources.length) return res.status(200).json(sources);
+            if (responseCode === 200 && sources.length) {
+                logger.info(sources);
+                return res.status(200).json(sources);
+            }
             return res.status(500).json({ error: "Error While Generating Sources" });
         },
         onRequestFailure: (error) => {

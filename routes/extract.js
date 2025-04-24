@@ -1,6 +1,7 @@
 const libExpress = require("express");
 const { extractMediaBySubjectIdAndMediaId, extractMediaByChapterIdAndMediaId } = require("../db/media");
 const { requestService } = require("../utils");
+const logger = require("../libs/logger");
 
 const router = libExpress.Router();
 
@@ -19,7 +20,9 @@ router.get("/chapters/:chapterId/:mediaId", async (req, res) => {
         return res.status(400).json({ error: "Missing Required Details" });
     }
 
-    console.log("######################### CALLED", req.query);
+    logger.info("######################### CALLED");
+    logger.info(req.query);
+
     const media = await extractMediaByChapterIdAndMediaId(req.params.chapterId, req.params.mediaId);
 
     requestService({

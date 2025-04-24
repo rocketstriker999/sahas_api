@@ -20,8 +20,6 @@ router.get("/chapters/:chapterId/:mediaId", async (req, res) => {
         return res.status(400).json({ error: "Missing Required Details" });
     }
 
-    logger.info("#########################");
-
     const media = await extractMediaByChapterIdAndMediaId(req.params.chapterId, req.params.mediaId);
 
     requestService({
@@ -29,16 +27,17 @@ router.get("/chapters/:chapterId/:mediaId", async (req, res) => {
         requestServiceName: process.env.SERVICE_MEDIA,
         requestPath: `extract/${media.type}/${media.cdn_id}`,
         onRequestStart: () => {
-            logger.info(`Extracting Media - CDN ID ${media.cdn_id}`);
+            logger.info(`Extracting Media - ${media.type} - ${media.cdn_id}`);
         },
         onResponseReceieved: (sources, responseCode) => {
             if (responseCode === 200 && sources.length) {
-                logger.info(JSON.stringify(sources));
+                logger.error(`Extracted Media - ${media.type} - ${media.cdn_id} - ${sources.length} Sources`);
                 return res.status(200).json(sources);
             }
             return res.status(500).json({ error: "Error While Generating Sources" });
         },
         onRequestFailure: (error) => {
+            logger.error(`Failed To Extract Media - ${media.type} - ${media.cdn_id} `);
             res.status(500).json({ error });
         },
     });

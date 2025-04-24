@@ -112,7 +112,7 @@ function getUserProductAccessData(params) {
             return result;
         })
         .catch((error) => {
-            logger.error(`getUserProductAccessData: ${error}`);
+            logger.error(`getUserProductAccessDatas: ${error}`);
             return false;
         });
 }

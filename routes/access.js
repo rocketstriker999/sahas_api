@@ -87,7 +87,7 @@ router.get("/temp-getUserProductAccess", async (req, res) => {
         const transactions = await getUserProductAccessData(req.query);
         return res.status(200).json(transactions);
     } catch (error) {
-        console.error("Transaction error:", error);
+        console.error("User Product Access error:", error);
         return res.status(500).json({ error: "Server error" });
     }
 });

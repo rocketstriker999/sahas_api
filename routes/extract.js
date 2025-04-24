@@ -13,7 +13,7 @@ router.get("/subjects/:subjectId/:mediaId", async (req, res) => {
     return res.status(400).json({ error: "Missing Required Details" });
 });
 
-//Chapter Content extractions
+//Chapter Content extractions #1
 router.get("/chapters/:chapterId/:mediaId", async (req, res) => {
     if (!req.params.chapterId || !req.params.mediaId) {
         return res.status(400).json({ error: "Missing Required Details" });

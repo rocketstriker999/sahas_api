@@ -34,12 +34,12 @@ router.get("/chapters/:chapterId/:mediaId", async (req, res) => {
             console.log(sources);
             if (responseCode === 200) {
                 if (media.type === "video" && sources.length) {
-                    logger.error(`Extracted Media - ${media.type} - ${media.cdn_id} - ${sources.length} Sources`);
+                    logger.success(`Extracted Media - ${media.type} - ${media.cdn_id} - ${sources.length} Sources`);
                     return res.status(200).json(sources);
                 }
 
                 if (media.type === "pdf") {
-                    logger.error(`Extracted Media - ${media.type} - ${media.cdn_id} `);
+                    logger.success(`Extracted Media - ${media.type} - ${media.cdn_id} `);
                     const resourceResponse = await fetch(sources?.stream);
                     return Readable.fromWeb(resourceResponse.body).pipe(res);
                 }

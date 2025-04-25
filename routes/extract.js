@@ -31,9 +31,16 @@ router.get("/chapters/:chapterId/:mediaId", async (req, res) => {
         },
         onResponseReceieved: (sources, responseCode) => {
             console.log(sources);
-            if (responseCode === 200 && sources.length) {
-                logger.error(`Extracted Media - ${media.type} - ${media.cdn_id} - ${sources.length} Sources`);
-                return res.status(200).json(sources);
+            if (responseCode === 200) {
+                if (media.type === "video" && sources.length) {
+                    logger.error(`Extracted Media - ${media.type} - ${media.cdn_id} - ${sources.length} Sources`);
+                    return res.status(200).json(sources);
+                }
+
+                if (media.type === "pdf") {
+                    logger.error(`Extracted Media - ${media.type} - ${media.cdn_id} `);
+                    return res.status(200).json(sources);
+                }
             }
             return res.status(500).json({ error: "Error While Generating Sources" });
         },

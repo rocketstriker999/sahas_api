@@ -30,7 +30,7 @@ router.get("/chapters/:chapterId/:mediaId", async (req, res) => {
             logger.info(`Extracting Media - ${media.type} - ${media.cdn_id}`);
         },
         onResponseReceieved: (sources, responseCode) => {
-            if (responseCode === 200) {
+            if (responseCode === 200 && sources.length) {
                 logger.error(`Extracted Media - ${media.type} - ${media.cdn_id} - ${sources.length} Sources`);
                 return res.status(200).json(sources);
             }

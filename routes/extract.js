@@ -2,6 +2,7 @@ const libExpress = require("express");
 const { extractMediaBySubjectIdAndMediaId, extractMediaByChapterIdAndMediaId } = require("../db/media");
 const { requestService } = require("../utils");
 const logger = require("../libs/logger");
+const { Readable } = require("stream");
 
 const router = libExpress.Router();
 

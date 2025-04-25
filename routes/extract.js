@@ -29,7 +29,7 @@ router.get("/chapters/:chapterId/:mediaId", async (req, res) => {
         onRequestStart: () => {
             logger.info(`Extracting Media - ${media.type} - ${media.cdn_id}`);
         },
-        onResponseReceieved: (sources, responseCode) => {
+        onResponseReceieved: async (sources, responseCode) => {
             console.log(sources);
             if (responseCode === 200) {
                 if (media.type === "video" && sources.length) {
@@ -39,7 +39,8 @@ router.get("/chapters/:chapterId/:mediaId", async (req, res) => {
 
                 if (media.type === "pdf") {
                     logger.error(`Extracted Media - ${media.type} - ${media.cdn_id} `);
-                    return res.status(200).json(sources);
+                    const resourceResponse = await fetch(sources?.stream);
+                    return Readable.fromWeb(resourceResponse.body).pipe(res);
                 }
             }
             return res.status(500).json({ error: "Error While Generating Sources" });

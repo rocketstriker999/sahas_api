@@ -15,15 +15,40 @@ function addAccess(transaction) {
 
 //temporarty and need to remove later
 function addAccessTemp(transaction) {
-    return executeSQLQueryParameterized(`INSERT INTO USER_PRODUCT_ACCESSES (user_id, product_id, transaction_id, validity) VALUES (?, ?, ?, ?)`, [
+    return executeSQLQueryParameterized(`INSERT INTO USER_PRODUCT_ACCESSES (user_id, product_id, transaction_id, validity,company) VALUES (?, ?, ?, ?,?)`, [
         transaction.user_id,
         transaction.product_id,
         transaction.id,
         transaction.validity,
+        transaction.company,
     ]).catch((error) => {
         logger.error(`addAccessTemp: ${error}`);
         return false;
     });
+}
+
+//temp
+function getUserProductAccessData(params) {
+    let query = `SELECT USER_PRODUCT_ACCESSES.id AS userProductAccess_id, USER_PRODUCT_ACCESSES.company AS userProductAccess_company, USER_PRODUCT_ACCESSES.validity AS userProductAccess_validity, USERS.id AS user_id, USERS.name AS name, USERS.email AS email, USERS.phone AS phone, PRODUCTS.id AS product_id, PRODUCTS.title AS product_title FROM USER_PRODUCT_ACCESSES INNER JOIN USERS ON USER_PRODUCT_ACCESSES.user_id = USERS.id INNER JOIN PRODUCTS ON USER_PRODUCT_ACCESSES.product_id = PRODUCTS.id`;
+    if (Object.keys(params).length) {
+        query = [
+            query,
+            Object.entries({
+                ...params,
+            })
+                .map(([key, value]) => `${key} LIKE '%${value}%'`)
+                .join(" AND "),
+        ].join(" WHERE ");
+    }
+    query = query + " Order By USER_PRODUCT_ACCESSES.id DESC";
+    return executeSQLQueryParameterized(query, [])
+        .then((result) => {
+            return result;
+        })
+        .catch((error) => {
+            logger.error(`getUserProductAccessDatas: ${error}`);
+            return false;
+        });
 }
 
 function getAccessByProductIdAndToken(productId, token) {
@@ -82,4 +107,12 @@ function getAccessByTransactionId(transactionId) {
         });
 }
 
-module.exports = { addAccess, addAccessTemp, getAccessByProductIdAndToken, verifyAccessByTokenForChapter, getAccessesByToken, getAccessByTransactionId };
+module.exports = {
+    addAccess,
+    addAccessTemp,
+    getAccessByProductIdAndToken,
+    verifyAccessByTokenForChapter,
+    getAccessesByToken,
+    getAccessByTransactionId,
+    getUserProductAccessData,
+};

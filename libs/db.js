@@ -117,6 +117,7 @@ function generateDBTables() {
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
             product_id INT NOT NULL,
+            company VARCHAR(16) NULL,
             transaction_id INT NULL,
             validity DATETIME NOT NULL,
             active BOOLEAN NOT NULL DEFAULT TRUE

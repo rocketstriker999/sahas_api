@@ -1,7 +1,7 @@
 const libExpress = require("express");
 const { creditUserWallet, getUserIdByEmail, getUserByTransactionId } = require("../db/users");
 const { updateTransactionStatus, getTransactionById } = require("../db/transactions");
-const { addAccess, addAccessTemp, getAccessByTransactionId } = require("../db/accesses");
+const { addAccess, addAccessTemp, getAccessByTransactionId, getUserProductAccessData } = require("../db/accesses");
 const { getDistributorByCouponCodeIdAndProductId } = require("../db/coupon");
 const { requestPayUVerification, requestService } = require("../utils");
 const logger = require("../libs/logger");
@@ -60,15 +60,15 @@ router.post("/", async (req, res) => {
 //Need to remove this router it is temporary
 router.post("/temp-addUserProductAccess", async (req, res) => {
     try {
-        const { email, product_id, validity } = req.body;
+        const { email, product_id, validity, company } = req.body;
 
         // Validate input
-        if (!email || !product_id || !validity) {
-            return res.status(400).json({ error: "Email and product ID and validity are required." });
+        if (!email || !product_id || !validity || !company) {
+            return res.status(400).json({ error: "Email and product ID and validity and company are required." });
         }
 
         // Call function to add access
-        const result = await addAccessTemp({ user_id: await getUserIdByEmail(email), product_id, id: null, validity });
+        const result = await addAccessTemp({ user_id: await getUserIdByEmail(email), product_id, company, id: null, validity });
 
         if (result) {
             return res.status(201).json({ message: "Access granted successfully!" });
@@ -78,6 +78,17 @@ router.post("/temp-addUserProductAccess", async (req, res) => {
     } catch (error) {
         console.error("Server error:", error);
         return res.status(500).json({ error: "Internal server error." });
+    }
+});
+
+//temp
+router.get("/temp-getUserProductAccess", async (req, res) => {
+    try {
+        const transactions = await getUserProductAccessData(req.query);
+        return res.status(200).json(transactions);
+    } catch (error) {
+        console.error("User Product Access error:", error);
+        return res.status(500).json({ error: "Server error" });
     }
 });
 

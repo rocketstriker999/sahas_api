@@ -60,7 +60,7 @@ router.post("/", async (req, res) => {
 //Need to remove this router it is temporary
 router.post("/temp-addUserProductAccess", async (req, res) => {
     try {
-        const { email, product_id, validity } = req.body;
+        const { email, product_id, validity, company } = req.body;
 
         // Validate input
         if (!email || !product_id || !validity) {
@@ -68,7 +68,7 @@ router.post("/temp-addUserProductAccess", async (req, res) => {
         }
 
         // Call function to add access
-        const result = await addAccessTemp({ user_id: await getUserIdByEmail(email), product_id, id: null, validity });
+        const result = await addAccessTemp({ user_id: await getUserIdByEmail(email), product_id, company, id: null, validity });
 
         if (result) {
             return res.status(201).json({ message: "Access granted successfully!" });

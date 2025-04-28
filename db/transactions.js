@@ -69,9 +69,11 @@ function getAllTransactionData(params) {
         let dateConditions = [];
         if (params.start_date) {
             dateConditions.push(`TRANSACTIONS.updated_at >= '${params.start_date} 00:00:00'`);
+            delete params.start_date;
         }
         if (params.end_date) {
             dateConditions.push(`TRANSACTIONS.updated_at <= '${params.end_date} 23:59:59'`);
+            delete params.end_date;
         }
 
     return executeSQLQueryParameterized(

@@ -89,7 +89,7 @@ router.get("/temp-getUserProductAccess", async (req, res) => {
     } catch (error) {
         console.error("User Product Access error:", error);
         return res.status(500).json({ error: "Server error" });
-    }
+    }
 });
 
 module.exports = router;

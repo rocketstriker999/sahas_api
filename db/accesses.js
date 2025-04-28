@@ -16,7 +16,7 @@ function addAccess(transaction) {
 
 //temporarty and need to remove later
 function addAccessTemp(transaction) {
-    return executeSQLQueryParameterized(`INSERT INTO USER_PRODUCT_ACCESSES (user_id, product_id, company, transaction_id, validity) VALUES (?, ?, ?, ?, ?)`, [
+    return executeSQLQueryParameterized(`INSERT INTO USER_PRODUCT_ACCESSES (user_id, product_id, transaction_id, validity,company) VALUES (?, ?, ?, ?, ?)`, [
         transaction.user_id,
         transaction.product_id,
         transaction.company,
@@ -110,4 +110,12 @@ function getUserProductAccessData(params) {
         });
 }
 
-module.exports = { addAccess, addAccessTemp, getAccessByProductIdAndToken, verifyAccessByTokenForChapter, getAccessesByToken, getAccessByTransactionId, getUserProductAccessData };
+module.exports = {
+    addAccess,
+    addAccessTemp,
+    getAccessByProductIdAndToken,
+    verifyAccessByTokenForChapter,
+    getAccessesByToken,
+    getAccessByTransactionId,
+    getUserProductAccessData,
+};

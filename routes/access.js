@@ -63,8 +63,8 @@ router.post("/temp-addUserProductAccess", async (req, res) => {
         const { email, product_id, validity, company } = req.body;
 
         // Validate input
-        if (!email || !product_id || !validity) {
-            return res.status(400).json({ error: "Email and product ID and validity are required." });
+        if (!email || !product_id || !validity || !company) {
+            return res.status(400).json({ error: "Email and product ID and validity and company are required." });
         }
 
         // Call function to add access
@@ -88,8 +88,8 @@ router.get("/temp-getUserProductAccess", async (req, res) => {
         return res.status(200).json(transactions);
     } catch (error) {
         console.error("User Product Access error:", error);
-        return res.status(500).json({ error: "Server error" });
-    }
+        return res.status(500).json({ error: "Server error" });
+    }
 });
 
 module.exports = router;

@@ -30,7 +30,7 @@ router.post("/", async (req, res) => {
                 transaction.productId = product.id;
                 transaction.productTitle = product.title;
                 transaction.price = Number(product.price);
-                transaction.discounted = (Number(product.discounted) * 100) / (100 + Number(process.env.CGST + process.env.SGST)).toFixed(2); //118  - 100 18
+                transaction.discounted = ((Number(product.discounted) * 100) / (100 + Number(process.env.CGST) + Number(process.env.SGST))).toFixed(2); //118  - 100 18
                 console.log(transaction.discounted);
                 transaction.couponId = req.body.couponCode && (await getCouponCodeIdByCouponCode(req.body.couponCode));
                 transaction.benifit = 0;

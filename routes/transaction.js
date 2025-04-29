@@ -30,7 +30,7 @@ router.post("/", async (req, res) => {
                 transaction.productId = product.id;
                 transaction.productTitle = product.title;
                 transaction.price = Number(product.price);
-                transaction.discounted = Number(product.discounted);
+                transaction.discounted = (Number(product.discounted) * 100) / (100 + Number(process.env.CGST + process.env.SGST)); //118  - 100 18
                 transaction.couponId = req.body.couponCode && (await getCouponCodeIdByCouponCode(req.body.couponCode));
                 transaction.benifit = 0;
                 transaction.productAccessValidity = product.access_validity;
@@ -43,9 +43,10 @@ router.post("/", async (req, res) => {
                         transaction.productAccessValidity = couponCodeBenifit.product_access_validity;
                     }
                 }
-                transaction.pay = Number(transaction.discounted);
-                transaction.sgst = Number((transaction.pay * process.env.SGST) / 100);
-                transaction.cgst = Number((transaction.pay * process.env.CGST) / 100);
+
+                transaction.pay = Number(transaction.discounted); //80
+                transaction.sgst = Number((transaction.pay * process.env.SGST) / 100); //7.2
+                transaction.cgst = Number((transaction.pay * process.env.CGST) / 100); //7.2
                 transaction.pay = parseFloat(transaction.pay + transaction.sgst + transaction.cgst).toFixed(2);
                 transaction.userId = user.id;
                 transaction.payuMerchantKey = process.env.MERCHANT_KEY;

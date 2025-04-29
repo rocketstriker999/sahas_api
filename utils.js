@@ -91,6 +91,7 @@ async function requestService({
     }
     try {
         const response = await fetch(requestPath, fetchOptions);
+        cosnole.log(response)
         const jsonResponse = await response.json();
 
         if (onResponseReceieved) onResponseReceieved(jsonResponse, response.status);

@@ -55,7 +55,7 @@ function getAllTransactionData(params) {
             TRANSACTIONS.pay AS transaction_pay,
             TRANSACTIONS.cgst AS transaction_cgst,
             TRANSACTIONS.sgst AS transaction_sgst,
-            TRANSACTIONS.discounted AS transaction_basePrice,
+            TRANSACTIONS.price AS transaction_basePrice,
             TRANSACTIONS.discounted AS transaction_discountedPrice,
             TRANSACTIONS.updated_at AS transaction_date,
             TRANSACTIONS.invoice AS transaction_invoice,

@@ -91,9 +91,10 @@ async function requestService({
     if (requestPostBody) {
         fetchOptions.body = JSON.stringify(requestPostBody);
     }
+    console.log(JSON.stringify(fetchOptions));
     try {
         const response = await fetch(requestPath, fetchOptions);
-        console.log(JSON.stringify(response));
+        console.log(response);
         const jsonResponse = await response.json();
 
         if (onResponseReceieved) onResponseReceieved(jsonResponse, response.status);

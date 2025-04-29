@@ -30,7 +30,7 @@ router.post("/", async (req, res) => {
                 transaction.productId = product.id;
                 transaction.productTitle = product.title;
                 transaction.price = Number(product.price);
-                transaction.discounted = ((Number(product.discounted) * 100) / (100 + Number(process.env.CGST) + Number(process.env.SGST))).toFixed(2); //118  - 100 18
+                transaction.discounted = ((Number(product.discounted) * 100) / (100 + Number(process.env.CGST) + Number(process.env.SGST))).toFixed(2);
                 transaction.couponId = req.body.couponCode && (await getCouponCodeIdByCouponCode(req.body.couponCode));
                 transaction.benifit = 0;
                 transaction.productAccessValidity = product.access_validity;
@@ -44,10 +44,9 @@ router.post("/", async (req, res) => {
                     }
                 }
 
-                transaction.sgst = ((transaction.discounted * Number(process.env.SGST)) / 100).toFixed(2); //7.2
-                transaction.cgst = ((transaction.discounted * Number(process.env.CGST)) / 100).toFixed(2); //7.2
+                transaction.sgst = ((transaction.discounted * Number(process.env.SGST)) / 100).toFixed(2);
+                transaction.cgst = ((transaction.discounted * Number(process.env.CGST)) / 100).toFixed(2);
                 transaction.pay = (Number(transaction.discounted) + Number(transaction.sgst) + Number(transaction.cgst)).toFixed(2);
-
                 transaction.userId = user.id;
                 transaction.payuMerchantKey = process.env.MERCHANT_KEY;
                 transaction.successURL = process.env.TRANSACTION_SUCCESS_URL;

@@ -68,6 +68,8 @@ async function requestService({
     //api specific path
     requestPath = process.env.SERVICE_NGINX.concat(requestServiceName).concat(requestPath);
 
+    console.log(requestPath);
+
     if (requestGetQuery) {
         requestPath = requestPath + "?";
         requestPath =
@@ -91,7 +93,7 @@ async function requestService({
     }
     try {
         const response = await fetch(requestPath, fetchOptions);
-        console.log(response);
+        console.log(JSON.stringify(response));
         const jsonResponse = await response.json();
 
         if (onResponseReceieved) onResponseReceieved(jsonResponse, response.status);

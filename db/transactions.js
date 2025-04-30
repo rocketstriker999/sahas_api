@@ -71,14 +71,14 @@ function getAllTransactionData(params) {
         INNER JOIN PRODUCTS ON TRANSACTIONS.product_id = PRODUCTS.id`;
 
         let dateConditions = [];
-        if (params.start_date) {
+         if (params.start_date) {
             dateConditions.push(`TRANSACTIONS.updated_at >= '${params.start_date} 00:00:00'`);
-            delete params.start_date;
-        }
-        if (params.end_date) {
+             delete params.start_date;
+         }
+         if (params.end_date) {
             dateConditions.push(`TRANSACTIONS.updated_at <= '${params.end_date} 23:59:59'`);
-            delete params.end_date;
-        }
+             delete params.end_date;
+         }
 
     return executeSQLQueryParameterized(
         [
@@ -88,7 +88,7 @@ function getAllTransactionData(params) {
                 "TRANSACTIONS.status": "SUCCESS",
             })
                 .map(([key, value]) => `${key} LIKE '%${value}%'`)
-                .concat(dateConditions) 
+                .concat(dateConditions)
                 .join(" AND "),
         ]
             .join(" WHERE ")

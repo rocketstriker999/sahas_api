@@ -27,14 +27,23 @@ router.post("/", async (req, res) => {
                 //oroginal product
                 const product = await getProductForTransaction(req.body.productId);
                 const transaction = {};
+                transaction.userId = user.id;
+                transaction.payuMerchantKey = process.env.MERCHANT_KEY;
+                transaction.successURL = process.env.TRANSACTION_SUCCESS_URL;
+                transaction.failureURL = process.env.TRANSACTION_FAILURE_URL;
+                transaction.payuURL = process.env.PAYU_URL;
                 transaction.productId = product.id;
                 transaction.productTitle = product.title;
                 transaction.price = Number(product.price);
                 transaction.discounted = (Number(product.discounted) * 100) / (100 + Number(process.env.CGST) + Number(process.env.SGST));
-                transaction.couponId = req.body.couponCode && (await getCouponCodeIdByCouponCode(req.body.couponCode));
+                transaction.pay = transaction.discounted;
                 transaction.benifit = 0;
+                transaction.sgst = ((transaction.discounted * Number(process.env.SGST)) / 100).toFixed(2);
+                transaction.cgst = ((transaction.discounted * Number(process.env.CGST)) / 100).toFixed(2);
                 transaction.productAccessValidity = product.access_validity;
+
                 //validate coupon and check if coupon can  be used
+                transaction.couponId = req.body.couponCode && (await getCouponCodeIdByCouponCode(req.body.couponCode));
                 if (transaction.couponId && (couponCodeBenifit = await getBenifitByCouponCodeIdAndProductId(transaction.couponId, product.id))) {
                     transaction.benifit =
                         couponCodeBenifit.type == "PERCENTAGE" ? (transaction.discounted * couponCodeBenifit.value) / 100 : couponCodeBenifit.value;
@@ -43,16 +52,6 @@ router.post("/", async (req, res) => {
                         transaction.productAccessValidity = couponCodeBenifit.product_access_validity;
                     }
                 }
-                transaction.discounted = Number(transaction.discounted).toFixed(2);
-                transaction.sgst = ((transaction.discounted * Number(process.env.SGST)) / 100).toFixed(2);
-                transaction.cgst = ((transaction.discounted * Number(process.env.CGST)) / 100).toFixed(2);
-                transaction.pay = (Number(transaction.discounted) + Number(transaction.sgst) + Number(transaction.cgst)).toFixed(2);
-                transaction.benifit = Number(transaction.benifit).toFixed(2);
-                transaction.userId = user.id;
-                transaction.payuMerchantKey = process.env.MERCHANT_KEY;
-                transaction.successURL = process.env.TRANSACTION_SUCCESS_URL;
-                transaction.failureURL = process.env.TRANSACTION_FAILURE_URL;
-                transaction.payuURL = process.env.PAYU_URL;
 
                 transaction.id = await createTransaction(transaction);
                 transaction.hash = generateSHA512(

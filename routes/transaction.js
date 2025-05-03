@@ -53,6 +53,7 @@ router.post("/", async (req, res) => {
                     }
                 }
 
+                //show in proper format
                 transaction.price = Number(transaction.price).toFixed(20);
                 transaction.discounted = Number(transaction.discounted).toFixed(20);
                 transaction.benifit = Number(transaction.benifit).toFixed(20);

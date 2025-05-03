@@ -36,10 +36,10 @@ router.post("/", async (req, res) => {
                 transaction.productTitle = product.title;
                 transaction.price = Number(product.price);
                 transaction.discounted = (Number(product.discounted) * 100) / (100 + Number(process.env.CGST) + Number(process.env.SGST));
+                transaction.pay = transaction.discounted;
                 transaction.benifit = 0;
                 transaction.sgst = ((transaction.discounted * Number(process.env.SGST)) / 100).toFixed(2);
                 transaction.cgst = ((transaction.discounted * Number(process.env.CGST)) / 100).toFixed(2);
-                transaction.pay = transaction.discounted;
                 transaction.productAccessValidity = product.access_validity;
 
                 //validate coupon and check if coupon can  be used

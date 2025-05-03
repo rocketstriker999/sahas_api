@@ -57,7 +57,6 @@ router.post("/", async (req, res) => {
                 transaction.price = Number(transaction.price).toFixed(2);
                 transaction.discounted = Number(transaction.discounted).toFixed(2);
                 transaction.benifit = Number(transaction.benifit).toFixed(2);
-                transaction.discounted = Number(transaction.price).toFixed(2);
                 transaction.sgst = Number(transaction.sgst).toFixed(2);
                 transaction.cgst = Number(transaction.cgst).toFixed(2);
                 transaction.pay = Number(transaction.pay).toFixed(2);

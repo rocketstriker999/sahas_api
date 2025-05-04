@@ -65,10 +65,13 @@ function getAllTransactionData(params) {
             USERS.email AS email,
             USERS.phone AS phone,
             PRODUCTS.id AS product_id,
-            PRODUCTS.title AS product_title
+            PRODUCTS.title AS product_title,
+            USER_PRODUCT_ACCESSES.transaction_id AS userProductAccess_transaction_id,
+            USER_PRODUCT_ACCESSES.company AS userProductAccess_company
         FROM TRANSACTIONS
         INNER JOIN USERS ON TRANSACTIONS.user_id = USERS.id
-        INNER JOIN PRODUCTS ON TRANSACTIONS.product_id = PRODUCTS.id`;
+        INNER JOIN PRODUCTS ON TRANSACTIONS.product_id = PRODUCTS.id
+        INNER JOIN USER_PRODUCT_ACCESSES ON TRANSACTIONS.id = USER_PRODUCT_ACCESSES.transaction_id`;
 
         let dateConditions = [];
          if (params.start_date) {
@@ -79,7 +82,14 @@ function getAllTransactionData(params) {
             dateConditions.push(`TRANSACTIONS.updated_at <= '${params.end_date} 23:59:59'`);
              delete params.end_date;
          }
-
+         if (params.product) {
+            params["PRODUCTS.title"] = params.product;
+            delete params.product;
+        }
+        if (params.company) {
+            params["USER_PRODUCT_ACCESSES.company"] = params.company;
+            delete params.company;
+        }
     return executeSQLQueryParameterized(
         [
             query,

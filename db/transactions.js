@@ -71,7 +71,15 @@ function getAllTransactionData(params) {
         FROM TRANSACTIONS
         INNER JOIN USERS ON TRANSACTIONS.user_id = USERS.id
         INNER JOIN PRODUCTS ON TRANSACTIONS.product_id = PRODUCTS.id
-        INNER JOIN USER_PRODUCT_ACCESSES ON TRANSACTIONS.id = USER_PRODUCT_ACCESSES.transaction_id`;
+        LEFT JOIN (
+            SELECT *
+            FROM USER_PRODUCT_ACCESSES AS inner_upa
+            WHERE inner_upa.id IN (
+                SELECT MAX(id)
+                FROM USER_PRODUCT_ACCESSES
+                GROUP BY transaction_id
+            )
+        ) AS USER_PRODUCT_ACCESSES ON TRANSACTIONS.id = USER_PRODUCT_ACCESSES.transaction_id`;
 
         let dateConditions = [];
          if (params.start_date) {

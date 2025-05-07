@@ -35,26 +35,31 @@ router.post("/", async (req, res) => {
                 transaction.productId = product.id;
                 transaction.productTitle = product.title;
                 transaction.price = Number(product.price);
+
+                //create a break up --- PRICE
                 transaction.discounted = (Number(product.discounted) * 100) / (100 + Number(process.env.CGST) + Number(process.env.SGST));
                 transaction.benifit = 0;
-
+                //default values
                 transaction.productAccessValidity = product.access_validity;
 
                 //validate coupon and check if coupon can  be used
                 transaction.couponId = req.body.couponCode && (await getCouponCodeIdByCouponCode(req.body.couponCode));
                 if (transaction.couponId && (couponCodeBenifit = await getBenifitByCouponCodeIdAndProductId(transaction.couponId, product.id))) {
+                    //Calculate ---- BENIFIT
                     transaction.benifit =
                         couponCodeBenifit.type == "PERCENTAGE" ? (transaction.discounted * couponCodeBenifit.value) / 100 : couponCodeBenifit.value;
+                    transaction.benifitLabel = couponCodeBenifit.type == "PERCENTAGE" ? `${couponCodeBenifit.value} %` : `Flat ${couponCodeBenifit.value}`;
                     transaction.discounted -= transaction.benifit;
                     if (couponCodeBenifit.product_access_validity) {
                         transaction.productAccessValidity = couponCodeBenifit.product_access_validity;
                     }
                 }
 
-                //show in proper format
+                //calculate tax after discounted is calculated
                 transaction.sgst = (transaction.discounted * Number(process.env.SGST)) / 100;
                 transaction.cgst = (transaction.discounted * Number(process.env.CGST)) / 100;
-                transaction.pay = transaction.discounted;
+                transaction.pay = Number(transaction.discounted) + Number(transaction.sgst) + Number(transaction.cgst);
+
                 transaction.price = Number(transaction.price).toFixed(2);
                 transaction.discounted = Number(transaction.discounted).toFixed(2);
                 transaction.benifit = Number(transaction.benifit).toFixed(2);

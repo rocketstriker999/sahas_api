@@ -67,6 +67,7 @@ function getAllTransactionData(params) {
             PRODUCTS.id AS product_id,
             PRODUCTS.title AS product_title,
             USER_PRODUCT_ACCESSES.transaction_id AS userProductAccess_transaction_id,
+            USER_PRODUCT_ACCESSES.id AS userProductAccess_id,
             USER_PRODUCT_ACCESSES.company AS userProductAccess_company
         FROM TRANSACTIONS
         INNER JOIN USERS ON TRANSACTIONS.user_id = USERS.id

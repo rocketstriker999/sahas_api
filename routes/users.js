@@ -15,7 +15,7 @@ router.patch("/:id/primary-details", async (req, res) => {
     return res.status(401).json({ error: "Missing Required Information" });
 });
 
-router.patch("profile/:id/update-details", async (req, res) => {
+router.patch("/profile/:id/update-details", async (req, res) => {
     if (req.params.id && req.body.formData && req.cookies.token) {
         console.log(req);
         const user = await getUserByToken(req.cookies.token);
@@ -28,7 +28,7 @@ router.patch("profile/:id/update-details", async (req, res) => {
     return res.status(401).json({ error: "Missing Required Information" });
 });
 
-router.get("profile/:id/get-details", async (req, res) => {
+router.get("/profile/:id/get-details", async (req, res) => {
     if (req.params.id && req.cookies.token) {
         console.log(req);
         const user = await getUserByToken(req.cookies.token);

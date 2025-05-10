@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const { creditUserWallet, getUserIdByEmail, getUserByTransactionId } = require("../db/users");
+const { creditUserWallet, getUserIdByEmail, getUserByTransactionId, getUserByToken } = require("../db/users");
 const { updateTransactionStatus, getTransactionById } = require("../db/transactions");
 const { addAccess, addAccessTemp, getAccessByTransactionId, getUserProductAccessData, getProfileUserProductAccessData } = require("../db/accesses");
 const { getDistributorByCouponCodeIdAndProductId } = require("../db/coupon");

@@ -15,6 +15,17 @@ function updateUserPrimaryDetails(id, name, phone) {
     });
 }
 
+function updateUserProfilePrimaryDetails(id, formData) {
+    const { name, phone, parentPhone, address, area, city } = formData;
+    return executeSQLQueryParameterized(
+        `UPDATE USERS SET name=?, phone=?, parentPhone=?, address=?, area=?, city=? WHERE id=?`,
+        [name, phone, parentPhone, address, area, city, id]
+    ).catch((error) => {
+        logger.error(`updateUserPrimaryDetails: ${error}`);
+        return false;
+    });
+}
+
 function getUserByEmail(email) {
     return executeSQLQueryParameterized(`SELECT * FROM USERS WHERE email=?`, [email])
         .then((user) => (user && user.length > 0 ? user[0] : false))
@@ -115,4 +126,5 @@ module.exports = {
     creditUserWallet,
     getUserIdByEmail,
     getUserByTransactionId,
+    updateUserProfilePrimaryDetails,
 };

@@ -1,7 +1,7 @@
 const libExpress = require("express");
 const { getUserByToken } = require("../db/users");
 const { getProductForTransaction } = require("../db/products");
-const { createTransaction, updateTransactionHash, getAllTransactionData } = require("../db/transactions");
+const { createTransaction, updateTransactionHash, getAllTransactionData, getTransactionById } = require("../db/transactions");
 const { getBenifitByCouponCodeIdAndProductId, getCouponCodeIdByCouponCode } = require("../db/coupon");
 const { generateSHA512 } = require("../utils");
 

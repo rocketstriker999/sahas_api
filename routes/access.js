@@ -64,6 +64,7 @@ router.get("/:id/getProfileUserProductAccess", async (req, res) => {
         if (user) {
             return res.status(200).json(await getProfileUserProductAccessData(user.id));
         }
+        console.log(res.status(200).json(await getProfileUserProductAccessData(user.id)));
     }
     return res.status(401).json({ error: "Missing Required Information" });
 });

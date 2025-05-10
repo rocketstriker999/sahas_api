@@ -16,12 +16,9 @@ router.patch("/:id/primary-details", async (req, res) => {
 });
 
 router.patch("/profile/:id/update-details", async (req, res) => {
-    if (req.params.id && req.body.formData && req.cookies.token) {
-        console.log(req);
+    if (req.params.id && req.body && req.cookies.token) {
         const user = await getUserByToken(req.cookies.token);
-        console.log(user);
-
-        if (user && (await updateUserProfilePrimaryDetails(user.id, req.body.formData))) {
+        if (user && (await updateUserProfilePrimaryDetails(user.id, req.body))) {
             return res.status(200).json(await getUserByToken(req.cookies.token));
         }
     }
@@ -30,9 +27,7 @@ router.patch("/profile/:id/update-details", async (req, res) => {
 
 router.get("/profile/:id/get-details", async (req, res) => {
     if (req.params.id && req.cookies.token) {
-        console.log(req);
         const user = await getUserByToken(req.cookies.token);
-        console.log(user);
         if (user) {
             return res.status(200).json(user);
         }

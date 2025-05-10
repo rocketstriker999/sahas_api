@@ -16,10 +16,10 @@ function updateUserPrimaryDetails(id, name, phone) {
 }
 
 function updateUserProfilePrimaryDetails(id, formData) {
-    const { name, phone, parentPhone, address, area, city } = formData;
+    const { name, phone, address } = formData;
     return executeSQLQueryParameterized(
-        `UPDATE USERS SET name=?, phone=?, parentPhone=?, address=?, area=?, city=? WHERE id=?`,
-        [name, phone, parentPhone, address, area, city, id]
+        `UPDATE USERS SET name=?, phone=?, address=? WHERE id=?`,
+        [name, phone, address, id]
     ).catch((error) => {
         logger.error(`updateUserPrimaryDetails: ${error}`);
         return false;

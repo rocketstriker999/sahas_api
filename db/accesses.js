@@ -55,7 +55,7 @@ function getProfileUserProductAccessData(userId) {
     return executeSQLQueryParameterized(
         `SELECT USER_PRODUCT_ACCESSES.*, PRODUCTS.title AS product_title FROM USER_PRODUCT_ACCESSES JOIN PRODUCTS ON USER_PRODUCT_ACCESSES.product_id = PRODUCTS.id WHERE USER_PRODUCT_ACCESSES.user_id = ?`,[userId]
     )
-        .then((result) => (result.length > 0 ? result[0] : false))
+        .then((result) => (result.length > 0 ? result : false))
         .catch((error) => {
             logger.error(`getProfileUserProductAccessData: ${error}`);
             return false;

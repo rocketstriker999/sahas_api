@@ -18,7 +18,7 @@ jobs:
               run: |
                   sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no root@46.202.164.212 << 'EOF'
                     set -e
-                    cd /root/sahas/dev
+                    cd /var/www/sites
                     DIR="sahas_api"
                     if [ ! -d "$DIR" ]; then
                       echo "Fetching Source - $DIR"

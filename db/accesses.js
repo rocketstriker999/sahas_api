@@ -51,6 +51,17 @@ function getUserProductAccessData(params) {
         });
 }
 
+function getProfileUserProductAccessData(userId) {
+    return executeSQLQueryParameterized(
+        `SELECT USER_PRODUCT_ACCESSES.*, PRODUCTS.title AS product_title FROM USER_PRODUCT_ACCESSES JOIN PRODUCTS ON USER_PRODUCT_ACCESSES.product_id = PRODUCTS.id WHERE USER_PRODUCT_ACCESSES.user_id = ?`,[userId]
+    )
+        .then((result) => (result.length > 0 ? result : false))
+        .catch((error) => {
+            logger.error(`getProfileUserProductAccessData: ${error}`);
+            return false;
+        });
+}
+
 function getAccessByProductIdAndToken(productId, token) {
     return executeSQLQueryParameterized(
         `SELECT USER_PRODUCT_ACCESSES.transaction_id, USER_PRODUCT_ACCESSES.validity FROM USERS JOIN USER_PRODUCT_ACCESSES ON USERS.id = USER_PRODUCT_ACCESSES.user_id WHERE USERS.token = ? AND USER_PRODUCT_ACCESSES.product_id = ? AND USER_PRODUCT_ACCESSES.validity >= CURRENT_DATE AND USER_PRODUCT_ACCESSES.active = true`,
@@ -115,4 +126,5 @@ module.exports = {
     getAccessesByToken,
     getAccessByTransactionId,
     getUserProductAccessData,
+    getProfileUserProductAccessData,
 };

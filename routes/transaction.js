@@ -1,7 +1,7 @@
 const libExpress = require("express");
 const { getUserByToken } = require("../db/users");
 const { getProductForTransaction } = require("../db/products");
-const { createTransaction, updateTransactionHash, getAllTransactionData } = require("../db/transactions");
+const { createTransaction, updateTransactionHash, getAllTransactionData, getTransactionById } = require("../db/transactions");
 const { getBenifitByCouponCodeIdAndProductId, getCouponCodeIdByCouponCode } = require("../db/coupon");
 const { generateSHA512 } = require("../utils");
 
@@ -16,6 +16,19 @@ router.get("/all", async (req, res) => {
         console.error("Transaction error:", error);
         return res.status(500).json({ error: "Server error" });
     }
+});
+
+//get Transaction by transaction Id 
+router.get("/transaction-details/:transactionId", async (req, res) => {
+     if (req.params.transactionId && req.cookies.token) {
+
+       const transaction = await getTransactionById(req.params.transactionId);
+
+        if (transaction) {
+            return res.status(200).json(transaction);
+        }
+    }
+    return res.status(401).json({ error: "Missing Required Information" });
 });
 
 //create new transactions1

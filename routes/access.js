@@ -1,7 +1,7 @@
 const libExpress = require("express");
-const { creditUserWallet, getUserIdByEmail, getUserByTransactionId } = require("../db/users");
+const { creditUserWallet, getUserIdByEmail, getUserByTransactionId, getUserByToken } = require("../db/users");
 const { updateTransactionStatus, getTransactionById } = require("../db/transactions");
-const { addAccess, addAccessTemp, getAccessByTransactionId, getUserProductAccessData } = require("../db/accesses");
+const { addAccess, addAccessTemp, getAccessByTransactionId, getUserProductAccessData, getProfileUserProductAccessData } = require("../db/accesses");
 const { getDistributorByCouponCodeIdAndProductId } = require("../db/coupon");
 const { requestPayUVerification, requestService } = require("../utils");
 const logger = require("../libs/logger");
@@ -56,6 +56,19 @@ router.post("/", async (req, res) => {
     }
     res.redirect(`/forbidden`);
 });
+
+//Get User Product Access by user id
+router.get("/:id/getProfileUserProductAccess", async (req, res) => {
+    if (req.params.id && req.cookies.token) {
+        const user = await getUserByToken(req.cookies.token);
+        if (user) {
+            return res.status(200).json(await getProfileUserProductAccessData(user.id));
+        }
+        console.log(res.status(200).json(await getProfileUserProductAccessData(user.id)));
+    }
+    return res.status(401).json({ error: "Missing Required Information" });
+});
+
 
 //Need to remove this router it is temporary
 router.post("/temp-addUserProductAccess", async (req, res) => {

@@ -24,7 +24,7 @@ router.get("/regenerate/:invoice", async (req, res) => {
                 percent_cgst: process.env.CGST,
             },
             onResponseReceieved: ({ invoice }, responseCode) => {
-                if (responseCode === 200) return res.redirect(`/resources/invoices/${invoice}`);
+                if (responseCode === 201) return res.redirect(`/resources/invoices/${invoice}`);
                 return res.redirect(`/not-found`);
             },
             onRequestFailure: (error) => {

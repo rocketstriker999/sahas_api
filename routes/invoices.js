@@ -10,6 +10,7 @@ const router = libExpress.Router();
 //update user's details before purchase if user is missing primary details -2
 router.get("/regenrate/:invoice", async (req, res) => {
     logger.info(`Regenerating Invoice ${req.params.invoice}`);
+    console.log("CALLELD");
     const transaction = await getTransactionByInvoice(req.params.invoice);
 
     requestService({

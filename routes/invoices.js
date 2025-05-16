@@ -8,7 +8,7 @@ const { getProductById } = require("../db/products");
 const router = libExpress.Router();
 
 //update user's details before purchase if user is missing primary details -2
-router.use(async (req, res) => {
+router.get("/regenrate/:invoice", async (req, res) => {
     logger.info(`Regenerating Invoice ${req.params.invoice}`);
     const transaction = await getTransactionByInvoice(req.params.invoice);
 
@@ -23,13 +23,8 @@ router.use(async (req, res) => {
             percent_sgst: process.env.SGST,
             percent_cgst: process.env.CGST,
         },
-        onResponseReceieved: (invoice, responseCode) => {
-            logger.success(`Invoice Regenerated ${invoice}`);
-        },
-        onRequestFailure: (error) => {
-            logger.error(`Failed To regenerate Invoice for transcation - ${transaction.id} error - ${error}`);
-        },
     });
+
     return res.redirect(`/resources/invoices/${req.params.invoice}`);
 });
 

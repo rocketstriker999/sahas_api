@@ -31,9 +31,9 @@ router.get("/regenerate/:invoice", async (req, res) => {
                 return res.redirect(`/not-found`);
             },
         });
+    } else {
+        return res.status(400).json({ error: "Missing or Invalid Invoice" });
     }
-
-    return res.status(400).json({ error: "Missing or Invalid Invoice" });
 });
 
 module.exports = router;

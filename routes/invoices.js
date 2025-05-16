@@ -1,12 +1,14 @@
 const libExpress = require("express");
 const { requestService } = require("../utils");
 const { getTransactionByInvoice } = require("../db/transactions");
+const logger = require("../libs/logger");
 
 const router = libExpress.Router();
 
 //update user's details before purchase if user is missing primary details -1
 router.get("/regenrate/:invoice", async (req, res) => {
     if (req.params.invoice) {
+        logger.info(`Incoming Request - ${req.method} ${req.url}`);
         const transaction = await getTransactionByInvoice(req.params.invoice);
 
         requestService({

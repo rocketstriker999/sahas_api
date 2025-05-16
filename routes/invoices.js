@@ -6,7 +6,7 @@ const logger = require("../libs/logger");
 const router = libExpress.Router();
 
 //update user's details before purchase if user is missing primary details -1
-router.get("/regenrate/:invoice", async (req, res) => {
+router.get("/regenerate/:invoice", async (req, res) => {
     if ((transaction = await getTransactionByInvoice(req.params.invoice))) {
         logger.info(`Regenerating Invoice ${transaction.invoice}`);
 

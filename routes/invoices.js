@@ -5,7 +5,7 @@ const { getTransactionByInvoice } = require("../db/transactions");
 const router = libExpress.Router();
 
 //update user's details before purchase if user is missing primary details -1
-router.get("regenrate/:invoice", async (req, res) => {
+router.get("/regenrate/:invoice", async (req, res) => {
     if (req.params.invoice) {
         const transaction = await getTransactionByInvoice(req.params.invoice);
 

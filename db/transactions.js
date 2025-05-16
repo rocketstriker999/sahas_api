@@ -47,6 +47,15 @@ function getTransactionById(transactionId) {
         });
 }
 
+function getTransactionByInvoice(invoice) {
+    return executeSQLQueryParameterized(`SELECT * FROM TRANSACTIONS WHERE invoice=?`, [invoice])
+        .then((result) => (result.length > 0 ? result[0] : false))
+        .catch((error) => {
+            logger.error(`getTransactionByInvoice: ${error}`);
+            return false;
+        });
+}
+
 //temp
 function getAllTransactionData(params) {
     let query = `SELECT
@@ -82,23 +91,23 @@ function getAllTransactionData(params) {
             )
         ) AS USER_PRODUCT_ACCESSES ON TRANSACTIONS.id = USER_PRODUCT_ACCESSES.transaction_id`;
 
-        let dateConditions = [];
-         if (params.start_date) {
-            dateConditions.push(`TRANSACTIONS.updated_at >= '${params.start_date} 00:00:00'`);
-             delete params.start_date;
-         }
-         if (params.end_date) {
-            dateConditions.push(`TRANSACTIONS.updated_at <= '${params.end_date} 23:59:59'`);
-             delete params.end_date;
-         }
-         if (params.product) {
-            params["PRODUCTS.title"] = params.product;
-            delete params.product;
-        }
-        if (params.company) {
-            params["USER_PRODUCT_ACCESSES.company"] = params.company;
-            delete params.company;
-        }
+    let dateConditions = [];
+    if (params.start_date) {
+        dateConditions.push(`TRANSACTIONS.updated_at >= '${params.start_date} 00:00:00'`);
+        delete params.start_date;
+    }
+    if (params.end_date) {
+        dateConditions.push(`TRANSACTIONS.updated_at <= '${params.end_date} 23:59:59'`);
+        delete params.end_date;
+    }
+    if (params.product) {
+        params["PRODUCTS.title"] = params.product;
+        delete params.product;
+    }
+    if (params.company) {
+        params["USER_PRODUCT_ACCESSES.company"] = params.company;
+        delete params.company;
+    }
     return executeSQLQueryParameterized(
         [
             query,
@@ -123,4 +132,4 @@ function getAllTransactionData(params) {
         });
 }
 
-module.exports = { createTransaction, updateTransactionStatus, getTransactionById, updateTransactionHash, getAllTransactionData };
+module.exports = { createTransaction, updateTransactionStatus, getTransactionById, updateTransactionHash, getAllTransactionData, getTransactionByInvoice };

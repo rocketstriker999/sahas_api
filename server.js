@@ -34,6 +34,7 @@ const routers = {
     "/extract": require("./routes/extract"),
     "/access": require("./routes/access"),
     "/catelogue": require("./routes/catelogue"),
+    "/invoices": require("./routes/invoices"),
 };
 
 //apply all routes -

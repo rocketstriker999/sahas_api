@@ -126,4 +126,11 @@ router.post("/demo-media", async (req, res) => {
     }
 });
 
+
+router.post("/youtube-sync", async (req, res) => {
+
+
+    res.status(200).json({ msg: "YT Syncer started" });
+});
+
 module.exports = router;

@@ -24,7 +24,9 @@ router.get("/regenerate/:invoice", async (req, res) => {
                 percent_cgst: process.env.CGST,
             },
             onResponseReceieved: ({ invoice }, responseCode) => {
-                if (responseCode === 201) return res.status(201).json({ message: "Regenerating" });
+                if (responseCode === 201) {
+                    return res.status(201).json({ message: "Regenerating" });
+                }
                 return res.redirect(`/not-found`);
             },
             onRequestFailure: (error) => {

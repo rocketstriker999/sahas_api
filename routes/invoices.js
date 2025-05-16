@@ -23,7 +23,7 @@ router.get("/regenerate/:invoice", async (req, res) => {
                 percent_sgst: process.env.SGST,
                 percent_cgst: process.env.CGST,
             },
-            onResponseReceieved: (invoice, responseCode) => {
+            onResponseReceieved: ({ invoice }, responseCode) => {
                 return res.redirect(`/resources/invoices/${invoice}`);
             },
             onRequestFailure: (error) => {

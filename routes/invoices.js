@@ -25,7 +25,7 @@ router.get("/regenerate/:invoice", async (req, res) => {
             },
             onResponseReceieved: ({ invoice }, responseCode) => {
                 if (responseCode === 201) {
-                    return res.status(201).json({ message: "Regenerating" });
+                    return res.redirect(`/resources/invoices/${invoice}`);
                 }
                 return res.redirect(`/not-found`);
             },

@@ -10,7 +10,7 @@ const dbConnectionPool = mysql.createPool({
     database: process.env.MYSQL_DB_NAME, // Name of the database
     waitForConnections: true, // Enable queuing of requests if the pool is busy
     connectionLimit: 10, // Max number of connections in the pool
-    queueLimit: 0, // Unlimited number of requests in the queue
+    queueLimit: 0, // Unlimited number of requests in the queue -1
     dateStrings: true,
 });
 

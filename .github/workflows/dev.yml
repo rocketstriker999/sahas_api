@@ -6,6 +6,11 @@ on:
             - dev
     schedule:
         - cron: "30 18 * * *"
+env:
+    DEPLOYMENT_DIRECTORY: "/var/www/sites/dev.sahasinstitute.com/"
+    REPO: "sahas_api"
+    BRANCH: "dev"
+    ENTRY: "app.js"
 
 jobs:
     deploy:
@@ -16,34 +21,35 @@ jobs:
 
             - name: SSH Deployment
               run: |
-                  sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no root@46.202.164.212 << 'EOF'
+                  sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USERNAME }}@${{ secrets.HOSTING_SERVER }}" << 'EOF'
                     set -e
-                    cd /var/www/sites/dev.sahasinstitute.com
-                    DIR="sahas_api"
-                    if [ ! -d "$DIR" ]; then
-                      echo "Fetching Source - $DIR"
-                      git clone --branch dev https://github.com/rocketstriker999/$DIR
-                    fi
-                    cd "$DIR"
-                    if [ -f process.id ]; then
+                    cd "${{ env.DEPLOYMENT_DIRECTORY }}"
+                    if [ -d "${{ env.REPO }}" ]; then
+                      cd "${{ env.REPO }}"
                       pid=$(cat process.id)
                       if ps -p $pid > /dev/null; then
-                        echo "Terminating $DIR - pid $pid"
+                        echo "Terminating ${{ env.REPO }} - pid $pid"
                         kill -9 $pid
                       fi
+                      git stash
+                      git checkout "${{env.BRANCH}}"
+                      git fetch origin "${{env.BRANCH}}"
+                      git pull origin "${{env.BRANCH}}"
+                    else
+                      echo "Fetching Source - ${{ env.REPO }}"
+                      git clone --branch "${{env.BRANCH}}" https://github.com/rocketstriker999/${{ env.REPO }}
+                      cd "${{ env.REPO }}"
                     fi
-                    git checkout dev
-                    git fetch origin dev
-                    git pull origin dev
+
+                    echo "Installing dependencies..."
                     npm install
 
-                    if [ ! -d "logs" ]; then
-                      mkdir logs
-                    fi
-                    nohup node app.js > logs/process.log 2>&1 &
+                    echo "Starting app..."
+                    nohup node "${{ env.ENTRY }}" > /dev/null 2>&1 &
                     new_pid=$!
-                    echo "Starting $DIR - pid $new_pid"
+                    echo "Starting ${{ env.REPO }} - pid $new_pid"
                     echo $new_pid > process.id
-                    echo "Deployed & Disconnecting SSH"
-                    exit 0
+
+                    echo "✅ Deployed & Disconnecting SSH"
+                    exit 1
                   EOF

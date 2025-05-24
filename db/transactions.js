@@ -59,8 +59,8 @@ function getTransactionByInvoice(invoice) {
 //temp
 function getTransactionCounts() {
     const query = `SELECT 
-            (SELECT COUNT(*) FROM TRANSACTIONS) AS totalTransaction,
-            (SELECT COUNT(*) FROM TRANSACTIONS WHERE DATE(updated_at) = CURRENT_DATE) AS todayTransaction`;
+    (SELECT COUNT(*) FROM TRANSACTIONS WHERE status = 'SUCCESS') AS totalTransaction,
+    (SELECT COUNT(*) FROM TRANSACTIONS WHERE status = 'SUCCESS' AND DATE(updated_at) = CURRENT_DATE) AS todayTransaction`;
     return executeSQLQueryParameterized(query, [])
         .then((result) => (result.length > 0 ? result[0] : { totalTransaction: 0, todayTransaction: 0 }))
         .catch((error) => {

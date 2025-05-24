@@ -57,6 +57,20 @@ function getTransactionByInvoice(invoice) {
 }
 
 //temp
+function getTransactionCounts() {
+    const query = `SELECT 
+    (SELECT COUNT(*) FROM TRANSACTIONS WHERE status = 'SUCCESS') AS totalTransaction,
+    (SELECT COUNT(*) FROM TRANSACTIONS WHERE status = 'SUCCESS' AND DATE(updated_at) = CURRENT_DATE) AS todayTransaction`;
+    return executeSQLQueryParameterized(query, [])
+        .then((result) => (result.length > 0 ? result[0] : { totalTransaction: 0, todayTransaction: 0 }))
+        .catch((error) => {
+            logger.error(`getTransactionCounts: ${error}`);
+            return { totalTransaction: 0, todayTransaction: 0 };
+        });
+}
+
+
+//temp
 function getAllTransactionData(params) {
     let query = `SELECT
             TRANSACTIONS.id AS transaction_id,
@@ -132,4 +146,4 @@ function getAllTransactionData(params) {
         });
 }
 
-module.exports = { createTransaction, updateTransactionStatus, getTransactionById, updateTransactionHash, getAllTransactionData, getTransactionByInvoice };
+module.exports = { createTransaction, updateTransactionStatus, getTransactionById, updateTransactionHash, getAllTransactionData, getTransactionByInvoice, getTransactionCounts };

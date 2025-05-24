@@ -1,7 +1,7 @@
 const libExpress = require("express");
 const { getUserByToken } = require("../db/users");
 const { getProductForTransaction } = require("../db/products");
-const { createTransaction, updateTransactionHash, getAllTransactionData, getTransactionById } = require("../db/transactions");
+const { createTransaction, updateTransactionHash, getAllTransactionData, getTransactionCounts, getTransactionById } = require("../db/transactions");
 const { getBenifitByCouponCodeIdAndProductId, getCouponCodeIdByCouponCode } = require("../db/coupon");
 const { generateSHA512 } = require("../utils");
 
@@ -11,7 +11,11 @@ const router = libExpress.Router();
 router.get("/all", async (req, res) => {
     try {
         const transactions = await getAllTransactionData(req.query);
-        return res.status(200).json(transactions);
+        const transactionCount = await getTransactionCounts();
+         return res.status(200).json({
+            data: transactions,
+            transactionCount: transactionCount,
+        });
     } catch (error) {
         console.error("Transaction error:", error);
         return res.status(500).json({ error: "Server error" });

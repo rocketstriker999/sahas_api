@@ -34,7 +34,7 @@ jobs:
                       git stash
                       git checkout "${{env.BRANCH}}"
                       git fetch origin "${{env.BRANCH}}"
-                      git pull origin "${{env.BRANCH}}"
+                      git pull origin "${{env.BRANCH}}" --rebase
                     else
                       echo "Fetching Source - ${{ env.REPO }}"
                       git clone --branch "${{env.BRANCH}}" https://github.com/rocketstriker999/${{ env.REPO }}

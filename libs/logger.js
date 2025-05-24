@@ -45,7 +45,7 @@ const error = (logStatement) => {
 };
 
 const saveLogs = (currentTimeStamp, logStatement) => {
-    if (process.env.SAVE_LOGS) {
+    if (!!process.env.SAVE_LOGS) {
         const logFileName = currentTimeStamp.toLocaleDateString("en-GB").split("/").join("-");
 
         libFs.open(libPath.join(logsDirectory, logFileName), "a", (error, logFileDescriptor) => {

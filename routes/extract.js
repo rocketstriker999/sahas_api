@@ -22,7 +22,7 @@ router.get("/subjects/:subjectId/:mediaId", async (req, res) => {
         },
         onResponseReceieved: async (sources, responseCode) => {
             if (responseCode === 200) {
-                if (media.type === "video" && sources.length) {
+                if (media.type === "video") {
                     logger.success(`Extracted Media - ${media.type} - ${media.cdn_id} - ${sources.length} Sources`);
                     return res.status(200).json(sources);
                 }
@@ -59,7 +59,7 @@ router.get("/chapters/:chapterId/:mediaId", async (req, res) => {
         },
         onResponseReceieved: async (sources, responseCode) => {
             if (responseCode === 200) {
-                if (media.type === "video" && sources.length) {
+                if (media.type === "video") {
                     logger.success(`Extracted Media - ${media.type} - ${media.cdn_id} - ${sources.length} Sources`);
                     return res.status(200).json(sources);
                 }

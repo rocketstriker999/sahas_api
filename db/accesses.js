@@ -36,13 +36,12 @@ function getUserProductAccessData(params) {
             Object.entries({
                 ...params,
             })
-                .map(([key, value]) => key === "title" ? `${key} = '%${value}%'` : `${key} LIKE '%${value}%'`)
+                .map(([key, value]) => key === "title" ? `${key} = '${value}'` : `${key} LIKE '%${value}%'`)
                 .join(" AND "),
         ].join(" WHERE ");
     }
     query = query + " Order By USER_PRODUCT_ACCESSES.id DESC";
 
-    logger.info(query);
     return executeSQLQueryParameterized(query, [])
         .then((result) => {
             return result;

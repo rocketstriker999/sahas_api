@@ -137,5 +137,5 @@ module.exports = {
     getAccessByTransactionId,
     getUserProductAccessData,
     getProfileUserProductAccessData,
-    updateUserProductAccessStatus
+    updateUserProductAccessStatus,
 };

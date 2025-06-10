@@ -108,7 +108,7 @@ router.get("/temp-getUserProductAccess", async (req, res) => {
 //temp
 router.post("/temp-updateUserProductAccessStatus", async (req, res) => {
     const { userProductAccessId, active } = req.body;
-
+    console.log(req.body);
     try {
         const result = await updateUserProductAccessStatus(userProductAccessId, active);
         return res.status(200).json({result, message: "Status updated successfully"});

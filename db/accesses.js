@@ -52,6 +52,15 @@ function getUserProductAccessData(params) {
         });
 }
 
+//temp
+function updateUserProductAccessStatus(userProductAccessId, active) {
+    return executeSQLQueryParameterized(`UPDATE USER_PRODUCT_ACCESSES SET active = ? WHERE id = ?`, [active, userProductAccessId])
+        .catch((error) => {
+            logger.error(`updateUserProductAccessStatus: ${error}`);
+            return false;
+        });
+}
+
 function getProfileUserProductAccessData(userId) {
     return executeSQLQueryParameterized(
         `SELECT USER_PRODUCT_ACCESSES.*, PRODUCTS.title AS product_title FROM USER_PRODUCT_ACCESSES JOIN PRODUCTS ON USER_PRODUCT_ACCESSES.product_id = PRODUCTS.id WHERE USER_PRODUCT_ACCESSES.user_id = ?`,[userId]
@@ -128,4 +137,5 @@ module.exports = {
     getAccessByTransactionId,
     getUserProductAccessData,
     getProfileUserProductAccessData,
+    updateUserProductAccessStatus
 };

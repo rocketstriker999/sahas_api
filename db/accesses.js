@@ -111,7 +111,7 @@ JOIN
     AND USERS.token = ?
 LEFT JOIN 
     TRANSACTIONS 
-    ON TRANSACTIONS.id = USER_PRODUCT_ACCESSES.transaction_id WHERE USER_PRODUCT_ACCESSES.validity >= CURDATE()`,
+    ON TRANSACTIONS.id = USER_PRODUCT_ACCESSES.transaction_id WHERE USER_PRODUCT_ACCESSES.validity >= CURDATE() AND USER_PRODUCT_ACCESSES.active = true`,
         [token]
     ).catch((error) => {
         logger.error(`getAccessesByToken: ${error}`);

@@ -29,7 +29,7 @@ function addAccessTemp(transaction) {
 
 //temp
 function getUserProductAccessData(params) {
-    let query = `SELECT USER_PRODUCT_ACCESSES.id AS userProductAccess_id, USER_PRODUCT_ACCESSES.company AS userProductAccess_company, USER_PRODUCT_ACCESSES.validity AS userProductAccess_validity, USERS.id AS user_id, USERS.name AS name, USERS.email AS email, USERS.phone AS phone, PRODUCTS.id AS product_id, PRODUCTS.title AS product_title FROM USER_PRODUCT_ACCESSES INNER JOIN USERS ON USER_PRODUCT_ACCESSES.user_id = USERS.id INNER JOIN PRODUCTS ON USER_PRODUCT_ACCESSES.product_id = PRODUCTS.id`;
+    let query = `SELECT USER_PRODUCT_ACCESSES.id AS userProductAccess_id, USER_PRODUCT_ACCESSES.company AS userProductAccess_company,USER_PRODUCT_ACCESSES.active AS userProductAccess_active, USER_PRODUCT_ACCESSES.validity AS userProductAccess_validity, USERS.id AS user_id, USERS.name AS name, USERS.email AS email, USERS.phone AS phone, PRODUCTS.id AS product_id, PRODUCTS.title AS product_title FROM USER_PRODUCT_ACCESSES INNER JOIN USERS ON USER_PRODUCT_ACCESSES.user_id = USERS.id INNER JOIN PRODUCTS ON USER_PRODUCT_ACCESSES.product_id = PRODUCTS.id`;
     if (Object.keys(params).length) {
         query = [
             query,
@@ -48,6 +48,15 @@ function getUserProductAccessData(params) {
         })
         .catch((error) => {
             logger.error(`getUserProductAccessDatas: ${error}`);
+            return false;
+        });
+}
+
+//temp
+function updateUserProductAccessStatus(userProductAccessId, active) {
+    return executeSQLQueryParameterized(`UPDATE USER_PRODUCT_ACCESSES SET active = ? WHERE id = ?`, [active, userProductAccessId])
+        .catch((error) => {
+            logger.error(`updateUserProductAccessStatus: ${error}`);
             return false;
         });
 }
@@ -102,7 +111,7 @@ JOIN
     AND USERS.token = ?
 LEFT JOIN 
     TRANSACTIONS 
-    ON TRANSACTIONS.id = USER_PRODUCT_ACCESSES.transaction_id WHERE USER_PRODUCT_ACCESSES.validity >= CURDATE()`,
+    ON TRANSACTIONS.id = USER_PRODUCT_ACCESSES.transaction_id WHERE USER_PRODUCT_ACCESSES.validity >= CURDATE() AND USER_PRODUCT_ACCESSES.active = true`,
         [token]
     ).catch((error) => {
         logger.error(`getAccessesByToken: ${error}`);
@@ -128,4 +137,5 @@ module.exports = {
     getAccessByTransactionId,
     getUserProductAccessData,
     getProfileUserProductAccessData,
+    updateUserProductAccessStatus,
 };

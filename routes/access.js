@@ -1,7 +1,7 @@
 const libExpress = require("express");
 const { creditUserWallet, getUserIdByEmail, getUserByTransactionId, getUserByToken } = require("../db/users");
 const { updateTransactionStatus, getTransactionById } = require("../db/transactions");
-const { addAccess, addAccessTemp, getAccessByTransactionId, getUserProductAccessData, getProfileUserProductAccessData } = require("../db/accesses");
+const { addAccess, addAccessTemp, getAccessByTransactionId, getUserProductAccessData, getProfileUserProductAccessData, updateUserProductAccessStatus } = require("../db/accesses");
 const { getDistributorByCouponCodeIdAndProductId } = require("../db/coupon");
 const { requestPayUVerification, requestService } = require("../utils");
 const logger = require("../libs/logger");
@@ -104,5 +104,19 @@ router.get("/temp-getUserProductAccess", async (req, res) => {
         return res.status(500).json({ error: "Server error" });
     }
 });
+
+//temp
+router.post("/temp-updateUserProductAccessStatus", async (req, res) => {
+    const { userProductAccessId, active } = req.body;
+    console.log(req.body);
+    try {
+        const result = await updateUserProductAccessStatus(userProductAccessId, active);
+        return res.status(200).json({result, message: "Status updated successfully"});
+    } catch (error) {
+        console.error("Error updating user product access status:", error);
+        return res.status(500).json({ error: "User Product Activation Status not updated" });
+    }
+});
+
 
 module.exports = router;

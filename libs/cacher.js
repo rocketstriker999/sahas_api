@@ -8,7 +8,7 @@ const logger = require("./logger");
 const cache = {};
 
 const add = (key, dataGenerator) => {
-    dataGenerator.then((data) => {
+    dataGenerator().then((data) => {
         cache[key] = { data, dataGenerator };
         logger.info(`[+]Cache Added - KEY:${key} `);
     });

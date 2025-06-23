@@ -127,7 +127,7 @@ router.post("/demo-media", async (req, res) => {
     }
 });
 
-router.post("/refresh-cache", async (req, res) => {
+router.get("/refresh-cache", async (req, res) => {
     //refreshing all cache post syncs
     refresh(process.env.CACHE_KEYS_CATEGORIES);
     refresh(process.env.CACHE_KEYS_PRODUCTS);

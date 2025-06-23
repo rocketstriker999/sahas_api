@@ -23,11 +23,11 @@ const refresh = (key) =>
     });
 
 const generateCaches = () => {
-    add(process.env.CACHE_KEYS_CATEGORIES, getAllCategoriesForCache());
-    add(process.env.CACHE_KEYS_PRODUCTS, getAllProducts());
-    add(process.env.CACHE_KEYS_COURSES, getAllCoursesForCache());
-    add(process.env.CACHE_KEYS_SUBJECTS, getAllSubjectsForCache());
-    add(process.env.CACHE_KEYS_CHAPTERS, getAllChaptersForCache());
+    add(process.env.CACHE_KEYS_CATEGORIES, getAllCategoriesForCache);
+    add(process.env.CACHE_KEYS_PRODUCTS, getAllProducts);
+    add(process.env.CACHE_KEYS_COURSES, getAllCoursesForCache);
+    add(process.env.CACHE_KEYS_SUBJECTS, getAllSubjectsForCache);
+    add(process.env.CACHE_KEYS_CHAPTERS, getAllChaptersForCache);
 };
 
 module.exports = { add, get, refresh, generateCaches };

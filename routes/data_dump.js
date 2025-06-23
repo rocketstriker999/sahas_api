@@ -1,6 +1,7 @@
 const libExpress = require("express");
 const { executeSQLQueryRaw, executeSQLQueryParameterized } = require("../libs/db");
 const logger = require("../libs/logger");
+const { refresh } = require("./libs/cacher");
 
 const router = libExpress.Router();
 
@@ -126,11 +127,15 @@ router.post("/demo-media", async (req, res) => {
     }
 });
 
+router.post("/refresh-cache", async (req, res) => {
+    //refreshing all cache post syncs
+    refresh(process.env.CACHE_KEYS_CATEGORIES);
+    refresh(process.env.CACHE_KEYS_PRODUCTS);
+    refresh(process.env.CACHE_KEYS_COURSES);
+    refresh(process.env.CACHE_KEYS_SUBJECTS);
+    refresh(process.env.CACHE_KEYS_CHAPTERS);
 
-router.post("/youtube-sync", async (req, res) => {
-
-
-    res.status(200).json({ msg: "YT Syncer started" });
+    res.status(200).json({ msg: "Cache Refreshed" });
 });
 
 module.exports = router;

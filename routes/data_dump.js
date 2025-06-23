@@ -137,6 +137,8 @@ router.post("/refresh-cache", async (req, res) => {
     refresh(process.env.CACHE_KEYS_COURSES);
     refresh(process.env.CACHE_KEYS_SUBJECTS);
     refresh(process.env.CACHE_KEYS_CHAPTERS);
+
+    res.status(200).json({ msg: "Cache Refreshed" });
 });
 
 module.exports = router;

@@ -39,10 +39,7 @@ router.post("/subjects", async (req, res) => {
         );
 
         Promise.all([...subjectsInsertionPromises, ...coursesToSubjectMappingPromises, ,])
-            .then((results) => {
-                res.status(200).json({ msg: "Subjects Synced" });
-                refresh();
-            })
+            .then((results) => res.status(200).json({ msg: "Subjects Synced" }))
             .catch((error) => {
                 logger.error(error);
                 res.status(400).json({ msg: error });

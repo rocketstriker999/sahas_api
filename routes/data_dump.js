@@ -1,7 +1,7 @@
 const libExpress = require("express");
 const { executeSQLQueryRaw, executeSQLQueryParameterized } = require("../libs/db");
 const logger = require("../libs/logger");
-const { refresh } = require("./libs/cacher");
+const { refresh } = require("../libs/cacher");
 
 const router = libExpress.Router();
 

@@ -9,8 +9,6 @@ const sahasAPI = libExpress();
 // Use the CORS middleware to allow cross origin request in case of testing UI Localhost and Cookies as well --
 sahasAPI.use(cors({ origin: process.env.ALLOWED_CORS_ORIGINS }));
 
-logger.info("TEST - " + process.env.ALLOWED_CORS_ORIGINS);
-
 //sahasAPI.use(require("./middlewares/device"));
 sahasAPI.use((req, res, next) => {
     logger.info(`Incoming Request - ${req.method} ${req.url}`);

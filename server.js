@@ -10,6 +10,7 @@ const sahasAPI = libExpress();
 sahasAPI.use(
     cors({
         origin: [process.env.ALLOWED_CORS_ORIGINS],
+        allowedHeaders: "*",
     })
 );
 

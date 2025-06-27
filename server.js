@@ -45,7 +45,7 @@ const routers = {
 Object.entries(routers).forEach(([path, router]) => sahasAPI.use(path, router));
 
 //if api path is not processable
-sahasAPI.use((req, res) => res.status(300).json({ error: "Bad Request" }));
+sahasAPI.use((req, res) => res.status(400).json({ error: "Bad Request" }));
 
 //APP Port and start app
 const allowTraffic = () => sahasAPI.listen(process.env.SERVER_PORT, () => logger.success(`APIs started at ${process.env.SERVER_PORT}`));

@@ -30,13 +30,18 @@ function generateDBTables() {
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP
           )
         `,
-
         `CREATE TABLE IF NOT EXISTS USER_GROUPS(user_id INT NOT NULL,title VARCHAR(36) NOT NULL)`,
         `CREATE TABLE IF NOT EXISTS USER_AUTHORITIES(user_id INT NOT NULL,title VARCHAR(36) NOT NULL)`,
-
         `CREATE TABLE IF NOT EXISTS DEVICES (
-            id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            finger_print CHAR(36) DEFAULT (UUID()),
             description VARCHAR(256) NOT NULL DEFAULT 'UNKNOWN'
+          )
+        `,
+        `CREATE TABLE IF NOT EXISTS MAPPING_USER_DEVICES (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            user_id INT NOT NULL,
+            device_id INT NOT NULL
           )
         `,
         `CREATE TABLE IF NOT EXISTS USER_USAGE(user_id INT NOT NULL,activity VARCHAR(16) NOT NULL,time_stamp DATETIME DEFAULT CURRENT_TIMESTAMP)`,

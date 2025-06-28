@@ -11,16 +11,16 @@ function getDevicesByToken(token) {
 }
 
 function addDevice(device) {
-    return executeSQLQueryParameterized(`INSERT INTO DEVICES  VALUES (?,?)`, [device.id, device.description])
-        .then((result) => device.id)
+    return executeSQLQueryParameterized(`INSERT INTO DEVICES(finger_print,description)  VALUES (?,?)`, [device.finger_print, device.description])
+        .then((result) => device.finger_print)
         .catch((error) => {
             logger.error(`addDevice: ${error}`);
             return false;
         });
 }
 
-function isDeviceKnown(deviceId) {
-    return executeSQLQueryParameterized(`SELECT COUNT(*) AS count FROM DEVICES WHERE id = ?`, [deviceId])
+function isDeviceKnown(deviceFingerPrint) {
+    return executeSQLQueryParameterized(`SELECT COUNT(*) AS count FROM DEVICES WHERE finger_print = ?`, [deviceFingerPrint])
         .then(([result]) => result.count > 0)
         .catch((error) => {
             logger.error(`isDeviceKnown: ${error}`);

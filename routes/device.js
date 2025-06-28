@@ -7,9 +7,9 @@ const { v4: uuidv4 } = require("uuid");
 
 //create a new device into datbase
 router.post("/create", async (req, res) => {
-    if (!Boolean(req.headers?.device_id) && req.body.device) {
+    if (!Boolean(req.headers?.device_finger_print) && req.body.device) {
         return res.status(201).json({
-            device_id: await addDevice({ id: uuidv4(), description: req.body.device }),
+            device_finger_print: await addDevice({ finger_print: uuidv4(), description: req.body.device }),
         });
     }
 

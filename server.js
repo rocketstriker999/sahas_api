@@ -4,7 +4,7 @@ const logger = require("./libs/logger");
 const cors = require("cors");
 const requests = require("./middlewares/requests");
 const hasDevice = require("./middlewares/has_device");
-const processDevice = require("./middlewares/process_device");
+const isDeviceAllowed = require("./middlewares/is_device_allowed");
 const hasAuthentication = require("./middlewares/has_authentication");
 
 //api server - 1
@@ -31,7 +31,7 @@ const routers = {
     "/otp": { middlewares: [], router: require("./routes/otp") },
     "/device": { middlewares: [], router: require("./routes/device") },
     "/transactions": { middlewares: [], router: require("./routes/transaction") },
-    "/media": { middlewares: [hasAuthentication, hasDevice, processDevice], router: require("./routes/media") },
+    "/media": { middlewares: [hasAuthentication, hasDevice, isDeviceAllowed], router: require("./routes/media") },
     "/extract": { middlewares: [], router: require("./routes/extract") },
     "/access": { middlewares: [], router: require("./routes/access") },
     "/catelogue": { middlewares: [], router: require("./routes/catelogue") },

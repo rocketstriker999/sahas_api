@@ -2,6 +2,9 @@ const libExpress = require("express");
 const libCookieParser = require("cookie-parser");
 const logger = require("./libs/logger");
 const cors = require("cors");
+const requests = require("./middlewares/requests");
+const hasDeviceId = require("./middlewares/has_deviceId");
+const { default: processDevice } = require("./middlewares/processDevice");
 
 //api server
 const sahasAPI = libExpress();
@@ -10,10 +13,7 @@ const sahasAPI = libExpress();
 sahasAPI.use(cors({ origin: process.env.ALLOWED_CORS_ORIGINS, credentials: true }));
 
 //sahasAPI.use(require("./middlewares/device"));
-sahasAPI.use((req, res, next) => {
-    logger.info(`Incoming Request - ${req.method} ${req.url}`);
-    next();
-});
+sahasAPI.use(requests);
 
 //allow json request payloads only
 sahasAPI.use(libExpress.json());
@@ -23,22 +23,22 @@ sahasAPI.use(libCookieParser());
 
 //api end points and routers
 const routers = {
-    "/data-dump": require("./routes/data_dump"),
-    "/configs": require("./routes/configs"),
-    "/users": require("./routes/users"),
-    "/token": require("./routes/token"),
-    "/otp": require("./routes/otp"),
-    "/device": require("./routes/device"),
-    "/transactions": require("./routes/transaction"),
-    "/media": require("./routes/media"),
-    "/extract": require("./routes/extract"),
-    "/access": require("./routes/access"),
-    "/catelogue": require("./routes/catelogue"),
-    "/invoices": require("./routes/invoices"),
+    "/data-dump": { middlewares: [], router: require("./routes/data_dump") },
+    "/configs": { middlewares: [], router: require("./routes/configs") },
+    "/users": { middlewares: [], router: require("./routes/users") },
+    "/token": { middlewares: [], router: require("./routes/token") },
+    "/otp": { middlewares: [], router: require("./routes/otp") },
+    "/device": { middlewares: [], router: require("./routes/device") },
+    "/transactions": { middlewares: [], router: require("./routes/transaction") },
+    "/media": { middlewares: [hasDeviceId, processDevice], router: require("./routes/media") },
+    "/extract": { middlewares: [], router: require("./routes/extract") },
+    "/access": { middlewares: [], router: require("./routes/access") },
+    "/catelogue": { middlewares: [], router: require("./routes/catelogue") },
+    "/invoices": { middlewares: [], router: require("./routes/invoices") },
 };
 
 //apply all routes -
-Object.entries(routers).forEach(([path, router]) => sahasAPI.use(path, router));
+Object.entries(routers).forEach(([path, routeHandler]) => sahasAPI.use(path, ...routeHandler?.middlewares, routeHandler.router));
 
 //if api path is not processable
 sahasAPI.use((req, res) => res.status(400).json({ error: "Bad Request" }));

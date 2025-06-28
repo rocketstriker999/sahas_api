@@ -2,6 +2,10 @@ const { isDeviceKnown } = require("../db/devices");
 const logger = require("../libs/logger");
 
 module.exports = async (req, res, next) => {
+    logger.info(req.headers?.device_finger_print);
+
+    logger.info(await isDeviceKnown(req.headers?.device_finger_print));
+
     if (req.headers?.device_finger_print && (isDeviceKnown = await isDeviceKnown(req.headers?.device_finger_print))) {
         return next();
     }

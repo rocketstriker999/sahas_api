@@ -2,26 +2,11 @@ const libExpress = require("express");
 const { addDevice } = require("../db/devices");
 const logger = require("../libs/logger");
 
-const DeviceDetector = require("device-detector-js");
-const deviceDetector = new DeviceDetector();
-
 const router = libExpress.Router();
 
 //create a new device into datbase
 router.post("/create", async (req, res) => {
-    logger.info(!Boolean(req.headers?.device_id));
-    logger.info(JSON.stringify(req.body));
-
-    const userAgent = req.headers["user-agent"];
-    const device = deviceDetector.parse(userAgent || "");
-
-    logger.info(JSON.stringify(device));
-
-    return res.status(201).json({
-        device_id: "1234",
-    });
-
-    if (!Boolean(req.headers?.device_id) && req.body.os && req.body.os && req.body.browser) {
+    if (!Boolean(req.headers?.device_id) && req.body.device) {
         return res.status(201).json({
             device_id: await addDevice(req.body),
         });

@@ -36,10 +36,7 @@ function generateDBTables() {
 
         `CREATE TABLE IF NOT EXISTS DEVICES (
             id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
-            os VARCHAR(32) NOT NULL,
-            company VARCHAR(32) NOT NULL,
-            browser VARCHAR(32) NOT NULL,
-            created_on DATETIME DEFAULT CURRENT_TIMESTAMP
+            description VARCHAR(256) NOT NULL
           )
         `,
         `CREATE TABLE IF NOT EXISTS USER_USAGE(user_id INT NOT NULL,activity VARCHAR(16) NOT NULL,time_stamp DATETIME DEFAULT CURRENT_TIMESTAMP)`,

@@ -10,7 +10,7 @@ function getDevicesByToken(token) {
     });
 }
 
-function addDevice(device) {
+function addDevice({ device }) {
     return executeSQLQueryParameterized(`INSERT INTO DEVICES(description)  VALUES (?)`, [device])
         .then((result) => result.insertId)
         .catch((error) => {

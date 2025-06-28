@@ -1,6 +1,6 @@
 const logger = require("../libs/logger");
 
-export default async (req, res, next) => {
+module.exports = async (req, res, next) => {
     if (req.headers["Device-ID"]) {
         next();
     }

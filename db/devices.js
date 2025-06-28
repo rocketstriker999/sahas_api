@@ -10,11 +10,11 @@ function getDevicesByToken(token) {
     });
 }
 
-function addDevice({ device }) {
-    return executeSQLQueryParameterized(`INSERT INTO DEVICES(description)  VALUES (?)`, [device])
+function addDevice(deviceDescription) {
+    return executeSQLQueryParameterized(`INSERT INTO DEVICES(description)  VALUES (?)`, [deviceDescription])
         .then((result) => result.insertId)
         .catch((error) => {
-            logger.error(`createTransaction: ${error}`);
+            logger.error(`addDevice: ${error}`);
             return false;
         });
 }

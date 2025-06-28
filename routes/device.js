@@ -8,7 +8,7 @@ const router = libExpress.Router();
 router.post("/create", async (req, res) => {
     if (!Boolean(req.headers?.device_id) && req.body.device) {
         return res.status(201).json({
-            device_id: await addDevice(req.body),
+            device_id: await addDevice(req.body.device),
         });
     }
 

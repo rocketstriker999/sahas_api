@@ -1,6 +1,5 @@
-import { getDevicesByToken } from "../db/devices";
-import { getUserByToken } from "../db/users";
-
+const { getDevicesByToken } = require("../db/devices");
+const { getUserByToken } = require("../db/users");
 const logger = require("../libs/logger");
 
 //req token ->   and req device ->   then

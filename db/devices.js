@@ -11,7 +11,7 @@ function getDevicesByToken(token) {
 }
 
 function addDevice(device) {
-    return executeSQLQueryParameterized(`INSERT INTO DEVICES(os,company,browser)  VALUES (?,?,?)`, [device.os, device.company, device.browser])
+    return executeSQLQueryParameterized(`INSERT INTO DEVICES(description)  VALUES (?)`, [device])
         .then((result) => result.insertId)
         .catch((error) => {
             logger.error(`createTransaction: ${error}`);

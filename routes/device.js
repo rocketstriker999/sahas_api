@@ -5,7 +5,9 @@ const router = libExpress.Router();
 
 //create a new device into datbase
 router.post("/create", async (req, res) => {
-    if (!Boolean(req.headers.device_id) && req.body.os && req.body.browser) {
+    console.log(!Boolean(req.headers?.device_id));
+
+    if (!Boolean(req.headers?.device_id) && req.body.os && req.body.browser) {
         return res.status(201).json({
             device_id: await addDevice(req.body),
         });

@@ -1,7 +1,8 @@
+const { isDeviceKnown } = require("../db/devices");
 const logger = require("../libs/logger");
 
 module.exports = async (req, res, next) => {
-    if (req.headers?.device) {
+    if (req.headers?.device_id && (await isDeviceKnown(req.headers?.device_id))) {
         return next();
     }
 

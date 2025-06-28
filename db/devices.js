@@ -19,4 +19,13 @@ function addDevice(device) {
         });
 }
 
-module.exports = { getDevicesByToken, addDevice };
+function isDeviceKnown(deviceId) {
+    return executeSQLQueryParameterized(`SELECT COUNT(*) AS count FROM DEVICES WHERE id = ?`, [deviceId])
+        .then(([result]) => result.count > 0)
+        .catch((error) => {
+            logger.error(`isDeviceKnown: ${error}`);
+            return false;
+        });
+}
+
+module.exports = { getDevicesByToken, addDevice, isDeviceKnown };

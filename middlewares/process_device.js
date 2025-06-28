@@ -13,6 +13,7 @@ module.exports = async (req, res, next) => {
         //next();
         const devices = await getDevicesByToken(req.cookies.token);
         console.log(devices);
+        return;
     }
 
     return res.status(400).json({ error: "Missing Device ID" });

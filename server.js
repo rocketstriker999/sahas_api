@@ -6,7 +6,7 @@ const requests = require("./middlewares/requests");
 const hasDeviceId = require("./middlewares/has_deviceId");
 const { default: processDevice } = require("./middlewares/processDevice");
 
-//api server
+//api server - 1
 const sahasAPI = libExpress();
 
 // Use the CORS middleware to allow cross origin request in case of testing UI Localhost and Cookies as well --

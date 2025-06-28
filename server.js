@@ -4,7 +4,7 @@ const logger = require("./libs/logger");
 const cors = require("cors");
 const requests = require("./middlewares/requests");
 const hasDeviceId = require("./middlewares/has_deviceId");
-const { default: processDevice } = require("./middlewares/processDevice");
+const processDevice = require("./middlewares/processDevice");
 
 //api server - 1
 const sahasAPI = libExpress();

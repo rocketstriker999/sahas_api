@@ -12,7 +12,11 @@ function getDevicesByToken(token) {
 
 function addDevice(deviceDescription) {
     return executeSQLQueryParameterized(`INSERT INTO DEVICES(description)  VALUES (?)`, [deviceDescription])
-        .then((result) => result.insertId)
+        .then((result) => {
+            logger.info(result);
+
+            return "123";
+        })
         .catch((error) => {
             logger.error(`addDevice: ${error}`);
             return false;

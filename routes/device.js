@@ -1,13 +1,15 @@
 const libExpress = require("express");
 const { addDevice } = require("../db/devices");
+const logger = require("../libs/logger");
 
 const router = libExpress.Router();
 
 //create a new device into datbase
 router.post("/create", async (req, res) => {
-    console.log(!Boolean(req.headers?.device_id));
+    logger.info(!Boolean(req.headers?.device_id));
+    logger.info(JSON.stringify(req.body));
 
-    if (!Boolean(req.headers?.device_id) && req.body.os && req.body.company && req.body.browser) {
+    if (!Boolean(req.headers?.device_id) && req.body.os && req.body.os && req.body.browser) {
         return res.status(201).json({
             device_id: await addDevice(req.body),
         });

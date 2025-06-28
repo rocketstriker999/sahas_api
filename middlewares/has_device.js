@@ -6,6 +6,6 @@ module.exports = async (req, res, next) => {
         return next();
     }
 
-    logger.error("Request Denied - Missing Device Information");
-    return res.status(401).json({ error: "Missing Device Information" });
+    logger.error("Request Denied - Missing Device FingerPrint");
+    return res.status(401).json({ error: "Missing Device FingerPrint" });
 };

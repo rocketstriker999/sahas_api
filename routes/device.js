@@ -13,7 +13,8 @@ router.post("/create", async (req, res) => {
         });
     }
 
-    return res.status(400).json({ error: "Missing Device Information" });
+    logger.error("Request Denied - Missing Device Information For Registration");
+    return res.status(400).json({ error: "Missing Device Information For Registration" });
 });
 
 module.exports = router;

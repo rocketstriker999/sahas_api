@@ -6,5 +6,5 @@ module.exports = async (req, res, next) => {
     }
 
     logger.error("Request Denied - Missing Device ID");
-    return res.status(400).json({ error: "Missing Device ID" });
+    return res.status(401).json({ error: "Missing Device ID" });
 };

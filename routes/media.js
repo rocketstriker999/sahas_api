@@ -16,7 +16,7 @@ router.get("/subjects/:subjectId", async (req, res) => {
 
 //request for content from chapterId
 router.get("/chapters/:chapterId", async (req, res) => {
-    if (req.cookies.token && req.params.chapterId && (user = await getUserByToken(req.cookies.token))) {
+    if (req.params.chapterId) {
         //cehck if this user has access to course
         if (await verifyAccessByTokenForChapter(req.cookies.token, req.params.chapterId)) {
             //check if this device has access

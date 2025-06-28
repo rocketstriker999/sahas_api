@@ -4,7 +4,7 @@ const logger = require("./libs/logger");
 const cors = require("cors");
 const requests = require("./middlewares/requests");
 const hasDeviceId = require("./middlewares/has_deviceId");
-const processDevice = require("./middlewares/processDevice");
+const processDevice = require("./middlewares/process_device");
 const hasAuthentication = require("./middlewares/has_authentication");
 
 //api server - 1

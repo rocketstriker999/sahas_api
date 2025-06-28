@@ -33,13 +33,13 @@ function generateDBTables() {
 
         `CREATE TABLE IF NOT EXISTS USER_GROUPS(user_id INT NOT NULL,title VARCHAR(36) NOT NULL)`,
         `CREATE TABLE IF NOT EXISTS USER_AUTHORITIES(user_id INT NOT NULL,title VARCHAR(36) NOT NULL)`,
+
         `CREATE TABLE IF NOT EXISTS USER_DEVICES (
-            id VARCHAR(128) PRIMARY KEY,
-            user_id INT NOT NULL,
+            id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
             os VARCHAR(32) NOT NULL,
             company VARCHAR(32) NOT NULL,
             browser VARCHAR(32) NOT NULL,
-            active BOOLEAN DEFAULT FALSE
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP
           )
         `,
         `CREATE TABLE IF NOT EXISTS USER_USAGE(user_id INT NOT NULL,activity VARCHAR(16) NOT NULL,time_stamp DATETIME DEFAULT CURRENT_TIMESTAMP)`,

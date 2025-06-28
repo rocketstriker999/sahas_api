@@ -11,4 +11,13 @@ function getDevicesByToken(token) {
     });
 }
 
-module.exports = { getDevicesByToken };
+function addDevice(device) {
+    return executeSQLQueryParameterized(`INSERT INTO DEVICES VALUES (?,?,?)`, [device.os, device.company, device.browser])
+        .then((result) => result.insertId)
+        .catch((error) => {
+            logger.error(`createTransaction: ${error}`);
+            return false;
+        });
+}
+
+module.exports = { getDevicesByToken, addDevice };

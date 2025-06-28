@@ -11,7 +11,7 @@ function getDevicesByToken(token) {
 }
 
 function addDevice(deviceDescription) {
-    return executeSQLQueryParameterized(`INSERT INTO DEVICES(description)  VALUES (?)`, [deviceDescription])
+    return executeSQLQueryParameterized(`INSERT INTO DEVICES(description)  VALUES (?) RETURNING id`, [deviceDescription])
         .then((result) => {
             logger.info(JSON.stringify(result));
 

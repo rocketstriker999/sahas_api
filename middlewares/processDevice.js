@@ -9,7 +9,7 @@ const logger = require("../libs/logger");
 // if user is having device already -> Insert also but not allowed
 
 module.exports = async (req, res, next) => {
-    if (req.cookies.token && req.headers["Device-ID"] && (user = await getUserByToken(req.cookies.token))) {
+    if (req.cookies.token && (user = await getUserByToken(req.cookies.token))) {
         //next();
         const devices = await getDevicesByToken(req.cookies.token);
         console.log(devices);

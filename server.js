@@ -5,6 +5,7 @@ const cors = require("cors");
 const requests = require("./middlewares/requests");
 const hasDeviceId = require("./middlewares/has_deviceId");
 const processDevice = require("./middlewares/processDevice");
+const hasAuthentication = require("./middlewares/has_authentication");
 
 //api server - 1
 const sahasAPI = libExpress();
@@ -30,7 +31,7 @@ const routers = {
     "/otp": { middlewares: [], router: require("./routes/otp") },
     "/device": { middlewares: [], router: require("./routes/device") },
     "/transactions": { middlewares: [], router: require("./routes/transaction") },
-    "/media": { middlewares: [hasDeviceId, processDevice], router: require("./routes/media") },
+    "/media": { middlewares: [hasAuthentication, hasDeviceId, processDevice], router: require("./routes/media") },
     "/extract": { middlewares: [], router: require("./routes/extract") },
     "/access": { middlewares: [], router: require("./routes/access") },
     "/catelogue": { middlewares: [], router: require("./routes/catelogue") },

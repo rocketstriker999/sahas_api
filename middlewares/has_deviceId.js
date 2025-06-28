@@ -1,9 +1,7 @@
 const logger = require("../libs/logger");
 
 module.exports = async (req, res, next) => {
-    logger.info(JSON.stringify(req.headers));
-
-    if (req.headers["Device-ID"]) {
+    if (req.headers["device-id"]) {
         return next();
     }
 

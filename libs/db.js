@@ -41,7 +41,9 @@ function generateDBTables() {
         `CREATE TABLE IF NOT EXISTS MAPPING_USER_DEVICES (
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
-            device_id INT NOT NULL
+            device_id INT NOT NULL,
+            active BOOLEAN NOT NULL DEFAULT TRUE
+
           )
         `,
         `CREATE TABLE IF NOT EXISTS USER_USAGE(user_id INT NOT NULL,activity VARCHAR(16) NOT NULL,time_stamp DATETIME DEFAULT CURRENT_TIMESTAMP)`,

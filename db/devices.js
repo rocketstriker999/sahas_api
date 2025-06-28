@@ -13,7 +13,7 @@ function getDevicesByToken(token) {
 function addDevice(deviceDescription) {
     return executeSQLQueryParameterized(`INSERT INTO DEVICES(description)  VALUES (?)`, [deviceDescription])
         .then((result) => {
-            logger.info(result);
+            logger.info(JSON.stringify(result));
 
             return "123";
         })

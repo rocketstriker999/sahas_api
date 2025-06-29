@@ -1,4 +1,4 @@
-const { getDeviceByFingerPrint, hasDeviceAnyAssociatedUser, addDeviceUser } = require("../db/devices");
+const { getDeviceByFingerPrint, hasDeviceAnyAssociatedUser, addDeviceUser, isDeviceAssignedToThisUser } = require("../db/devices");
 const logger = require("../libs/logger");
 
 const DEVICE_FINGER_PRINT_KEY = "device-finger-print";

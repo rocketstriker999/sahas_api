@@ -3,8 +3,8 @@ const libCookieParser = require("cookie-parser");
 const logger = require("./libs/logger");
 const cors = require("cors");
 const requests = require("./middlewares/requests");
-const hasAuthentication = require("./middlewares/has_authentication");
-
+const requiresAuthentication = require("./middlewares/requires_authentication");
+const parseDevice = require("./middlewares/parse_device");
 const parseToken = require("./middlewares/parse_token");
 
 //api server - 2
@@ -24,6 +24,7 @@ sahasAPI.use(libCookieParser());
 
 //process token
 sahasAPI.use(parseToken);
+sahasAPI.use(parseDevice);
 
 //api end points and routers
 const routers = {
@@ -34,11 +35,11 @@ const routers = {
     "/otp": { middlewares: [], router: require("./routes/otp") },
     "/device": { middlewares: [], router: require("./routes/device") },
     "/transactions": { middlewares: [], router: require("./routes/transaction") },
-    "/media": { middlewares: [hasAuthentication], router: require("./routes/media") },
+    "/media": { middlewares: [requiresAuthentication], router: require("./routes/media") },
     "/extract": { middlewares: [], router: require("./routes/extract") },
     "/access": { middlewares: [], router: require("./routes/access") },
     "/catelogue": { middlewares: [], router: require("./routes/catelogue") },
-    "/invoices": { middlewares: [hasAuthentication], router: require("./routes/invoices") },
+    "/invoices": { middlewares: [], router: require("./routes/invoices") },
 };
 
 //apply all routes -

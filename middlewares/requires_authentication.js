@@ -1,4 +1,3 @@
-const { getUserByToken } = require("../db/users");
 const logger = require("../libs/logger");
 
 module.exports = async (req, res, next) => {

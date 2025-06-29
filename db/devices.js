@@ -28,8 +28,20 @@ function isDeviceKnown(deviceFingerPrint) {
         });
 }
 
-function isDeviceAllowedForUser(deviceId, userId) {
-    return executeSQLQueryParameterized(`SELECT COUNT(*) AS count FROM MAPPING_USER_DEVICES WHERE device_id = ? AND user_id=?`, [deviceId, userId])
+function hasDeviceAnyAssociatedUser(deviceId) {
+    return executeSQLQueryParameterized(`SELECT COUNT(*) AS count FROM MAPPING_USER_DEVICES WHERE device_id = ? AND active=TRUE`, [deviceId])
+        .then(([result]) => result.count > 0)
+        .catch((error) => {
+            logger.error(`hasDeviceAssociatedUser: ${error}`);
+            return false;
+        });
+}
+
+function isDeviceAssignedToThisUser(deviceId, userId) {
+    return executeSQLQueryParameterized(`SELECT COUNT(*) AS count FROM MAPPING_USER_DEVICES WHERE device_id = ? AND user_id=? AND active=TRUE`, [
+        deviceId,
+        userId,
+    ])
         .then(([result]) => result.count > 0)
         .catch((error) => {
             logger.error(`isDeviceAllowedForUser: ${error}`);
@@ -37,4 +49,13 @@ function isDeviceAllowedForUser(deviceId, userId) {
         });
 }
 
-module.exports = { getDeviceByFingerPrint, addDevice, isDeviceKnown, isDeviceAllowedForUser };
+function addDeviceUser(user_id, device_id) {
+    return executeSQLQueryParameterized(`INSERT INTO MAPPING_USER_DEVICES(user_id,device_id,active)  VALUES (?,?,TRUE)`, [user_id, device_id]).catch(
+        (error) => {
+            logger.error(`addDeviceUser: ${error}`);
+            return false;
+        }
+    );
+}
+
+module.exports = { getDeviceByFingerPrint, addDevice, isDeviceKnown, isDeviceAssignedToThisUser, hasDeviceAnyAssociatedUser, addDeviceUser };

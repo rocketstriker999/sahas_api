@@ -2,8 +2,7 @@ const { getUserByToken } = require("../db/users");
 const logger = require("../libs/logger");
 
 module.exports = async (req, res, next) => {
-    if (req.cookies.token && (user = await getUserByToken(req.cookies.token))) {
-        req.user = user;
+    if (req.user) {
         return next();
     }
     logger.error("Request Denied - Missing Authentication");

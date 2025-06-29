@@ -1,13 +1,13 @@
 const { executeSQLQueryParameterized } = require("../libs/db");
 const logger = require("../libs/logger");
 
-function getDevicesByToken(token) {
-    return executeSQLQueryParameterized(`SELECT USERS.id,DEVICES.* FROM USERS INNER JOIN DEVICES ON USERS.id=DEVICES.user_id WHERE USERS.token=?`, [
-        token,
-    ]).catch((error) => {
-        logger.error(`executeSQLQueryParameterized: ${error}`);
-        return [];
-    });
+function getDeviceByFingerPrint(deviceFingerPrint) {
+    return executeSQLQueryParameterized(`SELECT * FROM DEVICES WHERE finger_print=?`, [deviceFingerPrint])
+        .then((result) => (result.length > 0 ? result[0] : false))
+        .catch((error) => {
+            logger.error(`executeSQLQueryParameterized: ${error}`);
+            return [];
+        });
 }
 
 function addDevice(device) {
@@ -28,4 +28,13 @@ function isDeviceKnown(deviceFingerPrint) {
         });
 }
 
-module.exports = { getDevicesByToken, addDevice, isDeviceKnown };
+function isDeviceAllowedForUser(deviceId, userId) {
+    return executeSQLQueryParameterized(`SELECT COUNT(*) AS count FROM MAPPING_USER_DEVICES WHERE device_id = ? AND user_id=?`, [deviceId, userId])
+        .then(([result]) => result.count > 0)
+        .catch((error) => {
+            logger.error(`isDeviceAllowedForUser: ${error}`);
+            return false;
+        });
+}
+
+module.exports = { getDeviceByFingerPrint, addDevice, isDeviceKnown, isDeviceAllowedForUser };

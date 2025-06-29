@@ -3,9 +3,9 @@ const libCookieParser = require("cookie-parser");
 const logger = require("./libs/logger");
 const cors = require("cors");
 const requests = require("./middlewares/requests");
-const hasDeviceFingerPrint = require("./middlewares/has_device_finger_print");
-const isDeviceAllowed = require("./middlewares/is_device_allowed");
 const hasAuthentication = require("./middlewares/has_authentication");
+
+const parseToken = require("./middlewares/parse_token");
 
 //api server - 1
 const sahasAPI = libExpress();
@@ -22,6 +22,9 @@ sahasAPI.use(libExpress.urlencoded({ extended: true }));
 //parse the cookies
 sahasAPI.use(libCookieParser());
 
+//process token
+sahasAPI.use(parseToken);
+
 //api end points and routers
 const routers = {
     "/data-dump": { middlewares: [], router: require("./routes/data_dump") },
@@ -31,11 +34,11 @@ const routers = {
     "/otp": { middlewares: [], router: require("./routes/otp") },
     "/device": { middlewares: [], router: require("./routes/device") },
     "/transactions": { middlewares: [], router: require("./routes/transaction") },
-    "/media": { middlewares: [hasAuthentication, hasDeviceFingerPrint, isDeviceAllowed], router: require("./routes/media") },
+    "/media": { middlewares: [hasAuthentication], router: require("./routes/media") },
     "/extract": { middlewares: [], router: require("./routes/extract") },
     "/access": { middlewares: [], router: require("./routes/access") },
     "/catelogue": { middlewares: [], router: require("./routes/catelogue") },
-    "/invoices": { middlewares: [], router: require("./routes/invoices") },
+    "/invoices": { middlewares: [hasAuthentication], router: require("./routes/invoices") },
 };
 
 //apply all routes -

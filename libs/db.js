@@ -35,15 +35,17 @@ function generateDBTables() {
         `CREATE TABLE IF NOT EXISTS DEVICES (
             id INT AUTO_INCREMENT PRIMARY KEY,
             finger_print CHAR(36) DEFAULT (UUID()),
-            description VARCHAR(256) NOT NULL DEFAULT 'UNKNOWN'
+            description VARCHAR(256) NOT NULL DEFAULT 'UNKNOWN',
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP
           )
         `,
         `CREATE TABLE IF NOT EXISTS MAPPING_USER_DEVICES (
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
             device_id INT NOT NULL,
-            active BOOLEAN NOT NULL DEFAULT TRUE
-
+            active BOOLEAN NOT NULL DEFAULT TRUE,
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
           )
         `,
         `CREATE TABLE IF NOT EXISTS USER_USAGE(user_id INT NOT NULL,activity VARCHAR(16) NOT NULL,time_stamp DATETIME DEFAULT CURRENT_TIMESTAMP)`,

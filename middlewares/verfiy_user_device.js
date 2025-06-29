@@ -1,4 +1,4 @@
-const { getDeviceByFingerPrint, isDeviceAllowedForUser } = require("../db/devices");
+const { getDeviceByFingerPrint, isDeviceAllowedForUser, isDeviceKnown } = require("../db/devices");
 const logger = require("../libs/logger");
 
 //if user's mamping with device

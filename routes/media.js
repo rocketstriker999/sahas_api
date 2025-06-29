@@ -1,7 +1,7 @@
 const libExpress = require("express");
-const { getMediaBySubjectId, getMediaByChapterId, extractMediaBySubjectIdAndMediaId } = require("../db/media");
+const { getMediaBySubjectId, getMediaByChapterId } = require("../db/media");
 const { verifyAccessByTokenForChapter } = require("../db/accesses");
-const verifyUserDevice = require("./middlewares/verfiy_user_device");
+const verifyUserDevice = require("../middlewares/verfiy_user_device");
 
 const router = libExpress.Router();
 

@@ -13,9 +13,14 @@ module.exports = async (req, res, next) => {
         return res.status(401).json({ error: "Missing Authentication" });
     }
 
-    if (!req.headers?.[DEVICE_FINGER_PRINT_KEY] || !(await isDeviceKnown(req.headers?.[DEVICE_FINGER_PRINT_KEY]))) {
+    if (!req.headers?.[DEVICE_FINGER_PRINT_KEY]) {
         logger.error("Request Denied - Missing Device FingerPrint");
         return res.status(401).json({ error: "Missing Device FingerPrint" });
+    }
+
+    if (!(await isDeviceKnown(req.headers?.[DEVICE_FINGER_PRINT_KEY]))) {
+        logger.error("Request Denied - Invalid Device FingerPrint");
+        return res.status(401).json({ error: "Invalid Device FingerPrint" });
     }
 
     if (!(device = await getDeviceByFingerPrint(req.headers?.[DEVICE_FINGER_PRINT_KEY])) || !(await isDeviceAllowedForUser(device.id, req.user.id))) {

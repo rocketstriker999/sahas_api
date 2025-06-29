@@ -7,7 +7,7 @@ const requiresAuthentication = require("./middlewares/requires_authentication");
 const parseDevice = require("./middlewares/parse_device");
 const parseToken = require("./middlewares/parse_token");
 
-//api server - 2
+//api server - 3
 const sahasAPI = libExpress();
 
 // Use the CORS middleware to allow cross origin request in case of testing UI Localhost and Cookies as well --

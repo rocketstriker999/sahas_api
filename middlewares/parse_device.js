@@ -24,7 +24,7 @@ module.exports = async (req, res, next) => {
 
             device.isCurrentUserAssociatedWithDevice = await isDeviceAssignedToThisUser(device.id, req.user.id);
 
-            //add the mapping into MApping Tbale
+            //add the mapping into MApping Table
             if (!(await userDeviceMappingExist(req.user.id, device.id))) {
                 addInActiveUserDeviceMapping(req.user.id, device.id);
                 logger.info("Inactive Device Mapping Was Added For User");

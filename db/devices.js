@@ -48,10 +48,7 @@ function hasUserAnyActiveDeviceMapping(userId) {
 }
 
 function userDeviceMappingExist(userId, deviceId) {
-    return executeSQLQueryParameterized(`SELECT COUNT(*) AS count FROM MAPPING_USER_DEVICES WHERE user_id = ? AND device_id=? AND active=FALSE`, [
-        userId,
-        deviceId,
-    ])
+    return executeSQLQueryParameterized(`SELECT COUNT(*) AS count FROM MAPPING_USER_DEVICES WHERE user_id = ? AND device_id=? `, [userId, deviceId])
         .then(([result]) => result.count > 0)
         .catch((error) => {
             logger.error(`userDeviceMappingExist: ${error}`);

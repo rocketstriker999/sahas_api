@@ -1,7 +1,7 @@
 const libExpress = require("express");
 const { getMediaBySubjectId, getMediaByChapterId } = require("../db/media");
 const { verifyAccessByTokenForChapter } = require("../db/accesses");
-const requiresUserAssociationWithDevice = require("../middlewares/requires_user_association_with_device");
+const requiresUserDeviceActiveMapping = require("../middlewares/requires_user_device_active_mapping");
 
 const router = libExpress.Router();
 
@@ -15,7 +15,7 @@ router.get("/subjects/:subjectId", async (req, res) => {
 });
 
 //request for content from chapterId
-router.get("/chapters/:chapterId", requiresUserAssociationWithDevice, async (req, res) => {
+router.get("/chapters/:chapterId", requiresUserDeviceActiveMapping, async (req, res) => {
     if (req.params.chapterId) {
         //cehck if this user has access to course
         if (await verifyAccessByTokenForChapter(req.cookies.token, req.params.chapterId)) {

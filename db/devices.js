@@ -19,24 +19,6 @@ function addDevice(device) {
         });
 }
 
-function isDeviceKnown(deviceFingerPrint) {
-    return executeSQLQueryParameterized(`SELECT COUNT(*) AS count FROM DEVICES WHERE finger_print = ?`, [deviceFingerPrint])
-        .then(([result]) => result.count > 0)
-        .catch((error) => {
-            logger.error(`isDeviceKnown: ${error}`);
-            return false;
-        });
-}
-
-function hasDeviceAnyAssociatedUser(deviceId) {
-    return executeSQLQueryParameterized(`SELECT COUNT(*) AS count FROM MAPPING_USER_DEVICES WHERE device_id = ? AND active=TRUE`, [deviceId])
-        .then(([result]) => result.count > 0)
-        .catch((error) => {
-            logger.error(`hasDeviceAssociatedUser: ${error}`);
-            return false;
-        });
-}
-
 function isDeviceAssignedToThisUser(deviceId, userId) {
     return executeSQLQueryParameterized(`SELECT COUNT(*) AS count FROM MAPPING_USER_DEVICES WHERE device_id = ? AND user_id=? AND active=TRUE`, [
         deviceId,
@@ -49,7 +31,7 @@ function isDeviceAssignedToThisUser(deviceId, userId) {
         });
 }
 
-function addDeviceUser(user_id, device_id) {
+function addActiveUserDeviceMapping(user_id, device_id) {
     return executeSQLQueryParameterized(`INSERT INTO MAPPING_USER_DEVICES(user_id,device_id,active)  VALUES (?,?,TRUE)`, [user_id, device_id]).catch(
         (error) => {
             logger.error(`addDeviceUser: ${error}`);
@@ -58,4 +40,13 @@ function addDeviceUser(user_id, device_id) {
     );
 }
 
-module.exports = { getDeviceByFingerPrint, addDevice, isDeviceKnown, isDeviceAssignedToThisUser, hasDeviceAnyAssociatedUser, addDeviceUser };
+function hasUserAnyActiveDeviceMapping(user_id) {
+    return executeSQLQueryParameterized(`SELECT COUNT(*) AS count FROM MAPPING_USER_DEVICES WHERE user_id = ? AND active=TRUE`, [user_id])
+        .then(([result]) => result.count > 0)
+        .catch((error) => {
+            logger.error(`hasUserAnyActiveDeviceMapping: ${error}`);
+            return false;
+        });
+}
+
+module.exports = { getDeviceByFingerPrint, addDevice, isDeviceAssignedToThisUser, hasUserAnyActiveDeviceMapping, addActiveUserDeviceMapping };

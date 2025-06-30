@@ -1,15 +1,20 @@
 const libExpress = require("express");
+const { addDevice } = require("../db/devices");
 
 const router = libExpress.Router();
 
-router.get("/create", async (req, res) => {
-    setTimeout(() => {
-        res.status(201).json({
-            device_id: `${Date.now()}_${Math.random()
-                .toString(36)
-                .substring(2, 15)}`,
+const { v4: uuidv4 } = require("uuid");
+
+//create a new device into datbase
+router.post("/create", async (req, res) => {
+    if (!Boolean(req.headers?.device_finger_print) && req.body.device) {
+        return res.status(201).json({
+            device_finger_print: await addDevice({ finger_print: uuidv4(), description: req.body.device }),
         });
-    }, 3000);
+    }
+
+    logger.error("Request Denied - Missing Device Information For Registration");
+    return res.status(400).json({ error: "Missing Device Information For Registration" });
 });
 
 module.exports = router;

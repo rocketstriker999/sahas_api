@@ -49,4 +49,30 @@ function hasUserAnyActiveDeviceMapping(user_id) {
         });
 }
 
-module.exports = { getDeviceByFingerPrint, addDevice, isDeviceAssignedToThisUser, hasUserAnyActiveDeviceMapping, addActiveUserDeviceMapping };
+function userDeviceMappingExist(userId, deviceId) {
+    return executeSQLQueryParameterized(`SELECT COUNT(*) AS count FROM MAPPING_USER_DEVICES WHERE user_id = ? AND device_id=? AND active=FALSE`, [user_id])
+        .then(([result]) => result.count > 0)
+        .catch((error) => {
+            logger.error(`hasUserAnyActiveDeviceMapping: ${error}`);
+            return false;
+        });
+}
+
+function addInActiveUserDeviceMapping(user_id, device_id) {
+    return executeSQLQueryParameterized(`INSERT INTO MAPPING_USER_DEVICES(user_id,device_id,active)  VALUES (?,?,FALSE)`, [user_id, device_id]).catch(
+        (error) => {
+            logger.error(`addDeviceUser: ${error}`);
+            return false;
+        }
+    );
+}
+
+module.exports = {
+    getDeviceByFingerPrint,
+    addDevice,
+    isDeviceAssignedToThisUser,
+    hasUserAnyActiveDeviceMapping,
+    addActiveUserDeviceMapping,
+    userDeviceMappingExist,
+    addInActiveUserDeviceMapping,
+};

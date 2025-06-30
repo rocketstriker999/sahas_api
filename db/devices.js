@@ -26,22 +26,20 @@ function isDeviceAssignedToThisUser(deviceId, userId) {
     ])
         .then(([result]) => result.count > 0)
         .catch((error) => {
-            logger.error(`isDeviceAllowedForUser: ${error}`);
+            logger.error(`isDeviceAssignedToThisUser: ${error}`);
             return false;
         });
 }
 
-function addActiveUserDeviceMapping(user_id, device_id) {
-    return executeSQLQueryParameterized(`INSERT INTO MAPPING_USER_DEVICES(user_id,device_id,active)  VALUES (?,?,TRUE)`, [user_id, device_id]).catch(
-        (error) => {
-            logger.error(`addDeviceUser: ${error}`);
-            return false;
-        }
-    );
+function addActiveUserDeviceMapping(userId, deviceId) {
+    return executeSQLQueryParameterized(`INSERT INTO MAPPING_USER_DEVICES(user_id,device_id,active)  VALUES (?,?,TRUE)`, [userId, device_id]).catch((error) => {
+        logger.error(`addActiveUserDeviceMapping: ${error}`);
+        return false;
+    });
 }
 
-function hasUserAnyActiveDeviceMapping(user_id) {
-    return executeSQLQueryParameterized(`SELECT COUNT(*) AS count FROM MAPPING_USER_DEVICES WHERE user_id = ? AND active=TRUE`, [user_id])
+function hasUserAnyActiveDeviceMapping(userId) {
+    return executeSQLQueryParameterized(`SELECT COUNT(*) AS count FROM MAPPING_USER_DEVICES WHERE user_id = ? AND active=TRUE`, [userId])
         .then(([result]) => result.count > 0)
         .catch((error) => {
             logger.error(`hasUserAnyActiveDeviceMapping: ${error}`);
@@ -49,4 +47,28 @@ function hasUserAnyActiveDeviceMapping(user_id) {
         });
 }
 
-module.exports = { getDeviceByFingerPrint, addDevice, isDeviceAssignedToThisUser, hasUserAnyActiveDeviceMapping, addActiveUserDeviceMapping };
+function userDeviceMappingExist(userId, deviceId) {
+    return executeSQLQueryParameterized(`SELECT COUNT(*) AS count FROM MAPPING_USER_DEVICES WHERE user_id = ? AND device_id=? `, [userId, deviceId])
+        .then(([result]) => result.count > 0)
+        .catch((error) => {
+            logger.error(`userDeviceMappingExist: ${error}`);
+            return false;
+        });
+}
+
+function addInActiveUserDeviceMapping(userId, deviceId) {
+    return executeSQLQueryParameterized(`INSERT INTO MAPPING_USER_DEVICES(user_id,device_id,active)  VALUES (?,?,FALSE)`, [userId, deviceId]).catch((error) => {
+        logger.error(`addInActiveUserDeviceMapping: ${error}`);
+        return false;
+    });
+}
+
+module.exports = {
+    getDeviceByFingerPrint,
+    addDevice,
+    isDeviceAssignedToThisUser,
+    hasUserAnyActiveDeviceMapping,
+    addActiveUserDeviceMapping,
+    userDeviceMappingExist,
+    addInActiveUserDeviceMapping,
+};

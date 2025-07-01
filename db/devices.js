@@ -32,7 +32,7 @@ function isDeviceAssignedToThisUser(deviceId, userId) {
 }
 
 function addActiveUserDeviceMapping(userId, deviceId) {
-    return executeSQLQueryParameterized(`INSERT INTO MAPPING_USER_DEVICES(user_id,device_id,active)  VALUES (?,?,TRUE)`, [userId, device_id]).catch((error) => {
+    return executeSQLQueryParameterized(`INSERT INTO MAPPING_USER_DEVICES(user_id,device_id,active)  VALUES (?,?,TRUE)`, [userId, deviceId]).catch((error) => {
         logger.error(`addActiveUserDeviceMapping: ${error}`);
         return false;
     });

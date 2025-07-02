@@ -33,8 +33,8 @@ jobs:
                         kill -9 $pid
                       fi
                       git stash
-                      git checkout "${{env.BRANCH}}"
                       git fetch origin "${{env.BRANCH}}"
+                      git checkout "${{env.BRANCH}}"
                       git pull origin "${{env.BRANCH}}" --rebase
                     else
                       echo "Fetching Source - ${{ env.REPO }}"

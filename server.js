@@ -1,7 +1,6 @@
 const libExpress = require("express");
 const libCookieParser = require("cookie-parser");
 const logger = require("./libs/logger");
-const cors = require("cors");
 const requests = require("./middlewares/logging/request");
 const requiresAuthentication = require("./middlewares/requires/authentication");
 const parseDevice = require("./middlewares/parsers/device");
@@ -10,21 +9,16 @@ const parseToken = require("./middlewares/parsers/auth_token");
 //api server
 const sahasAPI = libExpress();
 
-// Use the CORS middleware to allow cross origin request in case of testing UI Localhost and Cookies as well
-sahasAPI.use(cors({ origin: process.env.ALLOWED_CORS_ORIGINS, credentials: true }));
-
-//sahasAPI.use(require("./middlewares/device"));
+//coomon middlewares
 sahasAPI.use(requests);
+sahasAPI.use(parseToken);
+sahasAPI.use(parseDevice);
 
 //allow json request payloads only
 sahasAPI.use(libExpress.json());
 sahasAPI.use(libExpress.urlencoded({ extended: true }));
 //parse the cookies
 sahasAPI.use(libCookieParser());
-
-//process token
-sahasAPI.use(parseToken);
-sahasAPI.use(parseDevice);
 
 //api end points and routers
 const routers = {

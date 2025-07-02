@@ -2,15 +2,15 @@ const libExpress = require("express");
 const libCookieParser = require("cookie-parser");
 const logger = require("./libs/logger");
 const cors = require("cors");
-const requests = require("./middlewares/requests");
-const requiresAuthentication = require("./middlewares/requires_authentication");
-const parseDevice = require("./middlewares/parse_device");
-const parseToken = require("./middlewares/parse_token");
+const requests = require("./middlewares/logging/request");
+const requiresAuthentication = require("./middlewares/requires/authentication");
+const parseDevice = require("./middlewares/parsers/device");
+const parseToken = require("./middlewares/parsers/auth_token");
 
-//api server - 3
+//api server
 const sahasAPI = libExpress();
 
-// Use the CORS middleware to allow cross origin request in case of testing UI Localhost and Cookies as well --
+// Use the CORS middleware to allow cross origin request in case of testing UI Localhost and Cookies as well
 sahasAPI.use(cors({ origin: process.env.ALLOWED_CORS_ORIGINS, credentials: true }));
 
 //sahasAPI.use(require("./middlewares/device"));

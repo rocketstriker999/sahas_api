@@ -5,7 +5,7 @@ function getDeviceByFingerPrint(deviceFingerPrint) {
     return executeSQLQueryParameterized(`SELECT * FROM DEVICES WHERE finger_print=?`, [deviceFingerPrint])
         .then((result) => (result.length > 0 ? result[0] : false))
         .catch((error) => {
-            logger.error(`executeSQLQueryParameterized: ${error}`);
+            logger.error(`getDeviceByFingerPrint: ${error}`);
             return [];
         });
 }

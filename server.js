@@ -9,16 +9,14 @@ const parseToken = require("./middlewares/parsers/auth_token");
 //api server
 const sahasAPI = libExpress();
 
+//allow json request payloads and cookies only by express
+sahasAPI.use(libExpress.json());
+sahasAPI.use(libExpress.urlencoded({ extended: true }));
+
 //coomon middlewares
 sahasAPI.use(requests);
 sahasAPI.use(parseToken);
 sahasAPI.use(parseDevice);
-
-//allow json request payloads only
-sahasAPI.use(libExpress.json());
-sahasAPI.use(libExpress.urlencoded({ extended: true }));
-//parse the cookies
-sahasAPI.use(libCookieParser());
 
 //api end points and routers
 const routers = {

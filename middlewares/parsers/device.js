@@ -8,8 +8,6 @@ const {
 } = require("../../db/devices");
 const logger = require("../../libs/logger");
 
-const DEVICE_FINGER_PRINT_KEY = "device-finger-print";
-
 module.exports = async (req, res, next) => {
     if (req.headers?.[DEVICE_FINGER_PRINT_KEY] && (device = await getDeviceByFingerPrint(req.headers?.[DEVICE_FINGER_PRINT_KEY]))) {
         if (req.user) {
@@ -28,5 +26,6 @@ module.exports = async (req, res, next) => {
 
         req.device = device;
     }
+
     next();
 };

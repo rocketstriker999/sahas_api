@@ -13,7 +13,7 @@ jobs:
         env:
             DEPLOYMENT_DIRECTORY: "/var/www/sites/dev.sahasinstitute.com/"
             REPO: "sahas_api"
-            BRANCH: "dev"
+            BRANCH: ${{ github.ref_name }}
             ENTRY: "app.js"
 
         steps:

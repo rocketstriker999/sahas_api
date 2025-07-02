@@ -35,7 +35,7 @@ const routers = {
     "/otp": { middlewares: [], router: require("./routes/otp") },
     "/device": { middlewares: [], router: require("./routes/device") },
     "/transactions": { middlewares: [], router: require("./routes/transaction") },
-    "/media": { middlewares: [requiresAuthentication], router: require("./routes/media") },
+    "/media": { middlewares: [], router: require("./routes/media") },
     "/extract": { middlewares: [], router: require("./routes/extract") },
     "/access": { middlewares: [], router: require("./routes/access") },
     "/catelogue": { middlewares: [], router: require("./routes/catelogue") },

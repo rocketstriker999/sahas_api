@@ -15,7 +15,7 @@ router.get("/subjects/:subjectId", async (req, res) => {
 });
 
 //request for content from chapterId
-router.get("/chapters/:chapterId", requiresUserDeviceActiveMapping, async (req, res) => {
+router.get("/chapters/:chapterId", requiresAuthentication, requiresUserDeviceActiveMapping, async (req, res) => {
     if (req.params.chapterId) {
         //cehck if this user has access to course
         if (await verifyAccessByTokenForChapter(req.cookies.token, req.params.chapterId)) {

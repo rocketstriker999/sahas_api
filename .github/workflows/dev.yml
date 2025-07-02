@@ -32,6 +32,7 @@ jobs:
                         echo "Terminating ${{ env.REPO }} - pid $pid"
                         kill -9 $pid
                       fi
+                      echo "Fetching Source..."
                       git stash
                       git fetch origin "${{env.BRANCH}}"
                       git checkout "${{env.BRANCH}}"

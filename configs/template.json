@@ -1,4 +1,29 @@
 {
+    "carousel": {
+        "images": [
+            {
+                "type": "image",
+                "image": "Frame59.png"
+            },
+            {
+                "type": "image",
+                "image": "Frame60.png"
+            },
+            {
+                "type": "image",
+                "image": "Frame61.png"
+            },
+            {
+                "type": "image",
+                "image": "Frame62.png"
+            }
+        ]
+    },
+
+    "navbar": {
+        "share_message": "https://api.whatsapp.com/send?text=🚀 Check out this amazing Platform Sahas Smart Studies for Quality Education! https://linktr.ee/SahasInstituteOfCommerce",
+        "whatsapp_connect": "https://wa.me/7600749804"
+    },
     "footer": {
         "title": "Level up your life with Sahas study app.",
         "background_color": "bg-black-alpha-90",

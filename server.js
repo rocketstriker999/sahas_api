@@ -1,21 +1,29 @@
 const libExpress = require("express");
-const libCookieParser = require("cookie-parser");
 const logger = require("./libs/logger");
-const requests = require("./middlewares/logging/request");
-const requiresAuthentication = require("./middlewares/requires/authentication");
+const cors = require("cors");
+
+//Common Middlewares
+const parseRequest = require("./middlewares/parsers/request");
 const parseDevice = require("./middlewares/parsers/device");
-const parseToken = require("./middlewares/parsers/auth_token");
+const maintenanceCheck = require("./middlewares/requires/maintenance_check");
+
+//Required Middlewares
+const requiresAuthentication = require("./middlewares/requires/authentication");
+const { ROUTE_NOT_FOUND } = require("./constants");
 
 //api server
 const sahasAPI = libExpress();
+
+// Use the CORS middleware to allow cross origin request in case of testing UI Localhost and Cookies as well
+sahasAPI.use(cors({ origin: process.env.ALLOWED_CORS_ORIGINS, credentials: true }));
 
 //allow json request payloads and cookies only by express
 sahasAPI.use(libExpress.json());
 sahasAPI.use(libExpress.urlencoded({ extended: true }));
 
-//coomon middlewares
-sahasAPI.use(requests);
-sahasAPI.use(parseToken);
+//Apply Middlewares
+sahasAPI.use(maintenanceCheck);
+sahasAPI.use(parseRequest);
 sahasAPI.use(parseDevice);
 
 //api end points and routers
@@ -38,11 +46,12 @@ const routers = {
 Object.entries(routers).forEach(([path, routeHandler]) => sahasAPI.use(path, ...routeHandler?.middlewares, routeHandler.router));
 
 //if api path is not processable
-sahasAPI.use((req, res) => res.status(400).json({ error: "Bad Request" }));
+sahasAPI.use((req, res) => res.status(404).json({ error: ROUTE_NOT_FOUND }));
 
 //APP Port and start app
 const allowTraffic = () => sahasAPI.listen(process.env.SERVER_PORT, () => logger.success(`APIs started at ${process.env.SERVER_PORT}`));
 
+//global exception handling
 process.on("uncaughtException", (error) => logger.error(error));
 
 module.exports = { allowTraffic };

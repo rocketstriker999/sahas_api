@@ -2,23 +2,23 @@ const libFs = require("fs");
 
 const libPath = require("path");
 
-function getConfigs() {
+// write configuration and save
+function writeConfig(configName, configuration) {
     return new Promise((resolve, reject) => {
-        libFs.readdir(libPath.join(process.cwd(), process.env.DIR_CONFIGS), (error, files) => {
+        libFs.writeFile(libPath.join(process.cwd(), process.env.DIR_CONFIGS, configName), JSON.stringify(configuration, null, 2), "utf8", (error) => {
             if (error) {
-                reject(error); // Reject the promise if there's an error reading the file
+                reject(error);
             } else {
-                resolve(files);
+                resolve();
             }
         });
     });
 }
 
-function writeConfig(configName, configuration) {}
-
+//read a perticular configuration
 function readConfig(configName) {
     return new Promise((resolve, reject) => {
-        libFs.readFile(libPath.join(process.cwd(), process.env.DIR_CONFIGS, configName), "utf8", (error, jsonData) => {
+        libFs.readFile(libPath.join(process.cwd(), process.env.DIR_CONFIGS, configName.concat(".json")), "utf8", (error, jsonData) => {
             if (error) {
                 reject(error); // Reject the promise if there's an error reading the file
             } else {

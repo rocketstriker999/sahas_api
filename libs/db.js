@@ -14,11 +14,13 @@ const dbConnectionPool = mysql.createPool({
     dateStrings: true,
 });
 
+//Users table modification -  added updated_at column
+
 function generateDBTables() {
     const createUserTableQuery = [
         `CREATE TABLE IF NOT EXISTS USERS (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(36) NULL,
+            full_name VARCHAR(36) NULL,
             email VARCHAR(48) NOT NULL UNIQUE,
             phone VARCHAR(13) NULL UNIQUE,
             address VARCHAR(256) NULL,
@@ -27,7 +29,8 @@ function generateDBTables() {
             otp VARCHAR(4) NOT NULL,
             token VARCHAR(36) NULL UNIQUE,
             is_blocked BOOLEAN DEFAULT FALSE,
-            created_on DATETIME DEFAULT CURRENT_TIMESTAMP
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
           )
         `,
         `CREATE TABLE IF NOT EXISTS USER_GROUPS(user_id INT NOT NULL,title VARCHAR(36) NOT NULL)`,

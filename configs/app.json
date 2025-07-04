@@ -1,3 +1,10 @@
 {
-    "under_maintance": false
+    "general": {
+        "under_maintance": false,
+        "save_logs": false
+    },
+    "payment": {
+        "cgst": 9,
+        "sgst": 9
+    }
 }

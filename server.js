@@ -4,7 +4,6 @@ const cors = require("cors");
 
 //Common Middlewares
 const parseRequest = require("./middlewares/parsers/request");
-const parseDevice = require("./middlewares/parsers/device");
 const maintenanceCheck = require("./middlewares/requires/maintenance_check");
 
 //Required Middlewares
@@ -24,7 +23,6 @@ sahasAPI.use(libExpress.urlencoded({ extended: true }));
 //Apply Middlewares
 sahasAPI.use(maintenanceCheck);
 sahasAPI.use(parseRequest);
-sahasAPI.use(parseDevice);
 
 //api end points and routers
 const routers = {

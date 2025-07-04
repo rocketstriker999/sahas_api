@@ -28,4 +28,4 @@ function readConfig(configName) {
     });
 }
 
-module.exports = { writeConfig, readConfig, getConfigs };
+module.exports = { writeConfig, readConfig };

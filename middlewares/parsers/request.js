@@ -7,14 +7,11 @@ const DEVICE_FINGER_PRINT_KEY = "device-finger-print";
 module.exports = async (req, res, next) => {
     //verify token and get user information
     if (req.headers?.token && (user = await getUserByToken(req.cookies.token))) {
-        logger.info("YES1");
         req.user = user;
     }
 
     //verify device and get device information
     if (req.headers?.[DEVICE_FINGER_PRINT_KEY] && (device = await getDeviceByFingerPrint(req.headers?.[DEVICE_FINGER_PRINT_KEY]))) {
-        logger.info("YES2");
-
         if (req?.user) {
             //This user is not having any device mapping then allow to use device
             //New Device Mapping Added
@@ -27,14 +24,12 @@ module.exports = async (req, res, next) => {
 
             //This User's Previous Mapping Was Found But Need To Add InActive Mapping
             if (!(await userDeviceMappingExist(req.user.id, device.id))) {
-                addInActiveUserDeviceMapping(req.user.id, device.id);
+                await addInActiveUserDeviceMapping(req.user.id, device.id);
             }
         }
 
         req.device = device;
     }
-
-    logger.info("YES3");
 
     logger.info(
         `Incoming Request - ${req.method} ${req.url} | USER_ID : ${req?.user?.id} - USER_EMAIL : ${req?.user?.email} | Device FingerPrint : ${req?.device?.finger_print} | Device Allowed : ${req?.device?.isCurrentUserAssociatedWithDevice}`

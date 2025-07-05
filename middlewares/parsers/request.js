@@ -6,7 +6,7 @@ const DEVICE_FINGER_PRINT_KEY = "device-finger-print";
 
 module.exports = async (req, res, next) => {
     //verify token and get user information
-    if (req.cookies.token && (user = await getUserByToken(req.cookies.token))) {
+    if (req.headers?.token && (user = await getUserByToken(req.cookies.token))) {
         req.user = user;
     }
 

@@ -1,12 +1,15 @@
 const libExpress = require("express");
 const { getAccessesByToken } = require("../db/accesses");
 const cacher = require("../libs/cacher");
+const { KEY_AUTHENTICATION_TOKEN } = require("../constants");
 const router = libExpress.Router();
 
 //get catelogue for user
 router.get("/", async (req, res) => {
     //get user's accesses
-    const userAccesses = Object.assign({}, ...(await getAccessesByToken(req.cookies.token))?.map((access) => ({ [access.product_id]: access.invoice })));
+    const userAccesses = req?.user
+        ? Object.assign({}, ...(await getAccessesByToken(req.headers?.[KEY_AUTHENTICATION_TOKEN]))?.map((access) => ({ [access.product_id]: access.invoice })))
+        : [];
 
     //prepare and return catelogue
     res.status(200).json({

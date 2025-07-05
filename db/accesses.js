@@ -36,7 +36,7 @@ function getUserProductAccessData(params) {
             Object.entries({
                 ...params,
             })
-                .map(([key, value]) => key === "title" ? `${key} = '${value}'` : `${key} LIKE '%${value}%'`)
+                .map(([key, value]) => (key === "title" ? `${key} = '${value}'` : `${key} LIKE '%${value}%'`))
                 .join(" AND "),
         ].join(" WHERE ");
     }
@@ -54,16 +54,16 @@ function getUserProductAccessData(params) {
 
 //temp
 function updateUserProductAccessStatus(userProductAccessId, active) {
-    return executeSQLQueryParameterized(`UPDATE USER_PRODUCT_ACCESSES SET active = ? WHERE id = ?`, [active, userProductAccessId])
-        .catch((error) => {
-            logger.error(`updateUserProductAccessStatus: ${error}`);
-            return false;
-        });
+    return executeSQLQueryParameterized(`UPDATE USER_PRODUCT_ACCESSES SET active = ? WHERE id = ?`, [active, userProductAccessId]).catch((error) => {
+        logger.error(`updateUserProductAccessStatus: ${error}`);
+        return false;
+    });
 }
 
 function getProfileUserProductAccessData(userId) {
     return executeSQLQueryParameterized(
-        `SELECT USER_PRODUCT_ACCESSES.*, PRODUCTS.title AS product_title FROM USER_PRODUCT_ACCESSES JOIN PRODUCTS ON USER_PRODUCT_ACCESSES.product_id = PRODUCTS.id WHERE USER_PRODUCT_ACCESSES.user_id = ?`,[userId]
+        `SELECT USER_PRODUCT_ACCESSES.*, PRODUCTS.title AS product_title FROM USER_PRODUCT_ACCESSES JOIN PRODUCTS ON USER_PRODUCT_ACCESSES.product_id = PRODUCTS.id WHERE USER_PRODUCT_ACCESSES.user_id = ?`,
+        [userId]
     )
         .then((result) => (result.length > 0 ? result : false))
         .catch((error) => {
@@ -96,8 +96,7 @@ function verifyAccessByTokenForChapter(token, chapterId) {
         });
 }
 
-function getAccessesByToken(token) {
-    if (!token) return [];
+function getAccessesByUserId(userId) {
     return executeSQLQueryParameterized(
         `SELECT 
     USER_PRODUCT_ACCESSES.product_id,
@@ -108,11 +107,11 @@ FROM
 JOIN 
     USER_PRODUCT_ACCESSES 
     ON USERS.id = USER_PRODUCT_ACCESSES.user_id 
-    AND USERS.token = ?
+    AND USERS.id = ?
 LEFT JOIN 
     TRANSACTIONS 
     ON TRANSACTIONS.id = USER_PRODUCT_ACCESSES.transaction_id WHERE USER_PRODUCT_ACCESSES.validity >= CURDATE() AND USER_PRODUCT_ACCESSES.active = true`,
-        [token]
+        [userId]
     ).catch((error) => {
         logger.error(`getAccessesByToken: ${error}`);
         return [];
@@ -133,7 +132,7 @@ module.exports = {
     addAccessTemp,
     getAccessByProductIdAndToken,
     verifyAccessByTokenForChapter,
-    getAccessesByToken,
+    getAccessesByUserId,
     getAccessByTransactionId,
     getUserProductAccessData,
     getProfileUserProductAccessData,

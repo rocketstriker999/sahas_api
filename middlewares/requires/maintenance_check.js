@@ -7,7 +7,7 @@ module.exports = async (req, res, next) => {
 
     //if maintenance mode is disabled, then allow the request to proceed
     if (generalConfig && generalConfig?.under_maintance === false) {
-        next();
+        return next();
     }
     logger.error(`${REQUEST_DENIED} - ${SERVER_UNDER_MAINTENANCE}`);
     return res.status(503).json({ error: SERVER_UNDER_MAINTENANCE });

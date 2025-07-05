@@ -1,17 +1,15 @@
+const { KEY_DEVICE_FINGER_PRINT, KEY_AUTHENTICATION_TOKEN } = require("../../constants");
 const { getDeviceByFingerPrint } = require("../../db/devices");
-const { readConfig } = require("../../libs/config");
 const logger = require("../../libs/logger");
-
-const DEVICE_FINGER_PRINT_KEY = "device-finger-print";
 
 module.exports = async (req, res, next) => {
     //verify token and get user information
-    if (req.headers?.token && (user = await getUserByToken(req.cookies.token))) {
+    if (req.headers?.[KEY_AUTHENTICATION_TOKEN] && (user = await getUserByToken(req.headers?.[KEY_AUTHENTICATION_TOKEN]))) {
         req.user = user;
     }
 
     //verify device and get device information
-    if (req.headers?.[DEVICE_FINGER_PRINT_KEY] && (device = await getDeviceByFingerPrint(req.headers?.[DEVICE_FINGER_PRINT_KEY]))) {
+    if (req.headers?.[KEY_DEVICE_FINGER_PRINT] && (device = await getDeviceByFingerPrint(req.headers?.[KEY_DEVICE_FINGER_PRINT]))) {
         if (req?.user) {
             //This user is not having any device mapping then allow to use device
             //New Device Mapping Added

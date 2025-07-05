@@ -5,11 +5,14 @@ const router = libExpress.Router();
 
 //Specific Config
 router.get("/:config", async (req, res) => {
+    let config = {};
+
     try {
-        res.status(200).json(await readConfig(req.params.config));
+        config = await readConfig(req.params.config);
     } catch (error) {
         logger.error(error);
-        res.status(500).json({ error: "Config Not Found" });
+    } finally {
+        res.status(200).json(config);
     }
 });
 

@@ -6,8 +6,7 @@ const router = libExpress.Router();
 //Specific Config
 router.get("/:config", async (req, res) => {
     try {
-        const config = await readConfig(req.params.config);
-        res.status(200).json(config[req.params.config]);
+        res.status(200).json(await readConfig(req.params.config));
     } catch (error) {
         logger.error(error);
         res.status(500).json({ error: "Config Not Found" });

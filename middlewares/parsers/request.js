@@ -12,7 +12,7 @@ module.exports = async (req, res, next) => {
 
     //verify device and get device information
     if (req.headers?.[DEVICE_FINGER_PRINT_KEY] && (device = await getDeviceByFingerPrint(req.headers?.[DEVICE_FINGER_PRINT_KEY]))) {
-        if (req.user) {
+        if (req?.user) {
             //This user is not having any device mapping then allow to use device
             //New Device Mapping Added
             if (!(await hasUserAnyActiveDeviceMapping(req.user.id))) {
@@ -35,5 +35,5 @@ module.exports = async (req, res, next) => {
         `Incoming Request - ${req.method} ${req.url} | USER_ID : ${user?.id} - USER_EMAIL : ${user?.email} | Device FingerPrint : ${device?.finger_print} | Device Allowed : ${device?.isCurrentUserAssociatedWithDevice}`
     );
 
-    if (await readConfig()) next();
+    next();
 };

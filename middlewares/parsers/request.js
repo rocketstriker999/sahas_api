@@ -34,6 +34,8 @@ module.exports = async (req, res, next) => {
         req.device = device;
     }
 
+    logger.info("YES3");
+
     logger.info(
         `Incoming Request - ${req.method} ${req.url} | USER_ID : ${user?.id} - USER_EMAIL : ${user?.email} | Device FingerPrint : ${device?.finger_print} | Device Allowed : ${device?.isCurrentUserAssociatedWithDevice}`
     );

@@ -11,5 +11,5 @@ module.exports = async (req, res, next) => {
     }
 
     logger.error(`${REQUEST_DENIED} - ${ERROR_DEVICE_MISSING}`);
-    return req.status(400).json({ error: ERROR_DEVICE_MISSING });
+    return res.status(400).json({ error: ERROR_DEVICE_MISSING });
 };

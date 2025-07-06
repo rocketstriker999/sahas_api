@@ -8,6 +8,7 @@ module.exports = async (req, res, next) => {
         //Insert If Does Not Exist
         await addDevice(req.headers?.[KEY_DEVICE_FINGER_PRINT], req.headers?.[KEY_DEVICE_DESCRIPTION]);
         req.device = await getDeviceByFingerPrint(req.headers?.[KEY_DEVICE_FINGER_PRINT]);
+        return next();
     }
 
     logger.error(`${REQUEST_DENIED} - ${ERROR_DEVICE_MISSING}`);

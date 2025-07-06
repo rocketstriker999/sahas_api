@@ -3,7 +3,7 @@ const { getDeviceByFingerPrint, addDevice } = require("../db/devices");
 const logger = require("../libs/logger");
 
 module.exports = async (req, res, next) => {
-    logger.error(req.headers);
+    logger.error(JSON.stringify(req.headers));
 
     //Device information is Required
     if (req.headers?.[KEY_DEVICE_FINGER_PRINT] && req.headers?.[KEY_DEVICE_DESCRIPTION]) {

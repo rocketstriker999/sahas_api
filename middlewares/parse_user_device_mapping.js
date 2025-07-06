@@ -1,3 +1,5 @@
+const logger = require("../libs/logger");
+
 module.exports = async (req, res, next) => {
     if (req?.user) {
         //This user is not having any device mapping then allow to use device
@@ -14,7 +16,6 @@ module.exports = async (req, res, next) => {
             await addInActiveUserDeviceMapping(req.user.id, req.device.id);
         }
     }
-    logger.info("PARSEUSERDEVICEMAPPING");
 
     next();
 };

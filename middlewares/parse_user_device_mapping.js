@@ -1,6 +1,9 @@
 const logger = require("../libs/logger");
 
 module.exports = async (req, res, next) => {
+    logger.info(JSON.stringify(req.user));
+    logger.info(JSON.stringify(req.device));
+
     if (req?.user) {
         //This user is not having any device mapping then allow to use device
         //New Device Mapping Added

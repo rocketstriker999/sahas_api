@@ -11,12 +11,12 @@ function getDeviceByFingerPrint(deviceFingerPrint) {
 }
 
 function addDevice(device) {
-    return executeSQLQueryParameterized(`INSERT IGNORE INTO DEVICES(finger_print,description)  VALUES (?,?)`, [device.finger_print, device.description])
-        .then((result) => device.finger_print)
-        .catch((error) => {
+    return executeSQLQueryParameterized(`INSERT IGNORE INTO DEVICES(finger_print,description)  VALUES (?,?)`, [device.finger_print, device.description]).catch(
+        (error) => {
             logger.error(`addDevice: ${error}`);
             return false;
-        });
+        }
+    );
 }
 
 function isDeviceAssignedToThisUser(deviceId, userId) {

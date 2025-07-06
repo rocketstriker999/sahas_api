@@ -14,6 +14,7 @@ module.exports = async (req, res, next) => {
             await addInActiveUserDeviceMapping(req.user.id, req.device.id);
         }
     }
+    logger.info("PARSEUSERDEVICEMAPPING");
 
     next();
 };

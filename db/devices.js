@@ -10,8 +10,8 @@ function getDeviceByFingerPrint(deviceFingerPrint) {
         });
 }
 
-function addDevice(device) {
-    return executeSQLQueryParameterized(`INSERT IGNORE INTO DEVICES(finger_print,description)  VALUES (?,?)`, [device.finger_print, device.description]).catch(
+function addDevice(deviceFingerPrint, deviceDescription) {
+    return executeSQLQueryParameterized(`INSERT IGNORE INTO DEVICES(finger_print,description)  VALUES (?,?)`, [deviceFingerPrint, deviceDescription]).catch(
         (error) => {
             logger.error(`addDevice: ${error}`);
             return false;

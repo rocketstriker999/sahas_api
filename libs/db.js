@@ -37,7 +37,7 @@ function generateDBTables() {
         `CREATE TABLE IF NOT EXISTS USER_AUTHORITIES(user_id INT NOT NULL,title VARCHAR(36) NOT NULL)`,
         `CREATE TABLE IF NOT EXISTS DEVICES (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            finger_print CHAR(36) DEFAULT (UUID()) UNIQUE,
+            finger_print CHAR(64) NOT NULL UNIQUE,
             description VARCHAR(256) NOT NULL DEFAULT 'UNKNOWN',
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP
           )

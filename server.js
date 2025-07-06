@@ -1,14 +1,18 @@
 const libExpress = require("express");
 const logger = require("./libs/logger");
 const cors = require("cors");
+const { ROUTE_NOT_FOUND } = require("./constants");
 
 //Common Middlewares
-const parseRequest = require("./middlewares/parsers/request");
-const maintenanceCheck = require("./middlewares/requires/maintenance_check");
+const deviceCheck = require("./middlewares/check_device");
+const maintenanceCheck = require("./middlewares/check_maintenance");
+const parseUser = require("./middlewares/parse_user");
+const parseUserDeviceMapping = require("./middlewares/parse_user_device_mapping");
+
+const logRequest = require("./middlewares/log_request");
 
 //Required Middlewares
-const requiresAuthentication = require("./middlewares/requires/authentication");
-const { ROUTE_NOT_FOUND } = require("./constants");
+const requiresAuthentication = require("./middlewares/requires_authentication");
 
 //api server
 const sahasAPI = libExpress();
@@ -21,8 +25,11 @@ sahasAPI.use(libExpress.json());
 sahasAPI.use(libExpress.urlencoded({ extended: true }));
 
 //Apply Middlewares
+sahasAPI.use(deviceCheck);
 sahasAPI.use(maintenanceCheck);
-sahasAPI.use(parseRequest);
+sahasAPI.use(parseUser);
+sahasAPI.use(parseUserDeviceMapping);
+sahasAPI.use(logRequest);
 
 //api end points and routers
 const routers = {

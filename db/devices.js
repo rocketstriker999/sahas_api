@@ -11,7 +11,7 @@ function getDeviceByFingerPrint(deviceFingerPrint) {
 }
 
 function addDevice(device) {
-    return executeSQLQueryParameterized(`INSERT INTO DEVICES(finger_print,description)  VALUES (?,?)`, [device.finger_print, device.description])
+    return executeSQLQueryParameterized(`INSERT IGNORE INTO DEVICES(finger_print,description)  VALUES (?,?)`, [device.finger_print, device.description])
         .then((result) => device.finger_print)
         .catch((error) => {
             logger.error(`addDevice: ${error}`);
@@ -36,6 +36,15 @@ function addActiveUserDeviceMapping(userId, deviceId) {
         logger.error(`addActiveUserDeviceMapping: ${error}`);
         return false;
     });
+}
+
+function hasUserAnyDeviceMapping(userId) {
+    return executeSQLQueryParameterized(`SELECT COUNT(*) AS count FROM MAPPING_USER_DEVICES WHERE user_id = ?`, [userId])
+        .then(([result]) => result.count > 0)
+        .catch((error) => {
+            logger.error(`hasUserAnyActiveDeviceMapping: ${error}`);
+            return false;
+        });
 }
 
 function hasUserAnyActiveDeviceMapping(userId) {
@@ -67,6 +76,7 @@ module.exports = {
     getDeviceByFingerPrint,
     addDevice,
     isDeviceAssignedToThisUser,
+    hasUserAnyDeviceMapping,
     hasUserAnyActiveDeviceMapping,
     addActiveUserDeviceMapping,
     userDeviceMappingExist,

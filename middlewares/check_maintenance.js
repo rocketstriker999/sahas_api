@@ -1,6 +1,6 @@
-const { REQUEST_DENIED, SERVER_UNDER_MAINTENANCE } = require("../../constants");
-const { readConfig } = require("../../libs/config");
-const logger = require("../../libs/logger");
+const { REQUEST_DENIED, SERVER_UNDER_MAINTENANCE } = require("../constants");
+const { readConfig } = require("../libs/config");
+const logger = require("../libs/logger");
 
 module.exports = async (req, res, next) => {
     const { general: generalConfig } = await readConfig("app");

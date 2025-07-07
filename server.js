@@ -3,16 +3,15 @@ const logger = require("./libs/logger");
 const cors = require("cors");
 const { ROUTE_NOT_FOUND } = require("./constants");
 
-//Common Middlewares
+//Required Middlewares
 const deviceCheck = require("./middlewares/check_device");
 const maintenanceCheck = require("./middlewares/check_maintenance");
+const requiresAuthentication = require("./middlewares/requires_authentication");
+
+//Common Middlewares
 const parseUser = require("./middlewares/parse_user");
 const parseUserDeviceMapping = require("./middlewares/parse_user_device_mapping");
-
 const logRequest = require("./middlewares/log_request");
-
-//Required Middlewares
-const requiresAuthentication = require("./middlewares/requires_authentication");
 
 //api server
 const sahasAPI = libExpress();

@@ -17,7 +17,7 @@ const logRequest = require("./middlewares/log_request");
 const sahasAPI = libExpress();
 
 // Use the CORS middleware to allow cross origin request in case of testing UI Localhost and Cookies as well
-sahasAPI.use(cors());
+sahasAPI.use(cors({ origin: "*" }));
 
 //allow json request payloads and cookies only by express
 sahasAPI.use(libExpress.json());

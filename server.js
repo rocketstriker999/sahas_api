@@ -3,7 +3,7 @@ const logger = require("./libs/logger");
 const cors = require("cors");
 const { ROUTE_NOT_FOUND } = require("./constants");
 
-//Required Middlewares
+//Required Middlewares #1
 const deviceCheck = require("./middlewares/check_device");
 const maintenanceCheck = require("./middlewares/check_maintenance");
 const requiresAuthentication = require("./middlewares/requires_authentication");

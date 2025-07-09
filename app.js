@@ -14,6 +14,6 @@ generateDBTables()
     .then(() => {
         logger.success("[+]Database Ready");
         allowTraffic();
-        generateCaches();
+        // generateCaches();
     })
     .catch((error) => logger.error(`Failed To Prepare Database ${error}`));

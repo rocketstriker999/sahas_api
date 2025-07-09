@@ -33,8 +33,23 @@ function generateDBTables() {
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
           )
         `,
-        `CREATE TABLE IF NOT EXISTS USER_GROUPS(user_id INT NOT NULL,title VARCHAR(36) NOT NULL)`,
+
+        `CREATE TABLE IF NOT EXISTS GROUPS(
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            title VARCHAR(36) NOT NULL,
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        )`,
+
+        `CREATE TABLE IF NOT EXISTS ACCESSES(
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            title VARCHAR(36) NOT NULL,
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        )`,
+
         `CREATE TABLE IF NOT EXISTS USER_AUTHORITIES(user_id INT NOT NULL,title VARCHAR(36) NOT NULL)`,
+
         `CREATE TABLE IF NOT EXISTS DEVICES (
             id INT AUTO_INCREMENT PRIMARY KEY,
             finger_print CHAR(64) NOT NULL UNIQUE,
@@ -42,7 +57,7 @@ function generateDBTables() {
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP
           )
         `,
-        `CREATE TABLE IF NOT EXISTS MAPPING_USER_DEVICES (
+        `CREATE TABLE IF NOT EXISTS USER_DEVICES (
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
             device_id INT NOT NULL,
@@ -51,9 +66,7 @@ function generateDBTables() {
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
           )
         `,
-
         `CREATE TABLE IF NOT EXISTS CATEGORIES(id INT AUTO_INCREMENT PRIMARY KEY,title VARCHAR(100) NOT NULL UNIQUE,view_index INT NOT NULL DEFAULT 0)`,
-
         `CREATE TABLE IF NOT EXISTS PRODUCTS (
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(128) NOT NULL,
@@ -139,7 +152,7 @@ function generateDBTables() {
             validity DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
             active BOOLEAN NOT NULL DEFAULT TRUE
         )`,
-        `CREATE TABLE IF NOT EXISTS MAPPING_COUPON_CODES_BENIFIT (
+        `CREATE TABLE IF NOT EXISTS COUPON_CODE_BENIFITS (
             coupon_code_id INT NOT NULL,
             product_id INT NOT NULL,
             product_access_validity DATETIME NULL,

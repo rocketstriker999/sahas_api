@@ -3,7 +3,7 @@ const logger = require("../libs/logger");
 
 function getBenifitByCouponCodeIdAndProductId(couponCodeId, productId) {
     return executeSQLQueryParameterized(
-        `SELECT MAPPING_COUPON_CODES_BENIFIT.value,MAPPING_COUPON_CODES_BENIFIT.type,MAPPING_COUPON_CODES_BENIFIT.product_access_validity FROM MAPPING_COUPON_CODES_BENIFIT INNER JOIN COUPON_CODES ON MAPPING_COUPON_CODES_BENIFIT.coupon_code_id=COUPON_CODES.id  WHERE COUPON_CODES.id=? AND MAPPING_COUPON_CODES_BENIFIT.product_id=? AND COUPON_CODES.active=TRUE AND COUPON_CODES.validity>=CURRENT_DATE AND MAPPING_COUPON_CODES_BENIFIT.value>0`,
+        `SELECT COUPON_CODE_BENIFITS.value,COUPON_CODE_BENIFITS.type,COUPON_CODE_BENIFITS.product_access_validity FROM COUPON_CODE_BENIFITS INNER JOIN COUPON_CODES ON COUPON_CODE_BENIFITS.coupon_code_id=COUPON_CODES.id  WHERE COUPON_CODES.id=? AND COUPON_CODE_BENIFITS.product_id=? AND COUPON_CODES.active=TRUE AND COUPON_CODES.validity>=CURRENT_DATE AND COUPON_CODE_BENIFITS.value>0`,
         [couponCodeId, productId]
     )
         .then((result) => (result.length > 0 ? result[0] : false))

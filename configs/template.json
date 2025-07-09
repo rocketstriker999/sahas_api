@@ -23,49 +23,42 @@
         "opertions_sections": [
             {
                 "title": "Category 1",
+                "allowed_roles": ["admin", "student"],
                 "operations": [
                     {
-                        "allowed_roles": ["admin", "student"],
+                        "requires_accesses": ["admin", "student"],
                         "title": "Courses",
                         "icon": "pi-video"
                     },
                     {
-                        "allowed_roles": ["admin", "student"],
                         "title": "Devices",
                         "icon": "pi-mobile"
                     },
                     {
-                        "allowed_roles": ["admin", "student"],
                         "title": "Help",
                         "icon": "pi-question"
                     },
                     {
-                        "allowed_roles": ["admin", "student"],
                         "title": "Invoices",
                         "icon": "pi-receipt"
                     },
                     {
-                        "allowed_roles": ["admin", "student"],
                         "title": "Wallet",
                         "icon": "pi-wallet"
                     },
                     {
-                        "allowed_roles": ["admin", "student"],
                         "title": "FAQ",
                         "icon": "pi-question"
                     },
                     {
-                        "allowed_roles": ["admin", "student"],
                         "title": "Invoices",
                         "icon": "pi-receipt"
                     },
                     {
-                        "allowed_roles": ["admin", "student"],
                         "title": "Wallet",
                         "icon": "pi-wallet"
                     },
                     {
-                        "allowed_roles": ["admin", "student"],
                         "title": "FAQ",
                         "icon": "pi-question"
                     }

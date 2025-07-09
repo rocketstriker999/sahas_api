@@ -24,7 +24,7 @@ sahasAPI.use(libExpress.json());
 sahasAPI.use(libExpress.urlencoded({ extended: true }));
 
 //Apply Middlewares
-sahasAPI.use((req, res, next) => setTimeout(next, 3500));
+sahasAPI.use((req, res, next) => setTimeout(next, 3000));
 
 sahasAPI.use(deviceCheck);
 sahasAPI.use(maintenanceCheck);
@@ -44,7 +44,7 @@ const routers = {
     // "/media": { middlewares: [requiresAuthentication], router: require("./routes/media") },
     // "/extract": { middlewares: [], router: require("./routes/extract") },
     // "/access": { middlewares: [], router: require("./routes/access") },
-    // "/catelogue": { middlewares: [], router: require("./routes/catelogue") },
+    "/catelogue": { middlewares: [], router: require("./routes/catelogue") },
     // "/invoices": { middlewares: [], router: require("./routes/invoices") },
 };
 

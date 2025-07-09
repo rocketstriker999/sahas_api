@@ -21,10 +21,14 @@ const refresh = (key) =>
     });
 
 const generateCaches = async () => {
-    await add(process.env.CACHE_KEYS_CATEGORIES, getAllCategories);
-    await add(process.env.CACHE_KEYS_COURSES, getAllCourses);
-    await add(process.env.CACHE_KEYS_SUBJECTS, getAllSubjects);
-    await add(process.env.CACHE_KEYS_CHAPTERS, getAllChapters);
+    try {
+        await add(process.env.CACHE_KEYS_CATEGORIES, getAllCategories);
+        await add(process.env.CACHE_KEYS_COURSES, getAllCourses);
+        await add(process.env.CACHE_KEYS_SUBJECTS, getAllSubjects);
+        await add(process.env.CACHE_KEYS_CHAPTERS, getAllChapters);
+    } catch (error) {
+        logger.error(`Failed To Generate Caches: ${error}`);
+    }
 };
 
 module.exports = { add, get, refresh, generateCaches };

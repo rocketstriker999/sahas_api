@@ -22,11 +22,17 @@ function getSubjectsByCourseId(courseId) {
 
 function getAllSubjects() {
     return executeSQLQueryParameterized(
-        `SELECT COURSE_SUBJECTS.*,
+        `SELECT 
+            COURSE_SUBJECTS.*,
             (SELECT COUNT(*) FROM SUBJECT_CHAPTERS WHERE SUBJECT_CHAPTERS.subject_id = COURSE_SUBJECTS.id) AS chapters_count,
-            (SELECT COUNT(*) FROM MEDIA WHERE subject_id = COURSE_SUBJECTS.id WHERE type="VIDEO" AND active=TRUE ORDER BY view_index) AS demo_videos_count,   
-            (SELECT COUNT(*) FROM MEDIA WHERE subject_id = COURSE_SUBJECTS.id WHERE type="PDF" AND active=TRUE ORDER BY view_index) AS demo_pdfs_count
-            FROM COURSE_SUBJECTS WHERE active = TRUE ORDER BY view_index ASC`
+            (SELECT COUNT(*) FROM MEDIA WHERE subject_id = COURSE_SUBJECTS.id AND type='VIDEO' AND active=TRUE) AS demo_videos_count,
+            (SELECT COUNT(*) FROM MEDIA WHERE subject_id = COURSE_SUBJECTS.id AND type='PDF' AND active=TRUE) AS demo_pdfs_count
+        FROM 
+            COURSE_SUBJECTS
+        WHERE 
+            active = TRUE
+        ORDER BY 
+            view_index ASC`
     ).catch((error) => {
         logger.error(`getAllSubjects: ${error}`);
         return [];

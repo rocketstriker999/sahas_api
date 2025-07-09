@@ -17,7 +17,7 @@ const get = (key) => cache?.[key]?.data;
 
 const refresh = (key) =>
     cache[key]?.dataGenerator().then((data) => {
-        cache?.[key]["data"] = data;
+        cache[key]["data"] = data;
         logger.success(`Cache Refreshed - KEY:${key}`);
     });
 

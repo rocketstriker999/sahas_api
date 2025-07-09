@@ -17,10 +17,7 @@ function updateUserPrimaryDetails(id, name, phone) {
 
 function updateUserProfilePrimaryDetails(id, formData) {
     const { name, phone, address } = formData;
-    return executeSQLQueryParameterized(
-        `UPDATE USERS SET name=?, phone=?, address=? WHERE id=?`,
-        [name, phone, address, id]
-    ).catch((error) => {
+    return executeSQLQueryParameterized(`UPDATE USERS SET name=?, phone=?, address=? WHERE id=?`, [name, phone, address, id]).catch((error) => {
         logger.error(`updateUserPrimaryDetails: ${error}`);
         return false;
     });
@@ -104,7 +101,9 @@ function getUserIdByEmail(email) {
 
 //get user by transaction id
 function getUserByTransactionId(transactionId) {
-    return executeSQLQueryParameterized(`SELECT * FROM USERS INNER JOIN TRANSACTIONS ON USERS.id=TRANSACTIONS.user_id WHERE TRANSACTIONS.id=?`, [transactionId])
+    return executeSQLQueryParameterized(`SELECT * FROM USERS INNER JOIN USER_TRANSACTIONS ON USERS.id=USER_TRANSACTIONS.user_id WHERE USER_TRANSACTIONS.id=?`, [
+        transactionId,
+    ])
         .then((results) => {
             return results.length > 0 ? results[0] : null;
         })

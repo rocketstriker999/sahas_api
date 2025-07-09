@@ -2,7 +2,7 @@ const { executeSQLQueryParameterized } = require("../libs/db");
 const logger = require("../libs/logger");
 
 function addAccess(transaction) {
-    return executeSQLQueryParameterized(`INSERT INTO USER_PRODUCT_ACCESSES (user_id, product_id, transaction_id, validity) VALUES (?, ?, ?, ?)`, [
+    return executeSQLQueryParameterized(`INSERT INTO USER_PRODUCTS (user_id, product_id, transaction_id, validity) VALUES (?, ?, ?, ?)`, [
         transaction.user_id,
         transaction.product_id,
         transaction.id,
@@ -15,7 +15,7 @@ function addAccess(transaction) {
 
 //temporarty and need to remove later
 function addAccessTemp(transaction) {
-    return executeSQLQueryParameterized(`INSERT INTO USER_PRODUCT_ACCESSES (user_id, product_id, transaction_id, validity,company) VALUES (?, ?, ?, ?,?)`, [
+    return executeSQLQueryParameterized(`INSERT INTO USER_PRODUCTS (user_id, product_id, transaction_id, validity,company) VALUES (?, ?, ?, ?,?)`, [
         transaction.user_id,
         transaction.product_id,
         transaction.id,
@@ -29,7 +29,7 @@ function addAccessTemp(transaction) {
 
 //temp
 function getUserProductAccessData(params) {
-    let query = `SELECT USER_PRODUCT_ACCESSES.id AS userProductAccess_id, USER_PRODUCT_ACCESSES.company AS userProductAccess_company,USER_PRODUCT_ACCESSES.active AS userProductAccess_active, USER_PRODUCT_ACCESSES.validity AS userProductAccess_validity, USERS.id AS user_id, USERS.name AS name, USERS.email AS email, USERS.phone AS phone, PRODUCTS.id AS product_id, PRODUCTS.title AS product_title FROM USER_PRODUCT_ACCESSES INNER JOIN USERS ON USER_PRODUCT_ACCESSES.user_id = USERS.id INNER JOIN PRODUCTS ON USER_PRODUCT_ACCESSES.product_id = PRODUCTS.id`;
+    let query = `SELECT USER_PRODUCTS.id AS userProductAccess_id, USER_PRODUCTS.company AS userProductAccess_company,USER_PRODUCTS.active AS userProductAccess_active, USER_PRODUCTS.validity AS userProductAccess_validity, USERS.id AS user_id, USERS.name AS name, USERS.email AS email, USERS.phone AS phone, PRODUCTS.id AS product_id, PRODUCTS.title AS product_title FROM USER_PRODUCTS INNER JOIN USERS ON USER_PRODUCTS.user_id = USERS.id INNER JOIN PRODUCTS ON USER_PRODUCTS.product_id = PRODUCTS.id`;
     if (Object.keys(params).length) {
         query = [
             query,
@@ -40,7 +40,7 @@ function getUserProductAccessData(params) {
                 .join(" AND "),
         ].join(" WHERE ");
     }
-    query = query + " Order By USER_PRODUCT_ACCESSES.id DESC";
+    query = query + " Order By USER_PRODUCTS.id DESC";
 
     return executeSQLQueryParameterized(query, [])
         .then((result) => {
@@ -54,7 +54,7 @@ function getUserProductAccessData(params) {
 
 //temp
 function updateUserProductAccessStatus(userProductAccessId, active) {
-    return executeSQLQueryParameterized(`UPDATE USER_PRODUCT_ACCESSES SET active = ? WHERE id = ?`, [active, userProductAccessId]).catch((error) => {
+    return executeSQLQueryParameterized(`UPDATE USER_PRODUCTS SET active = ? WHERE id = ?`, [active, userProductAccessId]).catch((error) => {
         logger.error(`updateUserProductAccessStatus: ${error}`);
         return false;
     });
@@ -62,7 +62,7 @@ function updateUserProductAccessStatus(userProductAccessId, active) {
 
 function getProfileUserProductAccessData(userId) {
     return executeSQLQueryParameterized(
-        `SELECT USER_PRODUCT_ACCESSES.*, PRODUCTS.title AS product_title FROM USER_PRODUCT_ACCESSES JOIN PRODUCTS ON USER_PRODUCT_ACCESSES.product_id = PRODUCTS.id WHERE USER_PRODUCT_ACCESSES.user_id = ?`,
+        `SELECT USER_PRODUCTS.*, PRODUCTS.title AS product_title FROM USER_PRODUCTS JOIN PRODUCTS ON USER_PRODUCTS.product_id = PRODUCTS.id WHERE USER_PRODUCTS.user_id = ?`,
         [userId]
     )
         .then((result) => (result.length > 0 ? result : false))
@@ -74,7 +74,7 @@ function getProfileUserProductAccessData(userId) {
 
 function getAccessByProductIdAndToken(productId, token) {
     return executeSQLQueryParameterized(
-        `SELECT USER_PRODUCT_ACCESSES.transaction_id, USER_PRODUCT_ACCESSES.validity FROM USERS JOIN USER_PRODUCT_ACCESSES ON USERS.id = USER_PRODUCT_ACCESSES.user_id WHERE USERS.token = ? AND USER_PRODUCT_ACCESSES.product_id = ? AND USER_PRODUCT_ACCESSES.validity >= CURRENT_DATE AND USER_PRODUCT_ACCESSES.active = true`,
+        `SELECT USER_PRODUCTS.transaction_id, USER_PRODUCTS.validity FROM USERS JOIN USER_PRODUCTS ON USERS.id = USER_PRODUCTS.user_id WHERE USERS.token = ? AND USER_PRODUCTS.product_id = ? AND USER_PRODUCTS.validity >= CURRENT_DATE AND USER_PRODUCTS.active = true`,
         [token, productId]
     )
         .then((result) => (result.length > 0 ? result[0] : false))
@@ -86,7 +86,7 @@ function getAccessByProductIdAndToken(productId, token) {
 
 function verifyAccessByTokenForChapter(token, chapterId) {
     return executeSQLQueryParameterized(
-        `SELECT USER_PRODUCT_ACCESSES.id FROM USER_PRODUCT_ACCESSES JOIN USERS ON USER_PRODUCT_ACCESSES.user_id = USERS.id JOIN MAPPING_PRODUCT_COURSES ON USER_PRODUCT_ACCESSES.product_id = MAPPING_PRODUCT_COURSES.product_id JOIN MAPPING_COURSE_SUBJECTS ON MAPPING_PRODUCT_COURSES.course_id = MAPPING_COURSE_SUBJECTS.course_id JOIN MAPPING_SUBJECT_CHAPTERS ON MAPPING_COURSE_SUBJECTS.subject_id = MAPPING_SUBJECT_CHAPTERS.subject_id JOIN CHAPTERS ON MAPPING_SUBJECT_CHAPTERS.chapter_id = CHAPTERS.id WHERE USER_PRODUCT_ACCESSES.validity >= CURDATE() AND USERS.token = ? AND CHAPTERS.id = ?`,
+        `SELECT USER_PRODUCTS.id FROM USER_PRODUCTS JOIN USERS ON USER_PRODUCTS.user_id = USERS.id JOIN MAPPING_PRODUCT_COURSES ON USER_PRODUCTS.product_id = MAPPING_PRODUCT_COURSES.product_id JOIN COURSE_SUBJECTS ON MAPPING_PRODUCT_COURSES.course_id = COURSE_SUBJECTS.course_id JOIN MAPPING_SUBJECT_CHAPTERS ON COURSE_SUBJECTS.subject_id = MAPPING_SUBJECT_CHAPTERS.subject_id JOIN CHAPTERS ON MAPPING_SUBJECT_CHAPTERS.chapter_id = CHAPTERS.id WHERE USER_PRODUCTS.validity >= CURDATE() AND USERS.token = ? AND CHAPTERS.id = ?`,
         [token, chapterId]
     )
         .then((result) => (result.length > 0 ? true : false))
@@ -99,18 +99,18 @@ function verifyAccessByTokenForChapter(token, chapterId) {
 function getAccessesByUserId(userId) {
     return executeSQLQueryParameterized(
         `SELECT 
-    USER_PRODUCT_ACCESSES.product_id,
-    USER_PRODUCT_ACCESSES.transaction_id,
-    TRANSACTIONS.invoice
+    USER_PRODUCTS.product_id,
+    USER_PRODUCTS.transaction_id,
+    USER_TRANSACTIONS.invoice
 FROM 
     USERS
 JOIN 
-    USER_PRODUCT_ACCESSES 
-    ON USERS.id = USER_PRODUCT_ACCESSES.user_id 
+    USER_PRODUCTS 
+    ON USERS.id = USER_PRODUCTS.user_id 
     AND USERS.id = ?
 LEFT JOIN 
-    TRANSACTIONS 
-    ON TRANSACTIONS.id = USER_PRODUCT_ACCESSES.transaction_id WHERE USER_PRODUCT_ACCESSES.validity >= CURDATE() AND USER_PRODUCT_ACCESSES.active = true`,
+    USER_TRANSACTIONS 
+    ON USER_TRANSACTIONS.id = USER_PRODUCTS.transaction_id WHERE USER_PRODUCTS.validity >= CURDATE() AND USER_PRODUCTS.active = true`,
         [userId]
     ).catch((error) => {
         logger.error(`getAccessesByToken: ${error}`);
@@ -119,7 +119,7 @@ LEFT JOIN
 }
 
 function getAccessByTransactionId(transactionId) {
-    return executeSQLQueryParameterized(`SELECT * FROM USER_PRODUCT_ACCESSES WHERE transaction_id=?`, [transactionId])
+    return executeSQLQueryParameterized(`SELECT * FROM USER_PRODUCTS WHERE transaction_id=?`, [transactionId])
         .then((result) => (result.length > 0 ? result[0] : false))
         .catch((error) => {
             logger.error(`getAccessByTransactionId: ${error}`);

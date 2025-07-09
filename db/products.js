@@ -22,7 +22,7 @@ function getProductsByCategory(categoryId) {
 
 function getProductsByCategoryAndUser(categoryId, userId) {
     return executeSQLQueryParameterized(
-        `SELECT table_products.id, table_products.title, table_products.price, table_products.discounted, CASE WHEN EXISTS (SELECT 1 FROM USER_PRODUCT_ACCESSES table_user_product_accesses WHERE table_user_product_accesses.product_id = table_products.id AND table_user_product_accesses.user_id = ? AND table_user_product_accesses.validity >= CURRENT_DATE) THEN true ELSE false END AS has_access FROM PRODUCTS table_products WHERE table_products.category_id = ?`,
+        `SELECT table_products.id, table_products.title, table_products.price, table_products.discounted, CASE WHEN EXISTS (SELECT 1 FROM USER_PRODUCTS table_user_product_accesses WHERE table_user_product_accesses.product_id = table_products.id AND table_user_product_accesses.user_id = ? AND table_user_product_accesses.validity >= CURRENT_DATE) THEN true ELSE false END AS has_access FROM PRODUCTS table_products WHERE table_products.category_id = ?`,
         [userId, categoryId]
     ).catch((error) => {
         logger.error(`getProductsByCategoryAndUser: ${error}`);
@@ -32,7 +32,7 @@ function getProductsByCategoryAndUser(categoryId, userId) {
 
 function getProductsByToken(token) {
     return executeSQLQueryParameterized(
-        `SELECT PRODUCTS.* FROM USERS JOIN USER_PRODUCT_ACCESSES ON USERS.id = USER_PRODUCT_ACCESSES.user_id JOIN PRODUCTS ON USER_PRODUCT_ACCESSES.product_id = PRODUCTS.id WHERE USERS.token = ? AND USER_PRODUCT_ACCESSES.validity >= CURRENT_DATE`,
+        `SELECT PRODUCTS.* FROM USERS JOIN USER_PRODUCTS ON USERS.id = USER_PRODUCTS.user_id JOIN PRODUCTS ON USER_PRODUCTS.product_id = PRODUCTS.id WHERE USERS.token = ? AND USER_PRODUCTS.validity >= CURRENT_DATE`,
         [token]
     ).catch((error) => {
         logger.error(`getProductsByToken: ${error}`);

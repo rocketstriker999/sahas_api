@@ -3,7 +3,7 @@ const logger = require("../libs/logger");
 
 function createTransaction(transaction) {
     return executeSQLQueryParameterized(
-        `INSERT INTO TRANSACTIONS ( user_id,product_id, price, discounted,coupon_id,benifit, sgst, cgst,pay,product_access_validity) VALUES (?,?,?,?,?,?,?,?,?,?)`,
+        `INSERT INTO USER_TRANSACTIONS ( user_id,product_id, price, discounted,coupon_id,benifit, sgst, cgst,pay,product_access_validity) VALUES (?,?,?,?,?,?,?,?,?,?)`,
         [
             transaction.userId,
             transaction.productId,
@@ -25,21 +25,21 @@ function createTransaction(transaction) {
 }
 
 function updateTransactionStatus(transactionId, status) {
-    return executeSQLQueryParameterized(`UPDATE TRANSACTIONS SET status='${status.toUpperCase()}' WHERE id=?`, [transactionId]).catch((error) => {
+    return executeSQLQueryParameterized(`UPDATE USER_TRANSACTIONS SET status='${status.toUpperCase()}' WHERE id=?`, [transactionId]).catch((error) => {
         logger.error(`updateTransactionStatus: ${error}`);
         return false;
     });
 }
 
 function updateTransactionHash(transactionId, hash) {
-    return executeSQLQueryParameterized(`UPDATE TRANSACTIONS SET hash='${hash}' WHERE id=?`, [transactionId]).catch((error) => {
+    return executeSQLQueryParameterized(`UPDATE USER_TRANSACTIONS SET hash='${hash}' WHERE id=?`, [transactionId]).catch((error) => {
         logger.error(`updateTransactionHash: ${error}`);
         return false;
     });
 }
 
 function getTransactionById(transactionId) {
-    return executeSQLQueryParameterized(`SELECT * FROM TRANSACTIONS WHERE id=?`, [transactionId])
+    return executeSQLQueryParameterized(`SELECT * FROM USER_TRANSACTIONS WHERE id=?`, [transactionId])
         .then((result) => (result.length > 0 ? result[0] : false))
         .catch((error) => {
             logger.error(`getTransactionById: ${error}`);
@@ -48,7 +48,7 @@ function getTransactionById(transactionId) {
 }
 
 function getTransactionByInvoice(invoice) {
-    return executeSQLQueryParameterized(`SELECT * FROM TRANSACTIONS WHERE invoice=?`, [invoice])
+    return executeSQLQueryParameterized(`SELECT * FROM USER_TRANSACTIONS WHERE invoice=?`, [invoice])
         .then((result) => (result.length > 0 ? result[0] : false))
         .catch((error) => {
             logger.error(`getTransactionByInvoice: ${error}`);
@@ -59,8 +59,8 @@ function getTransactionByInvoice(invoice) {
 //temp
 function getTransactionCounts() {
     const query = `SELECT 
-    (SELECT COUNT(*) FROM TRANSACTIONS WHERE status = 'SUCCESS') AS totalTransaction,
-    (SELECT COUNT(*) FROM TRANSACTIONS WHERE status = 'SUCCESS' AND DATE(updated_at) = CURRENT_DATE) AS todayTransaction`;
+    (SELECT COUNT(*) FROM USER_TRANSACTIONS WHERE status = 'SUCCESS') AS totalTransaction,
+    (SELECT COUNT(*) FROM USER_TRANSACTIONS WHERE status = 'SUCCESS' AND DATE(updated_at) = CURRENT_DATE) AS todayTransaction`;
     return executeSQLQueryParameterized(query, [])
         .then((result) => (result.length > 0 ? result[0] : { totalTransaction: 0, todayTransaction: 0 }))
         .catch((error) => {
@@ -69,49 +69,48 @@ function getTransactionCounts() {
         });
 }
 
-
 //temp
 function getAllTransactionData(params) {
     let query = `SELECT
-            TRANSACTIONS.id AS transaction_id,
-            TRANSACTIONS.status AS transaction_status,
-            TRANSACTIONS.pay AS transaction_pay,
-            TRANSACTIONS.cgst AS transaction_cgst,
-            TRANSACTIONS.sgst AS transaction_sgst,
-            TRANSACTIONS.price AS transaction_basePrice,
-            TRANSACTIONS.discounted AS transaction_discountedPrice,
-            TRANSACTIONS.updated_at AS transaction_date,
-            TRANSACTIONS.invoice AS transaction_invoice,
-            TRANSACTIONS.product_access_validity AS transaction_product_access_validity,          
+            USER_TRANSACTIONS.id AS transaction_id,
+            USER_TRANSACTIONS.status AS transaction_status,
+            USER_TRANSACTIONS.pay AS transaction_pay,
+            USER_TRANSACTIONS.cgst AS transaction_cgst,
+            USER_TRANSACTIONS.sgst AS transaction_sgst,
+            USER_TRANSACTIONS.price AS transaction_basePrice,
+            USER_TRANSACTIONS.discounted AS transaction_discountedPrice,
+            USER_TRANSACTIONS.updated_at AS transaction_date,
+            USER_TRANSACTIONS.invoice AS transaction_invoice,
+            USER_TRANSACTIONS.product_access_validity AS transaction_product_access_validity,          
             USERS.id AS user_id,
             USERS.name AS name,
             USERS.email AS email,
             USERS.phone AS phone,
             PRODUCTS.id AS product_id,
             PRODUCTS.title AS product_title,
-            USER_PRODUCT_ACCESSES.transaction_id AS userProductAccess_transaction_id,
-            USER_PRODUCT_ACCESSES.id AS userProductAccess_id,
-            USER_PRODUCT_ACCESSES.company AS userProductAccess_company
-        FROM TRANSACTIONS
-        INNER JOIN USERS ON TRANSACTIONS.user_id = USERS.id
-        INNER JOIN PRODUCTS ON TRANSACTIONS.product_id = PRODUCTS.id
+            USER_PRODUCTS.transaction_id AS userProductAccess_transaction_id,
+            USER_PRODUCTS.id AS userProductAccess_id,
+            USER_PRODUCTS.company AS userProductAccess_company
+        FROM USER_TRANSACTIONS
+        INNER JOIN USERS ON USER_TRANSACTIONS.user_id = USERS.id
+        INNER JOIN PRODUCTS ON USER_TRANSACTIONS.product_id = PRODUCTS.id
         LEFT JOIN (
             SELECT *
-            FROM USER_PRODUCT_ACCESSES AS inner_upa
+            FROM USER_PRODUCTS AS inner_upa
             WHERE inner_upa.id IN (
                 SELECT MAX(id)
-                FROM USER_PRODUCT_ACCESSES
+                FROM USER_PRODUCTS
                 GROUP BY transaction_id
             )
-        ) AS USER_PRODUCT_ACCESSES ON TRANSACTIONS.id = USER_PRODUCT_ACCESSES.transaction_id`;
+        ) AS USER_PRODUCTS ON USER_TRANSACTIONS.id = USER_PRODUCTS.transaction_id`;
 
     let dateConditions = [];
     if (params.start_date) {
-        dateConditions.push(`TRANSACTIONS.updated_at >= '${params.start_date} 00:00:00'`);
+        dateConditions.push(`USER_TRANSACTIONS.updated_at >= '${params.start_date} 00:00:00'`);
         delete params.start_date;
     }
     if (params.end_date) {
-        dateConditions.push(`TRANSACTIONS.updated_at <= '${params.end_date} 23:59:59'`);
+        dateConditions.push(`USER_TRANSACTIONS.updated_at <= '${params.end_date} 23:59:59'`);
         delete params.end_date;
     }
     if (params.product) {
@@ -119,7 +118,7 @@ function getAllTransactionData(params) {
         delete params.product;
     }
     if (params.company) {
-        params["USER_PRODUCT_ACCESSES.company"] = params.company;
+        params["USER_PRODUCTS.company"] = params.company;
         delete params.company;
     }
     return executeSQLQueryParameterized(
@@ -127,14 +126,14 @@ function getAllTransactionData(params) {
             query,
             Object.entries({
                 ...params,
-                "TRANSACTIONS.status": "SUCCESS",
+                "USER_TRANSACTIONS.status": "SUCCESS",
             })
                 .map(([key, value]) => `${key} LIKE '%${value}%'`)
                 .concat(dateConditions)
                 .join(" AND "),
         ]
             .join(" WHERE ")
-            .concat(" ORDER BY TRANSACTIONS.id DESC"),
+            .concat(" ORDER BY USER_TRANSACTIONS.id DESC"),
         []
     )
         .then((result) => {
@@ -146,4 +145,12 @@ function getAllTransactionData(params) {
         });
 }
 
-module.exports = { createTransaction, updateTransactionStatus, getTransactionById, updateTransactionHash, getAllTransactionData, getTransactionByInvoice, getTransactionCounts };
+module.exports = {
+    createTransaction,
+    updateTransactionStatus,
+    getTransactionById,
+    updateTransactionHash,
+    getAllTransactionData,
+    getTransactionByInvoice,
+    getTransactionCounts,
+};

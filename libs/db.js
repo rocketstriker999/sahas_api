@@ -33,23 +33,35 @@ function generateDBTables() {
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
           )
         `,
-
         `CREATE TABLE IF NOT EXISTS GROUPS(
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(36) NOT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
-
+        `CREATE TABLE IF NOT EXISTS USER_GROUPS(
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            user_id INT NOT NULL,
+            group_id INT NOT NULL,
+            active BOOLEAN NOT NULL DEFAULT TRUE,
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        )`,
         `CREATE TABLE IF NOT EXISTS ACCESSES(
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(36) NOT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
-
-        `CREATE TABLE IF NOT EXISTS USER_AUTHORITIES(user_id INT NOT NULL,title VARCHAR(36) NOT NULL)`,
-
+        `CREATE TABLE IF NOT EXISTS USER_ACCESSES(
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            user_id INT NOT NULL,
+            access_id INT NOT NULL,
+            active BOOLEAN NOT NULL DEFAULT TRUE,
+            title VARCHAR(36) NOT NULL,
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        )`,
         `CREATE TABLE IF NOT EXISTS DEVICES (
             id INT AUTO_INCREMENT PRIMARY KEY,
             finger_print CHAR(64) NOT NULL UNIQUE,
@@ -66,48 +78,40 @@ function generateDBTables() {
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
           )
         `,
-        `CREATE TABLE IF NOT EXISTS CATEGORIES(id INT AUTO_INCREMENT PRIMARY KEY,title VARCHAR(100) NOT NULL UNIQUE,view_index INT NOT NULL DEFAULT 0)`,
-        `CREATE TABLE IF NOT EXISTS PRODUCTS (
+        `CREATE TABLE IF NOT EXISTS CATEGORIES(
             id INT AUTO_INCREMENT PRIMARY KEY,
+            title VARCHAR(96) NOT NULL UNIQUE,
+            view_index INT NOT NULL DEFAULT 0,
+            active BOOLEAN NOT NULL DEFAULT TRUE,
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        )`,
+        `CREATE TABLE IF NOT EXISTS CATEGORY_COURSES (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            category_id INT NOT NULL,
             title VARCHAR(128) NOT NULL,
             description VARCHAR(256) NOT NULL,
             image VARCHAR(32) NOT NULL UNIQUE,
             price DECIMAL(8, 2) NOT NULL,
-            discounted DECIMAL(8, 2) NOT NULL,
-            category_id INT NOT NULL,
-            access_validity INT NOT NULL DEFAULT 365
-          )`,
-        `CREATE TABLE IF NOT EXISTS MAPPING_PRODUCT_COURSES(
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            product_id INT NOT NULL,
-            course_id INT NOT NULL
-        )`,
-        `CREATE TABLE IF NOT EXISTS COURSES (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            title VARCHAR(128) NOT NULL,
             whatsapp_group VARCHAR(98) NULL
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
           )`,
-        `CREATE TABLE IF NOT EXISTS MAPPING_COURSE_SUBJECTS(
+        `CREATE TABLE IF NOT EXISTS COURSE_SUBJECTS(
             id INT AUTO_INCREMENT PRIMARY KEY,
             course_id INT NOT NULL,
-            subject_id INT NOT NULL,
-            view_index INT NULL
+            title VARCHAR(128) NOT NULL,
+            view_index INT NULL,
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
-        `CREATE TABLE IF NOT EXISTS SUBJECTS (
+        `CREATE TABLE IF NOT EXISTS SUBJECT_CHAPTERS(
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(128) NOT NULL,
             media_group_id CHAR(36) DEFAULT (UUID()) UNIQUE
-          )`,
-        `CREATE TABLE IF NOT EXISTS MAPPING_SUBJECT_CHAPTERS(
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            subject_id INT NOT NULL,
-            chapter_id INT NOT NULL,
-            view_index INT NULL
-        )`,
-        `CREATE TABLE IF NOT EXISTS CHAPTERS(
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            title VARCHAR(128) NOT NULL,
-            media_group_id CHAR(36) DEFAULT (UUID()) UNIQUE
+            view_index INT NULL,
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
         `CREATE TABLE IF NOT EXISTS MEDIA(
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -118,12 +122,10 @@ function generateDBTables() {
             view_index INT NULL,
             downloadable BOOLEAN DEFAULT FALSE
         )`,
-        `CREATE TABLE IF NOT EXISTS TRANSACTIONS (
+        `CREATE TABLE IF NOT EXISTS USER_TRANSACTIONS (
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
             product_id INT NOT NULL,
-            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
-            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             status VARCHAR(16) DEFAULT 'IN_PROGRESS',
             price DECIMAL(8, 2) DEFAULT 0,
             discounted DECIMAL(8, 2) DEFAULT 0,
@@ -134,32 +136,33 @@ function generateDBTables() {
             pay DECIMAL(8, 2) DEFAULT 0,
             hash VARCHAR(128) NULL,
             invoice CHAR(36) DEFAULT (CONCAT(REPLACE(UUID(), '-', ''), '.pdf')) UNIQUE,
-            product_access_validity DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         )`,
 
-        `CREATE TABLE IF NOT EXISTS USER_PRODUCT_ACCESSES (
+        `CREATE TABLE IF NOT EXISTS USER_PRODUCTS (
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
             product_id INT NOT NULL,
             company VARCHAR(36) NULL,
             transaction_id INT NULL,
-            validity DATETIME NOT NULL,
+            validity INT NOT NULL DEFAULT 365
             active BOOLEAN NOT NULL DEFAULT TRUE
         )`,
-        `CREATE TABLE IF NOT EXISTS COUPON_CODES (
+        `CREATE TABLE IF NOT EXISTS COUPONS (
             id INT AUTO_INCREMENT PRIMARY KEY,
             coupon_code VARCHAR(8) UNIQUE,
             validity DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
             active BOOLEAN NOT NULL DEFAULT TRUE
         )`,
-        `CREATE TABLE IF NOT EXISTS COUPON_CODE_BENIFITS (
+        `CREATE TABLE IF NOT EXISTS COUPON_PRODUCTS (
             coupon_code_id INT NOT NULL,
             product_id INT NOT NULL,
             product_access_validity DATETIME NULL,
             value DECIMAL(8, 2) NOT NULL DEFAULT 0,
             type VARCHAR(12)  DEFAULT 'PERCENTAGE'
         )`,
-        `CREATE TABLE IF NOT EXISTS MAPPING_COUPON_CODES_DISTRIBUTOR_BENIFIT(
+        `CREATE TABLE IF NOT EXISTS COUPON_DISTRIBUTORS(
             coupon_code_id INT NOT NULL,
             user_id INT NOT NULL,
             product_id INT NOT NULL,

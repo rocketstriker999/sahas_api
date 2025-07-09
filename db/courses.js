@@ -13,7 +13,7 @@ function getCoursesByProductId(productId) {
 
 function getAllCoursesForCache() {
     return executeSQLQueryParameterized(
-        "SELECT MAPPING_PRODUCT_COURSES.product_id, COURSES.id, COURSES.title,COURSES.whatsapp_group, (SELECT COUNT(*) FROM MAPPING_COURSE_SUBJECTS WHERE MAPPING_COURSE_SUBJECTS.course_id = COURSES.id) AS subjects_count FROM MAPPING_PRODUCT_COURSES INNER JOIN COURSES ON MAPPING_PRODUCT_COURSES.course_id = COURSES.id"
+        "SELECT MAPPING_PRODUCT_COURSES.product_id, COURSES.id, COURSES.title,COURSES.whatsapp_group, (SELECT COUNT(*) FROM COURSE_SUBJECTS WHERE COURSE_SUBJECTS.course_id = COURSES.id) AS subjects_count FROM MAPPING_PRODUCT_COURSES INNER JOIN COURSES ON MAPPING_PRODUCT_COURSES.course_id = COURSES.id"
     ).catch((error) => {
         logger.error(`getAllCourses: ${error}`);
         return [];

@@ -8,7 +8,7 @@ const router = libExpress.Router();
 router.post("/subjects", async (req, res) => {
     //truncate subjects
     await executeSQLQueryRaw("TRUNCATE TABLE SUBJECTS");
-    await executeSQLQueryRaw("TRUNCATE TABLE MAPPING_COURSE_SUBJECTS");
+    await executeSQLQueryRaw("TRUNCATE TABLE COURSE_SUBJECTS");
 
     if (req.body) {
         const subjectsInsertionPromises = [];
@@ -17,7 +17,7 @@ router.post("/subjects", async (req, res) => {
         req.body.forEach((element) => {
             subjectsInsertionPromises.push(executeSQLQueryParameterized("INSERT INTO SUBJECTS(id,title) VALUES (?,?)", [element.subject_id, element.title]));
             coursesToSubjectMappingPromises.push(
-                executeSQLQueryParameterized("INSERT INTO MAPPING_COURSE_SUBJECTS(course_id,subject_id,view_index) VALUES (?,?,?)", [
+                executeSQLQueryParameterized("INSERT INTO COURSE_SUBJECTS(course_id,subject_id,view_index) VALUES (?,?,?)", [
                     element.couse_id,
                     element.subject_id,
                     element.view_index,
@@ -26,16 +26,16 @@ router.post("/subjects", async (req, res) => {
         });
 
         coursesToSubjectMappingPromises.push(
-            executeSQLQueryParameterized(`INSERT INTO MAPPING_COURSE_SUBJECTS (view_index,course_id, subject_id)
-                SELECT 0,8, subject_id FROM MAPPING_COURSE_SUBJECTS WHERE course_id in(6,7)`)
+            executeSQLQueryParameterized(`INSERT INTO COURSE_SUBJECTS (view_index,course_id, subject_id)
+                SELECT 0,8, subject_id FROM COURSE_SUBJECTS WHERE course_id in(6,7)`)
         );
         coursesToSubjectMappingPromises.push(
-            executeSQLQueryParameterized(`INSERT INTO MAPPING_COURSE_SUBJECTS (view_index,course_id, subject_id)
-                SELECT 0,9, subject_id FROM MAPPING_COURSE_SUBJECTS WHERE course_id in(10,11)`)
+            executeSQLQueryParameterized(`INSERT INTO COURSE_SUBJECTS (view_index,course_id, subject_id)
+                SELECT 0,9, subject_id FROM COURSE_SUBJECTS WHERE course_id in(10,11)`)
         );
         coursesToSubjectMappingPromises.push(
-            executeSQLQueryParameterized(`INSERT INTO MAPPING_COURSE_SUBJECTS (view_index,course_id, subject_id)
-                SELECT 0,12, subject_id FROM MAPPING_COURSE_SUBJECTS WHERE course_id in(13,14)`)
+            executeSQLQueryParameterized(`INSERT INTO COURSE_SUBJECTS (view_index,course_id, subject_id)
+                SELECT 0,12, subject_id FROM COURSE_SUBJECTS WHERE course_id in(13,14)`)
         );
 
         Promise.all([...subjectsInsertionPromises, ...coursesToSubjectMappingPromises, ,])

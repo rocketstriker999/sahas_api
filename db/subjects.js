@@ -25,8 +25,8 @@ function getAllSubjects() {
         `SELECT 
             COURSE_SUBJECTS.*,
             (SELECT COUNT(*) FROM SUBJECT_CHAPTERS WHERE SUBJECT_CHAPTERS.subject_id = COURSE_SUBJECTS.id) AS chapters_count,
-            (SELECT COUNT(*) FROM MEDIA WHERE subject_id = COURSE_SUBJECTS.id AND type='VIDEO' AND active=TRUE) AS demo_videos_count,
-            (SELECT COUNT(*) FROM MEDIA WHERE subject_id = COURSE_SUBJECTS.id AND type='PDF' AND active=TRUE) AS demo_pdfs_count
+            (SELECT COUNT(*) FROM MEDIA WHERE media_group_id = COURSE_SUBJECTS.media_group_id AND type='VIDEO' AND active=TRUE) AS demo_videos_count,
+            (SELECT COUNT(*) FROM MEDIA WHERE media_group_id = COURSE_SUBJECTS.media_group_id AND active=TRUE) AS demo_pdfs_count
         FROM 
             COURSE_SUBJECTS
         WHERE 

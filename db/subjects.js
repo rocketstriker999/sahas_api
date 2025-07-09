@@ -20,13 +20,17 @@ function getSubjectsByCourseId(courseId) {
     });
 }
 
-function getAllSubjectsForCache() {
+function getAllSubjects() {
     return executeSQLQueryParameterized(
-        "SELECT COURSE_SUBJECTS.course_id, SUBJECTS.id, SUBJECTS.title, (SELECT COUNT(*) FROM MAPPING_SUBJECT_CHAPTERS WHERE MAPPING_SUBJECT_CHAPTERS.subject_id = SUBJECTS.id) AS chapters_count FROM COURSE_SUBJECTS INNER JOIN SUBJECTS ON COURSE_SUBJECTS.subject_id = SUBJECTS.id ORDER BY COURSE_SUBJECTS.view_index"
+        `SELECT COURSE_SUBJECTS.*,
+            (SELECT COUNT(*) FROM SUBJECT_CHAPTERS WHERE SUBJECT_CHAPTERS.subject_id = COURSE_SUBJECTS.id) AS chapters_count,
+            (SELECT COUNT(*) FROM MEDIA WHERE subject_id = COURSE_SUBJECTS.id WHERE type='VIDEO' ORDER BY view_index) AS demo_videos_count,   
+            (SELECT COUNT(*) FROM MEDIA WHERE subject_id = COURSE_SUBJECTS.id WHERE type='PDF' ORDER BY view_index) AS demo_pdfs_count,   
+            FROM COURSE_SUBJECTS WHERE active = TRUE ORDER BY view_index ASC`
     ).catch((error) => {
-        logger.error(`getAllSubjectsForCache: ${error}`);
+        logger.error(`getAllSubjects: ${error}`);
         return [];
     });
 }
 
-module.exports = { getSubjectsCountByProductId, getSubjectsByCourseId, getAllSubjectsForCache };
+module.exports = { getSubjectsCountByProductId, getSubjectsByCourseId, getAllSubjects };

@@ -8,13 +8,16 @@ function getChaptersBySubjectId(subjectId) {
     ).catch((error) => logger.error(`getChaptersBySubjectId: ${error}`));
 }
 
-function getAllChaptersForCache() {
+function getAllChapters() {
     return executeSQLQueryParameterized(
-        "SELECT MAPPING_SUBJECT_CHAPTERS.subject_id, CHAPTERS.id, CHAPTERS.title, (SELECT COUNT(*) FROM MEDIA WHERE MEDIA.media_group_id = CHAPTERS.media_group_id AND MEDIA.type='video') AS videos_count, (SELECT COUNT(*) FROM MEDIA WHERE MEDIA.media_group_id = CHAPTERS.media_group_id AND MEDIA.type='pdf') AS pdfs_count FROM MAPPING_SUBJECT_CHAPTERS INNER JOIN CHAPTERS ON MAPPING_SUBJECT_CHAPTERS.chapter_id = CHAPTERS.id ORDER BY MAPPING_SUBJECT_CHAPTERS.view_index"
+        `SELECT SUBJECT_CHAPTERS.*, 
+         (SELECT COUNT(*) FROM MEDIA WHERE subject_id = COURSE_SUBJECTS.id WHERE type='VIDEO' ORDER BY view_index) AS videos_count,   
+         (SELECT COUNT(*) FROM MEDIA WHERE subject_id = COURSE_SUBJECTS.id WHERE type='PDF' ORDER BY view_index) AS pdfs_count, 
+        FROM SUBJECT_CHAPTERS WHERE active = TRUE ORDER BY view_index ASC`
     ).catch((error) => {
         logger.error(`getAllChaptersForCache: ${error}`);
         return [];
     });
 }
 
-module.exports = { getChaptersBySubjectId, getAllChaptersForCache };
+module.exports = { getChaptersBySubjectId, getAllChapters };

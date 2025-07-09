@@ -86,36 +86,41 @@ function generateDBTables() {
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
-        `CREATE TABLE IF NOT EXISTS CATEGORY_COURSES (
+        `CREATE TABLE IF NOT EXISTS CATEGORIZED_COURSES (
             id INT AUTO_INCREMENT PRIMARY KEY,
             category_id INT NOT NULL,
-            title VARCHAR(128) NOT NULL,
+            title VARCHAR(128) NOT NULL UNIQUE,
             description VARCHAR(256) NOT NULL,
             image VARCHAR(32) NOT NULL UNIQUE,
             price DECIMAL(8, 2) NOT NULL,
             whatsapp_group VARCHAR(98) NULL,
+            view_index INT NULL,
+            active BOOLEAN NOT NULL DEFAULT TRUE,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
           )`,
         `CREATE TABLE IF NOT EXISTS COURSE_SUBJECTS(
             id INT AUTO_INCREMENT PRIMARY KEY,
             course_id INT NOT NULL,
-            title VARCHAR(128) NOT NULL,
+            title VARCHAR(128) NOT NULL UNIQUE,
+            media_group_id CHAR(36) DEFAULT (UUID()) UNIQUE,
             view_index INT NULL,
+            active BOOLEAN NOT NULL DEFAULT TRUE,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
         `CREATE TABLE IF NOT EXISTS SUBJECT_CHAPTERS(
             id INT AUTO_INCREMENT PRIMARY KEY,
-            title VARCHAR(128) NOT NULL,
+            title VARCHAR(128) NOT NULL UNIQUE,
             media_group_id CHAR(36) DEFAULT (UUID()) UNIQUE,
             view_index INT NULL,
+            active BOOLEAN NOT NULL DEFAULT TRUE,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
         `CREATE TABLE IF NOT EXISTS MEDIA(
             id INT AUTO_INCREMENT PRIMARY KEY,
-            title VARCHAR(128) NOT NULL,
+            title VARCHAR(128) NOT NULL UNIQUE,
             media_group_id CHAR(36) NULL,
             cdn_id CHAR(48) NOT NULL,
             type CHAR(12) NULL,
@@ -136,15 +141,15 @@ function generateDBTables() {
             pay DECIMAL(8, 2) DEFAULT 0,
             hash VARCHAR(128) NULL,
             invoice CHAR(36) DEFAULT (CONCAT(REPLACE(UUID(), '-', ''), '.pdf')) UNIQUE,
+            company VARCHAR(36) NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
 
-        `CREATE TABLE IF NOT EXISTS USER_PRODUCTS (
+        `CREATE TABLE IF NOT EXISTS USER_COURSES (
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
             product_id INT NOT NULL,
-            company VARCHAR(36) NULL,
             transaction_id INT NULL,
             validity INT NOT NULL DEFAULT 365,
             active BOOLEAN NOT NULL DEFAULT TRUE
@@ -155,7 +160,7 @@ function generateDBTables() {
             validity DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
             active BOOLEAN NOT NULL DEFAULT TRUE
         )`,
-        `CREATE TABLE IF NOT EXISTS COUPON_PRODUCTS (
+        `CREATE TABLE IF NOT EXISTS COUPON_COURSES (
             coupon_code_id INT NOT NULL,
             product_id INT NOT NULL,
             product_access_validity DATETIME NULL,

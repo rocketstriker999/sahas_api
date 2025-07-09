@@ -50,7 +50,7 @@ function getProductById(id) {
 }
 
 function getAllProducts() {
-    return executeSQLQueryParameterized("SELECT * FROM PRODUCTS").catch((error) => {
+    return executeSQLQueryParameterized("SELECT * FROM PRODUCTS where ").catch((error) => {
         logger.error(`getAllCourses: ${error}`);
         return [];
     });

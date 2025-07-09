@@ -11,9 +11,9 @@ function getCoursesByProductId(productId) {
     });
 }
 
-function getAllCoursesForCache() {
+function getAllCourses() {
     return executeSQLQueryParameterized(
-        "SELECT MAPPING_PRODUCT_COURSES.product_id, COURSES.id, COURSES.title,COURSES.whatsapp_group, (SELECT COUNT(*) FROM COURSE_SUBJECTS WHERE COURSE_SUBJECTS.course_id = COURSES.id) AS subjects_count FROM MAPPING_PRODUCT_COURSES INNER JOIN COURSES ON MAPPING_PRODUCT_COURSES.course_id = COURSES.id"
+        "SELECT CATEGORIZED_COURSES.*, (SELECT COUNT(*) FROM COURSE_SUBJECTS WHERE COURSE_SUBJECTS.course_id = COURSES.id) AS subjects_count FROM CATEGORIZED_COURSES WHERE active=TRUE ORDER BY view_index ASC"
     ).catch((error) => {
         logger.error(`getAllCourses: ${error}`);
         return [];
@@ -32,4 +32,4 @@ function getCourseByProductIdAndCourseId(productId, courseId) {
         });
 }
 
-module.exports = { getCoursesByProductId, getCourseByProductIdAndCourseId, getAllCoursesForCache };
+module.exports = { getCoursesByProductId, getCourseByProductIdAndCourseId, getAllCourses };

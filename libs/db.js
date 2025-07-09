@@ -93,7 +93,7 @@ function generateDBTables() {
             description VARCHAR(256) NOT NULL,
             image VARCHAR(32) NOT NULL UNIQUE,
             price DECIMAL(8, 2) NOT NULL,
-            whatsapp_group VARCHAR(98) NULL
+            whatsapp_group VARCHAR(98) NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
           )`,

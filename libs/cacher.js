@@ -6,12 +6,11 @@ const logger = require("./logger");
 
 const cache = {};
 
-const add = (key, dataGenerator) => {
+const add = (key, dataGenerator) =>
     dataGenerator().then((data) => {
         cache[key] = { data, dataGenerator };
         logger.info(`Cache Added - KEY:${key} `);
     });
-};
 
 const get = (key) => cache?.[key]?.data;
 
@@ -21,11 +20,11 @@ const refresh = (key) =>
         logger.success(`Cache Refreshed - KEY:${key}`);
     });
 
-const generateCaches = () => {
-    add(process.env.CACHE_KEYS_CATEGORIES, getAllCategories);
-    add(process.env.CACHE_KEYS_COURSES, getAllCourses);
-    add(process.env.CACHE_KEYS_SUBJECTS, getAllSubjects);
-    add(process.env.CACHE_KEYS_CHAPTERS, getAllChapters);
+const generateCaches = async () => {
+    await add(process.env.CACHE_KEYS_CATEGORIES, getAllCategories);
+    await add(process.env.CACHE_KEYS_COURSES, getAllCourses);
+    await add(process.env.CACHE_KEYS_SUBJECTS, getAllSubjects);
+    await add(process.env.CACHE_KEYS_CHAPTERS, getAllChapters);
 };
 
 module.exports = { add, get, refresh, generateCaches };

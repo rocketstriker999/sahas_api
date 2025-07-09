@@ -108,7 +108,7 @@ function generateDBTables() {
         `CREATE TABLE IF NOT EXISTS SUBJECT_CHAPTERS(
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(128) NOT NULL,
-            media_group_id CHAR(36) DEFAULT (UUID()) UNIQUE
+            media_group_id CHAR(36) DEFAULT (UUID()) UNIQUE,
             view_index INT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -137,7 +137,7 @@ function generateDBTables() {
             hash VARCHAR(128) NULL,
             invoice CHAR(36) DEFAULT (CONCAT(REPLACE(UUID(), '-', ''), '.pdf')) UNIQUE,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
-            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
 
         `CREATE TABLE IF NOT EXISTS USER_PRODUCTS (
@@ -146,7 +146,7 @@ function generateDBTables() {
             product_id INT NOT NULL,
             company VARCHAR(36) NULL,
             transaction_id INT NULL,
-            validity INT NOT NULL DEFAULT 365
+            validity INT NOT NULL DEFAULT 365,
             active BOOLEAN NOT NULL DEFAULT TRUE
         )`,
         `CREATE TABLE IF NOT EXISTS COUPONS (

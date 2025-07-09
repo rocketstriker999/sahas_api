@@ -24,6 +24,8 @@ sahasAPI.use(libExpress.json());
 sahasAPI.use(libExpress.urlencoded({ extended: true }));
 
 //Apply Middlewares
+sahasAPI.use((req, res, next) => setTimeout(next, 1500));
+
 sahasAPI.use(deviceCheck);
 sahasAPI.use(maintenanceCheck);
 sahasAPI.use(parseUser);

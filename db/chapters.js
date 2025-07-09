@@ -10,10 +10,17 @@ function getChaptersBySubjectId(subjectId) {
 
 function getAllChapters() {
     return executeSQLQueryParameterized(
-        `SELECT SUBJECT_CHAPTERS.*, 
-         (SELECT COUNT(*) FROM MEDIA WHERE subject_id = COURSE_SUBJECTS.id WHERE type='VIDEO' ORDER BY view_index) AS videos_count,   
-         (SELECT COUNT(*) FROM MEDIA WHERE subject_id = COURSE_SUBJECTS.id WHERE type='PDF' ORDER BY view_index) AS pdfs_count, 
-        FROM SUBJECT_CHAPTERS WHERE active = TRUE ORDER BY view_index ASC`
+        `SELECT 
+            SUBJECT_CHAPTERS.*, 
+            (SELECT COUNT(*) FROM MEDIA  WHERE media_group_id = SUBJECT_CHAPTERS.media_group_id AND type='VIDEO' AND active=TRUE) AS videos_count,   
+            (SELECT COUNT(*) FROM MEDIA  WHERE media_group_id = SUBJECT_CHAPTERS.media_group_id AND type='PDF' AND active=TRUE) AS pdfs_count
+        FROM 
+            SUBJECT_CHAPTERS
+        WHERE 
+            active = TRUE
+        ORDER BY 
+            view_index ASC;
+        `
     ).catch((error) => {
         logger.error(`getAllChapters: ${error}`);
         return [];

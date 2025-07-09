@@ -111,6 +111,7 @@ function generateDBTables() {
         )`,
         `CREATE TABLE IF NOT EXISTS SUBJECT_CHAPTERS(
             id INT AUTO_INCREMENT PRIMARY KEY,
+            subject_id INT NOT NULL,
             title VARCHAR(128) NOT NULL UNIQUE,
             media_group_id CHAR(36) DEFAULT (UUID()) UNIQUE,
             view_index INT NULL,

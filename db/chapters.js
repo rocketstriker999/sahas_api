@@ -15,7 +15,7 @@ function getAllChapters() {
          (SELECT COUNT(*) FROM MEDIA WHERE subject_id = COURSE_SUBJECTS.id WHERE type='PDF' ORDER BY view_index) AS pdfs_count, 
         FROM SUBJECT_CHAPTERS WHERE active = TRUE ORDER BY view_index ASC`
     ).catch((error) => {
-        logger.error(`getAllChaptersForCache: ${error}`);
+        logger.error(`getAllChapters: ${error}`);
         return [];
     });
 }

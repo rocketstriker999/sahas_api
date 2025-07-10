@@ -4,8 +4,7 @@ on:
     push:
         branches:
             - main
-    schedule:
-        - cron: "30 11 * * *"
+    
 env:
     DEPLOYMENT_DIRECTORY: "/var/www/sites/prod.sahasinstitute.com/"
     REPO: "sahas_api"

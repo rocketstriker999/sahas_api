@@ -38,7 +38,7 @@ const routers = {
     "/configs": { middlewares: [], router: require("./routes/configs") },
     // "/users": { middlewares: [], router: require("./routes/users") },
     // "/token": { middlewares: [], router: require("./routes/token") },
-    // "/otp": { middlewares: [], router: require("./routes/otp") },
+    "/authentication-token": { middlewares: [], router: require("./routes/authentication_token") },
     // "/device": { middlewares: [], router: require("./routes/device") },
     // "/transactions": { middlewares: [], router: require("./routes/transaction") },
     // "/media": { middlewares: [requiresAuthentication], router: require("./routes/media") },

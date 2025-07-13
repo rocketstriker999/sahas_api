@@ -27,7 +27,6 @@ function generateDBTables() {
             branch VARCHAR(16) NULL,
             wallet DECIMAL(8, 2) DEFAULT 0,
             otp VARCHAR(4) NOT NULL,
-            token VARCHAR(36) NULL UNIQUE,
             is_blocked BOOLEAN DEFAULT FALSE,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -53,15 +52,25 @@ function generateDBTables() {
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
-        `CREATE TABLE IF NOT EXISTS USER_ACCESSES(
+        `CREATE TABLE IF NOT EXISTS USER_AUTHORITIES(
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
-            access_id INT NOT NULL,
+            authority_id INT NOT NULL,
             active BOOLEAN NOT NULL DEFAULT TRUE,
-            title VARCHAR(36) NOT NULL,
+            title VARCHAR(36) NOT NULL,USERS
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
+        `CREATE TABLE IF NOT EXISTS USER_TOKENS (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            user_id INT NOT NULL,
+            otp VARCHAR(4) NOT NULL,
+            token VARCHAR(36) NULL UNIQUE,
+            active BOOLEAN NOT NULL DEFAULT FALSE,
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+          )
+        `,
         `CREATE TABLE IF NOT EXISTS DEVICES (
             id INT AUTO_INCREMENT PRIMARY KEY,
             finger_print CHAR(64) NOT NULL UNIQUE,

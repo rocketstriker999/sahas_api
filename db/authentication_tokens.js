@@ -5,7 +5,7 @@ const logger = require("../libs/logger");
 async function addInactiveToken(userId, otp, token, validity) {
     //get allowed validity from configuration
 
-    return executeSQLQueryParameterized(`INSERT INTO USER_TOKENS(user_id,otp,token,validity) VALUES(?,?,?,?)`, [userId, token, otp, validity]).catch(
+    return executeSQLQueryParameterized(`INSERT INTO USER_TOKENS(user_id,otp,token,validity) VALUES(?,?,?,?)`, [userId, otp, token, validity]).catch(
         (error) => {
             logger.error(`addInactiveToken: ${error}`);
             return [];

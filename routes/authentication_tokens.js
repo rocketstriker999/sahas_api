@@ -9,7 +9,7 @@ const { readConfig } = require("../libs/config");
 const router = libExpress.Router();
 
 router.patch("/", async (req, res) => {
-    if (!req.body.otp || !req.body.token) {
+    if (!req.body.otp || !req.body.authentication_token) {
         return res.status(400).json({ error: "Missing Required Parameters - OTP or Token" });
     }
 

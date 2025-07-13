@@ -4,7 +4,8 @@
         "save_logs": false
     },
     "authentication": {
-        "validity": 2592000000
+        "otp_validity": 5,
+        "token_validity": 2592000000
     },
 
     "payment": {

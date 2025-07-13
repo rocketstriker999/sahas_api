@@ -44,33 +44,42 @@ const router = libExpress.Router();
 // });
 
 router.post("/", async (req, res) => {
-    if (req.body.email && libValidator.isEmail(req.body.email)) {
-        //Get The user
-        await addUserByEmail(req.body.email);
-        const user = await getUserByEmail(req.body.email);
-        //generate an otp and token
-        const otp = Math.floor(1000 + Math.random() * 9000);
-        const token = generateToken();
-        //add token into table
-        await addInactiveToken(user.id, otp, token);
+    const { authentication: { token_validity, otp_validity } = {} } = await readConfig("app");
 
-        //send otp through the mailed
-        requestService({
-            requestServiceName: process.env.SERVICE_MAILER,
-            requestPath: "otp",
-            requestMethod: "POST",
-            requestPostBody: { to: req.body.email, body_paramters: { verification_code: otp, validity_duration: 5, requested_email: req.body.email } },
-            onResponseReceieved: (otpDetails, responseCode) => {
-                if (otpDetails && responseCode === 200) {
-                    res.sendStatus(201).json({ authentication_token: token });
-                } else {
-                    res.status(500).json({ error: "Something Seems to be Broken , Please Try Again Later" });
-                }
-            },
-        });
-    } else {
-        res.status(400).json({ error: "Missing or Invalid Email" });
+    if (!token_validity || !otp_validity) {
+        return res.status(500).json({ error: "Missing Configuration token_validity or otp_validity" });
     }
+
+    if (!req.body.email || !libValidator.isEmail(req.body.email)) {
+        return res.status(400).json({ error: "Missing or Invalid Email" });
+    }
+
+    //Get The user
+    await addUserByEmail(req.body.email);
+    const user = await getUserByEmail(req.body.email);
+    //generate an otp and token
+    const otp = Math.floor(1000 + Math.random() * 9000);
+    const authentication_token = generateToken();
+    //add token into table
+    await addInactiveToken(user.id, otp, authentication_token, new Date(Date.now() + token_validity * 24 * 60 * 60 * 1000));
+
+    //send otp through the mailed
+    requestService({
+        requestServiceName: process.env.SERVICE_MAILER,
+        requestPath: "otp",
+        requestMethod: "POST",
+        requestPostBody: {
+            to: req.body.email,
+            body_paramters: { verification_code: otp, validity_duration: otp_validity, requested_email: user.email },
+        },
+        onResponseReceieved: (otpDetails, responseCode) => {
+            if (otpDetails && responseCode === 200) {
+                res.sendStatus(201).json({ authentication_token });
+            } else {
+                res.status(500).json({ error: "Something Seems to be Broken , Please Try Again Later" });
+            }
+        },
+    });
 });
 
 // //logout and invalidate the authentication token

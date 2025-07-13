@@ -5,7 +5,7 @@
     },
     "authentication": {
         "otp_validity": 5,
-        "token_validity": 2592000000
+        "token_validity": 30
     },
 
     "payment": {

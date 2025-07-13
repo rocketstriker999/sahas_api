@@ -1,6 +1,6 @@
 const libExpress = require("express");
 const { requestService } = require("../utils");
-const { updateUserOTP, validateUserOTP, updateUserToken, getUserByEmail, getGroupsById, getAuthoritiesById, addUserByEmail } = require("../db/users");
+const { validateUserOTP, updateUserToken, getUserByEmail, getGroupsById, getAuthoritiesById, addUserByEmail } = require("../db/users");
 const libValidator = require("validator");
 const { generateToken } = require("../utils");
 const { addInactiveToken } = require("../db/authentication_tokens");

@@ -116,7 +116,6 @@ function getUserByTransactionId(transactionId) {
 }
 
 module.exports = {
-    updateUserOTP,
     validateUserOTP,
     updateUserToken,
     getUserByEmail,

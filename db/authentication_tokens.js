@@ -2,6 +2,24 @@ const { readConfig } = require("../libs/config");
 const { executeSQLQueryParameterized, executeSQLQueryRaw } = require("../libs/db");
 const logger = require("../libs/logger");
 
+async function getTokenByOTP(token, otp) {
+    //Check if such token is there
+    return executeSQLQueryParameterized(`SELECT COUNT(*) AS count FROM USER_TOKENS WHERE token = ? AND otp=? AND active=FALSE`, [token, otp])
+        .then(([result]) => result.count > 0)
+        .catch((error) => {
+            logger.error(`getTokenByOTP: ${error}`);
+            return false;
+        });
+}
+
+async function activateToken(token) {
+    //Activate Token
+    return executeSQLQueryParameterized(`UPDATE USER_TOKENS SET active = TRUE WHERE token = ?`, [token]).catch((error) => {
+        logger.error(`activateTokenByOTP: ${error}`);
+        return [];
+    });
+}
+
 async function addInactiveToken(userId, otp, token, validity) {
     //get allowed validity from configuration
 
@@ -13,4 +31,4 @@ async function addInactiveToken(userId, otp, token, validity) {
     );
 }
 
-module.exports = { addInactiveToken };
+module.exports = { addInactiveToken, activateToken, getTokenByOTP };

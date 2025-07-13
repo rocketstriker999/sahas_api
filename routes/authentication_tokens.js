@@ -1,48 +1,24 @@
 const libExpress = require("express");
 const { requestService } = require("../utils");
-const { validateUserOTP, updateUserToken, getUserByEmail, getGroupsById, getAuthoritiesById, addUserByEmail } = require("../db/users");
+const { getUserByEmail, addUserByEmail } = require("../db/users");
 const libValidator = require("validator");
 const { generateToken } = require("../utils");
-const { addInactiveToken } = require("../db/authentication_tokens");
+const { addInactiveToken, getTokenByOTP, activateTokenByOTP, activateToken } = require("../db/authentication_tokens");
 const { readConfig } = require("../libs/config");
 
 const router = libExpress.Router();
 
-// router.patch("/verify", async (req, res) => {
-//     if (req.body.email && req.body.otp && libValidator.isEmail(req.body.email) && libValidator.matches(req.body.otp, /^[0-9]{4}$/)) {
-//         //validate otp
-//         if (await validateUserOTP(req.body.email, req.body.otp)) {
-//             await updateUserToken(req.body.email, generateToken());
-//             const user = await getUserByEmail(req.body.email);
-//             if (user) {
-//                 res.cookie("token", user.token, {
-//                     httpOnly: true,
-//                     maxAge: process.env.TOKEN_AGE,
-//                     secure: true, // Set to true if using HTTPS
-//                     sameSite: "None", // Required for cross-origin requests
-//                     domain: process.env.CURRENT_DOMAIN,
-//                 });
-//                 res.status(200).json({
-//                     user: {
-//                         ...user,
-//                         groups: await getGroupsById(user.id),
-//                         authorities: await getAuthoritiesById(user.id),
-//                     },
-//                 });
-//             } else {
-//                 res.status(401).json({ error: "Email Does not exist" });
-//             }
-//         } else {
-//             res.status(401).json({
-//                 error: `Incorrect OTP`,
-//             });
-//         }
-//     } else {
-//         res.status(401).json({
-//             error: `Missing Requied Paramters or Incorrect Information is submitted`,
-//         });
-//     }
-// });
+router.patch("/", async (req, res) => {
+    if (!req.body.otp || !req.body.token) {
+        return res.status(400).json({ error: "Missing Required Parameters - OTP or Token" });
+    }
+
+    if (await getTokenByOTP(req.body.token, req.body.otp)) {
+        activateToken(req.body.token);
+        return res.status(200).json({ message: "Authentication Success" });
+    }
+    return res.status(400).json({ error: "Invalid Token" });
+});
 
 router.post("/", async (req, res) => {
     const { authentication: { token_validity, otp_validity } = {} } = await readConfig("app");

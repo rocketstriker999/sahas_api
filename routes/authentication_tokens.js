@@ -75,7 +75,7 @@ router.post("/", async (req, res) => {
         },
         onResponseReceieved: (otpDetails, responseCode) => {
             if (otpDetails && responseCode === 200) {
-                res.sendStatus(201).json({ authentication_token });
+                res.status(201).json({ authentication_token });
             } else {
                 res.status(500).json({ error: "Something Seems to be Broken , Please Try Again Later" });
             }

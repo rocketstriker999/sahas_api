@@ -69,11 +69,6 @@ function getAuthoritiesById(id) {
         });
 }
 
-function updateUserOTP(email, otp) {
-    //if user exist
-    executeSQLQueryParameterized(`INSERT INTO USERS (email, otp) VALUES (?, ?)ON DUPLICATE KEY UPDATE otp = VALUES(otp)`, [email, otp]);
-}
-
 function validateUserOTP(email, otp) {
     return executeSQLQueryParameterized(`SELECT COUNT(*) AS count FROM USERS WHERE email = ? AND otp = ?`, [email, otp])
         .then(([result]) => {

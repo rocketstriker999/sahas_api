@@ -60,7 +60,6 @@ router.post("/", async (req, res) => {
             requestPath: "otp",
             requestMethod: "POST",
             requestPostBody: { to: req.body.email, body_paramters: { verification_code: otp, validity_duration: 5, requested_email: req.body.email } },
-            onRequestStart: () => updateUserOTP(req.body.email, otp),
             onResponseReceieved: (otpDetails, responseCode) => {
                 if (otpDetails && responseCode === 200) {
                     res.sendStatus(201);

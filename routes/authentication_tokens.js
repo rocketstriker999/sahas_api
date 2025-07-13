@@ -13,8 +13,8 @@ router.patch("/", async (req, res) => {
         return res.status(400).json({ error: "Missing Required Parameters - OTP or Token" });
     }
 
-    if (await getTokenByOTP(req.body.token, req.body.otp)) {
-        activateToken(req.body.token);
+    if (await getTokenByOTP(req.body.authentication_token, req.body.otp)) {
+        activateToken(req.body.authentication_token);
         return res.status(200).json({ message: "Authentication Success" });
     }
     return res.status(400).json({ error: "Invalid Token" });

@@ -1,6 +1,6 @@
 const libExpress = require("express");
 const { requestService } = require("../utils");
-const { getUserByEmail, addUserByEmail } = require("../db/users");
+const { getUserByEmail, addUserByEmail, getUserById } = require("../db/users");
 const libValidator = require("validator");
 const { generateToken } = require("../utils");
 const { addInactiveToken, getTokenByOTP, activateTokenByOTP, activateToken } = require("../db/authentication_tokens");
@@ -13,9 +13,10 @@ router.patch("/", async (req, res) => {
         return res.status(400).json({ error: "Missing Required Parameters - OTP or Token" });
     }
 
-    if (await getTokenByOTP(req.body.authentication_token, req.body.otp)) {
+    if ((authenticationToken = await getTokenByOTP(req.body.authentication_token, req.body.otp))) {
         activateToken(req.body.authentication_token);
-        return res.status(200).json({ message: "Authentication Success" });
+        const user = getUserById();
+        return res.status(200).json(await getUserById(authenticationToken.user_id));
     }
     return res.status(400).json({ error: "Invalid Token" });
 });

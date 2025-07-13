@@ -4,8 +4,8 @@ const logger = require("../libs/logger");
 
 async function getTokenByOTP(token, otp) {
     //Check if such token is there
-    return executeSQLQueryParameterized(`SELECT COUNT(*) AS count FROM USER_TOKENS WHERE token = ? AND otp=? AND active=FALSE`, [token, otp])
-        .then(([result]) => result.count > 0)
+    return executeSQLQueryParameterized(`SELECT * FROM USER_TOKENS WHERE token = ? AND otp=? AND active=FALSE`, [token, otp])
+        .then((result) => (result.length > 0 ? result[0] : false))
         .catch((error) => {
             logger.error(`getTokenByOTP: ${error}`);
             return false;

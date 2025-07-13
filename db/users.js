@@ -115,6 +115,17 @@ function getUserByTransactionId(transactionId) {
         });
 }
 
+function getUserById(id) {
+    return executeSQLQueryParameterized(`SELECT * FROM USERS WHERE id = ?`, [id])
+        .then((results) => {
+            return results.length > 0 ? results[0] : null;
+        })
+        .catch((error) => {
+            logger.error(`getUserById: ${error}`);
+            return null;
+        });
+}
+
 module.exports = {
     validateUserOTP,
     updateUserToken,
@@ -128,4 +139,5 @@ module.exports = {
     getUserByTransactionId,
     updateUserProfilePrimaryDetails,
     addUserByEmail,
+    getUserById,
 };

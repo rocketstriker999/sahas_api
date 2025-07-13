@@ -8,6 +8,12 @@ const { readConfig } = require("../libs/config");
 
 const router = libExpress.Router();
 
+//work on blocked user
+//once receieved the info on UI save into reudx
+//check what fields need to be sent
+//logout with invalidate call from front end
+//if user already has the token then validate from ui side
+
 router.patch("/", async (req, res) => {
     if (!req.body.otp || !req.body.authentication_token) {
         return res.status(400).json({ error: "Missing Required Parameters - OTP or Token" });

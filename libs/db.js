@@ -26,7 +26,6 @@ function generateDBTables() {
             address VARCHAR(256) NULL,
             branch VARCHAR(16) NULL,
             wallet DECIMAL(8, 2) DEFAULT 0,
-            otp VARCHAR(4) NOT NULL,
             is_blocked BOOLEAN DEFAULT FALSE,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -58,6 +57,7 @@ function generateDBTables() {
             authority_id INT NOT NULL,
             active BOOLEAN NOT NULL DEFAULT TRUE,
             title VARCHAR(36) NOT NULL,
+            validity 
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
@@ -67,6 +67,7 @@ function generateDBTables() {
             otp VARCHAR(4) NOT NULL,
             token VARCHAR(36) NULL UNIQUE,
             active BOOLEAN NOT NULL DEFAULT FALSE,
+            validity DATETIME NOT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
           )`,

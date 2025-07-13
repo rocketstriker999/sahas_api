@@ -32,6 +32,13 @@ function getUserByEmail(email) {
         });
 }
 
+function addUserByEmail(email) {
+    return executeSQLQueryParameterized(`INSERT IGNORE INTO USERS(email) VALUES(?)`, [email]).catch((error) => {
+        logger.error(`addUserByEmail: ${error}`);
+        return false;
+    });
+}
+
 function getUserByToken(token) {
     return (
         token &&
@@ -126,4 +133,5 @@ module.exports = {
     getUserIdByEmail,
     getUserByTransactionId,
     updateUserProfilePrimaryDetails,
+    addUserByEmail,
 };

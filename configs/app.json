@@ -3,6 +3,10 @@
         "under_maintance": false,
         "save_logs": false
     },
+    "authentication": {
+        "validity": 2592000000
+    },
+
     "payment": {
         "cgst": 9,
         "sgst": 9

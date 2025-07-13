@@ -1,8 +1,9 @@
 const libExpress = require("express");
 const { requestService } = require("../utils");
-const { updateUserOTP, validateUserOTP, updateUserToken, getUserByEmail, getGroupsById, getAuthoritiesById } = require("../db/users");
+const { updateUserOTP, validateUserOTP, updateUserToken, getUserByEmail, getGroupsById, getAuthoritiesById, addUserByEmail } = require("../db/users");
 const libValidator = require("validator");
 const { generateToken } = require("../utils");
+const { addInactiveToken } = require("../db/authentication_tokens");
 
 const router = libExpress.Router();
 
@@ -43,10 +44,17 @@ const router = libExpress.Router();
 // });
 
 router.post("/", async (req, res) => {
-    if (req.body.email && libValidator.isEmail(req.body.email) && (await getUserByEmail(req.body.email))) {
-        //generate an otp
+    if (req.body.email && libValidator.isEmail(req.body.email)) {
+        //Get The user
+        await addUserByEmail(req.body.email);
+        const user = await getUserByEmail(req.body.email);
+        //generate an otp and token
         const otp = Math.floor(1000 + Math.random() * 9000);
-        //send through the mailed
+        const token = generateToken();
+        //add token into table
+        await addInactiveToken(user.id, otp, token);
+
+        //send otp through the mailed
         requestService({
             requestServiceName: process.env.SERVICE_MAILER,
             requestPath: "otp",
@@ -55,6 +63,7 @@ router.post("/", async (req, res) => {
             onRequestStart: () => updateUserOTP(req.body.email, otp),
             onResponseReceieved: (otpDetails, responseCode) => {
                 if (otpDetails && responseCode === 200) {
+                    res.sendStatus(201);
                 } else {
                     res.status(500).json({ error: "Something Seems to be Broken , Please Try Again Later" });
                 }

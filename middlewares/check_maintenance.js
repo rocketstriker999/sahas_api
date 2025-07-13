@@ -3,10 +3,10 @@ const { readConfig } = require("../libs/config");
 const logger = require("../libs/logger");
 
 module.exports = async (req, res, next) => {
-    const { general: generalConfig } = await readConfig("app");
+    const { general: { under_maintance } = {} } = await readConfig("app");
 
     //if maintenance mode is disabled, then allow the request to proceed
-    if (generalConfig && generalConfig?.under_maintance === false) {
+    if (under_maintance === false) {
         return next();
     }
     logger.error(`${REQUEST_DENIED} - ${SERVER_UNDER_MAINTENANCE}`);

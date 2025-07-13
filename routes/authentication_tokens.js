@@ -62,7 +62,7 @@ router.post("/", async (req, res) => {
             requestPostBody: { to: req.body.email, body_paramters: { verification_code: otp, validity_duration: 5, requested_email: req.body.email } },
             onResponseReceieved: (otpDetails, responseCode) => {
                 if (otpDetails && responseCode === 200) {
-                    res.sendStatus(201);
+                    res.sendStatus(201).json({ authentication_token: token });
                 } else {
                     res.status(500).json({ error: "Something Seems to be Broken , Please Try Again Later" });
                 }

@@ -57,7 +57,7 @@ function generateDBTables() {
             authority_id INT NOT NULL,
             active BOOLEAN NOT NULL DEFAULT TRUE,
             title VARCHAR(36) NOT NULL,
-            validity 
+            validity DATETIME NOT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,

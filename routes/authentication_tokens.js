@@ -4,6 +4,7 @@ const { validateUserOTP, updateUserToken, getUserByEmail, getGroupsById, getAuth
 const libValidator = require("validator");
 const { generateToken } = require("../utils");
 const { addInactiveToken } = require("../db/authentication_tokens");
+const { readConfig } = require("../libs/config");
 
 const router = libExpress.Router();
 

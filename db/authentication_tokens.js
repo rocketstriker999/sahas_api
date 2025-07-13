@@ -10,7 +10,7 @@ async function addInactiveToken(userId, token, otp) {
         userId,
         token,
         otp,
-        validity * 24 * 60 * 60 * 1000,
+        new Date(Date.now() + validity * 24 * 60 * 60 * 1000),
     ]).catch((error) => {
         logger.error(`addInactiveToken: ${error}`);
         return [];

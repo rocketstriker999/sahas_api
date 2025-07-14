@@ -39,13 +39,13 @@ function addUserByEmail(email) {
     });
 }
 
-function getUserByToken(token) {
+function getUserByAuthenticationToken(token) {
     return (
         token &&
-        executeSQLQueryParameterized(`SELECT * FROM USERS WHERE token=?`, [token])
+        executeSQLQueryParameterized(`SELECT USERS.* FROM USER_TOKENS INNER JOIN USERS ON USER_TOKENS.user_id=USERS.id  WHERE USER_TOKENS=?`, [token])
             .then((user) => (user && user.length > 0 ? user[0] : false))
             .catch((error) => {
-                logger.error(`getUserByToken: ${error}`);
+                logger.error(`getUserByAuthenticationToken: ${error}`);
                 return false;
             })
     );
@@ -130,7 +130,7 @@ module.exports = {
     validateUserOTP,
     updateUserToken,
     getUserByEmail,
-    getUserByToken,
+    getUserByAuthenticationToken,
     getGroupsById,
     getAuthoritiesById,
     updateUserPrimaryDetails,

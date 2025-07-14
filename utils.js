@@ -23,6 +23,8 @@ function generateSHA512(targetString) {
     return libCrypto.createHash("sha512").update(targetString).digest("hex");
 }
 
+const getDeviceDescriptionByFingerPrint = (fingerPrint) => Buffer.from(fingerPrint, "base64").toString("utf8");
+
 async function requestPayUVerification(transaction, command = process.env.TRANSACTION_VERIFICATION_COMMAND) {
     if (transaction.pay > 0) {
         const headers = new Headers();
@@ -99,4 +101,4 @@ async function requestService({
     }
     if (onRequestEnd) onRequestEnd();
 }
-module.exports = { prepareDirectories, requestService, generateToken, requestPayUVerification, generateSHA512 };
+module.exports = { prepareDirectories, requestService, generateToken, requestPayUVerification, generateSHA512, getDeviceDescriptionByFingerPrint };

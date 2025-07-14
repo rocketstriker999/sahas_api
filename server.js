@@ -4,12 +4,11 @@ const cors = require("cors");
 const { ROUTE_NOT_FOUND } = require("./constants");
 
 //Required Middlewares #1
-const deviceCheck = require("./middlewares/check_device");
-const maintenanceCheck = require("./middlewares/check_maintenance");
-const requiresAuthentication = require("./middlewares/requires_authentication");
+const requiresDeviceFingerPrint = require("./middlewares/requires_device_finger_print");
+const requiresNoMaintenance = require("./middlewares/requires_no_maintenance");
 
 //Common Middlewares
-const parseUser = require("./middlewares/parse_user");
+const parseAuthenticationToken = require("./middlewares/parse_authentication_token");
 const parseUserDeviceMapping = require("./middlewares/parse_user_device_mapping");
 const logRequest = require("./middlewares/log_request");
 
@@ -26,9 +25,9 @@ sahasAPI.use(libExpress.urlencoded({ extended: true }));
 //Apply Middlewares #2
 sahasAPI.use((req, res, next) => setTimeout(next, 3000));
 
-sahasAPI.use(deviceCheck);
-sahasAPI.use(maintenanceCheck);
-sahasAPI.use(parseUser);
+sahasAPI.use(requiresNoMaintenance);
+sahasAPI.use(requiresDeviceFingerPrint);
+sahasAPI.use(parseAuthenticationToken);
 sahasAPI.use(parseUserDeviceMapping);
 sahasAPI.use(logRequest);
 

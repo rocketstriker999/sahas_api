@@ -1,17 +1,18 @@
+const { addActiveUserDevice, getActiveDevicesByUserId, userDeviceExist } = require("../db/devices");
+
 module.exports = async (req, res, next) => {
-    if (req?.user) {
-        //This user is not having any device mapping then allow to use device
-        //New Device Mapping Added
-        if (!(await hasUserAnyActiveDeviceMapping(req.user.id))) {
-            await addActiveUserDeviceMapping(req.user.id, device.id);
-        }
+    if (req?.user && req?.device) {
+        const activeUserDevices = await getActiveDevicesByUserId(req?.user?.id);
 
-        //check if this device is assigned to this user
-        device.isCurrentUserAssociatedWithDevice = await isDeviceAssignedToThisUser(device.id, req.user.id);
+        if (!activeUserDevices?.length) {
+            addActiveUserDevice(req.user.id, req?.device?.fingerPrint);
+            req.device.active = true;
+        } else {
+            req.device.active = activeUserDevices.find((device) => req.device.fingerPrint === device.finger_print);
 
-        //This User's Previous Mapping Was Found But Need To Add InActive Mapping
-        if (!(await userDeviceMappingExist(req.user.id, req.device.id))) {
-            await addInActiveUserDeviceMapping(req.user.id, req.device.id);
+            if (!req.device.active && !(await userDeviceExist(req.user.id, req.device.fingerPrint))) {
+                addInActiveUserDevice(req.user.id, req.device.fingerPrint);
+            }
         }
     }
 

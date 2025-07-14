@@ -12,7 +12,7 @@ const parseAuthenticationToken = require("./middlewares/parse_authentication_tok
 const parseUserDevice = require("./middlewares/parse_user_device");
 const logRequest = require("./middlewares/log_request");
 
-//api server #6
+//api server #7
 const sahasAPI = libExpress();
 
 // Use the CORS middleware to allow cross origin request in case of testing UI Localhost and Cookies as well

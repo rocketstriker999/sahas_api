@@ -8,7 +8,7 @@ module.exports = async (req, res, next) => {
             addActiveUserDevice(req.user.id, req?.device?.fingerPrint);
             req.device.active = true;
         } else {
-            req.device.active = activeUserDevices.find((device) => req.device.fingerPrint === device.finger_print);
+            req.device.active = activeUserDevices.find((device) => req.device.fingerPrint === device.finger_print) ? true : false;
 
             if (!req.device.active && !(await userDeviceExist(req.user.id, req.device.fingerPrint))) {
                 addInActiveUserDevice(req.user.id, req.device.fingerPrint);

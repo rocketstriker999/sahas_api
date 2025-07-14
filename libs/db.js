@@ -75,7 +75,7 @@ function generateDBTables() {
         `CREATE TABLE IF NOT EXISTS USER_DEVICES (
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
-            finger_print VARCHAR(256) NOT NULL UNIQUE,
+            finger_print VARCHAR(256) NOT NULL,
             active BOOLEAN NOT NULL DEFAULT TRUE,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

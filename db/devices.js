@@ -2,12 +2,10 @@ const { executeSQLQueryParameterized } = require("../libs/db");
 const logger = require("../libs/logger");
 
 function addActiveUserDevice(userId, fingerPrint) {
-    return executeSQLQueryParameterized(`INSERT IGNORE INTO  USER_DEVICES(user_id,finger_print,active)  VALUES (?,?,TRUE)`, [userId, fingerPrint]).catch(
-        (error) => {
-            logger.error(`addActiveUserDevice: ${error}`);
-            return false;
-        }
-    );
+    return executeSQLQueryParameterized(`INSERT INTO  USER_DEVICES(user_id,finger_print,active)  VALUES (?,?,TRUE)`, [userId, fingerPrint]).catch((error) => {
+        logger.error(`addActiveUserDevice: ${error}`);
+        return false;
+    });
 }
 
 function userDeviceExist(userId, fingerPrint) {
@@ -26,12 +24,10 @@ function getActiveDevicesByUserId(userId) {
 }
 
 function addInActiveUserDevice(userId, fingerPrint) {
-    return executeSQLQueryParameterized(`INSERT IGNORE INTO USER_DEVICES(user_id,finger_print,active)  VALUES (?,?,FALSE)`, [userId, fingerPrint]).catch(
-        (error) => {
-            logger.error(`addInActiveUserDeviceMapping: ${error}`);
-            return false;
-        }
-    );
+    return executeSQLQueryParameterized(`INSERT  INTO USER_DEVICES(user_id,finger_print,active)  VALUES (?,?,FALSE)`, [userId, fingerPrint]).catch((error) => {
+        logger.error(`addInActiveUserDeviceMapping: ${error}`);
+        return false;
+    });
 }
 
 module.exports = {

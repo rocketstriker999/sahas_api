@@ -42,7 +42,7 @@ function addUserByEmail(email) {
 function getUserByAuthenticationToken(token) {
     return (
         token &&
-        executeSQLQueryParameterized(`SELECT USERS.* FROM USER_TOKENS INNER JOIN USERS ON USER_TOKENS.user_id=USERS.id  WHERE USER_TOKENS=?`, [token])
+        executeSQLQueryParameterized(`SELECT USERS.* FROM USER_TOKENS INNER JOIN USERS ON USER_TOKENS.user_id=USERS.id  WHERE USER_TOKENS.token=?`, [token])
             .then((user) => (user && user.length > 0 ? user[0] : false))
             .catch((error) => {
                 logger.error(`getUserByAuthenticationToken: ${error}`);

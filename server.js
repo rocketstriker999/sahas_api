@@ -9,7 +9,7 @@ const requiresNoMaintenance = require("./middlewares/requires_no_maintenance");
 
 //Common Middlewares
 const parseAuthenticationToken = require("./middlewares/parse_authentication_token");
-const parseUserDeviceMapping = require("./middlewares/parse_user_device_mapping");
+const parseUserDevice = require("./middlewares/parse_user_device");
 const logRequest = require("./middlewares/log_request");
 
 //api server #6
@@ -28,7 +28,7 @@ sahasAPI.use((req, res, next) => setTimeout(next, 3000));
 sahasAPI.use(requiresNoMaintenance);
 sahasAPI.use(requiresDeviceFingerPrint);
 sahasAPI.use(parseAuthenticationToken);
-sahasAPI.use(parseUserDeviceMapping);
+sahasAPI.use(parseUserDevice);
 sahasAPI.use(logRequest);
 
 //api end points and routers

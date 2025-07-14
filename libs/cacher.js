@@ -9,7 +9,7 @@ const cache = {};
 const add = (key, dataGenerator) =>
     dataGenerator().then((data) => {
         cache[key] = { data, dataGenerator };
-        logger.info(`Cache Added - KEY:${key} `);
+        logger.success(`Cache Added - KEY:${key} `);
     });
 
 const get = (key) => cache?.[key]?.data;

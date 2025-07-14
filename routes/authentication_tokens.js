@@ -21,7 +21,6 @@ router.patch("/", async (req, res) => {
 
     if ((authenticationToken = await getTokenByOTP(req.body.authentication_token, req.body.otp))) {
         activateToken(req.body.authentication_token);
-        const user = getUserById();
         return res.status(200).json(await getUserById(authenticationToken.user_id));
     }
     return res.status(400).json({ error: "Invalid Token" });
@@ -70,6 +69,8 @@ router.post("/", async (req, res) => {
         },
     });
 });
+
+router.get("/", async (req, res) => {});
 
 // //logout and invalidate the authentication token
 // router.delete("/verify", (req, res) => {

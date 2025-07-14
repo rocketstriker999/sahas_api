@@ -15,7 +15,7 @@ async function getTokenByOTP(token, otp) {
 async function activateToken(token) {
     //Activate Token
     return executeSQLQueryParameterized(`UPDATE USER_TOKENS SET active = TRUE WHERE token = ?`, [token]).catch((error) => {
-        logger.error(`activateTokenByOTP: ${error}`);
+        logger.error(`activateToken: ${error}`);
         return [];
     });
 }

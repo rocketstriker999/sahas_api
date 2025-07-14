@@ -1,5 +1,6 @@
 const { KEY_AUTHENTICATION_TOKEN } = require("../constants");
 const { getUserByToken, getUserByAuthenticationToken } = require("../db/users");
+const logger = require("../libs/logger");
 
 module.exports = async (req, res, next) => {
     //verify token and get user information

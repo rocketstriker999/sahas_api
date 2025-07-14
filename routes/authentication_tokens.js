@@ -70,7 +70,9 @@ router.post("/", async (req, res) => {
     });
 });
 
-router.get("/", async (req, res) => {});
+router.get("/", async (req, res) => {
+    logger.info(JSON.stringify(req?.user));
+});
 
 // //logout and invalidate the authentication token
 // router.delete("/verify", (req, res) => {

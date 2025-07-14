@@ -1,4 +1,4 @@
-const { addActiveUserDevice, getActiveDevicesByUserId, userDeviceExist } = require("../db/devices");
+const { addActiveUserDevice, getActiveDevicesByUserId, userDeviceExist, addInActiveUserDevice } = require("../db/devices");
 
 module.exports = async (req, res, next) => {
     if (req?.user && req?.device) {

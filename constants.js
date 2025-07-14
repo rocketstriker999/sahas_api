@@ -4,6 +4,6 @@ module.exports = {
     ROUTE_NOT_FOUND: "Route Not Found",
     KEY_DEVICE_FINGER_PRINT: "device-finger-print",
     KEY_DEVICE_DESCRIPTION: "device-description",
-    KEY_AUTHENTICATION_TOKEN: "auth_token",
+    KEY_AUTHENTICATION_TOKEN: "authentication-token",
     ERROR_DEVICE_MISSING: "Device Information Is Missing",
 };

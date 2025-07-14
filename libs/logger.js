@@ -23,7 +23,7 @@ const getCurrentDateTime = () => {
 //print normal statments
 const info = (logStatement) => {
     const { currentTimeStamp, logDateTime } = getCurrentDateTime();
-    logStatement = `[#]${logDateTime} INFO -> ${logStatement}`;
+    logStatement = `[#]${logDateTime} [INFO] -> ${logStatement}`;
     log(libChalk.blue(logStatement));
     saveLogs(currentTimeStamp, logStatement);
 };
@@ -31,7 +31,7 @@ const info = (logStatement) => {
 //print normal statments
 const success = (logStatement) => {
     const { currentTimeStamp, logDateTime } = getCurrentDateTime();
-    logStatement = `[+]${logDateTime} INFO -> ${logStatement}`;
+    logStatement = `[+]${logDateTime} [SUCCESS] -> ${logStatement}`;
     log(libChalk.green(logStatement));
     saveLogs(currentTimeStamp, logStatement);
 };
@@ -39,7 +39,7 @@ const success = (logStatement) => {
 //print normal statments
 const error = (logStatement) => {
     const { currentTimeStamp, logDateTime } = getCurrentDateTime();
-    logStatement = `[-]${logDateTime} ERROR -> ${logStatement}`;
+    logStatement = `[-]${logDateTime} [ERROR] -> ${logStatement}`;
     log(libChalk.red(logStatement));
     saveLogs(currentTimeStamp, logStatement);
 };

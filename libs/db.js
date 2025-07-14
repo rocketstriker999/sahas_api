@@ -26,7 +26,7 @@ function generateDBTables() {
             address VARCHAR(256) NULL,
             branch VARCHAR(16) NULL,
             wallet DECIMAL(8, 2) DEFAULT 0,
-            is_blocked BOOLEAN DEFAULT FALSE,
+            active BOOLEAN NOT NULL DEFAULT TRUE,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
           )

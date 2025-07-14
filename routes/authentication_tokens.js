@@ -72,7 +72,10 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-    logger.info(JSON.stringify(req?.user));
+    if (req?.user) {
+        return res.status(200).json(req.user);
+    }
+    return res.status(401).json({ error: "Invalid Token" });
 });
 
 // //logout and invalidate the authentication token

@@ -19,13 +19,13 @@ function userDeviceExist(userId, fingerPrint) {
 
 function getActiveDevicesByUserId(userId) {
     return executeSQLQueryParameterized(`SELECT * FROM USER_DEVICES WHERE user_id=? AND active=TRUE`, [userId])
-        .then((result) => (result.length > 0 ? result[0] : false))
-        .catch((error) => logger.error(`extractMediaBySubjectIdAndMediaId: ${error}`));
+        .then((result) => (result.length ? result : false))
+        .catch((error) => logger.error(`getActiveDevicesByUserId: ${error}`));
 }
 
 function addInActiveUserDevice(userId, fingerPrint) {
     return executeSQLQueryParameterized(`INSERT  INTO USER_DEVICES(user_id,finger_print,active)  VALUES (?,?,FALSE)`, [userId, fingerPrint]).catch((error) => {
-        logger.error(`addInActiveUserDeviceMapping: ${error}`);
+        logger.error(`addInActiveUserDevice: ${error}`);
         return false;
     });
 }

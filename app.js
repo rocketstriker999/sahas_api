@@ -10,10 +10,9 @@ const { generateCaches } = require("./libs/cacher");
 prepareDirectories([process.env.DIRECTORY_LOGS, process.env.DIR_CONFIGS]);
 
 // Test and Prepare Required Tables
+
 generateDBTables()
-    .then(() => {
-        logger.success("Database Ready");
-        allowTraffic();
-        generateCaches();
-    })
+    .then(() => logger.success("Database Ready"))
+    .then(generateCaches)
+    .then(allowTraffic)
     .catch((error) => logger.error(`Failed To Prepare Database ${error}`));

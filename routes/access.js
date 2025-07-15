@@ -47,7 +47,7 @@ router.post("/", async (req, res) => {
                                     user_name: user?.name,
                                     product_title: product.title,
                                     pay: transaction?.pay,
-                                    invoice: `${process.env.SERVICE_MEDIA.concat(transaction?.invoice)}`,
+                                    invoice: `${process.env.CURRENT_DOMAIN}/${process.env.SERVICE_MEDIA.concat(transaction?.invoice)}`,
                                 },
                             },
                         });

@@ -1,14 +1,7 @@
 const libExpress = require("express");
 const { creditUserWallet, getUserIdByEmail, getUserByTransactionId, getUserByToken } = require("../db/users");
 const { updateTransactionStatus, getTransactionById } = require("../db/transactions");
-const {
-    addAccess,
-    addAccessTemp,
-    getAccessByTransactionId,
-    getUserProductAccessData,
-    getProfileUserProductAccessData,
-    updateUserProductAccessStatus,
-} = require("../db/accesses");
+const { addAccess, addAccessTemp, getUserProductAccessData, getProfileUserProductAccessData, updateUserProductAccessStatus } = require("../db/accesses");
 const { getDistributorByCouponCodeIdAndProductId } = require("../db/coupon");
 const { requestPayUVerification, requestService } = require("../utils");
 const logger = require("../libs/logger");
@@ -50,25 +43,12 @@ router.post("/", async (req, res) => {
                             requestMethod: "POST",
                             requestPostBody: {
                                 to: req.body.email,
-                                body_paramters: { verification_code: otp, validity_duration: 5, requested_email: req.body.email },
-                            },
-                            onRequestStart: () => {
-                                updateUserOTP(req.body.email, otp);
-                            },
-                            onResponseReceieved: (otpDetails, responseCode) => {
-                                if (otpDetails && responseCode === 200) {
-                                    res.clearCookie("token", {
-                                        httpOnly: true,
-                                        secure: true, // Set to true if using HTTPS
-                                        sameSite: "None", // Required for cross-origin requests
-                                        domain: process.env.CURRENT_DOMAIN,
-                                    });
-                                    res.status(200).json({
-                                        message: `OTP Is been sent to ${req.body.email} Please Enter to Add it`,
-                                    });
-                                } else {
-                                    res.status(500).json({ error: "Something Seems to be Broken , Please Try Again Later" });
-                                }
+                                body_paramters: {
+                                    user_name: user?.name,
+                                    product_title: product.title,
+                                    pay: transaction?.pay,
+                                    invoice: `${process.env.SERVICE_MEDIA.concat(transaction?.invoice)}`,
+                                },
                             },
                         });
                     }

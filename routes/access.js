@@ -66,12 +66,16 @@ router.post("/", async (req, res) => {
                     (await getCouponCodeById(transaction.coupon_id)) &&
                     (couponCodeDistributor = await getDistributorByCouponCodeIdAndProductId(transaction.coupon_id, transaction.product_id)))
             ) {
+                logger.info(JSON.stringify(couponCode));
+
                 const commision =
                     couponCodeDistributor.commision_type === "PERCENTAGE"
                         ? (transaction.pay * couponCodeDistributor.commision) / 100
                         : couponCodeDistributor.commision;
 
                 creditUserWallet(couponCodeDistributor.user_id, commision);
+
+                logger.info(commision);
 
                 requestService({
                     requestServiceName: process.env.SERVICE_MAILER,

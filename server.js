@@ -3,7 +3,6 @@ const libCookieParser = require("cookie-parser");
 const logger = require("./libs/logger");
 const cors = require("cors");
 const requests = require("./middlewares/logging/request");
-const requiresAuthentication = require("./middlewares/requires/authentication");
 const parseDevice = require("./middlewares/parsers/device");
 const parseToken = require("./middlewares/parsers/auth_token");
 

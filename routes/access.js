@@ -39,7 +39,6 @@ router.post("/", async (req, res) => {
                 onResponseReceieved: (_, responseCode) => {
                     if (responseCode === 201) {
                         //send email
-
                         requestService({
                             requestServiceName: process.env.SERVICE_MAILER,
                             requestPath: "invoice",
@@ -48,7 +47,7 @@ router.post("/", async (req, res) => {
                                 to: req.body.email,
                                 body_paramters: {
                                     user_name: user?.name,
-                                    product_title: product.title,
+                                    product_title: product?.title,
                                     pay: transaction?.pay,
                                     invoice: `${process.env.CURRENT_DOMAIN}/${process.env.SERVICE_MEDIA}/invoices/${transaction?.invoice}`,
                                 },

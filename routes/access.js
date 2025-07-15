@@ -1,7 +1,14 @@
 const libExpress = require("express");
 const { creditUserWallet, getUserIdByEmail, getUserByTransactionId, getUserByToken } = require("../db/users");
 const { updateTransactionStatus, getTransactionById } = require("../db/transactions");
-const { addAccess, addAccessTemp, getAccessByTransactionId, getUserProductAccessData, getProfileUserProductAccessData, updateUserProductAccessStatus } = require("../db/accesses");
+const {
+    addAccess,
+    addAccessTemp,
+    getAccessByTransactionId,
+    getUserProductAccessData,
+    getProfileUserProductAccessData,
+    updateUserProductAccessStatus,
+} = require("../db/accesses");
 const { getDistributorByCouponCodeIdAndProductId } = require("../db/coupon");
 const { requestPayUVerification, requestService } = require("../utils");
 const logger = require("../libs/logger");
@@ -33,8 +40,38 @@ router.post("/", async (req, res) => {
                     percent_sgst: process.env.SGST,
                     percent_cgst: process.env.CGST,
                 },
-                onResponseReceieved: () => {
-                    //send email
+                onResponseReceieved: (_, responseCode) => {
+                    if (responseCode === 201) {
+                        //send email
+
+                        requestService({
+                            requestServiceName: process.env.SERVICE_MAILER,
+                            requestPath: "invoice",
+                            requestMethod: "POST",
+                            requestPostBody: {
+                                to: req.body.email,
+                                body_paramters: { verification_code: otp, validity_duration: 5, requested_email: req.body.email },
+                            },
+                            onRequestStart: () => {
+                                updateUserOTP(req.body.email, otp);
+                            },
+                            onResponseReceieved: (otpDetails, responseCode) => {
+                                if (otpDetails && responseCode === 200) {
+                                    res.clearCookie("token", {
+                                        httpOnly: true,
+                                        secure: true, // Set to true if using HTTPS
+                                        sameSite: "None", // Required for cross-origin requests
+                                        domain: process.env.CURRENT_DOMAIN,
+                                    });
+                                    res.status(200).json({
+                                        message: `OTP Is been sent to ${req.body.email} Please Enter to Add it`,
+                                    });
+                                } else {
+                                    res.status(500).json({ error: "Something Seems to be Broken , Please Try Again Later" });
+                                }
+                            },
+                        });
+                    }
                 },
                 onRequestFailure: (error) => {
                     logger.error(`Failed To generate Invoice for transcation - ${transaction.id} error - ${error}`);
@@ -68,7 +105,6 @@ router.get("/:id/getProfileUserProductAccess", async (req, res) => {
     }
     return res.status(401).json({ error: "Missing Required Information" });
 });
-
 
 //Need to remove this router it is temporary
 router.post("/temp-addUserProductAccess", async (req, res) => {
@@ -111,12 +147,11 @@ router.post("/temp-updateUserProductAccessStatus", async (req, res) => {
     console.log(req.body);
     try {
         const result = await updateUserProductAccessStatus(userProductAccessId, active);
-        return res.status(200).json({result, message: "Status updated successfully"});
+        return res.status(200).json({ result, message: "Status updated successfully" });
     } catch (error) {
         console.error("Error updating user product access status:", error);
         return res.status(500).json({ error: "User Product Activation Status not updated" });
     }
 });
-
 
 module.exports = router;

@@ -17,10 +17,7 @@ function updateUserPrimaryDetails(id, name, phone) {
 
 function updateUserProfilePrimaryDetails(id, formData) {
     const { name, phone, address } = formData;
-    return executeSQLQueryParameterized(
-        `UPDATE USERS SET name=?, phone=?, address=? WHERE id=?`,
-        [name, phone, address, id]
-    ).catch((error) => {
+    return executeSQLQueryParameterized(`UPDATE USERS SET name=?, phone=?, address=? WHERE id=?`, [name, phone, address, id]).catch((error) => {
         logger.error(`updateUserPrimaryDetails: ${error}`);
         return false;
     });
@@ -31,6 +28,15 @@ function getUserByEmail(email) {
         .then((user) => (user && user.length > 0 ? user[0] : false))
         .catch((error) => {
             logger.error(`getUserByEmail: ${error}`);
+            return false;
+        });
+}
+
+function getUserById(id) {
+    return executeSQLQueryParameterized(`SELECT * FROM USERS WHERE id=?`, [id])
+        .then((user) => (user && user.length > 0 ? user[0] : false))
+        .catch((error) => {
+            logger.error(`getUserById: ${error}`);
             return false;
         });
 }
@@ -115,6 +121,7 @@ function getUserByTransactionId(transactionId) {
 }
 
 module.exports = {
+    getUserById,
     updateUserOTP,
     validateUserOTP,
     updateUserToken,

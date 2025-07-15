@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const { creditUserWallet, getUserIdByEmail, getUserByTransactionId, getUserByToken } = require("../db/users");
+const { creditUserWallet, getUserIdByEmail, getUserByTransactionId, getUserByToken, getUserById } = require("../db/users");
 const { updateTransactionStatus, getTransactionById } = require("../db/transactions");
 const { addAccess, addAccessTemp, getUserProductAccessData, getProfileUserProductAccessData, updateUserProductAccessStatus } = require("../db/accesses");
 const { getDistributorByCouponCodeIdAndProductId, getCouponCodeIdByCouponCode, getCouponCodeById } = require("../db/coupon");
@@ -64,16 +64,18 @@ router.post("/", async (req, res) => {
             if (
                 (couponCode =
                     (await getCouponCodeById(transaction.coupon_id)) &&
-                    (couponCodeDistributor = await getDistributorByCouponCodeIdAndProductId(transaction.coupon_id, transaction.product_id)))
+                    (couponCodeDistribution = await getDistributorByCouponCodeIdAndProductId(transaction.coupon_id, transaction.product_id)))
             ) {
                 logger.info(JSON.stringify(couponCode));
 
-                const commision =
-                    couponCodeDistributor.commision_type === "PERCENTAGE"
-                        ? (transaction.pay * couponCodeDistributor.commision) / 100
-                        : couponCodeDistributor.commision;
+                const couponCodeDistributor = await getUserById(couponCodeDistribution?.user_id);
 
-                creditUserWallet(couponCodeDistributor.user_id, commision);
+                const commision =
+                    couponCodeDistribution.commision_type === "PERCENTAGE"
+                        ? (transaction.pay * couponCodeDistribution.commision) / 100
+                        : couponCodeDistribution.commision;
+
+                creditUserWallet(couponCodeDistribution.user_id, commision);
 
                 logger.info(commision);
 
@@ -82,7 +84,7 @@ router.post("/", async (req, res) => {
                     requestPath: "commision",
                     requestMethod: "POST",
                     requestPostBody: {
-                        to: req.body.email,
+                        to: couponCodeDistributor?.email,
                         body_paramters: {
                             coupon_code_distributor_name: user?.name,
                             commision,
@@ -92,6 +94,19 @@ router.post("/", async (req, res) => {
                             updated_at: transaction?.updated_at,
                             product_title: product?.title,
                         },
+                    },
+                });
+
+                logger.info({
+                    to: couponCodeDistributor?.email,
+                    body_paramters: {
+                        coupon_code_distributor_name: user?.name,
+                        commision,
+                        coupon_code: couponCode?.coupon_code,
+                        user_name: user?.name,
+                        user_email: user?.email,
+                        updated_at: transaction?.updated_at,
+                        product_title: product?.title,
                     },
                 });
             }

@@ -66,8 +66,6 @@ router.post("/", async (req, res) => {
                     (await getCouponCodeById(transaction.coupon_id)) &&
                     (couponCodeDistribution = await getDistributorByCouponCodeIdAndProductId(transaction.coupon_id, transaction.product_id)))
             ) {
-                logger.info(JSON.stringify(couponCode));
-
                 const couponCodeDistributor = await getUserById(couponCodeDistribution?.user_id);
 
                 const commision =
@@ -76,8 +74,6 @@ router.post("/", async (req, res) => {
                         : couponCodeDistribution.commision;
 
                 creditUserWallet(couponCodeDistribution.user_id, commision);
-
-                logger.info(commision);
 
                 requestService({
                     requestServiceName: process.env.SERVICE_MAILER,
@@ -94,19 +90,6 @@ router.post("/", async (req, res) => {
                             updated_at: transaction?.updated_at,
                             product_title: product?.title,
                         },
-                    },
-                });
-
-                logger.info({
-                    to: couponCodeDistributor?.email,
-                    body_paramters: {
-                        coupon_code_distributor_name: user?.name,
-                        commision,
-                        coupon_code: couponCode?.coupon_code,
-                        user_name: user?.name,
-                        user_email: user?.email,
-                        updated_at: transaction?.updated_at,
-                        product_title: product?.title,
                     },
                 });
             }

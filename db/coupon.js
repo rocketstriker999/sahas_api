@@ -36,7 +36,7 @@ function getCouponCodeIdByCouponCode(couponCode) {
 
 function getCouponCodeById(couponCodeId) {
     return executeSQLQueryParameterized(`SELECT * FROM COUPON_CODES WHERE id=?`, [couponCodeId])
-        .then((result) => (result.length > 0 ? result[0].id : null))
+        .then((result) => (result.length > 0 ? result[0] : null))
         .catch((error) => {
             logger.error(`getCouponCodeIdByCouponCode: ${error}`);
             return [];

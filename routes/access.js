@@ -62,9 +62,8 @@ router.post("/", async (req, res) => {
 
             //credit this to user's wallet money whoes code was used
             if (
-                (couponCode =
-                    (await getCouponCodeById(transaction.coupon_id)) &&
-                    (couponCodeDistribution = await getDistributorByCouponCodeIdAndProductId(transaction.coupon_id, transaction.product_id)))
+                (couponCode = await getCouponCodeById(transaction.coupon_id)) &&
+                (couponCodeDistribution = await getDistributorByCouponCodeIdAndProductId(transaction.coupon_id, transaction.product_id))
             ) {
                 const couponCodeDistributor = await getUserById(couponCodeDistribution?.user_id);
 
@@ -77,10 +76,6 @@ router.post("/", async (req, res) => {
 
                 logger.info("COUPON CODE");
                 logger.info(JSON.stringify(couponCode));
-                logger.info(couponCode);
-
-                console.log(couponCode);
-                console.log(JSON.stringify(couponCode));
 
                 requestService({
                     requestServiceName: process.env.SERVICE_MAILER,

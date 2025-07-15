@@ -34,4 +34,13 @@ function getCouponCodeIdByCouponCode(couponCode) {
         });
 }
 
-module.exports = { getBenifitByCouponCodeIdAndProductId, getDistributorByCouponCodeIdAndProductId, getCouponCodeIdByCouponCode };
+function getCouponCodeById(couponCodeId) {
+    return executeSQLQueryParameterized(`SELECT * FROM COUPON_CODES WHERE id=?`, [couponCodeId])
+        .then((result) => (result.length > 0 ? result[0].id : null))
+        .catch((error) => {
+            logger.error(`getCouponCodeIdByCouponCode: ${error}`);
+            return [];
+        });
+}
+
+module.exports = { getBenifitByCouponCodeIdAndProductId, getDistributorByCouponCodeIdAndProductId, getCouponCodeIdByCouponCode, getCouponCodeById };

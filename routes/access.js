@@ -2,7 +2,7 @@ const libExpress = require("express");
 const { creditUserWallet, getUserIdByEmail, getUserByTransactionId, getUserByToken } = require("../db/users");
 const { updateTransactionStatus, getTransactionById } = require("../db/transactions");
 const { addAccess, addAccessTemp, getUserProductAccessData, getProfileUserProductAccessData, updateUserProductAccessStatus } = require("../db/accesses");
-const { getDistributorByCouponCodeIdAndProductId } = require("../db/coupon");
+const { getDistributorByCouponCodeIdAndProductId, getCouponCodeIdByCouponCode, getCouponCodeById } = require("../db/coupon");
 const { requestPayUVerification, requestService } = require("../utils");
 const logger = require("../libs/logger");
 const { getProductById } = require("../db/products");
@@ -15,6 +15,9 @@ router.post("/", async (req, res) => {
     if (req.body.txnid) {
         //we have transaction which is requested
         const transaction = await getTransactionById(req.body.txnid);
+        const user = await getUserByTransactionId(transaction.id);
+        const product = await getProductById(transaction.product_id);
+
         //verify with PAyu once
         if (await requestPayUVerification(transaction)) {
             //verified from payu
@@ -28,8 +31,8 @@ router.post("/", async (req, res) => {
                 requestMethod: "POST",
                 requestPostBody: {
                     transaction,
-                    user: await getUserByTransactionId(transaction.id),
-                    product: await getProductById(transaction.product_id),
+                    user,
+                    product,
                     percent_sgst: process.env.SGST,
                     percent_cgst: process.env.CGST,
                 },
@@ -59,13 +62,35 @@ router.post("/", async (req, res) => {
             });
 
             //credit this to user's wallet money whoes code was used
-            if ((couponCodeDistributor = await getDistributorByCouponCodeIdAndProductId(transaction.coupon_id, transaction.product_id))) {
-                creditUserWallet(
-                    couponCodeDistributor.user_id,
+            if (
+                (couponCode =
+                    (await getCouponCodeById(transaction.coupon_id)) &&
+                    (couponCodeDistributor = await getDistributorByCouponCodeIdAndProductId(transaction.coupon_id, transaction.product_id)))
+            ) {
+                const commision =
                     couponCodeDistributor.commision_type === "PERCENTAGE"
                         ? (transaction.pay * couponCodeDistributor.commision) / 100
-                        : couponCodeDistributor.commision
-                );
+                        : couponCodeDistributor.commision;
+
+                creditUserWallet(couponCodeDistributor.user_id, commision);
+
+                requestService({
+                    requestServiceName: process.env.SERVICE_MAILER,
+                    requestPath: "commision",
+                    requestMethod: "POST",
+                    requestPostBody: {
+                        to: req.body.email,
+                        body_paramters: {
+                            coupon_code_distributor_name: user?.name,
+                            commision,
+                            coupon_code: couponCode?.coupon_code,
+                            user_name: user?.name,
+                            user_email: user?.email,
+                            updated_at: transaction?.updated_at,
+                            product_title: product?.title,
+                        },
+                    },
+                });
             }
 
             return res.redirect(`/products/${transaction.product_id}`);

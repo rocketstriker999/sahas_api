@@ -75,6 +75,13 @@ router.post("/", async (req, res) => {
 
                 creditUserWallet(couponCodeDistribution.user_id, commision);
 
+                logger.info("COUPON CODE");
+                logger.info(JSON.stringify(couponCode));
+                logger.info(couponCode);
+
+                console.log(couponCode);
+                console.log(JSON.stringify(couponCode));
+
                 requestService({
                     requestServiceName: process.env.SERVICE_MAILER,
                     requestPath: "commision",

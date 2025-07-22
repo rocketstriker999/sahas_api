@@ -42,7 +42,7 @@ router.post("/", async (req, res) => {
     await addUserByEmail(req.body.email);
     const user = await getUserByEmail(req.body.email);
 
-    if (!user?.active) {
+    if (!user?.is_blocked) {
         return res.status(401).json({ error: "User InActive" });
     }
 

@@ -50,11 +50,13 @@ router.post("/", async (req, res) => {
     const otp = Math.floor(1000 + Math.random() * 9000);
     const authentication_token = generateToken();
     //add token into table
+    logger.info("Generated Inactive Token");
     await addInactiveToken(user.id, otp, authentication_token, new Date(Date.now() + token_validity * 24 * 60 * 60 * 1000));
 
     //send otp through the mailed
     requestService({
         requestServiceName: process.env.SERVICE_MAILER,
+        onRequestStart: () => logger.info("Generating OTP"),
         requestPath: "otp",
         requestMethod: "POST",
         requestPostBody: {

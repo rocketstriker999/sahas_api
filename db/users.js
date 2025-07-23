@@ -34,7 +34,7 @@ function getUserByEmail(email) {
 
 function addUserByEmail(email) {
     return executeSQLQueryParameterized(`INSERT IGNORE INTO USERS(email) VALUES(?)`, [email])
-        .then(logger.info)
+        .then((result) => logger.info(JSON.stringify(result)))
         .catch((error) => {
             logger.error(`addUserByEmail: ${error}`);
             return false;

@@ -40,7 +40,6 @@ router.post("/", async (req, res) => {
 
     //Get The user
     await addUserByEmail(req.body.email);
-    await addDefaultUserRole(req.body.email);
 
     const user = await getUserByEmail(req.body.email);
 

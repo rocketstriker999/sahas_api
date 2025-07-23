@@ -32,14 +32,23 @@ function getUserByEmail(email) {
         });
 }
 
+function addDefaultRoleToUser(userId) {
+    return executeSQLQueryParameterized(`INSERT INTO USER_ROLES(user_id,role_id) VALUES(?,1)`, [userId]).catch((error) => {
+        logger.error(`addDefaultRoleToUser: ${error}`);
+        return false;
+    });
+}
+
 function addUserByEmail(email) {
     return executeSQLQueryParameterized(`INSERT IGNORE INTO USERS(email) VALUES(?)`, [email])
-        .then((result) => logger.info(JSON.stringify(result)))
+        .then((result) => result?.affectedRows && addDefaultRoleToUser(result?.insertId))
         .catch((error) => {
             logger.error(`addUserByEmail: ${error}`);
             return false;
         });
 }
+
+//affectedRows":1,"insertId":1
 
 function getUserByAuthenticationToken(token) {
     return (

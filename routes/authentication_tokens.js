@@ -9,7 +9,7 @@ const logger = require("../libs/logger");
 
 const router = libExpress.Router();
 
-//work on blocked user
+//work on blocked user #1
 //once receieved the info on UI save into reudx
 //check what fields need to be sent
 //logout with invalidate call from front end
@@ -42,8 +42,8 @@ router.post("/", async (req, res) => {
     await addUserByEmail(req.body.email);
     const user = await getUserByEmail(req.body.email);
 
-    if (!user?.is_blocked) {
-        return res.status(401).json({ error: "User InActive" });
+    if (user?.is_blocked) {
+        return res.status(401).json({ error: "User Blocked" });
     }
 
     //generate an otp and token

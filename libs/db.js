@@ -15,6 +15,7 @@ const dbConnectionPool = mysql.createPool({
 });
 
 //Users table modification -  added updated_at column
+//is_allowed_to_login
 
 function generateDBTables() {
     const createUserTableQuery = [
@@ -37,6 +38,22 @@ function generateDBTables() {
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
+        `CREATE TABLE IF NOT EXISTS AUTHORITIES(
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            title VARCHAR(36) NOT NULL,
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        )`,
+        `CREATE TABLE IF NOT EXISTS ROLE_AUTHORITIES(
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            role_id INT NOT NULL,
+            authority_id INT NOT NULL,
+            active BOOLEAN NOT NULL DEFAULT TRUE,
+            title VARCHAR(36) NOT NULL,
+            validity DATETIME NOT NULL,
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        )`,
         `CREATE TABLE IF NOT EXISTS USER_ROLES(
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
@@ -45,22 +62,7 @@ function generateDBTables() {
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
-        `CREATE TABLE IF NOT EXISTS AUTHORITIES(
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            title VARCHAR(36) NOT NULL,
-            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
-            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-        )`,
-        `CREATE TABLE IF NOT EXISTS USER_AUTHORITIES(
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            user_id INT NOT NULL,
-            authority_id INT NOT NULL,
-            active BOOLEAN NOT NULL DEFAULT TRUE,
-            title VARCHAR(36) NOT NULL,
-            validity DATETIME NOT NULL,
-            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
-            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-        )`,
+
         `CREATE TABLE IF NOT EXISTS USER_TOKENS (
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,

@@ -33,10 +33,12 @@ function getUserByEmail(email) {
 }
 
 function addUserByEmail(email) {
-    return executeSQLQueryParameterized(`INSERT IGNORE INTO USERS(email) VALUES(?)`, [email]).catch((error) => {
-        logger.error(`addUserByEmail: ${error}`);
-        return false;
-    });
+    return executeSQLQueryParameterized(`INSERT IGNORE INTO USERS(email) VALUES(?)`, [email])
+        .then(console.log)
+        .catch((error) => {
+            logger.error(`addUserByEmail: ${error}`);
+            return false;
+        });
 }
 
 function getUserByAuthenticationToken(token) {

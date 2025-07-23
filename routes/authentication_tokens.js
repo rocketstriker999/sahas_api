@@ -40,11 +40,9 @@ router.post("/", async (req, res) => {
 
     //Get The user
     await addUserByEmail(req.body.email);
-    const user = await getUserByEmail(req.body.email);
+    await addDefaultUserRole(req.body.email);
 
-    if (user?.is_blocked) {
-        return res.status(401).json({ error: "User Blocked" });
-    }
+    const user = await getUserByEmail(req.body.email);
 
     //generate an otp and token
     const otp = Math.floor(1000 + Math.random() * 9000);

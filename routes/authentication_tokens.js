@@ -83,8 +83,13 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-    if (req?.user) {
-        return res.status(200).json(req.user);
+    if ((user = req?.user)) {
+        const associatedRoles = await getUserRolesByUserId(authenticationToken.user_id);
+        const associatedAuthorities = associatedRoles?.length ? await getUserAuthoritiesByRoles(associatedRoles.map((role) => role.id)) : [];
+
+        user.roles = associatedRoles;
+        user.authorities = associatedAuthorities;
+        return res.status(200).json(user);
     }
     return res.status(401).json({ error: "Invalid Token" });
 });

@@ -1,6 +1,6 @@
 const libExpress = require("express");
 const { requestService } = require("../utils");
-const { getUserByEmail, addUserByEmail, getUserById, getUserRolesByUserId } = require("../db/users");
+const { getUserByEmail, addUserByEmail, getUserById, getUserRolesByUserId, getUserAuthoritiesByRoles } = require("../db/users");
 const libValidator = require("validator");
 const { generateToken } = require("../utils");
 const { addInactiveToken, getTokenByOTP, activateToken } = require("../db/authentication_tokens");
@@ -27,7 +27,12 @@ router.patch("/", async (req, res) => {
             return res.status(400).json({ error: "User Is Now Alloed To Access Application" });
         }
 
-        user.roles = getUserRolesByUserId(authenticationToken.user_id);
+        const associatedRoles = await getUserRolesByUserId(authenticationToken.user_id);
+
+        const associatedAuthorities = associatedRoles?.length ? await getUserAuthoritiesByRoles(associatedRoles.map((role) => role.id)) : [];
+
+        user.roles = associatedRoles;
+        user.authorities = associatedAuthorities;
 
         return res.status(200).json(user);
     }

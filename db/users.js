@@ -190,7 +190,7 @@ function getUserRolesAuthoritiesByUserId(userId) {
             ) role_authorities ON ROLES.id = role_authorities.role_id
             WHERE USERS.id = ? AND USERS.active = TRUE
             GROUP BY USERS.id, USERS.full_name, USERS.email, USERS.phone, USERS.address, USERS.wallet, USERS.active, USERS.created_on, USERS.updated_at`,
-        [id]
+        [userId]
     ).catch((error) => {
         logger.error(`getUserRolesAuthoritiesByUserId: ${error}`);
         return null;

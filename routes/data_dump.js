@@ -91,7 +91,14 @@ router.post("/chapter-media", async (req, res) => {
             mediaInsertionPromises.push(
                 executeSQLQueryParameterized(
                     "INSERT INTO MEDIA(downloadable,type,view_index,title, media_group_id, cdn_id) SELECT ?,?,?,?, media_group_id, ? FROM CHAPTERS WHERE id = ?",
-                    [element.downloadable, element.type, element.view_index, element.title, element.source, element.chapter_id]
+                    [
+                        element.downloadable,
+                        element.type,
+                        element.view_index,
+                        element.title,
+                        element.type === "video" ? `${element.type}.mp4` : element.type,
+                        element.chapter_id,
+                    ]
                 )
             );
         });
@@ -113,7 +120,14 @@ router.post("/demo-media", async (req, res) => {
             mediaInsertionPromises.push(
                 executeSQLQueryParameterized(
                     "INSERT INTO MEDIA(downloadable,type,view_index,title, media_group_id, cdn_id) SELECT ?,?,?,?, media_group_id, ? FROM SUBJECTS WHERE id = ?",
-                    [element.downloadable, element.type, element.view_index, element.title, element.source, element.subject_id]
+                    [
+                        element.downloadable,
+                        element.type,
+                        element.view_index,
+                        element.title,
+                        element.type === "video" ? `${element.type}.mp4` : element.type,
+                        element.subject_id,
+                    ]
                 )
             );
         });

@@ -9,7 +9,7 @@ const logger = require("../libs/logger");
 
 const router = libExpress.Router();
 
-//work on blocked user #1
+//work on blocked user #2
 //once receieved the info on UI save into reudx
 //check what fields need to be sent
 //logout with invalidate call from front end

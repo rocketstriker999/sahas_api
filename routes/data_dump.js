@@ -96,7 +96,7 @@ router.post("/chapter-media", async (req, res) => {
                         element.type,
                         element.view_index,
                         element.title,
-                        element.type === "video" ? `${element.type}.mp4` : element.type,
+                        element.type === "video" ? `${element.source}.mp4` : element.source,
                         element.chapter_id,
                     ]
                 )
@@ -125,7 +125,7 @@ router.post("/demo-media", async (req, res) => {
                         element.type,
                         element.view_index,
                         element.title,
-                        element.type === "video" ? `${element.type}.mp4` : element.type,
+                        element.type === "video" ? `${element.source}.mp4` : element.source,
                         element.subject_id,
                     ]
                 )

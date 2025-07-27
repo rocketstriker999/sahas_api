@@ -23,7 +23,7 @@ router.get("/subjects/:subjectId/:mediaId", async (req, res) => {
         onResponseReceieved: async (sources, responseCode) => {
             if (responseCode === 200) {
                 if (media.type === "video") {
-                    logger.success(`Extracted Media - ${media.type} - ${media.cdn_id} - ${sources.length} Sources`);
+                    logger.success(`Extracted Media - ${media.type} - ${media.cdn_id} `);
                     return res.status(200).json(sources);
                 }
 

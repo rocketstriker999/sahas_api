@@ -84,7 +84,7 @@ router.post("/", async (req, res) => {
 
 router.get("/", async (req, res) => {
     if ((user = req?.user)) {
-        const associatedRoles = await getUserRolesByUserId(authenticationToken.user_id);
+        const associatedRoles = await getUserRolesByUserId(user.id);
         const associatedAuthorities = associatedRoles?.length ? await getUserAuthoritiesByRoles(associatedRoles.map((role) => role.id)) : [];
 
         user.roles = associatedRoles;

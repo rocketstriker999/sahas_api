@@ -139,20 +139,20 @@ function getUserById(id) {
 
 function getUserRolesByUserId(userId) {
     return executeSQLQueryParameterized(
-        `SELECT ROLES.id, ROLES.title FROM USER_ROLES LEFT JOIN ROLES ON USER_ROLES.role_id=ROLES.id WHERE USER_ROLES.user_id = ? AND ROLES.active=TRUE AND USER_ROLES.active=TRUE`,
+        `SELECT ROLES.id, ROLES.title FROM USER_ROLES LEFT JOIN ROLES ON USER_ROLES.role_id=ROLES.id WHERE ROLES.active=TRUE AND USER_ROLES.active=TRUE AND USER_ROLES.user_id = ?`,
         [userId]
     ).catch((error) => {
-        logger.error(`getUserById: ${error}`);
+        logger.error(`getUserRolesByUserId: ${error}`);
         return null;
     });
 }
 
 function getUserAuthoritiesByRoles(userRoles) {
     return executeSQLQueryParameterized(
-        `SELECT AUTHORITIES.title FROM ROLE_AUTHORITIES LEFT JOIN AUTHORITIES ON ROLE_AUTHORITIES.authority_id=AUTHORITIES.id WHERE AUTHORITIES.active=TRUE AND ROLE_AUTHORITIES.active=TRUE AND ROLES.id in (?)`,
+        `SELECT AUTHORITIES.title FROM ROLE_AUTHORITIES LEFT JOIN AUTHORITIES ON ROLE_AUTHORITIES.authority_id=AUTHORITIES.id WHERE AUTHORITIES.active=TRUE AND ROLE_AUTHORITIES.active=TRUE AND ROLE_AUTHORITIES.role_id in (?)`,
         [userRoles]
     ).catch((error) => {
-        logger.error(`getUserById: ${error}`);
+        logger.error(`getUserAuthoritiesByRoles: ${error}`);
         return null;
     });
 }

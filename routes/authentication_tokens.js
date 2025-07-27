@@ -22,7 +22,7 @@ router.patch("/", async (req, res) => {
 
     if ((authenticationToken = await getTokenByOTP(req.body.authentication_token, req.body.otp))) {
         activateToken(req.body.authentication_token);
-        return res.status(200).json({ ...(await getUserById(authenticationToken.user_id)) });
+        return res.status(200).json({ ...(await getUserById(authenticationToken.user_id)), roles: [] });
     }
     return res.status(400).json({ error: "Invalid Token" });
 });

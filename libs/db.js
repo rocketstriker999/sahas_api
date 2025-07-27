@@ -25,7 +25,6 @@ function generateDBTables() {
             email VARCHAR(48) NOT NULL UNIQUE,
             phone VARCHAR(13) NULL UNIQUE,
             address VARCHAR(256) NULL,
-            branch VARCHAR(16) NULL,
             wallet DECIMAL(8, 2) DEFAULT 0,
             active BOOLEAN NOT NULL DEFAULT TRUE,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -34,13 +33,15 @@ function generateDBTables() {
         `,
         `CREATE TABLE IF NOT EXISTS ROLES(
             id INT AUTO_INCREMENT PRIMARY KEY,
-            title VARCHAR(36) NOT NULL,
+            title VARCHAR(36) UNIQUE NOT NULL,
+            active BOOLEAN NOT NULL DEFAULT TRUE,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
         `CREATE TABLE IF NOT EXISTS AUTHORITIES(
             id INT AUTO_INCREMENT PRIMARY KEY,
-            title VARCHAR(36) NOT NULL,
+            title VARCHAR(36) UNIQUE NOT NULL,
+            active BOOLEAN NOT NULL DEFAULT TRUE,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,

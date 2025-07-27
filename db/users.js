@@ -174,11 +174,6 @@ function getUserRolesAuthoritiesByUserId(userId) {
                             'role_authority_title', ROLE_AUTHORITIES.title,
                             'is_expired', CASE WHEN ROLE_AUTHORITIES.validity < NOW() THEN true ELSE false END,
                             'days_until_expiry', DATEDIFF(ROLE_AUTHORITIES.validity, NOW()),
-                            'status', CASE 
-                                WHEN ROLE_AUTHORITIES.validity < NOW() THEN 'EXPIRED'
-                                WHEN DATEDIFF(ROLE_AUTHORITIES.validity, NOW()) <= 30 THEN 'EXPIRING_SOON'
-                                ELSE 'ACTIVE'
-                            END,
                             'authority_created_on', AUTHORITIES.created_on,
                             'authority_updated_at', AUTHORITIES.updated_at
                         )

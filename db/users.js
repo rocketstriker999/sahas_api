@@ -137,63 +137,27 @@ function getUserById(id) {
         });
 }
 
-function getUserRolesAuthoritiesByUserId(userId) {
+function getUserRolesByUserId(userId) {
     return executeSQLQueryParameterized(
-        `SELECT USERS.id as user_id,USERS.full_name,USERS.email,USERS.phone,USERS.address,USERS.wallet,USERS.active as user_active,USERS.created_on,USERS.updated_at,
-            COALESCE(
-                JSON_ARRAYAGG(
-                    CASE 
-                        WHEN ROLES.id IS NOT NULL THEN
-                            JSON_OBJECT(
-                                'role_id', ROLES.id,
-                                'role_title', ROLES.title,
-                                'role_active', ROLES.active,
-                                'user_role_active', USER_ROLES.active,
-                                'role_created_on', ROLES.created_on,
-                                'role_updated_at', ROLES.updated_at,
-                                'authorities', COALESCE(role_authorities.authorities, JSON_ARRAY())
-                            )
-                        ELSE NULL
-                    END
-                ), 
-                JSON_ARRAY()
-            ) as roles_with_authorities
-            FROM USERS
-            LEFT JOIN USER_ROLES ON USERS.id = USER_ROLES.user_id AND USER_ROLES.active = TRUE
-            LEFT JOIN ROLES ON USER_ROLES.role_id = ROLES.id AND ROLES.active = TRUE
-            LEFT JOIN (
-                SELECT 
-                    ROLE_AUTHORITIES.role_id,
-                    JSON_ARRAYAGG(
-                        JSON_OBJECT(
-                            'authority_id', AUTHORITIES.id,
-                            'authority_title', AUTHORITIES.title,
-                            'authority_active', AUTHORITIES.active,
-                            'role_authority_active', ROLE_AUTHORITIES.active,
-                            'validity', ROLE_AUTHORITIES.validity,
-                            'role_authority_title', ROLE_AUTHORITIES.title,
-                            'is_expired', CASE WHEN ROLE_AUTHORITIES.validity < NOW() THEN true ELSE false END,
-                            'days_until_expiry', DATEDIFF(ROLE_AUTHORITIES.validity, NOW()),
-                            'authority_created_on', AUTHORITIES.created_on,
-                            'authority_updated_at', AUTHORITIES.updated_at
-                        )
-                    ) as authorities
-                FROM ROLE_AUTHORITIES
-                JOIN AUTHORITIES ON ROLE_AUTHORITIES.authority_id = AUTHORITIES.id AND AUTHORITIES.active = TRUE
-                WHERE ROLE_AUTHORITIES.active = TRUE
-                GROUP BY ROLE_AUTHORITIES.role_id
-            ) role_authorities ON ROLES.id = role_authorities.role_id
-            WHERE USERS.id = ? AND USERS.active = TRUE
-            GROUP BY USERS.id, USERS.full_name, USERS.email, USERS.phone, USERS.address, USERS.wallet, USERS.active, USERS.created_on, USERS.updated_at`,
+        `SELECT ROLES.title FROM USER_ROLES LEFT JOIN ROLES ON USER_ROLES.role_id=ROLES.id WHERE USER_ROLES.user_id = ? AND ROLES.active=TRUE AND USER_ROLES.active=TRUE`,
         [userId]
     ).catch((error) => {
-        logger.error(`getUserRolesAuthoritiesByUserId: ${error}`);
+        logger.error(`getUserById: ${error}`);
+        return null;
+    });
+}
+
+function getUserAuthoritiesByRoles(userRoles) {
+    return executeSQLQueryParameterized(
+        `SELECT ROLES.title FROM USER_ROLES LEFT JOIN ROLES ON USER_ROLES.role_id=ROLES.id WHERE USER_ROLES.user_id = ? AND ROLES.active=TRUE AND USER_ROLES.active=TRUE`,
+        [userRoles]
+    ).catch((error) => {
+        logger.error(`getUserById: ${error}`);
         return null;
     });
 }
 
 module.exports = {
-    getUserRolesAuthoritiesByUserId,
     validateUserOTP,
     updateUserToken,
     getUserByEmail,
@@ -207,4 +171,5 @@ module.exports = {
     updateUserProfilePrimaryDetails,
     addUserByEmail,
     getUserById,
+    getUserRolesByUserId,
 };

@@ -1,9 +1,9 @@
 const libExpress = require("express");
 const { requestService } = require("../utils");
-const { getUserByEmail, addUserByEmail, getUserById, getUserRolesAuthoritiesByUserId } = require("../db/users");
+const { getUserByEmail, addUserByEmail, getUserById, getUserRolesByUserId } = require("../db/users");
 const libValidator = require("validator");
 const { generateToken } = require("../utils");
-const { addInactiveToken, getTokenByOTP, activateTokenByOTP, activateToken } = require("../db/authentication_tokens");
+const { addInactiveToken, getTokenByOTP, activateToken } = require("../db/authentication_tokens");
 const { readConfig } = require("../libs/config");
 const logger = require("../libs/logger");
 
@@ -22,7 +22,14 @@ router.patch("/", async (req, res) => {
 
     if ((authenticationToken = await getTokenByOTP(req.body.authentication_token, req.body.otp))) {
         activateToken(req.body.authentication_token);
-        return res.status(200).json(await getUserRolesAuthoritiesByUserId(authenticationToken.user_id));
+        const user = await getUserById(authenticationToken.user_id);
+        if (!user.active) {
+            return res.status(400).json({ error: "User Is Now Alloed To Access Application" });
+        }
+
+        user.roles = getUserRolesByUserId(authenticationToken.user_id);
+
+        return res.status(200).json(user);
     }
     return res.status(400).json({ error: "Invalid Token" });
 });

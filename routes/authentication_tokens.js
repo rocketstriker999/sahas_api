@@ -15,6 +15,13 @@ const router = libExpress.Router();
 //logout with invalidate call from front end
 //if user already has the token then validate from ui side
 
+async function populateRolesAndAuthorities(user) {
+    const roles = await getUserRolesByUserId(user.id);
+    const authorities = roles?.length ? await getUserAuthoritiesByRoles(roles.map((role) => role.id).join(",")) : [];
+    user.roles = roles?.map((role) => role.title);
+    user.authorities = authorities?.map((authority) => authority.title);
+}
+
 router.patch("/", async (req, res) => {
     if (!req.body.otp || !req.body.authentication_token) {
         return res.status(400).json({ error: "Missing Required Parameters - OTP or Token" });
@@ -23,16 +30,7 @@ router.patch("/", async (req, res) => {
     if ((authenticationToken = await getTokenByOTP(req.body.authentication_token, req.body.otp))) {
         activateToken(req.body.authentication_token);
         const user = await getUserById(authenticationToken.user_id);
-        if (!user.active) {
-            return res.status(400).json({ error: "User Is Now Alloed To Access Application" });
-        }
-
-        const associatedRoles = await getUserRolesByUserId(authenticationToken.user_id);
-
-        const associatedAuthorities = associatedRoles?.length ? await getUserAuthoritiesByRoles(associatedRoles.map((role) => role.id)) : [];
-
-        user.roles = associatedRoles;
-        user.authorities = associatedAuthorities;
+        await populateRolesAndAuthorities(user);
 
         return res.status(200).json(user);
     }
@@ -84,11 +82,7 @@ router.post("/", async (req, res) => {
 
 router.get("/", async (req, res) => {
     if ((user = req?.user)) {
-        const associatedRoles = await getUserRolesByUserId(user.id);
-        const associatedAuthorities = associatedRoles?.length ? await getUserAuthoritiesByRoles(associatedRoles.map((role) => role.id).join(",")) : [];
-
-        user.roles = associatedRoles;
-        user.authorities = associatedAuthorities;
+        await populateRolesAndAuthorities(user);
         return res.status(200).json(user);
     }
     return res.status(401).json({ error: "Invalid Token" });

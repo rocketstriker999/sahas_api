@@ -125,7 +125,7 @@ router.post("/demo-media", async (req, res) => {
                         element.type,
                         element.view_index,
                         element.title,
-                        element.type === "video" ? `${element.source}.mp4` : element.source,
+                        element.type === "video" && !element.source.includes(".mkv") ? `${element.source}.mp4` : element.source,
                         element.subject_id,
                     ]
                 )

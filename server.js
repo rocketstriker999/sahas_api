@@ -22,7 +22,7 @@ sahasAPI.use(cors({ origin: process.env.ALLOWED_CORS_ORIGINS }));
 sahasAPI.use(libExpress.json());
 sahasAPI.use(libExpress.urlencoded({ extended: true }));
 
-//Apply Middlewares #5
+//Apply Middlewares #6
 sahasAPI.use((req, res, next) => setTimeout(next, 3000));
 
 sahasAPI.use(requiresNoMaintenance);

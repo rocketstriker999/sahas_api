@@ -79,6 +79,18 @@ router.post("/chapters", async (req, res) => {
     }
 });
 
+const videoSourceNameGenerator = (sourceName) => {
+    if (sourceName.includes(".mp4")) {
+        return sourceName;
+    }
+
+    if (sourceName.includes(".mkv")) {
+        return sourceName.replace(".mkv", ".mp4");
+    }
+
+    return `${sourceName}.mp4`;
+};
+
 router.post("/chapter-media", async (req, res) => {
     if (req.body.is_first_request) {
         await executeSQLQueryRaw("TRUNCATE TABLE MEDIA");
@@ -96,7 +108,7 @@ router.post("/chapter-media", async (req, res) => {
                         element.type,
                         element.view_index,
                         element.title,
-                        element.type === "video" && !element.source.includes(".mkv") ? `${element.source}.mp4` : element.source,
+                        element.type === "video" ? videoSourceNameGenerator(element.source) : element.source,
                         element.chapter_id,
                     ]
                 )
@@ -125,7 +137,7 @@ router.post("/demo-media", async (req, res) => {
                         element.type,
                         element.view_index,
                         element.title,
-                        element.type === "video" && !element.source.includes(".mkv") ? `${element.source}.mp4` : element.source,
+                        element.type === "video" ? videoSourceNameGenerator(element.source) : element.source,
                         element.subject_id,
                     ]
                 )

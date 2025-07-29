@@ -23,48 +23,6 @@
                 }
             ]
         },
-        "opertions_sections": [
-            {
-                "title": "Category 1",
-                "operations": [
-                    {
-                        "title": "Courses",
-                        "icon": "pi-video"
-                    },
-                    {
-                        "title": "Devices",
-                        "icon": "pi-mobile"
-                    },
-                    {
-                        "title": "Help",
-                        "icon": "pi-question"
-                    },
-                    {
-                        "title": "Invoices",
-                        "icon": "pi-receipt"
-                    },
-                    {
-                        "title": "Wallet",
-                        "icon": "pi-wallet"
-                    },
-                    {
-                        "title": "FAQ",
-                        "icon": "pi-question"
-                    },
-                    {
-                        "title": "Invoices",
-                        "icon": "pi-receipt"
-                    },
-                    {
-                        "title": "Wallet",
-                        "icon": "pi-wallet"
-                    },
-                    {
-                        "title": "FAQ",
-                        "icon": "pi-question"
-                    }
-                ]
-            }
-        ]
+        "opertions_sections": {}
     }
 }

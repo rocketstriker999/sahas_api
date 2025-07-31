@@ -1,7 +1,4 @@
 {
-    "app": {
-        "requires_authorities": []
-    },
     "dash_board": {
         "carousel": {
             "images": [
@@ -22,7 +19,6 @@
                     "image": "Frame62.png"
                 }
             ]
-        },
-        "opertions_sections": {}
+        }
     }
 }

@@ -1,10 +1,12 @@
-const { readConfig } = require("../libs/config");
-const { executeSQLQueryParameterized, executeSQLQueryRaw } = require("../libs/db");
+const { executeSQLQueryParameterized } = require("../libs/db");
 const logger = require("../libs/logger");
 
 async function getTokenByOTP(token, otp) {
     //Check if such token is there
-    return executeSQLQueryParameterized(`SELECT * FROM USER_TOKENS WHERE token = ? AND otp=? AND active=FALSE`, [token, otp])
+    return executeSQLQueryParameterized(
+        `SELECT * FROM USER_AUTHENTICATION_TOKENS WHERE token = ? AND otp=? AND active=FALSE  AND validity > CURRENT_TIMESTAMP;`,
+        [token, otp]
+    )
         .then((result) => (result.length > 0 ? result[0] : false))
         .catch((error) => {
             logger.error(`getTokenByOTP: ${error}`);
@@ -14,7 +16,7 @@ async function getTokenByOTP(token, otp) {
 
 async function activateToken(token) {
     //Activate Token
-    return executeSQLQueryParameterized(`UPDATE USER_TOKENS SET active = TRUE WHERE token = ?`, [token]).catch((error) => {
+    return executeSQLQueryParameterized(`UPDATE USER_AUTHENTICATION_TOKENS SET active = TRUE WHERE token = ?`, [token]).catch((error) => {
         logger.error(`activateToken: ${error}`);
         return [];
     });
@@ -23,12 +25,15 @@ async function activateToken(token) {
 async function addInactiveToken(userId, otp, token, validity) {
     //get allowed validity from configuration
 
-    return executeSQLQueryParameterized(`INSERT INTO USER_TOKENS(user_id,otp,token,validity) VALUES(?,?,?,?)`, [userId, otp, token, validity]).catch(
-        (error) => {
-            logger.error(`addInactiveToken: ${error}`);
-            return [];
-        }
-    );
+    return executeSQLQueryParameterized(`INSERT INTO USER_AUTHENTICATION_TOKENS(user_id,otp,token,validity) VALUES(?,?,?,?)`, [
+        userId,
+        otp,
+        token,
+        validity,
+    ]).catch((error) => {
+        logger.error(`addInactiveToken: ${error}`);
+        return [];
+    });
 }
 
 module.exports = { addInactiveToken, activateToken, getTokenByOTP };

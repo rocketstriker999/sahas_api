@@ -62,7 +62,7 @@ function generateDBTables() {
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
 
-        `CREATE TABLE IF NOT EXISTS USER_TOKENS (
+        `CREATE TABLE IF NOT EXISTS USER_AUTHENTICATION_TOKENS (
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
             otp VARCHAR(4) NOT NULL,

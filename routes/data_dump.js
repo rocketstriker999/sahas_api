@@ -88,7 +88,7 @@ const videoSourceNameGenerator = (sourceName) => {
         return sourceName.replace(".mkv", ".mp4");
     }
 
-    return `${sourceName}.mp4`.trim();
+    return `${sourceName}.mp4`;
 };
 
 router.post("/chapter-media", async (req, res) => {
@@ -108,7 +108,7 @@ router.post("/chapter-media", async (req, res) => {
                         element.type,
                         element.view_index,
                         element.title,
-                        element.type === "video" ? videoSourceNameGenerator(element.source) : element.source,
+                        element.type === "video" ? videoSourceNameGenerator(element.source).trim() : element.source.trim(),
                         element.chapter_id,
                     ]
                 )

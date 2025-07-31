@@ -22,7 +22,7 @@ sahasAPI.use(cors({ origin: process.env.ALLOWED_CORS_ORIGINS }));
 sahasAPI.use(libExpress.json());
 sahasAPI.use(libExpress.urlencoded({ extended: true }));
 
-//Apply Middlewares #7
+//Apply Middlewares #8
 sahasAPI.use((req, res, next) => setTimeout(next, 1000));
 
 sahasAPI.use(requiresNoMaintenance);
@@ -35,15 +35,16 @@ sahasAPI.use(logRequest);
 const routers = {
     "/data-dump": { middlewares: [], router: require("./routes/data_dump") },
     "/configs": { middlewares: [], router: require("./routes/configs") },
+    "/authentication-tokens": { middlewares: [], router: require("./routes/authentication_tokens") },
+    "/catelogue": { middlewares: [], router: require("./routes/catelogue") },
+
     // "/users": { middlewares: [], router: require("./routes/users") },
     // "/token": { middlewares: [], router: require("./routes/token") },
-    "/authentication-tokens": { middlewares: [], router: require("./routes/authentication_tokens") },
     // "/device": { middlewares: [], router: require("./routes/device") },
     // "/transactions": { middlewares: [], router: require("./routes/transaction") },
     // "/media": { middlewares: [requiresAuthentication], router: require("./routes/media") },
     // "/extract": { middlewares: [], router: require("./routes/extract") },
     // "/access": { middlewares: [], router: require("./routes/access") },
-    "/catelogue": { middlewares: [], router: require("./routes/catelogue") },
     // "/invoices": { middlewares: [], router: require("./routes/invoices") },
 };
 

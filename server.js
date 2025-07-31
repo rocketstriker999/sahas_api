@@ -33,11 +33,11 @@ sahasAPI.use(logRequest);
 
 //api end points and routers
 const routers = {
-    "/data-dump": { middlewares: [], router: require("./routes/data_dump") },
+    // "/data-dump": { middlewares: [], router: require("./routes/data_dump") },
     "/configs": { middlewares: [], router: require("./routes/configs") },
     "/authentication-tokens": { middlewares: [], router: require("./routes/authentication_tokens") },
-    "/catelogue": { middlewares: [], router: require("./routes/catelogue") },
-
+    // "/catelogue": { middlewares: [], router: require("./routes/catelogue") },
+    "/roles": { middlewares: [], router: require("./routes/roles") },
     // "/users": { middlewares: [], router: require("./routes/users") },
     // "/token": { middlewares: [], router: require("./routes/token") },
     // "/device": { middlewares: [], router: require("./routes/device") },

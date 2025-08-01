@@ -9,10 +9,19 @@ const router = libExpress.Router();
 router.get("/", async (req, res) => {
     res.status(200).json({
         roles: await getRoles(),
-        branches: [{ title: "B1" }, { title: "B2" }],
+        branches: [
+            { title: "B1", id: 1 },
+            { title: "B2", id: 2 },
+        ],
         courses: [],
-        active: [{ title: "Yes" }, { title: "No" }],
-        dues: [{ title: "Yes" }, { title: "No" }],
+        active: [
+            { title: "Yes", id: true },
+            { title: "No", id: false },
+        ],
+        dues: [
+            { title: "Yes", id: true },
+            { title: "No", id: false },
+        ],
     });
 });
 

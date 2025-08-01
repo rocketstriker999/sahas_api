@@ -33,6 +33,8 @@ router.get("/", async (req, res) => {
     //     }
     // }
     // return res.status(401).json({ error: "Missing Required Information" });
+
+    res.status(200).json([]);
 });
 
 module.exports = router;

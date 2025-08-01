@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const { updateUserPrimaryDetails, getUserByToken, updateUserProfilePrimaryDetails } = require("../db/users");
+const logger = require("../libs/logger");
 
 const router = libExpress.Router();
 

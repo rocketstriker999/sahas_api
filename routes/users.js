@@ -26,13 +26,13 @@ const router = libExpress.Router();
 // });
 
 router.get("/", async (req, res) => {
-    // if (req.params.id && req.cookies.token) {
-    //     const user = await getUserByToken(req.cookies.token);
-    //     if (user) {
-    //         return res.status(200).json(user);
-    //     }
-    // }
-    // return res.status(401).json({ error: "Missing Required Information" });
+    //all users
+
+    if (req.query) {
+        console.log(req.query);
+    }
+
+    //if filters and query
 
     res.status(200).json([]);
 });

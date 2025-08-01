@@ -29,7 +29,7 @@ router.get("/", async (req, res) => {
     //all users
 
     if (req.query) {
-        console.log(req.query);
+        logger.info(req.query);
     }
 
     //if filters and query

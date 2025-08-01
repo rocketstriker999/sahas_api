@@ -7,6 +7,11 @@ const router = libExpress.Router();
 //get all filters
 
 router.get("/", async (req, res) => {
+    const booleanFilters = [
+        { title: "Yes", id: "TRUE" },
+        { title: "No", id: "FALSE" },
+    ];
+
     res.status(200).json({
         roles: await getRoles(),
         branches: [
@@ -14,14 +19,8 @@ router.get("/", async (req, res) => {
             { title: "B2", id: 2 },
         ],
         courses: [],
-        active: [
-            { title: "Yes", id: "TRUE" },
-            { title: "No", id: "FALSE" },
-        ],
-        dues: [
-            { title: "Yes", id: "TRUE" },
-            { title: "No", id: "FALSE" },
-        ],
+        active: booleanFilters,
+        dues: booleanFilters,
     });
 });
 

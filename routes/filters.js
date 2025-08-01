@@ -11,7 +11,7 @@ router.get("/", async (req, res) => {
         roles: await getRoles(),
         branches: [{ title: "B1" }, { title: "B2" }],
         courses: [],
-        active: [true, false],
+        active: [{ title: "Yes" }, { title: "No" }],
     });
 });
 

@@ -23,7 +23,7 @@ sahasAPI.use(libExpress.json());
 sahasAPI.use(libExpress.urlencoded({ extended: true }));
 
 //Apply Middlewares #8
-sahasAPI.use((req, res, next) => setTimeout(next, 1000));
+//sahasAPI.use((req, res, next) => setTimeout(next, 1000));
 
 sahasAPI.use(requiresNoMaintenance);
 sahasAPI.use(requiresDeviceFingerPrint);
@@ -39,7 +39,7 @@ const routers = {
     "/catelogue": { middlewares: [], router: require("./routes/catelogue") },
     "/roles": { middlewares: [], router: require("./routes/roles") },
     "/filters": { middlewares: [], router: require("./routes/filters") },
-    // "/users": { middlewares: [], router: require("./routes/users") },
+    "/users": { middlewares: [], router: require("./routes/users") },
     // "/token": { middlewares: [], router: require("./routes/token") },
     // "/device": { middlewares: [], router: require("./routes/device") },
     // "/transactions": { middlewares: [], router: require("./routes/transaction") },

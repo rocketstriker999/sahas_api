@@ -12,6 +12,7 @@ router.get("/", async (req, res) => {
         branches: [{ title: "B1" }, { title: "B2" }],
         courses: [],
         active: [{ title: "Yes" }, { title: "No" }],
+        dues: [{ title: "Yes" }, { title: "No" }],
     });
 });
 

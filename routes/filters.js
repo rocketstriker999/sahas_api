@@ -15,12 +15,12 @@ router.get("/", async (req, res) => {
         ],
         courses: [],
         active: [
-            { title: "Yes", id: true },
-            { title: "No", id: false },
+            { title: "Yes", id: TRUE },
+            { title: "No", id: FALSE },
         ],
         dues: [
-            { title: "Yes", id: true },
-            { title: "No", id: false },
+            { title: "Yes", id: TRUE },
+            { title: "No", id: FALSE },
         ],
     });
 });

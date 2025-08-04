@@ -160,7 +160,15 @@ function getUserAuthoritiesByRoles(userRoles) {
     });
 }
 
+function getAllUsers() {
+    return executeSQLQueryParameterized(`SELECT * FROM USERS`, []).catch((error) => {
+        logger.error(`getAllUsers: ${error}`);
+        return [];
+    });
+}
+
 module.exports = {
+    getAllUsers,
     validateUserOTP,
     updateUserToken,
     getUserByEmail,

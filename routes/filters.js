@@ -28,7 +28,7 @@ router.get("/reports", async (req, res) => {
     //we will technically return the filters needed for this screen
 });
 
-router.get("/reports", async (req, res) => {
+router.get("/any-other-screen", async (req, res) => {
     //we will technically return the filters needed for this screen
 });
 

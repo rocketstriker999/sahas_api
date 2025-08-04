@@ -34,7 +34,7 @@ router.get("/", async (req, res) => {
 
     //if filters and query
 
-    res.status(200).json([]);
+    res.status(200).json([{ name: "daw" }]);
 });
 
 module.exports = router;

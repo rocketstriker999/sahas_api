@@ -13,10 +13,7 @@ router.get("/", async (req, res) => {
 
     // if searched query is there
     //Filter the Users if includes the email phone or name like give
-    if (search)
-        users = users.filter((user) => {
-            user?.full_name?.includes(search) || user?.email?.includes(search) || user?.phone?.includes(search);
-        });
+    if (search) users = users.filter((user) => user?.full_name?.includes(search) || user?.email?.includes(search) || user?.phone?.includes(search));
 
     //it is time to apply filters if we have any
 

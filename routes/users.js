@@ -16,6 +16,12 @@ router.get("/", async (req, res) => {
     if (search) users = users.filter((user) => user?.full_name?.includes(search) || user?.email?.includes(search) || user?.phone?.includes(search));
 
     //it is time to apply filters if we have any
+    if (appliedFilters && Object.keys(appliedFilters)) {
+        //role
+        //branches
+        //active
+        //dues
+    }
 
     res.status(200).json(users);
 });

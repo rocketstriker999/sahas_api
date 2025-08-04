@@ -24,6 +24,7 @@ function generateDBTables() {
             full_name VARCHAR(36) NULL,
             email VARCHAR(48) NOT NULL UNIQUE,
             phone VARCHAR(13) NULL UNIQUE,
+            image VARCHAR(64) NULL UNIQUE,
             address VARCHAR(256) NULL,
             wallet DECIMAL(8, 2) DEFAULT 0,
             active BOOLEAN NOT NULL DEFAULT TRUE,

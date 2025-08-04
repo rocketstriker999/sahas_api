@@ -7,10 +7,18 @@ const router = libExpress.Router();
 router.get("/", async (req, res) => {
     const { search, appliedFilters } = req.query;
     logger.info(`Searching Users - search : ${search} | filters : ${appliedFilters}`);
-    //get ALl Users
-    const users = await getAllUsers();
 
+    //get All Users
+    let users = await getAllUsers();
+
+    // if searched query is there
     //Filter the Users if includes the email phone or name like give
+    if (search)
+        users = users.filter((user) => {
+            user?.full_name?.includes(search) || user?.email?.includes(search) || user?.phone?.includes(search);
+        });
+
+    //it is time to apply filters if we have any
 
     res.status(200).json(users);
 });

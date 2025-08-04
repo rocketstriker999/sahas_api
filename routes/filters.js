@@ -6,7 +6,7 @@ const router = libExpress.Router();
 
 //get all filters
 
-router.get("/", async (req, res) => {
+router.get("/users", async (req, res) => {
     const booleanFilters = [
         { title: "Yes", id: "TRUE" },
         { title: "No", id: "FALSE" },
@@ -22,6 +22,14 @@ router.get("/", async (req, res) => {
         active: booleanFilters,
         dues: booleanFilters,
     });
+});
+
+router.get("/reports", async (req, res) => {
+    //we will technically return the filters needed for this screen
+});
+
+router.get("/reports", async (req, res) => {
+    //we will technically return the filters needed for this screen
 });
 
 module.exports = router;

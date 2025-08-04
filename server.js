@@ -23,7 +23,7 @@ sahasAPI.use(libExpress.json());
 sahasAPI.use(libExpress.urlencoded({ extended: true }));
 
 //Apply Middlewares #8
-//sahasAPI.use((req, res, next) => setTimeout(next, 1000));
+sahasAPI.use((req, res, next) => setTimeout(next, 3000));
 
 sahasAPI.use(requiresNoMaintenance);
 sahasAPI.use(requiresDeviceFingerPrint);

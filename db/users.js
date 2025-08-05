@@ -193,7 +193,7 @@ function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
 }
 
 function getCountUsersBySearchAndFilters(search, appliedFilters) {
-    const query = [`SELECT COUNT(id) FROM USERS`];
+    const query = [`SELECT COUNT(id) AS count FROM USERS`];
     const parameters = [];
 
     if (search || appliedFilters) {
@@ -209,11 +209,7 @@ function getCountUsersBySearchAndFilters(search, appliedFilters) {
     }
 
     return executeSQLQueryParameterized(query.join(" "), parameters)
-        .then(([result]) => {
-            logger.info("CALLEEEEEEE - ");
-            logger.info(JSON.stringify(result));
-            return result.count;
-        })
+        .then(([result]) => result.count)
         .catch((error) => {
             logger.error(`getCountUsersBySearchAndFilters: ${error}`);
             return 0;

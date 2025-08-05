@@ -1,5 +1,6 @@
 const { executeSQLQueryParameterized } = require("../libs/db");
 const logger = require("../libs/logger");
+const { param } = require("../routes/configs");
 
 function updateUserToken(email, token) {
     return executeSQLQueryParameterized(`UPDATE USERS SET token=? WHERE email=?`, [token, email]).catch((error) => {
@@ -162,12 +163,14 @@ function getUserAuthoritiesByRoles(userRoles) {
 
 function getAllUsersBySearchAndFilters(search, appliedFilters, offset, limit) {
     const query = [`SELECT * FROM USERS`];
+    const parameters = [];
 
     if (search || appliedFilters) {
         query.push(`WHERE`);
 
         if (search) {
-            query.push(["full_name", "email", "phone"].map((key) => `${key} LIKE '%${search}%'`).join(" OR "));
+            query.push(["full_name", "email", "phone"].map((key) => `${key} LIKE '%?%'`).join(" OR "));
+            parameters.push(search);
         }
 
         if (appliedFilters) {
@@ -175,14 +178,16 @@ function getAllUsersBySearchAndFilters(search, appliedFilters, offset, limit) {
     }
 
     if (offset) {
-        query.push(` OFFSET ${offset} `);
+        query.push(`OFFSET ?`);
+        parameters.push(offset);
     }
 
     if (limit) {
-        query.push(` LIMIT ${limit} `);
+        query.push(`LIMIT ?`);
+        parameters.push(limit);
     }
 
-    return executeSQLQueryParameterized(query.join(" "), []).catch((error) => {
+    return executeSQLQueryParameterized(query.join(" "), parameters).catch((error) => {
         logger.error(`getAllUsersBySearchAndFilters: ${error}`);
         return [];
     });

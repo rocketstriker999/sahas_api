@@ -177,14 +177,11 @@ function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
         }
     }
 
-    if (offSet) {
-        query.push(`OFFSET ?`);
-        parameters.push(offSet);
-    }
-
-    if (limit) {
+    if (offSet && limit) {
         query.push(`LIMIT ?`);
         parameters.push(limit);
+        query.push(`OFFSET ?`);
+        parameters.push(offSet);
     }
 
     console.log(query);

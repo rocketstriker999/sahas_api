@@ -187,6 +187,10 @@ function getAllUsersBySearchAndFilters(search, appliedFilters, offset, limit) {
         parameters.push(limit);
     }
 
+    console.log(query);
+    console.log(parameters);
+    console.log(query.join(" "));
+
     return executeSQLQueryParameterized(query.join(" "), parameters).catch((error) => {
         logger.error(`getAllUsersBySearchAndFilters: ${error}`);
         return [];

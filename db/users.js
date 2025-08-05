@@ -161,7 +161,7 @@ function getUserAuthoritiesByRoles(userRoles) {
     });
 }
 
-function getAllUsersBySearchAndFilters(search, appliedFilters, offset, limit) {
+function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
     const query = [`SELECT * FROM USERS`];
     const parameters = [];
 
@@ -177,9 +177,9 @@ function getAllUsersBySearchAndFilters(search, appliedFilters, offset, limit) {
         }
     }
 
-    if (offset) {
+    if (offSet) {
         query.push(`OFFSET ?`);
-        parameters.push(offset);
+        parameters.push(offSet);
     }
 
     if (limit) {

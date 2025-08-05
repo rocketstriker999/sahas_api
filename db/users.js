@@ -211,7 +211,7 @@ function getCountUsersBySearchAndFilters(search, appliedFilters) {
     return executeSQLQueryParameterized(query.join(" "), parameters)
         .then(([result]) => result.count)
         .catch((error) => {
-            logger.error(`getAllUsersBySearchAndFilters: ${error}`);
+            logger.error(`getCountUsersBySearchAndFilters: ${error}`);
             return [];
         });
 }

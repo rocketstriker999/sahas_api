@@ -209,10 +209,14 @@ function getCountUsersBySearchAndFilters(search, appliedFilters) {
     }
 
     return executeSQLQueryParameterized(query.join(" "), parameters)
-        .then(([result]) => result.count)
+        .then(([result]) => {
+            logger.info("CALLEEEEEEE - ");
+            logger.info(result.count);
+            return result.count;
+        })
         .catch((error) => {
             logger.error(`getCountUsersBySearchAndFilters: ${error}`);
-            return [];
+            return 0;
         });
 }
 

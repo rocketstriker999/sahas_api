@@ -160,15 +160,36 @@ function getUserAuthoritiesByRoles(userRoles) {
     });
 }
 
-function getAllUsers() {
-    return executeSQLQueryParameterized(`SELECT * FROM USERS`, []).catch((error) => {
-        logger.error(`getAllUsers: ${error}`);
+function getAllUsersBySearchAndFilters(search, appliedFilters, offset, limit) {
+    let query = `SELECT * FROM USERS`;
+
+    if (search || appliedFilters) {
+        query.concat(` WHERE `);
+
+        if (search) {
+            query.concat(["full_name", "email", "phone"].map((key) => `${key} LIKE '%${search}%'`).join(" OR "));
+        }
+
+        if (appliedFilters) {
+        }
+    }
+
+    if (offset) {
+        query.concat(` OFFSET ${offset} `);
+    }
+
+    if (limit) {
+        query.concat(` LIMIT ${limit} `);
+    }
+
+    return executeSQLQueryParameterized(query, []).catch((error) => {
+        logger.error(`getAllUsersBySearchAndFilters: ${error}`);
         return [];
     });
 }
 
 module.exports = {
-    getAllUsers,
+    getAllUsersBySearchAndFilters,
     validateUserOTP,
     updateUserToken,
     getUserByEmail,

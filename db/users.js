@@ -161,13 +161,13 @@ function getUserAuthoritiesByRoles(userRoles) {
 }
 
 function getAllUsersBySearchAndFilters(search, appliedFilters, offset, limit) {
-    let query = `SELECT * FROM USERS`;
+    const query = [`SELECT * FROM USERS`];
 
     if (search || appliedFilters) {
-        query.concat(` WHERE `);
+        query.push(`WHERE`);
 
         if (search) {
-            query.concat(["full_name", "email", "phone"].map((key) => `${key} LIKE '%${search}%'`).join(" OR "));
+            query.push(["full_name", "email", "phone"].map((key) => `${key} LIKE '%${search}%'`).join(" OR "));
         }
 
         if (appliedFilters) {
@@ -175,14 +175,14 @@ function getAllUsersBySearchAndFilters(search, appliedFilters, offset, limit) {
     }
 
     if (offset) {
-        query.concat(` OFFSET ${offset} `);
+        query.push(` OFFSET ${offset} `);
     }
 
     if (limit) {
-        query.concat(` LIMIT ${limit} `);
+        query.push(` LIMIT ${limit} `);
     }
 
-    return executeSQLQueryParameterized(query, []).catch((error) => {
+    return executeSQLQueryParameterized(query.join(" "), []).catch((error) => {
         logger.error(`getAllUsersBySearchAndFilters: ${error}`);
         return [];
     });

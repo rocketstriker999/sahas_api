@@ -11,17 +11,6 @@ router.get("/", async (req, res) => {
     //get All Users
     let users = await getAllUsersBySearchAndFilters(search, appliedFilters, limit, offset);
 
-    // if searched query is there
-    //Filter the Users if includes the email phone or name like give
-
-    //it is time to apply filters if we have any
-    if (appliedFilters && Object.keys(appliedFilters)) {
-        //role
-        //branches
-        //active
-        //dues
-    }
-
     res.status(200).json(users);
 });
 

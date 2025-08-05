@@ -177,6 +177,8 @@ function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
         }
     }
 
+    query.push("ORDER BY id");
+
     if (offSet && limit) {
         query.push(`LIMIT ?`);
         parameters.push(limit);
@@ -184,18 +186,39 @@ function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
         parameters.push(offSet);
     }
 
-    console.log(query);
-    console.log(parameters);
-    console.log(query.join(" "));
-
     return executeSQLQueryParameterized(query.join(" "), parameters).catch((error) => {
         logger.error(`getAllUsersBySearchAndFilters: ${error}`);
         return [];
     });
 }
 
+function getCountUsersBySearchAndFilters(search, appliedFilters) {
+    const query = [`SELECT COUNT(id) FROM USERS`];
+    const parameters = [];
+
+    if (search || appliedFilters) {
+        query.push(`WHERE`);
+
+        if (search) {
+            query.push(["full_name", "email", "phone"].map((key) => `${key} LIKE '%?%'`).join(" OR "));
+            parameters.push(search);
+        }
+
+        if (appliedFilters) {
+        }
+    }
+
+    return executeSQLQueryParameterized(query.join(" "), parameters)
+        .then(([result]) => result.count)
+        .catch((error) => {
+            logger.error(`getAllUsersBySearchAndFilters: ${error}`);
+            return [];
+        });
+}
+
 module.exports = {
     getAllUsersBySearchAndFilters,
+    getCountUsersBySearchAndFilters,
     validateUserOTP,
     updateUserToken,
     getUserByEmail,

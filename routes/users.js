@@ -10,8 +10,8 @@ router.get("/", async (req, res) => {
 
     //get All Users
     const users = {
-        dataSet: await getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit),
         recordsCount: await getCountUsersBySearchAndFilters(search, appliedFilters),
+        dataSet: await getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit),
     };
 
     res.status(200).json(users);

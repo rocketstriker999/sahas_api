@@ -211,7 +211,7 @@ function getCountUsersBySearchAndFilters(search, appliedFilters) {
     return executeSQLQueryParameterized(query.join(" "), parameters)
         .then(([result]) => {
             logger.info("CALLEEEEEEE - ");
-            logger.info(result.count);
+            logger.info(JSON.stringify(result));
             return result.count;
         })
         .catch((error) => {

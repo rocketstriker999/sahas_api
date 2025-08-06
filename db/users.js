@@ -162,7 +162,7 @@ function getUserAuthoritiesByRoles(userRoles) {
 }
 
 function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
-    const query = [`SELECT * FROM USERS`];
+    const query = [`SELECT USERS.*,USER_ROLES.role_id FROM USERS LEFT JOIN USER_ROLES ON USERS.id=USER_ROLES.user_id`];
     const parameters = [];
 
     if (search || appliedFilters) {
@@ -173,6 +173,14 @@ function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
         }
 
         if (appliedFilters) {
+            //if priviously search is applied then we need to add AND
+            if (search) query.push("AND");
+
+            const { roles } = appliedFilters;
+
+            if (roles) {
+                query.push(`  USER_ROLES.id in (${roles})`);
+            }
         }
     }
 
@@ -203,6 +211,14 @@ function getCountUsersBySearchAndFilters(search, appliedFilters) {
         }
 
         if (appliedFilters) {
+            //if priviously search is applied then we need to add AND
+            if (search) query.push("AND");
+
+            const { roles } = appliedFilters;
+
+            if (roles) {
+                query.push(`  USER_ROLES.id in (${roles})`);
+            }
         }
     }
 

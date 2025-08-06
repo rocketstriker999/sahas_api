@@ -173,7 +173,7 @@ function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
 
     if (Object.keys(appliedFilters).length) {
         //if priviously search is applied then we need to add AND
-        if (search) query.push("AND");
+        query.push(!!search ? "AND" : "WHERE");
 
         const { roles } = appliedFilters;
 
@@ -209,7 +209,7 @@ function getCountUsersBySearchAndFilters(search, appliedFilters) {
 
     if (Object.keys(appliedFilters).length) {
         //if priviously search is applied then we need to add AND
-        if (search) query.push("AND");
+        query.push(!!search ? "AND" : "WHERE");
 
         const { roles } = appliedFilters;
 

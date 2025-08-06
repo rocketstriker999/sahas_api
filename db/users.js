@@ -198,7 +198,7 @@ function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
 }
 
 function getCountUsersBySearchAndFilters(search, appliedFilters) {
-    const query = [`SELECT COUNT(id) AS count FROM USERS LEFT JOIN USER_ROLES ON USERS.id=USER_ROLES.user_id`];
+    const query = [`SELECT COUNT(USERS.id) AS count FROM USERS LEFT JOIN USER_ROLES ON USERS.id=USER_ROLES.user_id`];
     const parameters = [];
 
     if (!!search) {

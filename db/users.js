@@ -169,7 +169,7 @@ function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
         query.push(`WHERE`);
 
         if (search) {
-            query.push(["full_name", "email", "phone"].map((key) => `${key} LIKE '%?%'`).join(" OR "));
+            query.push(["full_name", "email", "phone"].map((key) => `${key} LIKE '%${search}%'`).join(" OR "));
             parameters.push(search);
         }
 

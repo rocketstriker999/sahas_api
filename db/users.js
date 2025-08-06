@@ -174,7 +174,7 @@ function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
     if (!!appliedFilters) {
         //if priviously search is applied then we need to add AND
         if (search) query.push("AND");
-        logger.info("APPLIEFILTERS");
+        logger.info(JSON.stringify(appliedFilters));
         const { roles } = appliedFilters;
 
         if (roles) {
@@ -210,7 +210,7 @@ function getCountUsersBySearchAndFilters(search, appliedFilters) {
     if (!!appliedFilters) {
         //if priviously search is applied then we need to add AND
         if (search) query.push("AND");
-        logger.info("APPLIEFILTERS");
+        logger.info(JSON.stringify(appliedFilters));
 
         const { roles } = appliedFilters;
 

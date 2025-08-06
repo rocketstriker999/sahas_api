@@ -5,8 +5,8 @@ const { getAllUsers, getAllUsersBySearchAndFilters, getCountUsersBySearchAndFilt
 const router = libExpress.Router();
 
 router.get("/", async (req, res) => {
-    const { search, appliedFilters, offSet, limit } = req.query;
-    logger.info(`Searching Users - search : ${search} | filters : ${appliedFilters} | offSet : ${offSet} | limit : ${limit}`);
+    const { search, offSet, limit, ...appliedFilters } = req.query;
+    logger.info(`Searching Users - search : ${search} | filters : ${JSON.stringify(appliedFilters)} | offSet : ${offSet} | limit : ${limit}`);
 
     //get All Users
     const users = {

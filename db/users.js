@@ -173,6 +173,8 @@ function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
         }
 
         if (appliedFilters) {
+            logger.info("DAWDAWDAWDAWDAWDAWDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDd");
+
             //if priviously search is applied then we need to add AND
             if (search) query.push("AND");
 
@@ -211,6 +213,7 @@ function getCountUsersBySearchAndFilters(search, appliedFilters) {
         }
 
         if (appliedFilters) {
+            logger.info("DAWDAWDAWDAWDAWDAWDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDd");
             //if priviously search is applied then we need to add AND
             if (search) query.push("AND");
 

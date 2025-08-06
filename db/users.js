@@ -175,7 +175,7 @@ function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
         //if priviously search is applied then we need to add AND
         query.push(!!search ? "AND" : "WHERE");
 
-        const { roles } = appliedFilters;
+        const { roles, branches } = appliedFilters;
 
         if (roles) {
             query.push(`  USER_ROLES.id in (${roles})`);

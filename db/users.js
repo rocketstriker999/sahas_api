@@ -200,8 +200,7 @@ function getCountUsersBySearchAndFilters(search, appliedFilters) {
         query.push(`WHERE`);
 
         if (search) {
-            query.push(["full_name", "email", "phone"].map((key) => `${key} LIKE '%?%'`).join(" OR "));
-            parameters.push(search);
+            query.push(["full_name", "email", "phone"].map((key) => `${key} LIKE '%${search}%'`).join(" OR "));
         }
 
         if (appliedFilters) {

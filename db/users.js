@@ -162,7 +162,7 @@ function getUserAuthoritiesByRoles(userRoles) {
 }
 
 function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
-    const query = [`SELECT USERS.*,USER_ROLES.role_id FROM USERS LEFT JOIN USER_ROLES ON USERS.id=USER_ROLES.user_id`];
+    const query = [`SELECT DISTINCT USERS.* FROM USERS LEFT JOIN USER_ROLES ON USERS.id=USER_ROLES.user_id`];
     const parameters = [];
 
     if (!!search) {
@@ -198,7 +198,7 @@ function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
 }
 
 function getCountUsersBySearchAndFilters(search, appliedFilters) {
-    const query = [`SELECT COUNT(USERS.id) AS count FROM USERS LEFT JOIN USER_ROLES ON USERS.id=USER_ROLES.user_id`];
+    const query = [`SELECT COUNT(DISTINCT USERS.id) AS count FROM USERS LEFT JOIN USER_ROLES ON USERS.id=USER_ROLES.user_id`];
     const parameters = [];
 
     if (!!search) {

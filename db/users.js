@@ -171,10 +171,10 @@ function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
         query.push(["full_name", "email", "phone"].map((key) => `${key} LIKE '%${search}%'`).join(" OR "));
     }
 
-    if (!!appliedFilters) {
+    if (Object.key(appliedFilters).length) {
         //if priviously search is applied then we need to add AND
         if (search) query.push("AND");
-        logger.info(JSON.stringify(appliedFilters));
+
         const { roles } = appliedFilters;
 
         if (roles) {
@@ -207,10 +207,9 @@ function getCountUsersBySearchAndFilters(search, appliedFilters) {
         query.push(["full_name", "email", "phone"].map((key) => `${key} LIKE '%${search}%'`).join(" OR "));
     }
 
-    if (!!appliedFilters) {
+    if (Object.key(appliedFilters).length) {
         //if priviously search is applied then we need to add AND
         if (search) query.push("AND");
-        logger.info(JSON.stringify(appliedFilters));
 
         const { roles } = appliedFilters;
 

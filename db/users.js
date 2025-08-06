@@ -165,24 +165,20 @@ function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
     const query = [`SELECT USERS.*,USER_ROLES.role_id FROM USERS LEFT JOIN USER_ROLES ON USERS.id=USER_ROLES.user_id`];
     const parameters = [];
 
-    if (search || appliedFilters) {
-        query.push(`WHERE`);
+    if (!!search) {
+        logger.info("SEARCH");
+        query.push("WHERE");
+        query.push(["full_name", "email", "phone"].map((key) => `${key} LIKE '%${search}%'`).join(" OR "));
+    }
 
-        if (search) {
-            query.push(["full_name", "email", "phone"].map((key) => `${key} LIKE '%${search}%'`).join(" OR "));
-        }
+    if (!!appliedFilters) {
+        //if priviously search is applied then we need to add AND
+        if (search) query.push("AND");
+        logger.info("APPLIEFILTERS");
+        const { roles } = appliedFilters;
 
-        if (appliedFilters) {
-            logger.info("DAWDAWDAWDAWDAWDAWDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDd");
-
-            //if priviously search is applied then we need to add AND
-            if (search) query.push("AND");
-
-            const { roles } = appliedFilters;
-
-            if (roles) {
-                query.push(`  USER_ROLES.id in (${roles})`);
-            }
+        if (roles) {
+            query.push(`  USER_ROLES.id in (${roles})`);
         }
     }
 
@@ -202,26 +198,24 @@ function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
 }
 
 function getCountUsersBySearchAndFilters(search, appliedFilters) {
-    const query = [`SELECT COUNT(id) AS count FROM USERS`];
+    const query = [`SELECT COUNT(id) AS count FROM USERS LEFT JOIN USER_ROLES ON USERS.id=USER_ROLES.user_id`];
     const parameters = [];
 
-    if (search || appliedFilters) {
-        query.push(`WHERE`);
+    if (!!search) {
+        logger.info("SEARCH");
+        query.push("WHERE");
+        query.push(["full_name", "email", "phone"].map((key) => `${key} LIKE '%${search}%'`).join(" OR "));
+    }
 
-        if (search) {
-            query.push(["full_name", "email", "phone"].map((key) => `${key} LIKE '%${search}%'`).join(" OR "));
-        }
+    if (!!appliedFilters) {
+        //if priviously search is applied then we need to add AND
+        if (search) query.push("AND");
+        logger.info("APPLIEFILTERS");
 
-        if (appliedFilters) {
-            logger.info("DAWDAWDAWDAWDAWDAWDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDd");
-            //if priviously search is applied then we need to add AND
-            if (search) query.push("AND");
+        const { roles } = appliedFilters;
 
-            const { roles } = appliedFilters;
-
-            if (roles) {
-                query.push(`  USER_ROLES.id in (${roles})`);
-            }
+        if (roles) {
+            query.push(`  USER_ROLES.id in (${roles})`);
         }
     }
 

@@ -168,24 +168,26 @@ function prepareSearchLikeQuery(search, query) {
     }
 }
 
-function prepareFiltersWhereQuery(appliedFilters, search, query, parameters) {
-    if (Object.keys(appliedFilters).length) {
-        //if priviously search is applied then we need to add AND
+function prepareFiltersWhereQuery(appliedFilters, search, query) {
+    const { roles, branches, active } = appliedFilters;
+
+    const filterQueries = [];
+
+    if (roles) {
+        filterQueries.push(`USER_ROLES.id in (${roles})`);
+    }
+
+    if (branches) {
+        filterQueries.push(`USERS.branch in (${branches})`);
+    }
+
+    if (active) {
+        filterQueries.push(`USERS.active in (${active})`);
+    }
+
+    if (filterQueries.length) {
         query.push(!!search ? "AND" : "WHERE");
-
-        const { roles, branches, active } = appliedFilters;
-
-        if (roles) {
-            query.push(`USER_ROLES.id in (${roles})`);
-        }
-
-        if (branches) {
-            query.push(`USERS.branch in (${branches})`);
-        }
-
-        if (active) {
-            query.push(`USERS.active in (${active})`);
-        }
+        filterQueries.join(" AND ");
     }
 }
 
@@ -195,7 +197,7 @@ function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
 
     prepareSearchLikeQuery(search, query);
 
-    prepareFiltersWhereQuery(appliedFilters, search, query, parameters);
+    prepareFiltersWhereQuery(appliedFilters, search, query);
 
     query.push("ORDER BY id");
 

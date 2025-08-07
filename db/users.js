@@ -169,25 +169,27 @@ function prepareSearchLikeQuery(search, query) {
 }
 
 function prepareFiltersWhereQuery(appliedFilters, search, query) {
-    const { roles, branches, active } = appliedFilters;
-
-    const filterQueries = [];
-
-    if (roles) {
-        filterQueries.push(`USER_ROLES.id in (${roles})`);
-    }
-
-    if (branches) {
-        filterQueries.push(`USERS.branch in (${branches})`);
-    }
-
-    if (active) {
-        filterQueries.push(`USERS.active in (${active})`);
-    }
-
-    if (filterQueries.length) {
+    if (Object.keys(appliedFilters).length) {
+        //if priviously search is applied then we need to add AND
         query.push(!!search ? "AND" : "WHERE");
-        filterQueries.join(" AND ");
+
+        const { roles, branches, active } = appliedFilters;
+
+        const filterQueries = [];
+
+        if (roles) {
+            filterQueries.push(`USER_ROLES.id in (${roles})`);
+        }
+
+        if (branches) {
+            filterQueries.push(`USERS.branch in (${branches})`);
+        }
+
+        if (active) {
+            filterQueries.push(`USERS.active in (${active})`);
+        }
+
+        query.push(filterQueries.join(" AND "));
     }
 }
 

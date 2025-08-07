@@ -161,26 +161,44 @@ function getUserAuthoritiesByRoles(userRoles) {
     });
 }
 
-function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
-    const query = [`SELECT DISTINCT USERS.* FROM USERS LEFT JOIN USER_ROLES ON USERS.id=USER_ROLES.user_id`];
-    const parameters = [];
-
+function prepareSearchLikeQuery(search, query) {
     if (!!search) {
-        logger.info("SEARCH");
         query.push("WHERE");
         query.push(["full_name", "email", "phone"].map((key) => `${key} LIKE '%${search}%'`).join(" OR "));
     }
+}
 
+function prepareFiltersWhereQuery(appliedFilters, search, query, parameters) {
     if (Object.keys(appliedFilters).length) {
         //if priviously search is applied then we need to add AND
         query.push(!!search ? "AND" : "WHERE");
 
-        const { roles, branches } = appliedFilters;
+        const { roles, branches, active } = appliedFilters;
 
         if (roles) {
-            query.push(`  USER_ROLES.id in (${roles})`);
+            query.push(`USER_ROLES.id in (?)`);
+            parameters(roles);
+        }
+
+        if (branches) {
+            query.push(`USERS.branch in (?)`);
+            parameters(branches);
+        }
+
+        if (active) {
+            query.push(`USERS.active in (?)`);
+            parameters(active);
         }
     }
+}
+
+function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
+    const query = [`SELECT DISTINCT USERS.* FROM USERS LEFT JOIN USER_ROLES ON USERS.id=USER_ROLES.user_id`];
+    const parameters = [];
+
+    prepareSearchLikeQuery(search, query);
+
+    prepareFiltersWhereQuery(appliedFilters, search, query, parameters);
 
     query.push("ORDER BY id");
 
@@ -201,22 +219,9 @@ function getCountUsersBySearchAndFilters(search, appliedFilters) {
     const query = [`SELECT COUNT(DISTINCT USERS.id) AS count FROM USERS LEFT JOIN USER_ROLES ON USERS.id=USER_ROLES.user_id`];
     const parameters = [];
 
-    if (!!search) {
-        logger.info("SEARCH");
-        query.push("WHERE");
-        query.push(["full_name", "email", "phone"].map((key) => `${key} LIKE '%${search}%'`).join(" OR "));
-    }
+    prepareSearchLikeQuery(search, query);
 
-    if (Object.keys(appliedFilters).length) {
-        //if priviously search is applied then we need to add AND
-        query.push(!!search ? "AND" : "WHERE");
-
-        const { roles } = appliedFilters;
-
-        if (roles) {
-            query.push(`  USER_ROLES.id in (${roles})`);
-        }
-    }
+    prepareFiltersWhereQuery(appliedFilters, search, query, parameters);
 
     return executeSQLQueryParameterized(query.join(" "), parameters)
         .then(([result]) => result.count)

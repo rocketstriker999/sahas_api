@@ -27,6 +27,7 @@ function generateDBTables() {
             image VARCHAR(64) NULL UNIQUE,
             address VARCHAR(256) NULL,
             wallet DECIMAL(8, 2) DEFAULT 0,
+            branch INT NULL,
             active BOOLEAN NOT NULL DEFAULT TRUE,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -83,6 +84,17 @@ function generateDBTables() {
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
           )
         `,
+        `CREATE TABLE IF NOT EXISTS BRANCHES (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            title INT NOT NULL,
+            address VARCHAR(128) NOT NULL,
+            description VARCHAR(256) NOT NULL,
+            active BOOLEAN NOT NULL DEFAULT TRUE,
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+          )
+        `,
+
         `CREATE TABLE IF NOT EXISTS CATEGORIES(
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(96) NOT NULL UNIQUE,

@@ -177,17 +177,17 @@ function prepareFiltersWhereQuery(appliedFilters, search, query, parameters) {
 
         if (roles) {
             query.push(`USER_ROLES.id in (?)`);
-            parameters(roles);
+            parameters.push(roles);
         }
 
         if (branches) {
             query.push(`USERS.branch in (?)`);
-            parameters(branches);
+            parameters.push(branches);
         }
 
         if (active) {
             query.push(`USERS.active in (?)`);
-            parameters(active);
+            parameters.push(active);
         }
     }
 }

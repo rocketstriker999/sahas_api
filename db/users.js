@@ -176,18 +176,15 @@ function prepareFiltersWhereQuery(appliedFilters, search, query, parameters) {
         const { roles, branches, active } = appliedFilters;
 
         if (roles) {
-            query.push(`USER_ROLES.id in (?)`);
-            parameters.push(roles);
+            query.push(`USER_ROLES.id in (${roles})`);
         }
 
         if (branches) {
-            query.push(`USERS.branch in (?)`);
-            parameters.push(branches);
+            query.push(`USERS.branch in (${branches})`);
         }
 
         if (active) {
-            query.push(`USERS.active in (?)`);
-            parameters.push(active);
+            query.push(`USERS.active in (${active})`);
         }
     }
 }

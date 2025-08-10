@@ -62,8 +62,7 @@ function generateDBTables() {
             active BOOLEAN NOT NULL DEFAULT TRUE,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-        )`,
-
+            )`,
         `CREATE TABLE IF NOT EXISTS USER_AUTHENTICATION_TOKENS (
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
@@ -74,7 +73,6 @@ function generateDBTables() {
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
           )`,
-
         `CREATE TABLE IF NOT EXISTS USER_DEVICES (
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
@@ -82,13 +80,32 @@ function generateDBTables() {
             active BOOLEAN NOT NULL DEFAULT TRUE,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-          )
-        `,
+          )`,
         `CREATE TABLE IF NOT EXISTS BRANCHES (
             id INT AUTO_INCREMENT PRIMARY KEY,
             title INT NOT NULL,
             address VARCHAR(128) NOT NULL,
             description VARCHAR(256) NOT NULL,
+            active BOOLEAN NOT NULL DEFAULT TRUE,
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+          )
+        `,
+        `CREATE TABLE IF NOT EXISTS USER_COURSE_ACCESSES (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            user_id INT NOT NULL,
+            start_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+            end_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+            active BOOLEAN NOT NULL DEFAULT TRUE,
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+          )
+        `,
+        `CREATE TABLE IF NOT EXISTS USER_PAYMENT_TRANSACTIONS (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            user_id INT NOT NULL,
+            start_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+            end_date DATETIME DEFAULT CURRENT_TIMESTAMP,
             active BOOLEAN NOT NULL DEFAULT TRUE,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

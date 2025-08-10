@@ -83,7 +83,7 @@ function generateDBTables() {
           )`,
         `CREATE TABLE IF NOT EXISTS BRANCHES (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            title INT NOT NULL,
+            title VARCHAR(56) NOT NULL,
             address VARCHAR(128) NOT NULL,
             description VARCHAR(256) NOT NULL,
             active BOOLEAN NOT NULL DEFAULT TRUE,

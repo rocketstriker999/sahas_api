@@ -1,6 +1,6 @@
 const libExpress = require("express");
 const logger = require("../libs/logger");
-const { getAllUsers, getAllUsersBySearchAndFilters, getCountUsersBySearchAndFilters } = require("../db/users");
+const { getAllUsers, getAllUsersBySearchAndFilters, getCountUsersBySearchAndFilters, getUserById } = require("../db/users");
 
 const router = libExpress.Router();
 
@@ -15,6 +15,14 @@ router.get("/", async (req, res) => {
     };
 
     res.status(200).json(users);
+});
+
+router.get("/:userId", async (req, res) => {
+    if (!req.params.userId) {
+        return res.status(400).json({ error: "Missing User Id" });
+    }
+
+    const user = await getUserById(authenticationToken.user_id);
 });
 
 module.exports = router;

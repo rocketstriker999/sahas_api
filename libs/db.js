@@ -94,6 +94,7 @@ function generateDBTables() {
         `CREATE TABLE IF NOT EXISTS USER_COURSE_ACCESSES (
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
+            course_id INT NOT NULL,
             start_date DATETIME DEFAULT CURRENT_TIMESTAMP,
             end_date DATETIME DEFAULT CURRENT_TIMESTAMP,
             active BOOLEAN NOT NULL DEFAULT TRUE,
@@ -104,9 +105,12 @@ function generateDBTables() {
         `CREATE TABLE IF NOT EXISTS USER_PAYMENT_TRANSACTIONS (
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
-            start_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-            end_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-            active BOOLEAN NOT NULL DEFAULT TRUE,
+            user_course_access INT NOT NULL,
+            amount DECIMAL(8, 2) DEFAULT 0,
+            cgst DECIMAL(8, 2) DEFAULT 0,
+            sgst DECIMAL(8, 2) DEFAULT 0,
+            total DECIMAL(8, 2) DEFAULT 0,
+            invoice CHAR(36) DEFAULT (CONCAT(REPLACE(UUID(), '-', ''), '.pdf')) UNIQUE,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
           )

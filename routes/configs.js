@@ -1,6 +1,7 @@
 const libExpress = require("express");
 const { readConfig, getConfigs } = require("../libs/config");
 const logger = require("../libs/logger");
+const { getAllBranches } = require("../db/branches");
 const router = libExpress.Router();
 
 //Specific Config
@@ -9,6 +10,7 @@ router.get("/:config", async (req, res) => {
 
     try {
         config = await readConfig(req.params.config);
+        config.global.branches = getAllBranches();
     } catch (error) {
         logger.error(error);
     } finally {

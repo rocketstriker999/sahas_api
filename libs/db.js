@@ -219,7 +219,7 @@ function generateDBTables() {
             attendee_user_id INT NOT NULL,
             product_id INT NOT NULL,
             transaction_id INT NULL,
-            status INT NOT NULL DEFAULT 1;
+            status INT NOT NULL DEFAULT 1,
             active BOOLEAN NOT NULL DEFAULT TRUE
         )`,
     ];

@@ -217,7 +217,7 @@ function generateDBTables() {
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
             created_by INT NOT NULL,
-            product_id INT NOT NULL,
+            course_id INT NOT NULL,
             status INT NOT NULL DEFAULT 1,
             active BOOLEAN NOT NULL DEFAULT TRUE,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,

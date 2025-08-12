@@ -11,10 +11,17 @@ function getCoursesByProductId(productId) {
     });
 }
 
+// function getAllCourses() {
+//     return executeSQLQueryParameterized(
+//         `SELECT CATEGORIZED_COURSES.*, (SELECT COUNT(*) FROM COURSE_SUBJECTS WHERE COURSE_SUBJECTS.course_id = CATEGORIZED_COURSES.id AND active = TRUE) AS subjects_count FROM CATEGORIZED_COURSES WHERE active = TRUE ORDER BY view_index ASC`
+//     ).catch((error) => {
+//         logger.error(`getAllCourses: ${error}`);
+//         return [];
+//     });
+// }
+
 function getAllCourses() {
-    return executeSQLQueryParameterized(
-        `SELECT CATEGORIZED_COURSES.*, (SELECT COUNT(*) FROM COURSE_SUBJECTS WHERE COURSE_SUBJECTS.course_id = CATEGORIZED_COURSES.id AND active = TRUE) AS subjects_count FROM CATEGORIZED_COURSES WHERE active = TRUE ORDER BY view_index ASC`
-    ).catch((error) => {
+    return executeSQLQueryParameterized(`SELECT * FROM CATEGORIZED_COURSES`).catch((error) => {
         logger.error(`getAllCourses: ${error}`);
         return [];
     });

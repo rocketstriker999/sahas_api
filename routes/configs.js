@@ -12,7 +12,7 @@ router.get("/:config", async (req, res) => {
     try {
         config = await readConfig(req.params.config);
         config.global.branches = await getAllBranches();
-        config.global.products = await getAllCourses();
+        config.global.courses = await getAllCourses();
     } catch (error) {
         logger.error(error);
     } finally {

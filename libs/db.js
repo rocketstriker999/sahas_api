@@ -219,7 +219,9 @@ function generateDBTables() {
             created_by INT NOT NULL,
             product_id INT NOT NULL,
             status INT NOT NULL DEFAULT 1,
-            active BOOLEAN NOT NULL DEFAULT TRUE
+            active BOOLEAN NOT NULL DEFAULT TRUE,
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
     ];
 

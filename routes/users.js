@@ -23,6 +23,12 @@ router.get("/:userId", async (req, res) => {
     }
 
     const user = await getUserById(authenticationToken.user_id);
+
+    if (!user) {
+        return res.status(400).json({ error: "User Not Found" });
+    }
+
+    return res.status(200).json(user);
 });
 
 module.exports = router;

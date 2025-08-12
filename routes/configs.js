@@ -10,7 +10,7 @@ router.get("/:config", async (req, res) => {
 
     try {
         config = await readConfig(req.params.config);
-        config.global.branches = getAllBranches();
+        config.global.branches = await getAllBranches();
     } catch (error) {
         logger.error(error);
     } finally {

@@ -1,6 +1,7 @@
 const libExpress = require("express");
 const logger = require("../libs/logger");
 const { getAllUsers, getAllUsersBySearchAndFilters, getCountUsersBySearchAndFilters, getUserById } = require("../db/users");
+const { getInquiriesByUserId } = require("../db/inquiries");
 
 const router = libExpress.Router();
 
@@ -29,7 +30,7 @@ router.get("/:userId", async (req, res) => {
     }
 
     //get user's other infromations
-    user.inquieries = [];
+    user.inquieries = await getInquiriesByUserId(user.id);
 
     return res.status(200).json(user);
 });

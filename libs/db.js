@@ -213,6 +213,15 @@ function generateDBTables() {
             commision DECIMAL(8, 2) DEFAULT 0,
             commision_type VARCHAR(12) DEFAULT 'PERCENTAGE'
         )`,
+        `CREATE TABLE IF NOT EXISTS USER_INQUIRIES (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            user_id INT NOT NULL,
+            attendee_user_id INT NOT NULL,
+            product_id INT NOT NULL,
+            transaction_id INT NULL,
+            status INT NOT NULL DEFAULT 1;
+            active BOOLEAN NOT NULL DEFAULT TRUE
+        )`,
     ];
 
     return Promise.all(createUserTableQuery.map((query) => executeSQLQueryRaw(query)));

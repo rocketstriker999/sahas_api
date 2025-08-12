@@ -8,7 +8,7 @@ const router = libExpress.Router();
 //Specific Config
 router.get("/:config", async (req, res) => {
     let config = {};
-
+    //configs
     try {
         config = await readConfig(req.params.config);
         config.global.branches = await getAllBranches();

@@ -28,6 +28,9 @@ router.get("/:userId", async (req, res) => {
         return res.status(400).json({ error: "User Not Found" });
     }
 
+    //get user's other infromations
+    user.inquieries = [];
+
     return res.status(200).json(user);
 });
 

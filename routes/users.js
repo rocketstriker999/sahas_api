@@ -22,7 +22,7 @@ router.get("/:userId", async (req, res) => {
         return res.status(400).json({ error: "Missing User Id" });
     }
 
-    const user = await getUserById(authenticationToken.user_id);
+    const user = await getUserById(req.params.userId);
 
     if (!user) {
         return res.status(400).json({ error: "User Not Found" });

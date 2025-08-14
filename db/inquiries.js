@@ -3,7 +3,7 @@ const logger = require("../libs/logger");
 
 function getInquiriesByUserId(userId) {
     return executeSQLQueryParameterized(
-        "SELECT USER_INQUIRIES.*,USERS.full_name AS created_by_full_name FROM USER_INQUIRIES LEFT JOIN USERS ON USER_INQUIRIES.created_by=USERS.id WHERE USER_INQUIRIES.user_id=?",
+        "SELECT USER_INQUIRIES.*,USERS.full_name AS created_by_full_name FROM USER_INQUIRIES LEFT JOIN USERS ON USER_INQUIRIES.created_by=USERS.id WHERE USER_INQUIRIES.user_id=? ORDER BY USER_INQUIRIES.id DESC",
         [userId]
     ).catch((error) => {
         logger.error(`getInquiriesByUserId: ${error}`);

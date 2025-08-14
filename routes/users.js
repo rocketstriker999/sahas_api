@@ -54,7 +54,7 @@ router.put("/:userId/basics", async (req, res) => {
     }
 });
 
-router.get("/:userId/inquieries", async (req, res) => {
+router.get("/:userId/inquiries", async (req, res) => {
     if (!req.params.userId) {
         return res.status(400).json({ error: "Missing User Id" });
     }

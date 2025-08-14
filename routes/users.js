@@ -18,21 +18,21 @@ router.get("/", async (req, res) => {
     res.status(200).json(users);
 });
 
-router.get("/:userId", async (req, res) => {
+router.get("/:userId/basics", async (req, res) => {
     if (!req.params.userId) {
         return res.status(400).json({ error: "Missing User Id" });
     }
 
-    const user = await getUserById(req.params.userId);
+    const basics = await getUserById(req.params.userId);
 
-    if (!user) {
+    if (!basics) {
         return res.status(400).json({ error: "User Not Found" });
     }
 
     //get user's other infromations
-    user.inquieries = await getInquiriesByUserId(user.id);
+    // user.inquieries = await getInquiriesByUserId(user.id);
 
-    return res.status(200).json(user);
+    return res.status(200).json(basics);
 });
 
 module.exports = router;

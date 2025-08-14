@@ -223,6 +223,13 @@ function generateDBTables() {
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
+        `CREATE TABLE IF NOT EXISTS INQUIRY_NOTES (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            inquiry_id INT NOT NULL;
+            note VARCHAR(256) NOT NULL,
+            created_by INT NOT NULL,
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+        )`,
     ];
 
     return Promise.all(createUserTableQuery.map((query) => executeSQLQueryRaw(query)));

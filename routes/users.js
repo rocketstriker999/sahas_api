@@ -3,6 +3,7 @@ const logger = require("../libs/logger");
 const { getAllUsers, getAllUsersBySearchAndFilters, getCountUsersBySearchAndFilters, getUserById, updateUserBasics } = require("../db/users");
 const { getInquiriesByUserId } = require("../db/inquiries");
 const { validateRequestBody } = require("../utils");
+const { getInquiryNotesByInquiryId } = require("../db/inquiry_notes");
 
 const router = libExpress.Router();
 
@@ -53,12 +54,19 @@ router.put("/:userId/basics", async (req, res) => {
     }
 });
 
-router.put("/:userId/inquieries", async (req, res) => {
+router.get("/:userId/inquieries", async (req, res) => {
     if (!req.params.userId) {
         return res.status(400).json({ error: "Missing User Id" });
     }
 
-    res.status(200).json(await getInquiriesByUserId(req.params.userId));
+    const inquieries = await Promise.all(
+        await getInquiriesByUserId(req.params.userId).map(async (inquiry) => ({
+            ...inquiry,
+            notes: await getInquiryNotesByInquiryId(inquiry.id),
+        }))
+    );
+
+    res.status(200).json(inquieries);
 });
 
 module.exports = router;

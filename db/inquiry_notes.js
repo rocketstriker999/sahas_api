@@ -11,4 +11,18 @@ function getInquiryNotesByInquiryId(inquiryId) {
     });
 }
 
-module.exports = { getInquiryNotesByInquiryId };
+function deleteInquiryNoteByNoteId(noteId) {
+    return executeSQLQueryParameterized("DELETE  FROM INQUIRY_NOTES WHERE id=?", [noteId]).catch((error) => {
+        logger.error(`deleteInquiryNoteById: ${error}`);
+        return [];
+    });
+}
+
+function deleteInquiryNotesByInquiryId(inquiryId) {
+    return executeSQLQueryParameterized("DELETE  FROM INQUIRY_NOTES WHERE inquiry_id=?", [inquiryId]).catch((error) => {
+        logger.error(`deleteInquiryNotesById: ${error}`);
+        return [];
+    });
+}
+
+module.exports = { getInquiryNotesByInquiryId, deleteInquiryNoteByNoteId, deleteInquiryNotesByInquiryId };

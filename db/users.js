@@ -232,7 +232,7 @@ function getCountUsersBySearchAndFilters(search, appliedFilters) {
 }
 
 function updateUserBasics({ id, full_name, phone, image, address, branch, active }) {
-    executeSQLQueryParameterized(`UPDATE USERS SET full_name = ?,phone=?,image=?,address=?,branch=?,active=? WHERE id = ?`, [
+    return executeSQLQueryParameterized(`UPDATE USERS SET full_name = ?,phone=?,image=?,address=?,branch=?,active=? WHERE id = ?`, [
         full_name,
         phone,
         image,

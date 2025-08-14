@@ -46,8 +46,8 @@ router.put("/:userId/basics", async (req, res) => {
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
     if (isRequestBodyValid) {
-        updateUserBasics({ ...validatedRequestBody, id: req.params.userId });
-        return res.status(200).json(validatedRequestBody);
+        await updateUserBasics({ ...validatedRequestBody, id: req.params.userId });
+        return res.status(200).json(await getUserById(req.params.userId));
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

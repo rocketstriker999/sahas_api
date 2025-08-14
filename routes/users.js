@@ -53,4 +53,12 @@ router.put("/:userId/basics", async (req, res) => {
     }
 });
 
+router.put("/:userId/inquieries", async (req, res) => {
+    if (!req.params.userId) {
+        return res.status(400).json({ error: "Missing User Id" });
+    }
+
+    res.status(200).json(await getInquiriesByUserId(req.params.userId));
+});
+
 module.exports = router;

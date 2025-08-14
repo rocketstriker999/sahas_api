@@ -53,6 +53,19 @@ async function requestPayUVerification(transaction, command = process.env.TRANSA
     return true;
 }
 
+function validateRequestBody(body, requiredFields) {
+    const missingRequestBodyFields = requiredFields.filter((key) => body[key] === undefined || body[key] === null);
+
+    return {
+        isRequestBodyValid: missingRequestBodyFields?.length > 0 ? false : true,
+        missingRequestBodyFields: missingRequestBodyFields,
+        validatedRequestBody: requiredFields.reduce((obj, key) => {
+            obj[key] = body[key];
+            return obj;
+        }, {}),
+    };
+}
+
 async function requestService({
     requestHeaders = {},
     requestServiceName,
@@ -101,4 +114,12 @@ async function requestService({
     }
     if (onRequestEnd) onRequestEnd();
 }
-module.exports = { prepareDirectories, requestService, generateToken, requestPayUVerification, generateSHA512, getDeviceDescriptionByFingerPrint };
+module.exports = {
+    prepareDirectories,
+    requestService,
+    generateToken,
+    requestPayUVerification,
+    generateSHA512,
+    getDeviceDescriptionByFingerPrint,
+    validateRequestBody,
+};

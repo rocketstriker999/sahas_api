@@ -54,7 +54,7 @@ async function requestPayUVerification(transaction, command = process.env.TRANSA
 }
 
 function validateRequestBody(body, requiredFields) {
-    const missingRequestBodyFields = requiredFields.filter((key) => body[key] === undefined || body[key] === null);
+    const missingRequestBodyFields = requiredFields.filter((key) => body[key] === undefined || body[key] === null || body[key] === "");
 
     return {
         isRequestBodyValid: missingRequestBodyFields?.length > 0 ? false : true,

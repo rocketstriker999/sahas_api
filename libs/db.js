@@ -228,7 +228,7 @@ function generateDBTables() {
             inquiry_id INT NOT NULL;
             note VARCHAR(256) NOT NULL,
             created_by INT NOT NULL,
-            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP
         )`,
     ];
 

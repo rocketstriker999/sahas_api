@@ -12,7 +12,7 @@ router.delete("/:inquiryId", async (req, res) => {
         return res.status(400).json({ error: "Failed To Delete Inquiry" });
     }
 
-    res.sendStatus(204);
+    res.status(204).json({ error: "Deleted" });
 });
 
 module.exports = router;

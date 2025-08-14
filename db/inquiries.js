@@ -8,4 +8,11 @@ function getInquiriesByUserId(userId) {
     });
 }
 
-module.exports = { getInquiriesByUserId };
+function deleteInquiryById(inquiryId) {
+    return executeSQLQueryParameterized("DELETE  FROM USER_INQUIRIES WHERE id=?", [inquiryId]).catch((error) => {
+        logger.error(`deleteInquiryById: ${error}`);
+        return [];
+    });
+}
+
+module.exports = { getInquiriesByUserId, deleteInquiryById };

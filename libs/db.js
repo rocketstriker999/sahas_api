@@ -225,7 +225,7 @@ function generateDBTables() {
         )`,
         `CREATE TABLE IF NOT EXISTS INQUIRY_NOTES (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            inquiry_id INT NOT NULL;
+            inquiry_id INT NOT NULL,
             note VARCHAR(256) NOT NULL,
             created_by INT NOT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP

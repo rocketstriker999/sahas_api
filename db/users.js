@@ -1,6 +1,5 @@
 const { executeSQLQueryParameterized } = require("../libs/db");
 const logger = require("../libs/logger");
-const { param } = require("../routes/configs");
 
 function updateUserToken(email, token) {
     return executeSQLQueryParameterized(`UPDATE USERS SET token=? WHERE email=?`, [token, email]).catch((error) => {
@@ -232,6 +231,18 @@ function getCountUsersBySearchAndFilters(search, appliedFilters) {
         });
 }
 
+function updateUserBasics({ id, full_name, phone, image, address, branch, active }) {
+    executeSQLQueryParameterized(`UPDATE USERS SET full_name = ?,phone=?,image=?,address=?,branch=?,active=? WHERE id = ?`, [
+        full_name,
+        phone,
+        image,
+        address,
+        branch,
+        active,
+        id,
+    ]).catch((error) => logger.error(`updateUserBasics: ${error}`));
+}
+
 module.exports = {
     getAllUsersBySearchAndFilters,
     getCountUsersBySearchAndFilters,
@@ -250,4 +261,5 @@ module.exports = {
     getUserById,
     getUserRolesByUserId,
     getUserAuthoritiesByRoles,
+    updateUserBasics,
 };

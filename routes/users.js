@@ -59,14 +59,16 @@ router.get("/:userId/inquieries", async (req, res) => {
         return res.status(400).json({ error: "Missing User Id" });
     }
 
-    const inquieries = await Promise.all(
-        await getInquiriesByUserId(req.params.userId).map(async (inquiry) => ({
+    const inquiries = await getInquiriesByUserId(req.params.userId);
+
+    const inquiriesWithNotes = await Promise.all(
+        inquiries.map(async (inquiry) => ({
             ...inquiry,
             notes: await getInquiryNotesByInquiryId(inquiry.id),
         }))
     );
 
-    res.status(200).json(inquieries);
+    res.status(200).json(inquiriesWithNotes);
 });
 
 module.exports = router;

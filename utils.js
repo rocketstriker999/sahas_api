@@ -54,13 +54,17 @@ async function requestPayUVerification(transaction, command = process.env.TRANSA
 }
 
 function validateRequestBody(body, requiredFields) {
-    const missingRequestBodyFields = requiredFields.filter((key) => body[key] === undefined || body[key] === null || body[key] === "");
+    const missingRequestBodyFields = requiredFields.filter((key) => body[key] === undefined || body[key] === null);
 
     return {
-        isRequestBodyValid: missingRequestBodyFields?.length > 0 ? false : true,
-        missingRequestBodyFields: missingRequestBodyFields,
+        isRequestBodyValid: missingRequestBodyFields.length === 0,
+        missingRequestBodyFields,
         validatedRequestBody: requiredFields.reduce((obj, key) => {
-            obj[key] = body[key];
+            let value = body[key];
+            if (typeof value === "string") {
+                value = value.trim();
+            }
+            obj[key] = value;
             return obj;
         }, {}),
     };

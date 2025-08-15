@@ -13,7 +13,7 @@ function getInquiryNotesByInquiryId(inquiryId) {
 
 function getInquiryNoteByInquiryNoteId(inquiryNoteId) {
     return executeSQLQueryParameterized(
-        "SELECT INQUIRY_NOTES.*,USERS.full_name AS created_by_full_name FROM INQUIRY_NOTES LEFT JOIN USERS ON INQUIRY_NOTES.created_by = USERS.id WHERE id=? ",
+        "SELECT INQUIRY_NOTES.*,USERS.full_name AS created_by_full_name FROM INQUIRY_NOTES LEFT JOIN USERS ON INQUIRY_NOTES.created_by = USERS.id WHERE INQUIRY_NOTES.id=? ",
         [inquiryNoteId]
     ).catch((error) => {
         logger.error(`getInquiryNoteByInquiryNoteId: ${error}`);

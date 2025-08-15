@@ -25,4 +25,13 @@ function deleteInquiryNotesByInquiryId(inquiryId) {
     });
 }
 
-module.exports = { getInquiryNotesByInquiryId, deleteInquiryNoteByNoteId, deleteInquiryNotesByInquiryId };
+function addInquiryNote({ inquiryId, note, created_by }) {
+    return executeSQLQueryParameterized("INSERT INTO INQUIRY_NOTES(inquiry_id,note,created_by) VALUES(?,?,?)", [inquiryId, note, created_by])
+        .then((result) => result.insertId)
+        .catch((error) => {
+            logger.error(`addInquiryNote: ${error}`);
+            return [];
+        });
+}
+
+module.exports = { getInquiryNotesByInquiryId, deleteInquiryNoteByNoteId, deleteInquiryNotesByInquiryId, addInquiryNote };

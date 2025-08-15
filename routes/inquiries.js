@@ -21,7 +21,7 @@ router.post("/", async (req, res) => {
 
     if (isRequestBodyValid) {
         const inquiryId = await addInquiry({ ...validatedRequestBody, created_by: req.user.id });
-        await addInquiryNote({ inquiryId, note, created_by: req.user.id });
+        await addInquiryNote({ inquiry_id: inquiryId, note: validatedRequestBody.note, created_by: req.user.id });
 
         const inquiry = await getInquiryByInquiryId(inquiryId);
         inquiry.notes = await getInquiryNotesByInquiryId(inquiryId);

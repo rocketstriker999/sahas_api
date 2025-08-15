@@ -39,7 +39,7 @@ router.put("/:userId/basics", async (req, res) => {
         return res.status(400).json({ error: "Missing User Id" });
     }
 
-    const requiredBodyFields = ["full_name", "phone", "address", "branch_id", "active"];
+    const requiredBodyFields = ["full_name", "phone", "image", "address", "branch_id", "active"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 

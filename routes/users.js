@@ -1,6 +1,6 @@
 const libExpress = require("express");
 const logger = require("../libs/logger");
-const { getAllUsers, getAllUsersBySearchAndFilters, getCountUsersBySearchAndFilters, getUserById, updateUserBasics } = require("../db/users");
+const { getAllUsersBySearchAndFilters, getCountUsersBySearchAndFilters, getUserById, updateUserBasics } = require("../db/users");
 const { getInquiriesByUserId } = require("../db/inquiries");
 const { validateRequestBody } = require("../utils");
 const { getInquiryNotesByInquiryId } = require("../db/inquiry_notes");
@@ -31,9 +31,6 @@ router.get("/:userId/basics", async (req, res) => {
         return res.status(400).json({ error: "User Not Found" });
     }
 
-    //get user's other infromations
-    // user.inquieries = await getInquiriesByUserId(user.id);
-
     return res.status(200).json(basics);
 });
 
@@ -42,7 +39,7 @@ router.put("/:userId/basics", async (req, res) => {
         return res.status(400).json({ error: "Missing User Id" });
     }
 
-    const requiredBodyFields = ["full_name", "phone", "image", "address", "branch_id", "active"];
+    const requiredBodyFields = ["full_name", "phone", "address", "branch_id", "active"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 

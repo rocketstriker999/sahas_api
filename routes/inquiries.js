@@ -1,9 +1,5 @@
 const libExpress = require("express");
-const { requestService } = require("../utils");
-const { getTransactionByInvoice } = require("../db/transactions");
-const logger = require("../libs/logger");
-const { getUserByTransactionId } = require("../db/users");
-const { getProductById } = require("../db/products");
+const { validateRequestBody } = require("../utils");
 const { deleteInquiryById, addInquiry } = require("../db/inquiries");
 const { deleteInquiryNotesByInquiryId, getInquiryNotesByInquiryId } = require("../db/inquiry_notes");
 

@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const { deleteInquiryNoteByNoteId, addInquiryNote, getInquiryNotesByInquiryId, getInquiryNoteByInquiryNoteId } = require("../db/inquiry_notes");
+const { deleteInquiryNoteByNoteId, addInquiryNote, getInquiryNoteByInquiryNoteId } = require("../db/inquiry_notes");
 const { validateRequestBody } = require("../utils");
 
 const router = libExpress.Router();
@@ -20,7 +20,7 @@ router.post("/", async (req, res) => {
     if (isRequestBodyValid) {
         const inquiryNoteId = await addInquiryNote({ ...validatedRequestBody, created_by: req.user.id });
 
-        res.status(201).json(getInquiryNoteByInquiryNoteId(inquiryNoteId));
+        res.status(201).json(await getInquiryNoteByInquiryNoteId(inquiryNoteId));
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

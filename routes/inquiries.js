@@ -1,7 +1,7 @@
 const libExpress = require("express");
 const { validateRequestBody } = require("../utils");
 const { deleteInquiryById, addInquiry } = require("../db/inquiries");
-const { deleteInquiryNotesByInquiryId, getInquiryNotesByInquiryId } = require("../db/inquiry_notes");
+const { deleteInquiryNotesByInquiryId, getInquiryNotesByInquiryId, addInquiryNote } = require("../db/inquiry_notes");
 
 const router = libExpress.Router();
 
@@ -21,7 +21,7 @@ router.post("/", async (req, res) => {
 
     if (isRequestBodyValid) {
         const inquiryId = await addInquiry({ ...validatedRequestBody, created_by: req.user.id });
-        await addInquiryNotes({ inquiryId, note, created_by: req.user.id });
+        await addInquiryNote({ inquiryId, note, created_by: req.user.id });
 
         const inquiry = await getInquiryByInquiryId(inquiryId);
         inquiry.notes = await getInquiryNotesByInquiryId(inquiryId);

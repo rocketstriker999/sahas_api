@@ -27,7 +27,7 @@ function generateDBTables() {
             image VARCHAR(64) NULL UNIQUE,
             address VARCHAR(256) NULL,
             wallet DECIMAL(8, 2) DEFAULT 0,
-            branch INT NULL,
+            branch_id INT NULL,
             active BOOLEAN NOT NULL DEFAULT TRUE,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -217,7 +217,7 @@ function generateDBTables() {
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
             created_by INT NOT NULL,
-            branch INT NOT NULL,
+            branch_id INT NOT NULL,
             course_id INT NOT NULL,
             status INT NOT NULL DEFAULT 1,
             active BOOLEAN NOT NULL DEFAULT TRUE,

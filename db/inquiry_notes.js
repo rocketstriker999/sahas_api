@@ -25,8 +25,8 @@ function deleteInquiryNotesByInquiryId(inquiryId) {
     });
 }
 
-function addInquiryNote({ inquiryId, note, created_by }) {
-    return executeSQLQueryParameterized("INSERT INTO INQUIRY_NOTES(inquiry_id,note,created_by) VALUES(?,?,?)", [inquiryId, note, created_by])
+function addInquiryNote({ inquiry_id, note, created_by }) {
+    return executeSQLQueryParameterized("INSERT INTO INQUIRY_NOTES(inquiry_id,note,created_by) VALUES(?,?,?)", [inquiry_id, note, created_by])
         .then((result) => result.insertId)
         .catch((error) => {
             logger.error(`addInquiryNote: ${error}`);

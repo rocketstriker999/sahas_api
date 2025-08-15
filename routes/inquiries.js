@@ -15,7 +15,7 @@ router.delete("/:inquiryId", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-    const requiredBodyFields = ["user_id", "created_by", "branch", "course_id"];
+    const requiredBodyFields = ["user_id", "branch_id", "course_id"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 

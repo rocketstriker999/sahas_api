@@ -30,11 +30,11 @@ function deleteInquiryById(inquiryId) {
     });
 }
 
-function addInquiry({ user_id, created_by, branch, course_id }) {
-    return executeSQLQueryParameterized("INSERT INTO USER_INQUIRIES(user_id,created_by,branch,course_id) VALUES(?,?,?,?)", [
+function addInquiry({ user_id, created_by, branch_id, course_id }) {
+    return executeSQLQueryParameterized("INSERT INTO USER_INQUIRIES(user_id,created_by,branch_id,course_id) VALUES(?,?,?,?)", [
         user_id,
         created_by,
-        branch,
+        branch_id,
         course_id,
     ])
         .then((result) => result.insertId)

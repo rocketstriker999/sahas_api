@@ -181,7 +181,7 @@ function prepareFiltersWhereQuery(appliedFilters, search, query) {
         }
 
         if (branches) {
-            filterQueries.push(`USERS.branch in (${branches})`);
+            filterQueries.push(`USERS.branch_id in (${branches})`);
         }
 
         if (active) {
@@ -231,13 +231,13 @@ function getCountUsersBySearchAndFilters(search, appliedFilters) {
         });
 }
 
-function updateUserBasics({ id, full_name, phone, image, address, branch, active }) {
-    return executeSQLQueryParameterized(`UPDATE USERS SET full_name = ?,phone=?,image=?,address=?,branch=?,active=? WHERE id = ?`, [
+function updateUserBasics({ id, full_name, phone, image, address, branch_id, active }) {
+    return executeSQLQueryParameterized(`UPDATE USERS SET full_name = ?,phone=?,image=?,address=?,branch_id=?,active=? WHERE id = ?`, [
         full_name,
         phone,
         image,
         address,
-        branch,
+        branch_id,
         active,
         id,
     ]).catch((error) => logger.error(`updateUserBasics: ${error}`));

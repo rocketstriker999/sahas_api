@@ -112,11 +112,11 @@ function generateDBTables() {
         `CREATE TABLE IF NOT EXISTS USER_ENROLLMENTS (
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
-            start_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-            end_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+            start_date DATE DEFAULT CURRENT_TIMESTAMP,
+            end_date DATE DEFAULT CURRENT_TIMESTAMP,
             total DECIMAL(8, 2) DEFAULT 0,
             active BOOLEAN NOT NULL DEFAULT TRUE,
-            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+            created_on DATE DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
           )
         `,

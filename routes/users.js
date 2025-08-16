@@ -4,6 +4,7 @@ const { getAllUsersBySearchAndFilters, getCountUsersBySearchAndFilters, getUserB
 const { getInquiriesByUserId } = require("../db/inquiries");
 const { validateRequestBody } = require("../utils");
 const { getInquiryNotesByInquiryId } = require("../db/inquiry_notes");
+const { getEnrollmentsByUserId } = require("../db/enrollments");
 
 const router = libExpress.Router();
 
@@ -73,7 +74,9 @@ router.get("/:userId/enrollments", async (req, res) => {
         return res.status(400).json({ error: "Missing User Id" });
     }
 
-    return res.status(200).json([{ courses: [] }]);
+    const enrollments = await getEnrollmentsByUserId(req.params.userId);
+
+    return res.status(200).json(enrollments);
 });
 
 module.exports = router;

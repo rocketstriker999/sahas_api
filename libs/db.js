@@ -91,10 +91,28 @@ function generateDBTables() {
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
           )
         `,
-        `CREATE TABLE IF NOT EXISTS USER_COURSE_ACCESSES (
+
+        `CREATE TABLE IF NOT EXISTS USER_INQUIRIES (
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
+            created_by INT NOT NULL,
+            branch_id INT NOT NULL,
             course_id INT NOT NULL,
+            status INT NOT NULL DEFAULT 1,
+            active BOOLEAN NOT NULL DEFAULT TRUE,
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        )`,
+        `CREATE TABLE IF NOT EXISTS INQUIRY_NOTES (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            inquiry_id INT NOT NULL,
+            note VARCHAR(256) NOT NULL,
+            created_by INT NOT NULL,
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP
+        )`,
+        `CREATE TABLE IF NOT EXISTS USER_ENROLLMENTS (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            user_id INT NOT NULL,
             start_date DATETIME DEFAULT CURRENT_TIMESTAMP,
             end_date DATETIME DEFAULT CURRENT_TIMESTAMP,
             active BOOLEAN NOT NULL DEFAULT TRUE,
@@ -102,20 +120,23 @@ function generateDBTables() {
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
           )
         `,
-        `CREATE TABLE IF NOT EXISTS USER_PAYMENT_TRANSACTIONS (
+        `CREATE TABLE IF NOT EXISTS ENROLLMENT_COURSES (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            user_id INT NOT NULL,
-            user_course_access INT NOT NULL,
+            enrollment_id INT NOT NULL,
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP
+          )
+        `,
+        `CREATE TABLE IF NOT EXISTS ENROLLMENT_TRANSACTIONS (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            enrollment_id INT NOT NULL,
             amount DECIMAL(8, 2) DEFAULT 0,
             cgst DECIMAL(8, 2) DEFAULT 0,
             sgst DECIMAL(8, 2) DEFAULT 0,
             total DECIMAL(8, 2) DEFAULT 0,
-            invoice CHAR(36) DEFAULT (CONCAT(REPLACE(UUID(), '-', ''), '.pdf')) UNIQUE,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
           )
         `,
-
         `CREATE TABLE IF NOT EXISTS CATEGORIES(
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(96) NOT NULL UNIQUE,
@@ -184,15 +205,6 @@ function generateDBTables() {
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
-
-        `CREATE TABLE IF NOT EXISTS USER_COURSES (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            user_id INT NOT NULL,
-            product_id INT NOT NULL,
-            transaction_id INT NULL,
-            validity INT NOT NULL DEFAULT 365,
-            active BOOLEAN NOT NULL DEFAULT TRUE
-        )`,
         `CREATE TABLE IF NOT EXISTS COUPONS (
             id INT AUTO_INCREMENT PRIMARY KEY,
             coupon_code VARCHAR(8) UNIQUE,
@@ -212,24 +224,6 @@ function generateDBTables() {
             product_id INT NOT NULL,
             commision DECIMAL(8, 2) DEFAULT 0,
             commision_type VARCHAR(12) DEFAULT 'PERCENTAGE'
-        )`,
-        `CREATE TABLE IF NOT EXISTS USER_INQUIRIES (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            user_id INT NOT NULL,
-            created_by INT NOT NULL,
-            branch_id INT NOT NULL,
-            course_id INT NOT NULL,
-            status INT NOT NULL DEFAULT 1,
-            active BOOLEAN NOT NULL DEFAULT TRUE,
-            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
-            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-        )`,
-        `CREATE TABLE IF NOT EXISTS INQUIRY_NOTES (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            inquiry_id INT NOT NULL,
-            note VARCHAR(256) NOT NULL,
-            created_by INT NOT NULL,
-            created_on DATETIME DEFAULT CURRENT_TIMESTAMP
         )`,
     ];
 

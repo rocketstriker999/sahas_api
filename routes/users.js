@@ -68,4 +68,10 @@ router.get("/:userId/inquiries", async (req, res) => {
     res.status(200).json(inquiriesWithNotes);
 });
 
+router.get("/:userId/enrollments", async (req, res) => {
+    if (!req.params.userId) {
+        return res.status(400).json({ error: "Missing User Id" });
+    }
+});
+
 module.exports = router;

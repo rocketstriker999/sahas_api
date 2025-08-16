@@ -72,6 +72,8 @@ router.get("/:userId/enrollments", async (req, res) => {
     if (!req.params.userId) {
         return res.status(400).json({ error: "Missing User Id" });
     }
+
+    return res.status(200).json([]);
 });
 
 module.exports = router;

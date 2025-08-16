@@ -39,4 +39,14 @@ function getCourseByProductIdAndCourseId(productId, courseId) {
         });
 }
 
-module.exports = { getCoursesByProductId, getCourseByProductIdAndCourseId, getAllCourses };
+function getCoursesByEnrollmentId(enrollmentId) {
+    return executeSQLQueryParameterized(
+        `SELECT  * FROM ENROLLMENT_COURSES LEFT JOIN CATEGORIZED_COURSES ON ENROLLMENT_COURSES.course_id=CATEGORIZED_COURSES.id WHERE ENROLLMENT_COURSES.id=?`,
+        [enrollmentId]
+    ).catch((error) => {
+        logger.error(`getCoursesByEnrollmentId: ${error}`);
+        return [];
+    });
+}
+
+module.exports = { getCoursesByProductId, getCourseByProductIdAndCourseId, getAllCourses, getCoursesByEnrollmentId };

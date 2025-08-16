@@ -5,6 +5,7 @@ const { getInquiriesByUserId } = require("../db/inquiries");
 const { validateRequestBody } = require("../utils");
 const { getInquiryNotesByInquiryId } = require("../db/inquiry_notes");
 const { getEnrollmentsByUserId } = require("../db/enrollments");
+const { getCoursesByEnrollmentId } = require("../db/courses");
 
 const router = libExpress.Router();
 
@@ -76,7 +77,21 @@ router.get("/:userId/enrollments", async (req, res) => {
 
     const enrollments = await getEnrollmentsByUserId(req.params.userId);
 
-    return res.status(200).json(enrollments);
+    const enrollmentsWithCourses = await Promise.all(
+        enrollments.map(async (enrollment) => ({
+            ...enrollment,
+            courses: await getCoursesByEnrollmentId(enrollment.id),
+        }))
+    );
+
+    // const enrollmentsWithCoursesAndTransactions = await Promise.all(
+    //     enrollments.map(async (enrollment) => ({
+    //         ...enrollment,
+    //         courses: await getCoursesByEnrollmentId(enrollment.id),
+    //     }))
+    // );
+
+    return res.status(200).json(enrollmentsWithCourses);
 });
 
 module.exports = router;

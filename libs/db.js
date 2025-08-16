@@ -123,7 +123,7 @@ function generateDBTables() {
         `CREATE TABLE IF NOT EXISTS ENROLLMENT_COURSES (
             id INT AUTO_INCREMENT PRIMARY KEY,
             enrollment_id INT NOT NULL,
-            created_on DATETIME DEFAULT CURRENT_TIMESTAMP
+            course_id INT NOT NULL
           )
         `,
         `CREATE TABLE IF NOT EXISTS ENROLLMENT_TRANSACTIONS (

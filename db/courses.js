@@ -41,7 +41,7 @@ function getCourseByProductIdAndCourseId(productId, courseId) {
 
 function getCoursesByEnrollmentId(enrollmentId) {
     return executeSQLQueryParameterized(
-        `SELECT  * FROM ENROLLMENT_COURSES LEFT JOIN CATEGORIZED_COURSES ON ENROLLMENT_COURSES.course_id=CATEGORIZED_COURSES.id WHERE ENROLLMENT_COURSES.id=?`,
+        `SELECT  * FROM ENROLLMENT_COURSES LEFT JOIN CATEGORIZED_COURSES ON ENROLLMENT_COURSES.course_id=CATEGORIZED_COURSES.id WHERE ENROLLMENT_COURSES.enrollment_id=?`,
         [enrollmentId]
     ).catch((error) => {
         logger.error(`getCoursesByEnrollmentId: ${error}`);

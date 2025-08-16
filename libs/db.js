@@ -132,7 +132,6 @@ function generateDBTables() {
             amount DECIMAL(8, 2) DEFAULT 0,
             cgst DECIMAL(8, 2) DEFAULT 0,
             sgst DECIMAL(8, 2) DEFAULT 0,
-            
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
           )

@@ -1,8 +1,6 @@
 const libExpress = require("express");
-const { getAccessesByToken } = require("../db/accesses");
-const cacher = require("../libs/cacher");
-const { KEY_AUTHENTICATION_TOKEN } = require("../constants");
 const { updateEnrollmentByEnrollmentId, getEnrollmentByEnrollmentId } = require("../db/enrollments");
+const { validateRequestBody } = require("../utils");
 const router = libExpress.Router();
 
 //get catelogue for user

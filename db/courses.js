@@ -11,15 +11,6 @@ function getCoursesByProductId(productId) {
     });
 }
 
-// function getAllCourses() {
-//     return executeSQLQueryParameterized(
-//         `SELECT CATEGORIZED_COURSES.*, (SELECT COUNT(*) FROM COURSE_SUBJECTS WHERE COURSE_SUBJECTS.course_id = CATEGORIZED_COURSES.id AND active = TRUE) AS subjects_count FROM CATEGORIZED_COURSES WHERE active = TRUE ORDER BY view_index ASC`
-//     ).catch((error) => {
-//         logger.error(`getAllCourses: ${error}`);
-//         return [];
-//     });
-// }
-
 function getAllCourses() {
     return executeSQLQueryParameterized(`SELECT * FROM CATEGORIZED_COURSES`).catch((error) => {
         logger.error(`getAllCourses: ${error}`);
@@ -49,4 +40,10 @@ function getCoursesByEnrollmentId(enrollmentId) {
     });
 }
 
-module.exports = { getCoursesByProductId, getCourseByProductIdAndCourseId, getAllCourses, getCoursesByEnrollmentId };
+function addCourse({ enrollment_id, course_id }) {
+    return executeSQLQueryParameterized(`INSERT INTO ENROLLMENT_COURSES(enrollment_id,course_id) VALUES(?,?)`, [enrollment_id, course_id]).catch((error) => {
+        logger.error(`addCourse: ${error}`);
+    });
+}
+
+module.exports = { getCoursesByProductId, getCourseByProductIdAndCourseId, getAllCourses, getCoursesByEnrollmentId, addCourse };

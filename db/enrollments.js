@@ -21,7 +21,10 @@ function updateEnrollmentByEnrollmentId({ id, active, start_date, end_date }) {
 }
 
 function getEnrollmentByEnrollmentId(enrollmentId) {
-    return executeSQLQueryParameterized("SELECT * FROM USER_ENROLLMENTS WHERE id =?", [enrollmentId])
+    return executeSQLQueryParameterized(
+        "SELECT id,user_id,DATE(start_date) as start_date,DATE(end_date) as end_date,total,active,created_on,updated_at FROM USER_ENROLLMENTS WHERE id =?",
+        [enrollmentId]
+    )
         .then((results) => {
             return results.length > 0 ? results[0] : null;
         })

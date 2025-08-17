@@ -80,7 +80,7 @@ router.get("/:userId/enrollments", async (req, res) => {
     const enrollmentsWithCourses = await Promise.all(
         enrollments.map(async (enrollment) => ({
             ...enrollment,
-            courses: (await getCourseIdsByEnrollmentId(enrollment.id)).map((id) => id),
+            courses: (await getCourseIdsByEnrollmentId(enrollment.id)).map(({ id }) => id),
         }))
     );
 

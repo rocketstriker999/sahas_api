@@ -39,4 +39,21 @@ router.post("/:enrollmentId/courses", async (req, res) => {
     }
 });
 
+router.delete("/:enrollmentId/courses", async (req, res) => {
+    if (!req.params.enrollmentId) {
+        return res.status(400).json({ error: "Missing Enrollment Id" });
+    }
+
+    const requiredBodyFields = ["course_id"];
+
+    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+
+    if (isRequestBodyValid) {
+        await addCourse({ created_by: req.user.id, enrollment_id: req.params.enrollmentId, ...validatedRequestBody });
+        res.status(201).json(await getCoursesByEnrollmentId(req.params.enrollmentId));
+    } else {
+        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+    }
+});
+
 module.exports = router;

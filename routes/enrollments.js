@@ -1,7 +1,7 @@
 const libExpress = require("express");
 const { updateEnrollmentByEnrollmentId, getEnrollmentByEnrollmentId } = require("../db/enrollments");
 const { validateRequestBody } = require("../utils");
-const { addCourse } = require("../db/courses");
+const { addCourse, getCoursesByEnrollmentId } = require("../db/courses");
 const router = libExpress.Router();
 
 //get catelogue for user
@@ -33,7 +33,8 @@ router.post("/:enrollmentId/courses", async (req, res) => {
 
     if (isRequestBodyValid) {
         await addCourse({ created_by: req.user.id, enrollment_id: req.params.enrollmentId, ...validatedRequestBody });
-        res.sendStatus(201);
+
+        res.sendStatus(await getCoursesByEnrollmentId(req.params.enrollmentId));
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

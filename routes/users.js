@@ -5,7 +5,7 @@ const { getInquiriesByUserId } = require("../db/inquiries");
 const { validateRequestBody } = require("../utils");
 const { getInquiryNotesByInquiryId } = require("../db/inquiry_notes");
 const { getEnrollmentsByUserId } = require("../db/enrollments");
-const { getCoursesByEnrollmentId, getCourseIdsByEnrollmentId } = require("../db/courses");
+const { getCoursesByEnrollmentId } = require("../db/courses");
 
 const router = libExpress.Router();
 
@@ -80,42 +80,11 @@ router.get("/:userId/enrollments", async (req, res) => {
     const enrollmentsWithCourses = await Promise.all(
         enrollments.map(async (enrollment) => ({
             ...enrollment,
-            courses: await getCourseIdsByEnrollmentId(enrollment.id),
+            courses: await getCoursesByEnrollmentId(enrollment.id),
         }))
     );
 
-    // const enrollmentsWithCoursesAndTransactions = await Promise.all(
-    //     enrollments.map(async (enrollment) => ({
-    //         ...enrollment,
-    //         courses: await getCoursesByEnrollmentId(enrollment.id),
-    //     }))
-    // );
-
     return res.status(200).json(enrollmentsWithCourses);
 });
-
-// router.post("/:userId/enrollments", async (req, res) => {
-//     if (!req.params.userId) {
-//         return res.status(400).json({ error: "Missing User Id" });
-//     }
-
-//     const enrollments = await getEnrollmentsByUserId(req.params.userId);
-
-//     const enrollmentsWithCourses = await Promise.all(
-//         enrollments.map(async (enrollment) => ({
-//             ...enrollment,
-//             courses: await getCourseIdsByEnrollmentId(enrollment.id),
-//         }))
-//     );
-
-//     // const enrollmentsWithCoursesAndTransactions = await Promise.all(
-//     //     enrollments.map(async (enrollment) => ({
-//     //         ...enrollment,
-//     //         courses: await getCoursesByEnrollmentId(enrollment.id),
-//     //     }))
-//     // );
-
-//     return res.status(200).json(enrollmentsWithCourses);
-// });
 
 module.exports = router;

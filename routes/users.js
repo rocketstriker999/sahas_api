@@ -94,4 +94,28 @@ router.get("/:userId/enrollments", async (req, res) => {
     return res.status(200).json(enrollmentsWithCourses);
 });
 
+// router.post("/:userId/enrollments", async (req, res) => {
+//     if (!req.params.userId) {
+//         return res.status(400).json({ error: "Missing User Id" });
+//     }
+
+//     const enrollments = await getEnrollmentsByUserId(req.params.userId);
+
+//     const enrollmentsWithCourses = await Promise.all(
+//         enrollments.map(async (enrollment) => ({
+//             ...enrollment,
+//             courses: await getCourseIdsByEnrollmentId(enrollment.id),
+//         }))
+//     );
+
+//     // const enrollmentsWithCoursesAndTransactions = await Promise.all(
+//     //     enrollments.map(async (enrollment) => ({
+//     //         ...enrollment,
+//     //         courses: await getCoursesByEnrollmentId(enrollment.id),
+//     //     }))
+//     // );
+
+//     return res.status(200).json(enrollmentsWithCourses);
+// });
+
 module.exports = router;

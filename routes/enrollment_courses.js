@@ -6,7 +6,7 @@ router.delete("/:enrollmentCourseId", async (req, res) => {
     if (!req.params.enrollmentCourseId) {
         return res.status(400).json({ error: "Missing enrollmentCourseId" });
     }
-    deleteEnrollmentCourseByEnrollmentIdAndCourseId(enrollmentCourseId);
+    deleteEnrollmentCourseByEnrollmentIdAndCourseId(req.params.enrollmentCourseId);
     res.sendStatus(204);
 });
 

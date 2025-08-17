@@ -11,4 +11,24 @@ function getEnrollmentsByUserId(userId) {
     });
 }
 
-module.exports = { getEnrollmentsByUserId };
+function updateEnrollmentByEnrollmentId({ id, active, start_date, end_date }) {
+    return executeSQLQueryParameterized("UPDATE USER_ENROLLMENTS SET active=?,start_date=?,end_date=? WHERE id=?", [active, start_date, end_date, id]).catch(
+        (error) => {
+            logger.error(`updateEnrollmentByEnrollmentId: ${error}`);
+            return [];
+        }
+    );
+}
+
+function getEnrollmentByEnrollmentId(enrollmentId) {
+    return executeSQLQueryParameterized("SELECT * FROM USER_ENROLLMENTS WHERE id =?", [enrollmentId])
+        .then((results) => {
+            return results.length > 0 ? results[0] : null;
+        })
+        .catch((error) => {
+            logger.error(`getEnrollmentByEnrollmentId: ${error}`);
+            return null;
+        });
+}
+
+module.exports = { getEnrollmentsByUserId, updateEnrollmentByEnrollmentId, getEnrollmentByEnrollmentId };

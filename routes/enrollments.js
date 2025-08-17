@@ -1,7 +1,7 @@
 const libExpress = require("express");
 const { updateEnrollmentByEnrollmentId, getEnrollmentByEnrollmentId } = require("../db/enrollments");
 const { validateRequestBody } = require("../utils");
-const { addCourse, getCoursesByEnrollmentId } = require("../db/courses");
+const { deleteEnrollmentCourseByEnrollmentIdAndCourseId, addEnrollmentCourse, getEnrollmentCoursesByEnrollmentId } = require("../db/enrollment_courses");
 const router = libExpress.Router();
 
 //get catelogue for user
@@ -32,28 +32,19 @@ router.post("/:enrollmentId/courses", async (req, res) => {
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
     if (isRequestBodyValid) {
-        await addCourse({ created_by: req.user.id, enrollment_id: req.params.enrollmentId, ...validatedRequestBody });
-        res.status(201).json(await getCoursesByEnrollmentId(req.params.enrollmentId));
+        await addEnrollmentCourse({ created_by: req.user.id, enrollment_id: req.params.enrollmentId, ...validatedRequestBody });
+        res.status(201).json(await getEnrollmentCoursesByEnrollmentId(req.params.enrollmentId));
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }
 });
 
-router.delete("/:enrollmentId/courses", async (req, res) => {
-    if (!req.params.enrollmentId) {
-        return res.status(400).json({ error: "Missing Enrollment Id" });
+router.delete("/:enrollmentId/courses/:courseId", async (req, res) => {
+    if (!req.params.enrollmentId || !req.params.courseId) {
+        return res.status(400).json({ error: "Missing Enrollment Id or courseId" });
     }
-
-    const requiredBodyFields = ["course_id"];
-
-    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
-
-    if (isRequestBodyValid) {
-        await addCourse({ created_by: req.user.id, enrollment_id: req.params.enrollmentId, ...validatedRequestBody });
-        res.status(201).json(await getCoursesByEnrollmentId(req.params.enrollmentId));
-    } else {
-        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
-    }
+    deleteEnrollmentCourseByEnrollmentIdAndCourseId(req.params.noteId);
+    res.sendStatus(204);
 });
 
 module.exports = router;

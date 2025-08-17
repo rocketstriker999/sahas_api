@@ -1,6 +1,6 @@
 const { getAllCategories } = require("../db/categories");
 const { getAllChapters } = require("../db/chapters");
-const { getAllCourses } = require("../db/courses");
+const { getAllCourses } = require("../db/enrollment_courses");
 const { getAllSubjects } = require("../db/subjects");
 const logger = require("./logger");
 

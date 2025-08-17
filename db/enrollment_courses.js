@@ -21,8 +21,8 @@ function addEnrollmentCourse({ created_by, enrollment_id, course_id }) {
     });
 }
 
-function deleteEnrollmentCourseByEnrollmentIdAndCourseId({ enrollment_id, course_id }) {
-    return executeSQLQueryParameterized(`DELETE FROM ENROLLMENT_COURSES WHERE enrollment_id=? AND course_id=?`, [enrollment_id, course_id]).catch((error) => {
+function deleteEnrollmentCourseByEnrollmentIdAndCourseId(enrollmentCourseId) {
+    return executeSQLQueryParameterized(`DELETE FROM ENROLLMENT_COURSES WHERE id=? `, [enrollmentCourseId]).catch((error) => {
         logger.error(`deleteCourseByEnrollmentIdAndCourseId: ${error}`);
     });
 }

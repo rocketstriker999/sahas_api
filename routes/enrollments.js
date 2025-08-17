@@ -39,12 +39,4 @@ router.post("/:enrollmentId/courses", async (req, res) => {
     }
 });
 
-router.delete("/:enrollmentId/courses/:courseId", async (req, res) => {
-    if (!req.params.enrollmentId || !req.params.courseId) {
-        return res.status(400).json({ error: "Missing Enrollment Id or courseId" });
-    }
-    deleteEnrollmentCourseByEnrollmentIdAndCourseId({ enrollment_id: req.params.enrollmentId, course_id: req.params.courseId });
-    res.sendStatus(204);
-});
-
 module.exports = router;

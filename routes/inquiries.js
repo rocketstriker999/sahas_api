@@ -1,13 +1,7 @@
 const libExpress = require("express");
 const { validateRequestBody } = require("../utils");
 const { deleteInquiryById, addInquiry, getInquiryByInquiryId } = require("../db/inquiries");
-const {
-    deleteInquiryNotesByInquiryId,
-    getInquiryNotesByInquiryId,
-    addInquiryNote,
-    deleteInquiryNoteByNoteId,
-    getInquiryNoteByInquiryNoteId,
-} = require("../db/inquiry_notes");
+const { deleteInquiryNotesByInquiryId, getInquiryNotesByInquiryId, addInquiryNote, deleteInquiryNoteByNoteId } = require("../db/inquiry_notes");
 
 const router = libExpress.Router();
 

@@ -39,7 +39,7 @@ router.post("/", async (req, res) => {
 });
 
 router.delete("/:inquiryId/notes/:noteId", async (req, res) => {
-    if (req.params.inquiryId && !req.params.noteId) {
+    if (!req.params.inquiryId || !req.params.noteId) {
         return res.status(400).json({ error: "Missing inquiryId or noteId" });
     }
     deleteInquiryNoteByNoteId(req.params.noteId);
@@ -47,7 +47,7 @@ router.delete("/:inquiryId/notes/:noteId", async (req, res) => {
 });
 
 router.post("/:inquiryId/notes", async (req, res) => {
-    if (req.params.inquiryId) {
+    if (!req.params.inquiryId) {
         return res.status(400).json({ error: "Missing inquiryId" });
     }
     const requiredBodyFields = ["note"];

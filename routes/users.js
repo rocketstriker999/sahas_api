@@ -91,7 +91,7 @@ router.get("/:userId/enrollments", async (req, res) => {
         }))
     );
 
-    return res.status(200).json(enrollmentsWithCourses);
+    return res.status(200).json(enrollmentsWithCoursesAndTranscations);
 });
 
 module.exports = router;

@@ -40,10 +40,20 @@ function getCoursesByEnrollmentId(enrollmentId) {
     });
 }
 
+function getCourseIdsByEnrollmentId(enrollmentId) {
+    return executeSQLQueryParameterized(
+        `SELECT  CATEGORIZED_COURSES.id FROM ENROLLMENT_COURSES LEFT JOIN CATEGORIZED_COURSES ON ENROLLMENT_COURSES.course_id=CATEGORIZED_COURSES.id WHERE ENROLLMENT_COURSES.enrollment_id=?`,
+        [enrollmentId]
+    ).catch((error) => {
+        logger.error(`getCoursesByEnrollmentId: ${error}`);
+        return [];
+    });
+}
+
 function addCourse({ enrollment_id, course_id }) {
     return executeSQLQueryParameterized(`INSERT INTO ENROLLMENT_COURSES(enrollment_id,course_id) VALUES(?,?)`, [enrollment_id, course_id]).catch((error) => {
         logger.error(`addCourse: ${error}`);
     });
 }
 
-module.exports = { getCoursesByProductId, getCourseByProductIdAndCourseId, getAllCourses, getCoursesByEnrollmentId, addCourse };
+module.exports = { getCoursesByProductId, getCourseByProductIdAndCourseId, getAllCourses, getCoursesByEnrollmentId, addCourse, getCourseIdsByEnrollmentId };

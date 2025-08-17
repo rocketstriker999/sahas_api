@@ -22,7 +22,7 @@ router.get("/", async (req, res) => {
     res.status(200).json(users);
 });
 
-router.get("/:userId/basics", async (req, res) => {
+router.get("/:userId", async (req, res) => {
     if (!req.params.userId) {
         return res.status(400).json({ error: "Missing User Id" });
     }
@@ -36,7 +36,7 @@ router.get("/:userId/basics", async (req, res) => {
     return res.status(200).json(basics);
 });
 
-router.put("/:userId/basics", async (req, res) => {
+router.put("/:userId", async (req, res) => {
     if (!req.params.userId) {
         return res.status(400).json({ error: "Missing User Id" });
     }

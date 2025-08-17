@@ -32,7 +32,7 @@ router.post("/:enrollmentId/courses", async (req, res) => {
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
     if (isRequestBodyValid) {
-        await addCourse({ enrollment_id: req.params.enrollmentId, ...validatedRequestBody });
+        await addCourse({ created_by: req.user.id, enrollment_id: req.params.enrollmentId, ...validatedRequestBody });
         res.sendStatus(201);
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });

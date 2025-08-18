@@ -7,15 +7,12 @@ const router = libExpress.Router();
 
 //Specific Config
 router.get("/template", async (req, res) => {
-    const { payment } = await readConfig("app");
-
     let config = {};
     //configs
     try {
         config = await readConfig(req.params.config);
         config.global.branches = await getAllBranches();
         config.global.courses = await getAllCourses();
-        config.global.paymentTypes = payment?.types;
     } catch (error) {
         logger.error(error);
     } finally {

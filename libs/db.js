@@ -132,12 +132,12 @@ function generateDBTables() {
         `CREATE TABLE IF NOT EXISTS ENROLLMENT_TRANSACTIONS (
             id INT AUTO_INCREMENT PRIMARY KEY,
             enrollment_id INT NOT NULL,
+            amount DECIMAL(8, 2) DEFAULT 0,
             cgst DECIMAL(8, 2) DEFAULT 0,
             sgst DECIMAL(8, 2) DEFAULT 0,
-            amount DECIMAL(8, 2) DEFAULT 0,
             created_by INT NOT NULL,
             note VARCHAR(256) NOT NULL,
-            type INT NOT NULL DEFAULT 0,
+            type VARCHAR(16) NOT NULL ,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP
           )
         `,

@@ -10,7 +10,7 @@ router.get("/template", async (req, res) => {
     let config = {};
     //configs
     try {
-        config = await readConfig(req.params.config);
+        config = await readConfig("template");
         config.global.branches = await getAllBranches();
         config.global.courses = await getAllCourses();
     } catch (error) {

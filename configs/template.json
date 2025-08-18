@@ -1,5 +1,7 @@
 {
-    "global": {},
+    "global": {
+        "payment_types": ["PAYU", "CASH", "NET_BANKING", "UPI", "CHEQUE"]
+    },
     "dash_board": {
         "carousel": {
             "images": [

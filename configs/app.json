@@ -10,7 +10,6 @@
 
     "payment": {
         "cgst": 9,
-        "sgst": 9,
-        "types": ["PAYU", "CASH", "NET_BANKING", "UPI", "CHEQUE"]
+        "sgst": 9
     }
 }

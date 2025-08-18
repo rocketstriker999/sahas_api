@@ -136,9 +136,9 @@ function generateDBTables() {
             sgst DECIMAL(8, 2) DEFAULT 0,
             amount DECIMAL(8, 2) DEFAULT 0,
             created_by INT NOT NULL,
-            note VARCHAR(256) NOT NULL, 
+            note VARCHAR(256) NOT NULL,
+            type INT NOT NULL DEFAULT 0,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP
-            
           )
         `,
         `CREATE TABLE IF NOT EXISTS CATEGORIES(

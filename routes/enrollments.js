@@ -57,8 +57,8 @@ router.post("/:enrollmentId/transactions", async (req, res) => {
             created_by: req.user.id,
             enrollment_id: req.params.enrollmentId,
             ...validatedRequestBody,
-            cgst: (validatedRequestBody?.amount * cgst) / 100,
-            sgst: (validatedRequestBody?.amount * sgst) / 100,
+            cgst: (validatedRequestBody?.amount * cgst) / (100 + cgst + sgst),
+            sgst: (validatedRequestBody?.amount * sgst) / (100 + cgst + sgst),
         });
         res.status(201).json(await getTransactionsByEnrollmentId(req.params.enrollmentId));
     } else {

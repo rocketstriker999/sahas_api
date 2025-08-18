@@ -114,7 +114,7 @@ function generateDBTables() {
             user_id INT NOT NULL,
             start_date DATETIME DEFAULT CURRENT_TIMESTAMP,
             end_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-            total DECIMAL(8, 2) DEFAULT 0,
+            fees DECIMAL(8, 2) DEFAULT 0,
             active BOOLEAN NOT NULL DEFAULT TRUE,
             created_by INT NOT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -132,12 +132,13 @@ function generateDBTables() {
         `CREATE TABLE IF NOT EXISTS ENROLLMENT_TRANSACTIONS (
             id INT AUTO_INCREMENT PRIMARY KEY,
             enrollment_id INT NOT NULL,
-            amount DECIMAL(8, 2) DEFAULT 0,
             cgst DECIMAL(8, 2) DEFAULT 0,
             sgst DECIMAL(8, 2) DEFAULT 0,
+            amount DECIMAL(8, 2) DEFAULT 0,
             created_by INT NOT NULL,
+            note VARCHAR(256) NOT NULL, 
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
-            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            
           )
         `,
         `CREATE TABLE IF NOT EXISTS CATEGORIES(

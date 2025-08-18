@@ -87,7 +87,7 @@ router.get("/:userId/enrollments", async (req, res) => {
     const enrollmentsWithCoursesAndTranscations = await Promise.all(
         enrollmentsWithCourses.map(async (enrollment) => ({
             ...enrollment,
-            transactions: [],
+            transactions: await getTrans,
         }))
     );
 

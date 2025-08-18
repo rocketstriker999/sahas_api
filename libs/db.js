@@ -137,7 +137,7 @@ function generateDBTables() {
             amount DECIMAL(8, 2) DEFAULT 0,
             created_by INT NOT NULL,
             note VARCHAR(256) NOT NULL, 
-            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP
             
           )
         `,

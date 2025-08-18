@@ -136,7 +136,7 @@ function generateDBTables() {
             cgst DECIMAL(8, 2) DEFAULT 0,
             sgst DECIMAL(8, 2) DEFAULT 0,
             created_by INT NOT NULL,
-            note VARCHAR(256) NOT NULL,
+            note VARCHAR(256) NULL,
             type VARCHAR(16) NOT NULL ,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP
           )

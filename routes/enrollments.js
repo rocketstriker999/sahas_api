@@ -48,7 +48,7 @@ router.post("/:enrollmentId/transactions", async (req, res) => {
 
     const { payment: { cgst, sgst } = {} } = await readConfig("app");
 
-    const requiredBodyFields = ["amount", "note", "type"];
+    const requiredBodyFields = ["amount", "type"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
@@ -59,6 +59,7 @@ router.post("/:enrollmentId/transactions", async (req, res) => {
             ...validatedRequestBody,
             cgst: (validatedRequestBody?.amount * cgst) / (100 + cgst + sgst),
             sgst: (validatedRequestBody?.amount * sgst) / (100 + cgst + sgst),
+            note: req.body.note,
         });
         res.status(201).json(await getTransactionsByEnrollmentId(req.params.enrollmentId));
     } else {

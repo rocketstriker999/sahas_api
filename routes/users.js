@@ -158,9 +158,7 @@ router.get("/:userId/roles", async (req, res) => {
         return res.status(400).json({ error: "Missing User Id" });
     }
 
-    const roles = await getUserRolesByUserId(req.params.userId);
-
-    res.status(200).json(roles);
+    res.status(200).json(await getUserRolesByUserId(req.params.userId));
 });
 
 module.exports = router;

@@ -111,7 +111,7 @@ function getUserIdByEmail(email) {
         })
         .catch((error) => {
             logger.error(`getUserIdByEmail: ${error}`);
-            return null;
+            return [];
         });
 }
 
@@ -125,7 +125,7 @@ function getUserByTransactionId(transactionId) {
         })
         .catch((error) => {
             logger.error(`getUserByTransactionId: ${error}`);
-            return null;
+            return [];
         });
 }
 
@@ -146,7 +146,7 @@ function getUserRolesByUserId(userId) {
         [userId]
     ).catch((error) => {
         logger.error(`getUserRolesByUserId: ${error}`);
-        return null;
+        return [];
     });
 }
 
@@ -156,7 +156,7 @@ function getUserAuthoritiesByRoles(userRoles) {
         [userRoles]
     ).catch((error) => {
         logger.error(`getUserAuthoritiesByRoles: ${error}`);
-        return null;
+        return [];
     });
 }
 

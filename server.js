@@ -40,6 +40,7 @@ const routers = {
     "/roles": { middlewares: [], router: require("./routes/roles") },
     "/filters": { middlewares: [], router: require("./routes/filters") },
     "/users": { middlewares: [], router: require("./routes/users") },
+    "/user-roles": { middlewares: [], router: require("./routes/user_roles") },
     "/inquiries": { middlewares: [], router: require("./routes/inquiries") },
     "/inquiry-notes": { middlewares: [], router: require("./routes/inquiry_notes") },
     "/enrollments": { middlewares: [], router: require("./routes/enrollments") },

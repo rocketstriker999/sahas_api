@@ -108,7 +108,8 @@ router.post("/:userId/enrollments", async (req, res) => {
         //add enrollment
         const enrollmentId = await addEnrollment({ user_id: req.params.userId, created_by: req.user.id, ...validatedRequestBody });
         //add course from it
-        await addEnrollmentCourse({ created_by: req.user.id, enrollment_id: enrollmentId, course_id: validatedRequestBody?.course?.id });
+        if (enrollmentId) await addEnrollmentCourse({ created_by: req.user.id, enrollment_id: enrollmentId, course_id: validatedRequestBody?.course?.id });
+        else return res.status(400).json({ error: "Invalid Data for Enrollments" });
 
         const enrollments = await getEnrollmentsByUserId(req.params.userId);
         const enrollmentsWithCourses = await Promise.all(

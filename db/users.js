@@ -142,7 +142,7 @@ function getUserById(id) {
 
 function getUserRolesByUserId(userId) {
     return executeSQLQueryParameterized(
-        `SELECT ROLES.id, ROLES.title FROM USER_ROLES LEFT JOIN ROLES ON USER_ROLES.role_id=ROLES.id WHERE ROLES.active=TRUE AND USER_ROLES.active=TRUE AND USER_ROLES.user_id = ?`,
+        `SELECT ROLES.id, ROLES.title,ROLES.created_on,ROLES.created_by FROM USER_ROLES LEFT JOIN ROLES ON USER_ROLES.role_id=ROLES.id WHERE ROLES.active=TRUE AND USER_ROLES.active=TRUE AND USER_ROLES.user_id = ?`,
         [userId]
     ).catch((error) => {
         logger.error(`getUserRolesByUserId: ${error}`);

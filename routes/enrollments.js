@@ -1,7 +1,7 @@
 const libExpress = require("express");
 const { updateEnrollmentByEnrollmentId, getEnrollmentByEnrollmentId } = require("../db/enrollments");
 const { validateRequestBody } = require("../utils");
-const { deleteEnrollmentCourseByEnrollmentIdAndCourseId, addEnrollmentCourse, getEnrollmentCoursesByEnrollmentId } = require("../db/enrollment_courses");
+const { deleteEnrollmentCourseByEnrollmentCourseId, addEnrollmentCourse, getEnrollmentCoursesByEnrollmentId } = require("../db/enrollment_courses");
 const { getTransactionsByEnrollmentId, addTransaction } = require("../db/transactions");
 const { readConfig } = require("../libs/config");
 const router = libExpress.Router();

@@ -23,8 +23,8 @@ function getInquiryNoteByInquiryNoteId(inquiryNoteId) {
         });
 }
 
-function deleteInquiryNoteByNoteId(noteId) {
-    return executeSQLQueryParameterized("DELETE  FROM INQUIRY_NOTES WHERE id=?", [noteId]).catch((error) => {
+function deleteInquiryNoteByInquiryNoteId(inquiryNoteId) {
+    return executeSQLQueryParameterized("DELETE  FROM INQUIRY_NOTES WHERE id=?", [inquiryNoteId]).catch((error) => {
         logger.error(`deleteInquiryNoteById: ${error}`);
         return [];
     });
@@ -46,4 +46,4 @@ function addInquiryNote({ inquiry_id, note, created_by }) {
     );
 }
 
-module.exports = { getInquiryNotesByInquiryId, getInquiryNoteByInquiryNoteId, deleteInquiryNoteByNoteId, deleteInquiryNotesByInquiryId, addInquiryNote };
+module.exports = { getInquiryNotesByInquiryId, getInquiryNoteByInquiryNoteId, deleteInquiryNoteByInquiryNoteId, deleteInquiryNotesByInquiryId, addInquiryNote };

@@ -1,7 +1,7 @@
 const libExpress = require("express");
 const { validateRequestBody } = require("../utils");
 const { deleteInquiryById, addInquiry, getInquiryByInquiryId } = require("../db/inquiries");
-const { deleteInquiryNotesByInquiryId, getInquiryNotesByInquiryId, addInquiryNote, deleteInquiryNoteByNoteId } = require("../db/inquiry_notes");
+const { deleteInquiryNotesByInquiryId, getInquiryNotesByInquiryId, addInquiryNote, deleteInquiryNoteByInquiryNoteId } = require("../db/inquiry_notes");
 
 const router = libExpress.Router();
 
@@ -18,7 +18,7 @@ router.delete("/:inquiryId/notes/:noteId", async (req, res) => {
     if (!req.params.inquiryId || !req.params.noteId) {
         return res.status(400).json({ error: "Missing inquiryId or noteId" });
     }
-    deleteInquiryNoteByNoteId(req.params.noteId);
+    deleteInquiryNoteByInquiryNoteId(req.params.noteId);
     res.sendStatus(204);
 });
 

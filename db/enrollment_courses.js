@@ -21,14 +21,14 @@ function addEnrollmentCourse({ created_by, enrollment_id, course_id }) {
     });
 }
 
-function deleteEnrollmentCourseByEnrollmentIdAndCourseId(enrollmentCourseId) {
+function deleteEnrollmentCourseByEnrollmentCourseId(enrollmentCourseId) {
     return executeSQLQueryParameterized(`DELETE FROM ENROLLMENT_COURSES WHERE id=? `, [enrollmentCourseId]).catch((error) => {
-        logger.error(`deleteCourseByEnrollmentIdAndCourseId: ${error}`);
+        logger.error(`deleteEnrollmentCourseByEnrollmentCourseId: ${error}`);
     });
 }
 
 module.exports = {
     addEnrollmentCourse,
     getEnrollmentCoursesByEnrollmentId,
-    deleteEnrollmentCourseByEnrollmentIdAndCourseId,
+    deleteEnrollmentCourseByEnrollmentCourseId,
 };

@@ -8,11 +8,4 @@ function getRoles() {
     });
 }
 
-function deleteUserRolesbyId() {
-    return executeSQLQueryParameterized("SELECT * FROM ROLES").catch((error) => {
-        logger.error(`getRoles: ${error}`);
-        return false;
-    });
-}
-
 module.exports = { getRoles };

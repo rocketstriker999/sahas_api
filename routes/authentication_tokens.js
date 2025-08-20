@@ -16,8 +16,8 @@ const router = libExpress.Router();
 //if user already has the token then validate from ui side
 
 async function populateRolesAndAuthorities(user) {
-    const roles = await getUserRolesByUserId(user.id);
-    const authorities = roles?.length ? await getUserAuthoritiesByRoles(roles.map((role) => role.id).join(",")) : [];
+    const userRoles = await getUserRolesByUserId(user.id);
+    const authorities = await getUserAuthoritiesByRoles(userRoles.map(({ role_id }) => role_id).join(","));
     user.roles = roles?.map((role) => role.title);
     user.authorities = authorities?.map((authority) => authority.title);
 }

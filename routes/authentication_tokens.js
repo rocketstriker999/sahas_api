@@ -18,7 +18,7 @@ const router = libExpress.Router();
 async function populateRolesAndAuthorities(user) {
     const userRoles = await getUserRolesByUserId(user.id);
     const authorities = await getUserAuthoritiesByRoles(userRoles.map(({ role_id }) => role_id).join(","));
-    user.roles = roles?.map((role) => role.title);
+    user.roles = userRoles?.map(({ title }) => title);
     user.authorities = authorities?.map((authority) => authority.title);
 }
 

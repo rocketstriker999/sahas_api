@@ -42,7 +42,7 @@ function addEnrollment({ user_id, start_date, end_date, fees, created_by }) {
         .then((result) => result.insertId)
         .catch((error) => {
             logger.error(`addInquiry: ${error}`);
-            return [];
+            return false;
         });
 }
 

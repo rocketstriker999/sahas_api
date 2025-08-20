@@ -177,7 +177,7 @@ function prepareFiltersWhereQuery(appliedFilters, search, query) {
         const filterQueries = [];
 
         if (roles) {
-            filterQueries.push(`USER_ROLES.id in (${roles})`);
+            filterQueries.push(`USER_ROLES.role_id in (${roles})`);
         }
 
         if (branches) {

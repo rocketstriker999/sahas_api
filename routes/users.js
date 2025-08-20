@@ -123,7 +123,7 @@ router.post("/:userId/enrollments", async (req, res) => {
                 transactions: await getTransactionsByEnrollmentId(enrollment.id),
             }))
         );
-        return res.status(200).json(enrollmentsWithCoursesAndTranscations);
+        return res.status(201).json(enrollmentsWithCoursesAndTranscations);
     } else {
         return res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

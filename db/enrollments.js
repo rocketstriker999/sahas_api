@@ -31,4 +31,19 @@ function getEnrollmentByEnrollmentId(enrollmentId) {
         });
 }
 
-module.exports = { getEnrollmentsByUserId, updateEnrollmentByEnrollmentId, getEnrollmentByEnrollmentId };
+function addEnrollment({ user_id, start_date, end_date, fees, created_by }) {
+    return executeSQLQueryParameterized("INSERT INTO USER_ENROLLMENTS(user_id,start_date,end_date,fees,created_by) VALUES(?,?,?,?,?)", [
+        user_id,
+        start_date,
+        end_date,
+        fees,
+        created_by,
+    ])
+        .then((result) => result.insertId)
+        .catch((error) => {
+            logger.error(`addInquiry: ${error}`);
+            return [];
+        });
+}
+
+module.exports = { getEnrollmentsByUserId, updateEnrollmentByEnrollmentId, getEnrollmentByEnrollmentId, addEnrollment };

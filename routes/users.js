@@ -106,7 +106,7 @@ router.post("/:userId/enrollments", async (req, res) => {
 
     if (isRequestBodyValid) {
         //add enrollment
-        const enrollmentId = await addEnrollment({ user_id: req.params.userId, created_by: req.user.id });
+        const enrollmentId = await addEnrollment({ user_id: req.params.userId, created_by: req.user.id, ...validatedRequestBody });
         //add course from it
         await addEnrollmentCourse({ created_by: req.user.id, enrollment_id: enrollmentId, course_id: validatedRequestBody?.course?.id });
 

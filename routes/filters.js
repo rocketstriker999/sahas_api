@@ -11,9 +11,6 @@ const booleanFilters = [
 ];
 router.get("/users", async (req, res) => {
     res.status(200).json({
-        roles: await getRoles(),
-        branches: await getAllBranches(),
-        courses: [],
         active: booleanFilters,
         dues: booleanFilters,
     });

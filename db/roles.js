@@ -1,11 +1,11 @@
 const { executeSQLQueryParameterized } = require("../libs/db");
 const logger = require("../libs/logger");
 
-function getRoles() {
+function getAllRoles() {
     return executeSQLQueryParameterized("SELECT * FROM ROLES").catch((error) => {
-        logger.error(`getRoles: ${error}`);
+        logger.error(`getAllRoles: ${error}`);
         return false;
     });
 }
 
-module.exports = { getRoles };
+module.exports = { getAllRoles };

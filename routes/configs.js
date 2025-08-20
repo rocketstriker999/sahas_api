@@ -3,6 +3,7 @@ const { readConfig } = require("../libs/config");
 const logger = require("../libs/logger");
 const { getAllBranches } = require("../db/branches");
 const { getAllCourses } = require("../db/courses");
+const { getAllRoles } = require("../db/roles");
 const router = libExpress.Router();
 
 //Specific Config
@@ -13,6 +14,7 @@ router.get("/template", async (req, res) => {
         config = await readConfig("template");
         config.global.branches = await getAllBranches();
         config.global.courses = await getAllCourses();
+        config.global.roles = await getAllRoles();
     } catch (error) {
         logger.error(error);
     } finally {

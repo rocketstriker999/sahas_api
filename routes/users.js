@@ -7,6 +7,7 @@ const { getInquiryNotesByInquiryId, addInquiryNote } = require("../db/inquiry_no
 const { getEnrollmentsByUserId, addEnrollment } = require("../db/enrollments");
 const { getEnrollmentCoursesByEnrollmentId, addEnrollmentCourse } = require("../db/enrollment_courses");
 const { getTransactionsByEnrollmentId } = require("../db/transactions");
+const { addUserRoleByUserIdAndRoleId, getUserRolesByUserRoleId } = require("../db/user_roles");
 
 const router = libExpress.Router();
 
@@ -159,6 +160,24 @@ router.get("/:userId/roles", async (req, res) => {
     }
 
     res.status(200).json(await getUserRolesByUserId(req.params.userId));
+});
+
+router.post("/:userId/roles", async (req, res) => {
+    if (!req.params.userId) {
+        return res.status(400).json({ error: "Missing User Id" });
+    }
+
+    const requiredBodyFields = ["role_id"];
+
+    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+
+    if (isRequestBodyValid) {
+        const userRoleId = await addUserRoleByUserIdAndRoleId({ user_id: req.params.userId, created_by: req.user.id, ...validatedRequestBody });
+
+        res.status(201).json(await getUserRolesByUserRoleId(userRoleId));
+    } else {
+        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+    }
 });
 
 module.exports = router;

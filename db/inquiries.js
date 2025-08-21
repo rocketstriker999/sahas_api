@@ -40,7 +40,6 @@ function addInquiry({ user_id, created_by, branch_id, course_id }) {
         .then((result) => result.insertId)
         .catch((error) => {
             logger.error(`addInquiry: ${error}`);
-            return false;
         });
 }
 

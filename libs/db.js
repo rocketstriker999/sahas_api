@@ -60,8 +60,8 @@ function generateDBTables() {
             user_id INT NOT NULL,
             role_id INT NOT NULL,
             active BOOLEAN NOT NULL DEFAULT TRUE,
-            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
-            created_by INT NOT NULL
+            created_by INT NOT NULL,
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP
             )`,
         `CREATE TABLE IF NOT EXISTS USER_AUTHENTICATION_TOKENS (
             id INT AUTO_INCREMENT PRIMARY KEY,

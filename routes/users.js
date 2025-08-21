@@ -7,7 +7,7 @@ const { getInquiryNotesByInquiryId, addInquiryNote } = require("../db/inquiry_no
 const { getEnrollmentsByUserId, addEnrollment } = require("../db/enrollments");
 const { getEnrollmentCoursesByEnrollmentId, addEnrollmentCourse } = require("../db/enrollment_courses");
 const { getTransactionsByEnrollmentId } = require("../db/transactions");
-const { addUserRoleByUserIdAndRoleId, getUserRolesByUserRoleId } = require("../db/user_roles");
+const { addUserRoleByUserIdAndRoleId, getUserRoleByUserRoleId } = require("../db/user_roles");
 
 const router = libExpress.Router();
 
@@ -174,7 +174,7 @@ router.post("/:userId/roles", async (req, res) => {
     if (isRequestBodyValid) {
         const userRoleId = await addUserRoleByUserIdAndRoleId({ user_id: req.params.userId, created_by: req.user.id, ...validatedRequestBody });
 
-        res.status(201).json(await getUserRolesByUserRoleId(userRoleId));
+        res.status(201).json(await getUserRoleByUserRoleId(userRoleId));
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

@@ -37,8 +37,8 @@ function generateDBTables() {
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(36) UNIQUE NOT NULL,
             active BOOLEAN NOT NULL DEFAULT TRUE,
-            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
-            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP
+           
         )`,
         `CREATE TABLE IF NOT EXISTS AUTHORITIES(
             id INT AUTO_INCREMENT PRIMARY KEY,

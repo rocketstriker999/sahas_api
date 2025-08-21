@@ -8,7 +8,7 @@ function deleteUserRoleByUserRoleId(userRoleId) {
 }
 
 function addUserRoleByUserIdAndRoleId({ user_id, role_id, created_by }) {
-    return executeSQLQueryParameterized(`INSERT INTO USER_ROLES(user_id,role_id,created_by)`, [user_id, role_id, created_by])
+    return executeSQLQueryParameterized(`INSERT INTO USER_ROLES(user_id,role_id,created_by) VALUES(?,?,?)`, [user_id, role_id, created_by])
         .then((result) => result.insertId)
         .catch((error) => {
             logger.error(`addUserRoleByUserIdAndRoleId: ${error}`);

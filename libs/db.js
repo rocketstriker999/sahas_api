@@ -26,13 +26,20 @@ function generateDBTables() {
             phone VARCHAR(13) NULL UNIQUE,
             image VARCHAR(64) NULL UNIQUE,
             address VARCHAR(256) NULL,
-            wallet DECIMAL(8, 2) DEFAULT 0,
             branch_id INT NULL,
             active BOOLEAN NOT NULL DEFAULT TRUE,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
           )
         `,
+        `CREATE TABLE IF NOT EXISTS WALLET_TRANSACTIONS(
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            user_id INT NOT NULL,
+            amount INT NOT NULL,
+            created_by INT NOT NULL,
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP
+            )`,
+
         `CREATE TABLE IF NOT EXISTS ROLES(
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(36) UNIQUE NOT NULL,

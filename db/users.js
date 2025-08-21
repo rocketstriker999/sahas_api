@@ -97,11 +97,11 @@ function validateUserOTP(email, otp) {
         });
 }
 
-function creditUserWallet(userId, credit) {
-    executeSQLQueryParameterized(`UPDATE USERS SET wallet = wallet + ? WHERE id = ?`, [credit, userId]).catch((error) =>
-        logger.error(`creditCuponReward: ${error}`)
-    );
-}
+// function creditUserWallet(userId, credit) {
+//     executeSQLQueryParameterized(`UPDATE USERS SET wallet = wallet + ? WHERE id = ?`, [credit, userId]).catch((error) =>
+//         logger.error(`creditCuponReward: ${error}`)
+//     );
+// }
 
 // Temporary need to be removed Find user_id by email
 function getUserIdByEmail(email) {
@@ -253,7 +253,6 @@ module.exports = {
     getGroupsById,
     getAuthoritiesById,
     updateUserPrimaryDetails,
-    creditUserWallet,
     getUserIdByEmail,
     getUserByTransactionId,
     updateUserProfilePrimaryDetails,

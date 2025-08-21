@@ -8,6 +8,7 @@ const { getEnrollmentsByUserId, addEnrollment } = require("../db/enrollments");
 const { getEnrollmentCoursesByEnrollmentId, addEnrollmentCourse } = require("../db/enrollment_courses");
 const { getTransactionsByEnrollmentId } = require("../db/transactions");
 const { addUserRoleByUserIdAndRoleId, getUserRoleByUserRoleId } = require("../db/user_roles");
+const { getWalletTransactionsByUserId, getWalletBalanceByUserId } = require("../db/wallet_transactions");
 
 const router = libExpress.Router();
 
@@ -178,6 +179,19 @@ router.post("/:userId/roles", async (req, res) => {
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }
+});
+
+router.get("/:userId/wallet-transactions", async (req, res) => {
+    if (!req.params.userId) {
+        return res.status(400).json({ error: "Missing User Id" });
+    }
+
+    const transactions = {
+        balanace: await getWalletBalanceByUserId(req.params.userId),
+        transactions: await getWalletTransactionsByUserId(req.params.userId),
+    };
+
+    res.status(200).json(transactions);
 });
 
 module.exports = router;

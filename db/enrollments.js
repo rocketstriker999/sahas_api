@@ -22,13 +22,8 @@ function updateEnrollmentByEnrollmentId({ id, active, start_date, end_date }) {
 
 function getEnrollmentByEnrollmentId(enrollmentId) {
     return executeSQLQueryParameterized("SELECT * FROM USER_ENROLLMENTS WHERE id =?", [enrollmentId])
-        .then((results) => {
-            return results.length > 0 ? results[0] : null;
-        })
-        .catch((error) => {
-            logger.error(`getEnrollmentByEnrollmentId: ${error}`);
-            return null;
-        });
+        .then((results) => (results.length > 0 ? results[0] : null))
+        .catch((error) => logger.error(`getEnrollmentByEnrollmentId: ${error}`));
 }
 
 function addEnrollment({ user_id, start_date, end_date, fees, created_by }) {

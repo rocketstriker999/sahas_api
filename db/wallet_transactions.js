@@ -3,7 +3,7 @@ const logger = require("../libs/logger");
 
 function getWalletTransactionsByUserId(userId) {
     return executeSQLQueryParameterized(
-        `SELECT WALLET_TRANSACTIONS.*,USERS.created_by_full_team FROM WALLET_TRANSACTIONS LEFT JOIN USERS ON WALLET_TRANSACTIONS.created_by=USERS.id WHERE user_id=?`,
+        `SELECT WALLET_TRANSACTIONS.*,USERS.full_name AS created_by_full_name FROM WALLET_TRANSACTIONS LEFT JOIN USERS ON WALLET_TRANSACTIONS.created_by=USERS.id WHERE user_id=?`,
         [userId]
     ).catch((error) => {
         logger.error(`getWalletTransactionsByUserId: ${error}`);

@@ -13,7 +13,7 @@ function getWalletTransactionsByUserId(userId) {
 
 function getWalletBalanceByUserId(userId) {
     return executeSQLQueryParameterized(`SELECT SUM(amount) AS balance FROM WALLET_TRANSACTIONS WHERE user_id=?`, [userId])
-        .then((result) => (result.length > 0 && !!result[0]?.balance) || 0)
+        .then((result) => result.length > 0 && (result[0]?.balance || 0))
         .catch((error) => {
             logger.error(`getWalletBalanceByUserId: ${error}`);
             return 0;

@@ -192,7 +192,7 @@ router.get("/:userId/wallet-transactions", async (req, res) => {
     }
 
     const transactions = {
-        balanace: await getWalletBalanceByUserId(req.params.userId),
+        balance: await getWalletBalanceByUserId(req.params.userId),
         transactions: await getWalletTransactionsByUserId(req.params.userId),
     };
 

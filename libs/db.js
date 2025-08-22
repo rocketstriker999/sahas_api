@@ -37,7 +37,7 @@ function generateDBTables() {
             user_id INT NOT NULL,
             amount INT NOT NULL,
             note VARCHAR(256) NOT NULL,
-            created_by INT NOT NULL DEFAULT 0,
+            created_by INT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP
             )`,
 

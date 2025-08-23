@@ -23,7 +23,7 @@ router.post("/", async (req, res) => {
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
     if (isRequestBodyValid) {
-        const authorityId = await addAuthority(validatedRequestBody?.authority);
+        const authorityId = await addAuthority(validatedRequestBody);
         res.status(201).json(await getAuthorityByAuthorityId(authorityId));
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });

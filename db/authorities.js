@@ -8,4 +8,11 @@ function getAllAuthorities() {
     });
 }
 
-module.exports = { getAllAuthorities };
+function deleteAuthorityByAuthorityId(authorityId) {
+    return executeSQLQueryParameterized("DELETE FROM AUTHORITIES WHERE id=?", [authorityId]).catch((error) => {
+        logger.error(`deleteAuthorityByAuthorityId: ${error}`);
+        return [];
+    });
+}
+
+module.exports = { getAllAuthorities, deleteAuthorityByAuthorityId };

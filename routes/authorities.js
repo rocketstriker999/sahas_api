@@ -18,7 +18,7 @@ router.delete("/:authorityId", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-    const requiredBodyFields = ["authority"];
+    const requiredBodyFields = ["title", "authority"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 

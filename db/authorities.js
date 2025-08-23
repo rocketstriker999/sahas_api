@@ -22,8 +22,8 @@ function deleteAuthorityByAuthorityId(authorityId) {
     });
 }
 
-function addAuthority(authority) {
-    return executeSQLQueryParameterized("INSERT INTO AUTHORITIES(title) VALUES(?)", [authority])
+function addAuthority({ title, description }) {
+    return executeSQLQueryParameterized("INSERT INTO AUTHORITIES(title,description) VALUES(?)", [title, description])
         .then((result) => result.insertId)
         .catch((error) => logger.error(`addAuthority: ${error}`));
 }

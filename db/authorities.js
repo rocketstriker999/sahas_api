@@ -23,7 +23,7 @@ function deleteAuthorityByAuthorityId(authorityId) {
 }
 
 function addAuthority({ title, description }) {
-    return executeSQLQueryParameterized("INSERT INTO AUTHORITIES(title,description) VALUES(?)", [title, description])
+    return executeSQLQueryParameterized("INSERT INTO AUTHORITIES(title,description) VALUES(?,?)", [title, description])
         .then((result) => result.insertId)
         .catch((error) => logger.error(`addAuthority: ${error}`));
 }

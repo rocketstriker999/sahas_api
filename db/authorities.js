@@ -8,11 +8,24 @@ function getAllAuthorities() {
     });
 }
 
+function getAuthorityByAuthorityId(authorityId) {
+    return executeSQLQueryParameterized("SELECT * FROM AUTHORITIES WHERE id=?", [authorityId])
+        .then((result) => (result.length > 0 ? result[0] : false))
+        .catch((error) => {
+            logger.error(`getAuthorityByAuthorityId: ${error}`);
+        });
+}
+
 function deleteAuthorityByAuthorityId(authorityId) {
     return executeSQLQueryParameterized("DELETE FROM AUTHORITIES WHERE id=?", [authorityId]).catch((error) => {
         logger.error(`deleteAuthorityByAuthorityId: ${error}`);
-        return [];
     });
 }
 
-module.exports = { getAllAuthorities, deleteAuthorityByAuthorityId };
+function addAuthority(authority) {
+    return executeSQLQueryParameterized("INSERT INTO AUTHORITIES(title) VALUES(?)", [authority])
+        .then((result) => result.insertId)
+        .catch((error) => logger.error(`addAuthority: ${error}`));
+}
+
+module.exports = { getAllAuthorities, deleteAuthorityByAuthorityId, addAuthority, getAuthorityByAuthorityId };

@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const { deleteAuthorityByAuthorityId } = require("../db/authorities");
+const { deleteAuthorityByAuthorityId, addAuthority, getAuthorityByAuthorityId } = require("../db/authorities");
 const { deleteRoleAuthorityByRoleAuthorityId } = require("../db/role_authorities");
 
 const router = libExpress.Router();
@@ -14,6 +14,19 @@ router.delete("/:authorityId", async (req, res) => {
     //this authority needs to go away from roleauthorities
     deleteRoleAuthorityByRoleAuthorityId(req.params.authorityId);
     res.sendStatus(204);
+});
+
+router.post("/", async (req, res) => {
+    const requiredBodyFields = ["authority"];
+
+    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+
+    if (isRequestBodyValid) {
+        const authorityId = await addAuthority(validatedRequestBody?.requiredBodyFields);
+        res.status(201).json(await getAuthorityByAuthorityId(authorityId));
+    } else {
+        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+    }
 });
 
 module.exports = router;

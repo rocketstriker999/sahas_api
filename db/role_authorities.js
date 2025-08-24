@@ -8,7 +8,7 @@ function deleteRoleAuthorityByRoleAuthorityId(roleAuthorityId) {
 }
 
 function getRoleAuthoritiesByRoleId(roleId) {
-    return executeSQLQueryParameterized("SELECT * FROM ROLE_AUTHORITIES WHERE role_id=? AND active =TRUE", [roleId]).catch((error) => {
+    return executeSQLQueryParameterized("SELECT * FROM ROLE_AUTHORITIES WHERE role_id=? ", [roleId]).catch((error) => {
         logger.error(`getRoleAuthoritiesByRoleId: ${error}`);
     });
 }

@@ -7,6 +7,12 @@ function deleteUserRoleByUserRoleId(userRoleId) {
     });
 }
 
+function deleteUserRoleByRoleId(roleId) {
+    return executeSQLQueryParameterized(`DELETE FROM USER_ROLES WHERE role_id=?`, [roleId]).catch((error) => {
+        logger.error(`deleteUserRoleByRoleId: ${error}`);
+    });
+}
+
 function addUserRoleByUserIdAndRoleId({ user_id, role_id, created_by }) {
     return executeSQLQueryParameterized(`INSERT INTO USER_ROLES(user_id,role_id,created_by) VALUES(?,?,?)`, [user_id, role_id, created_by])
         .then((result) => result.insertId)
@@ -26,4 +32,4 @@ function getUserRoleByUserRoleId(userRoleId) {
         });
 }
 
-module.exports = { deleteUserRoleByUserRoleId, addUserRoleByUserIdAndRoleId, getUserRoleByUserRoleId };
+module.exports = { deleteUserRoleByUserRoleId, addUserRoleByUserIdAndRoleId, getUserRoleByUserRoleId, deleteUserRoleByRoleId };

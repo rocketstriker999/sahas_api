@@ -8,4 +8,10 @@ function getAllRoles() {
     });
 }
 
-module.exports = { getAllRoles };
+function deleteRoleByRoleId(roleId) {
+    return executeSQLQueryParameterized("DELETE FROM ROLES WHERE id=?", [roleId]).catch((error) => {
+        logger.error(`deleteRoleByRoleId: ${error}`);
+    });
+}
+
+module.exports = { getAllRoles, deleteRoleByRoleId };

@@ -59,7 +59,6 @@ function generateDBTables() {
             role_id INT NOT NULL,
             authority_id INT NOT NULL,
             active BOOLEAN NOT NULL DEFAULT TRUE,
-            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
         `CREATE TABLE IF NOT EXISTS USER_ROLES(

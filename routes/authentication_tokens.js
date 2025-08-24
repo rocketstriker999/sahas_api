@@ -1,6 +1,6 @@
 const libExpress = require("express");
 const { requestService } = require("../utils");
-const { getUserByEmail, addUserByEmail, getUserById, getUserRolesByUserId, getUserAuthoritiesByRoles } = require("../db/users");
+const { getUserByEmail, addUserByEmail, getUserById, getUserRolesByUserId, getAuthoritiesByRoleIds } = require("../db/users");
 const libValidator = require("validator");
 const { generateToken } = require("../utils");
 const { addInactiveToken, getTokenByOTP, activateToken } = require("../db/authentication_tokens");
@@ -17,7 +17,7 @@ const router = libExpress.Router();
 
 async function populateRolesAndAuthorities(user) {
     const userRoles = await getUserRolesByUserId(user.id);
-    const authorities = await getUserAuthoritiesByRoles(userRoles.map(({ role_id }) => role_id).join(","));
+    const authorities = await getAuthoritiesByRoleIds(userRoles.map(({ role_id }) => role_id).join(","));
     user.roles = userRoles?.map(({ title }) => title);
     user.authorities = authorities?.map((authority) => authority.title);
 }

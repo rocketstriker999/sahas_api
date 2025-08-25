@@ -21,10 +21,6 @@ router.post("/", async (req, res) => {
 });
 
 router.patch("/", async (req, res) => {
-    if (!req.params.id) {
-        return res.status(400).json({ error: "Missing inquiry id" });
-    }
-
     const requiredBodyFields = ["id", "status", "branch_id", "course_id"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);

@@ -12,7 +12,7 @@ router.post("/", async (req, res) => {
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
     if (isRequestBodyValid) {
-        const inquiryId = await addInquiry({ user_id: req.params.userId, ...validatedRequestBody, created_by: req.user.id });
+        const inquiryId = await addInquiry({ ...validatedRequestBody, created_by: req.user.id });
         addInquiryNote({ inquiry_id: inquiryId, note: validatedRequestBody.note, created_by: req.user.id });
         res.status(201).json(await getInquiryById(inquiryId));
     } else {

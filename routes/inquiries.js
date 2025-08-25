@@ -7,7 +7,7 @@ const router = libExpress.Router();
 
 //create  a new inquiry
 router.post("/", async (req, res) => {
-    const requiredBodyFields = ["user_id", "course_id", "note"];
+    const requiredBodyFields = ["user_id", "course_id", "note", "branch_id"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 

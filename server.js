@@ -47,6 +47,7 @@ const routers = {
     "/enrollment-courses": { middlewares: [], router: require("./routes/enrollment_courses") },
     "/authorities": { middlewares: [], router: require("./routes/authorities") },
     "/roles": { middlewares: [], router: require("./routes/roles") },
+    "/role-authorities": { middlewares: [], router: require("./routes/role_authorities") },
 
     // "/token": { middlewares: [], router: require("./routes/token") },
     // "/device": { middlewares: [], router: require("./routes/device") },

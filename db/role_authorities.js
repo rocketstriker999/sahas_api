@@ -9,7 +9,7 @@ function deleteRoleAuthorityByRoleAuthorityId(roleAuthorityId) {
 
 function getRoleAuthoritiesByRoleId(roleId) {
     return executeSQLQueryParameterized(
-        "SELECT AUTHORITIES.*, ROLE_AUTHORITIES.id AS roleAuthorityId, ROLE_AUTHORITIES.created_on, ROLE_AUTHORITIES.created_by, USERS.id AS user_id, USERS.full_name AS created_by_full_name FROM AUTHORITIES LEFT JOIN ROLE_AUTHORITIES ON AUTHORITIES.id = ROLE_AUTHORITIES.authority_id AND ROLE_AUTHORITIES.role_id = ? LEFT JOIN USERS ON ROLE_AUTHORITIES.created_by = USERS.id",
+        "SELECT AUTHORITIES.*, ROLE_AUTHORITIES.id AS roleAuthorityId, ROLE_AUTHORITIES.created_on, ROLE_AUTHORITIES.created_by,ROLE_AUTHORITIES.created_on, USERS.id AS user_id, USERS.full_name AS created_by_full_name FROM AUTHORITIES LEFT JOIN ROLE_AUTHORITIES ON AUTHORITIES.id = ROLE_AUTHORITIES.authority_id AND ROLE_AUTHORITIES.role_id = ? LEFT JOIN USERS ON ROLE_AUTHORITIES.created_by = USERS.id",
         [roleId]
     ).catch((error) => {
         logger.error(`getRoleAuthoritiesByRoleId: ${error}`);
@@ -26,7 +26,7 @@ function addRoleAuthority({ role_id, authority_id, created_by }) {
 
 function getRoleAuthorityByRoleAuthorityId(roleAuthorityId) {
     return executeSQLQueryParameterized(
-        "SELECT AUTHORITIES.*, ROLE_AUTHORITIES.id AS roleAuthorityId, ROLE_AUTHORITIES.created_on, ROLE_AUTHORITIES.created_by, USERS.id AS user_id, USERS.full_name  AS created_by_full_name FROM AUTHORITIES LEFT JOIN ROLE_AUTHORITIES ON AUTHORITIES.id = ROLE_AUTHORITIES.authority_id  LEFT JOIN USERS ON ROLE_AUTHORITIES.created_by = USERS.id where ROLE_AUTHORITIES.id=?",
+        "SELECT AUTHORITIES.*, ROLE_AUTHORITIES.id AS roleAuthorityId, ROLE_AUTHORITIES.created_on, ROLE_AUTHORITIES.created_by,ROLE_AUTHORITIES.created_on, USERS.id AS user_id, USERS.full_name  AS created_by_full_name FROM AUTHORITIES LEFT JOIN ROLE_AUTHORITIES ON AUTHORITIES.id = ROLE_AUTHORITIES.authority_id  LEFT JOIN USERS ON ROLE_AUTHORITIES.created_by = USERS.id where ROLE_AUTHORITIES.id=?",
         [roleAuthorityId]
     )
         .then((result) => (result.length > 0 ? result[0] : false))

@@ -16,4 +16,10 @@ function getRoleAuthoritiesByRoleId(roleId) {
     });
 }
 
-module.exports = { deleteRoleAuthorityByRoleAuthorityId, getRoleAuthoritiesByRoleId };
+function addRoleAuthority(roleId, authorityId) {
+    return executeSQLQueryParameterized("INSERT INTO ROLE_AUHTORITIES (role_id,authority_id) VALUES(?,?)", [roleId, authorityId]).catch((error) => {
+        logger.error(`addRoleAuthority: ${error}`);
+    });
+}
+
+module.exports = { deleteRoleAuthorityByRoleAuthorityId, getRoleAuthoritiesByRoleId, addRoleAuthority };

@@ -65,7 +65,6 @@ function generateDBTables() {
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
             role_id INT NOT NULL,
-            active BOOLEAN NOT NULL DEFAULT TRUE,
             created_by INT NOT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP
             )`,

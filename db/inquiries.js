@@ -47,6 +47,7 @@ function getInquiryById({ id }) {
         });
 }
 
+//freeze
 function deleteInquiryById({ id }) {
     return executeSQLQueryParameterized("DELETE  FROM INQUIRIES WHERE id=?", [id]).catch((error) => {
         logger.error(`deleteInquiryById: ${error}`);

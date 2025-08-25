@@ -13,7 +13,7 @@ router.post("/", async (req, res) => {
 
     if (isRequestBodyValid) {
         const inquiryId = await addInquiry({ ...validatedRequestBody, created_by: req.user.id });
-        addInquiryNote({ inquiry_id: inquiryId, note: validatedRequestBody.note, created_by: req.user.id });
+        await addInquiryNote({ inquiry_id: inquiryId, note: validatedRequestBody.note, created_by: req.user.id });
         res.status(201).json(await getInquiryById({ id: inquiryId }));
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });

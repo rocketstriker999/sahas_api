@@ -58,8 +58,7 @@ function generateDBTables() {
             id INT AUTO_INCREMENT PRIMARY KEY,
             role_id INT NOT NULL,
             authority_id INT NOT NULL,
-            active BOOLEAN NOT NULL DEFAULT TRUE,
-            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP
         )`,
         `CREATE TABLE IF NOT EXISTS USER_ROLES(
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -76,7 +75,6 @@ function generateDBTables() {
             active BOOLEAN NOT NULL DEFAULT FALSE,
             validity DATETIME NOT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
-            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
           )`,
         `CREATE TABLE IF NOT EXISTS USER_DEVICES (
             id INT AUTO_INCREMENT PRIMARY KEY,

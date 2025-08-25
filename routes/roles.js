@@ -2,7 +2,13 @@ const libExpress = require("express");
 const logger = require("../libs/logger");
 const { deleteRoleByRoleId, addRole, getRoleByRoleId } = require("../db/roles");
 const { deleteUserRoleByRoleId } = require("../db/user_roles");
-const { getRoleAuthoritiesByRoleId, addRoleAuthority, getRoleAuthorityByRoleAuthorityId } = require("../db/role_authorities");
+const {
+    getRoleAuthoritiesByRoleId,
+    addRoleAuthority,
+    getRoleAuthorityByRoleAuthorityId,
+    deleteRoleAuthorityByAuthorityId,
+    deleteRoleAuthorityByRoleId,
+} = require("../db/role_authorities");
 const { validateRequestBody } = require("../utils");
 
 const router = libExpress.Router();
@@ -16,6 +22,8 @@ router.delete("/:roleId", async (req, res) => {
     deleteRoleByRoleId(req.params.roleId);
     //this authority needs to go away from roleauthorities
     deleteUserRoleByRoleId(req.params.roleId);
+    //need to delete authorities as well
+    deleteRoleAuthorityByRoleId(req.params.roleId);
     res.sendStatus(204);
 });
 

@@ -17,13 +17,11 @@ function getRoleAuthoritiesByRoleId(roleId) {
 }
 
 function addRoleAuthority({ role_id, authority_id, created_by }) {
-    return executeSQLQueryParameterized("INSERT INTO ROLE_AUTHORITIES (role_id,authority_id,created_by) VALUES(?,?,?)", [
-        role_id,
-        authority_id,
-        created_by,
-    ]).catch((error) => {
-        logger.error(`addRoleAuthority: ${error}`);
-    });
+    return executeSQLQueryParameterized("INSERT INTO ROLE_AUTHORITIES (role_id,authority_id,created_by) VALUES(?,?,?)", [role_id, authority_id, created_by])
+        .then((result) => result.insertId)
+        .catch((error) => {
+            logger.error(`addRoleAuthority: ${error}`);
+        });
 }
 
 function getRoleAuthorityByRoleAuthorityId(roleAuthorityId) {

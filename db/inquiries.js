@@ -1,9 +1,9 @@
 const { executeSQLQueryParameterized } = require("../libs/db");
 const logger = require("../libs/logger");
 
-function getInquiriesByUserId(userId) {
+function getInquiriesByUserId({ userId }) {
     return executeSQLQueryParameterized(
-        "SELECT INQUIRIES.*,USERS.full_name AS created_by_full_name FROM INQUIRIES LEFT JOIN USERS ON INQUIRIES.created_by=USERS.id WHERE INQUIRIES.user_id=? ORDER BY INQUIRIES.id DESC",
+        "SELECT INQUIRIES.*, USERS.full_name AS created_by_full_name, COUNT(INQUIRY_NOTES.id) AS notes_count FROM INQUIRIES LEFT JOIN USERS ON INQUIRIES.created_by = USERS.id LEFT JOIN INQUIRY_NOTES ON INQUIRY_NOTES.inquiry_id = INQUIRIES.id WHERE INQUIRIES.user_id = ? GROUP BY INQUIRIES.id ORDER BY INQUIRIES.id DESC",
         [userId]
     ).catch((error) => {
         logger.error(`getInquiriesByUserId: ${error}`);

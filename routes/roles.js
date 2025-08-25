@@ -2,7 +2,7 @@ const libExpress = require("express");
 const logger = require("../libs/logger");
 const { deleteRoleByRoleId } = require("../db/roles");
 const { deleteUserRoleByUserRoleId, deleteUserRoleByRoleId } = require("../db/user_roles");
-const { getRoleAuthoritiesByRoleId } = require("../db/role_authorities");
+const { getRoleAuthoritiesByRoleId, addRoleAuthority } = require("../db/role_authorities");
 
 const router = libExpress.Router();
 
@@ -34,7 +34,7 @@ router.post("/:roleId/authorities", async (req, res) => {
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
     if (isRequestBodyValid) {
-        const userRoleId = await addRoleAuthori({ user_id: req.params.userId, created_by: req.user.id, ...validatedRequestBody });
+        const userRoleId = await addRoleAuthority({ role_id: req.params.roleId, created_by: req.user.id, ...validatedRequestBody });
 
         res.status(201).json(await getUserRoleByUserRoleId(userRoleId));
     } else {

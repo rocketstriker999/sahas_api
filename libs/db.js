@@ -58,6 +58,7 @@ function generateDBTables() {
             id INT AUTO_INCREMENT PRIMARY KEY,
             role_id INT NOT NULL,
             authority_id INT NOT NULL,
+            created_by INT NOT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP
         )`,
         `CREATE TABLE IF NOT EXISTS USER_ROLES(

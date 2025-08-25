@@ -9,15 +9,19 @@ function deleteRoleAuthorityByRoleAuthorityId(roleAuthorityId) {
 
 function getRoleAuthoritiesByRoleId(roleId) {
     return executeSQLQueryParameterized(
-        "SELECT ROLE_AUTHORITIES.*,AUTHORITIES.title FROM ROLE_AUTHORITIES LEFT JOIN AUTHORITIES ON ROLE_AUTHORITIES.authority_id=AUTHORITIES.id WHERE role_id=? ",
+        "SELECT ROLE_AUTHORITIES.*,AUTHORITIES.title,USERS-.full_name AS created_by_full_name FROM ROLE_AUTHORITIES LEFT JOIN AUTHORITIES ON ROLE_AUTHORITIES.authority_id=AUTHORITIES.id LEFT JOIN USERS ON ROLE_AUTHORITIES.created_by=USERS.id WHERE role_id=? ",
         [roleId]
     ).catch((error) => {
         logger.error(`getRoleAuthoritiesByRoleId: ${error}`);
     });
 }
 
-function addRoleAuthority(roleId, authorityId) {
-    return executeSQLQueryParameterized("INSERT INTO ROLE_AUHTORITIES (role_id,authority_id) VALUES(?,?)", [roleId, authorityId]).catch((error) => {
+function addRoleAuthority({ role_id, authority_id, created_by }) {
+    return executeSQLQueryParameterized("INSERT INTO ROLE_AUHTORITIES (role_id,authority_id,created_by) VALUES(?,?,?)", [
+        role_id,
+        authority_id,
+        created_by,
+    ]).catch((error) => {
         logger.error(`addRoleAuthority: ${error}`);
     });
 }

@@ -9,7 +9,7 @@ function deleteRoleAuthorityByRoleAuthorityId(roleAuthorityId) {
 
 function getRoleAuthoritiesByRoleId(roleId) {
     return executeSQLQueryParameterized(
-        "SELECT AUTHORITIES.*, ROLE_AUTHORITIES.id as roleAuthorityId FROM AUTHORITIES LEFT JOIN ROLE_AUTHORITIES ON AUTHORITIES.id = ROLE_AUTHORITIES.authority_id AND ROLE_AUTHORITIES.role_id = ?",
+        "SELECT AUTHORITIES.*, ROLE_AUTHORITIES.id AS roleAuthorityId, ROLE_AUTHORITIES.created_on, ROLE_AUTHORITIES.created_by, USERS.id AS user_id, USERS.full_name FROM AUTHORITIES LEFT JOIN ROLE_AUTHORITIES ON AUTHORITIES.id = ROLE_AUTHORITIES.authority_id AND ROLE_AUTHORITIES.role_id = 1 LEFT JOIN USERS ON ROLE_AUTHORITIES.created_by = USERS.id",
         [roleId]
     ).catch((error) => {
         logger.error(`getRoleAuthoritiesByRoleId: ${error}`);

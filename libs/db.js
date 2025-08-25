@@ -74,7 +74,7 @@ function generateDBTables() {
             token VARCHAR(36) NULL UNIQUE,
             active BOOLEAN NOT NULL DEFAULT FALSE,
             validity DATETIME NOT NULL,
-            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP
           )`,
         `CREATE TABLE IF NOT EXISTS USER_DEVICES (
             id INT AUTO_INCREMENT PRIMARY KEY,

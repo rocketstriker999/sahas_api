@@ -26,8 +26,8 @@ router.patch("/", async (req, res) => {
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
     if (isRequestBodyValid) {
-        updateInquiryById({ ...validatedRequestBody });
-        res.sendStatus(200);
+        await updateInquiryById({ ...validatedRequestBody });
+        res.status(200).json(await getInquiryById(inquiryId));
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

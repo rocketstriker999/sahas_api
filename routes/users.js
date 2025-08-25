@@ -69,29 +69,6 @@ router.get("/:id/inquiries", async (req, res) => {
     res.status(200).json(await getInquiriesByUserId({ userId: req.params.id }));
 });
 
-router.post("/:userId/inquiries", async (req, res) => {
-    if (!req.params.userId) {
-        return res.status(400).json({ error: "Missing User Id" });
-    }
-
-    const requiredBodyFields = ["branch_id", "course_id", "note"];
-
-    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
-
-    if (isRequestBodyValid) {
-        const inquiryId = await addInquiry({ user_id: req.params.userId, ...validatedRequestBody, created_by: req.user.id });
-        await addInquiryNote({ inquiry_id: inquiryId, note: validatedRequestBody.note, created_by: req.user.id });
-
-        //getInquiryNotesByInquiryId
-        const inquiry = await getInquiryByInquiryId(inquiryId);
-        inquiry.notes = await getInquiryNotesByInquiryId(inquiryId);
-
-        res.status(201).json(inquiry);
-    } else {
-        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
-    }
-});
-
 router.get("/:userId/enrollments", async (req, res) => {
     if (!req.params.userId) {
         return res.status(400).json({ error: "Missing User Id" });

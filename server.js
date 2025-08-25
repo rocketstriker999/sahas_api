@@ -38,6 +38,7 @@ const routers = {
     "/authentication-tokens": { middlewares: [], router: require("./routes/authentication_tokens") },
     "/catelogue": { middlewares: [], router: require("./routes/catelogue") },
     "/filters": { middlewares: [], router: require("./routes/filters") },
+
     "/users": { middlewares: [], router: require("./routes/users") },
 
     "/inquiries": { middlewares: [], router: require("./routes/inquiries") },

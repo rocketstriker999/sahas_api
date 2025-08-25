@@ -1,9 +1,38 @@
 const libExpress = require("express");
 const { validateRequestBody } = require("../utils");
-const { deleteInquiryById } = require("../db/inquiries");
+const { deleteInquiryById, updateInquiryStatusById, addInquiry, getInquiryByInquiryId, getInquiryById } = require("../db/inquiries");
 const { deleteInquiryNotesByInquiryId, getInquiryNotesByInquiryId, addInquiryNote, deleteInquiryNoteByInquiryNoteId } = require("../db/inquiry_notes");
 
 const router = libExpress.Router();
+
+//create  a new inquiry
+router.post("/", async (req, res) => {
+    const requiredBodyFields = ["user_id", "course_id", "note"];
+
+    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+
+    if (isRequestBodyValid) {
+        const inquiryId = await addInquiry({ user_id: req.params.userId, ...validatedRequestBody, created_by: req.user.id });
+        addInquiryNote({ inquiry_id: inquiryId, note: validatedRequestBody.note, created_by: req.user.id });
+        res.status(201).json(await getInquiryById(inquiryId));
+    } else {
+        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+    }
+});
+
+router.patch("/:id/status", async (req, res) => {
+    if (!req.params.id) {
+        return res.status(400).json({ error: "Missing inquiry id" });
+    }
+
+    const requiredBodyFields = ["status"];
+
+    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+
+    updateInquiryStatusById({ id, ...validatedRequestBody });
+
+    res.sendStatus(200);
+});
 
 router.delete("/:id", async (req, res) => {
     if (!req.params.id) {

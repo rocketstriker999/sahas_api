@@ -32,7 +32,7 @@ function getInquiriesByUserId({ userId }) {
     });
 }
 
-function getInquiryById(id) {
+function getInquiryById({ id }) {
     return executeSQLQueryParameterized(
         "SELECT INQUIRIES.*, USERS.full_name AS created_by_full_name, COUNT(INQUIRY_NOTES.id) AS notes_count FROM INQUIRIES LEFT JOIN USERS ON INQUIRIES.created_by = USERS.id LEFT JOIN INQUIRY_NOTES ON INQUIRY_NOTES.inquiry_id = INQUIRIES.id WHERE INQUIRIES.id = ? GROUP BY INQUIRIES.id ",
         [id]

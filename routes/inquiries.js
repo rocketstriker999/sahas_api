@@ -27,7 +27,7 @@ router.patch("/", async (req, res) => {
 
     if (isRequestBodyValid) {
         await updateInquiryById({ ...validatedRequestBody });
-        res.status(200).json(await getInquiryById(inquiryId));
+        res.status(200).json(await getInquiryById(validatedRequestBody));
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

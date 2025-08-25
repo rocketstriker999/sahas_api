@@ -14,10 +14,12 @@ function addInquiry({ user_id, created_by, branch_id, course_id }) {
         });
 }
 
-function updateInquiryStatusById({ id, status }) {
-    return executeSQLQueryParameterized("UPDATE INQUIRIES SET status=? where id=?", [id, status]).catch((error) => {
-        logger.error(`getInquiriesByUserId: ${error}`);
-    });
+function updateInquiryById({ id, status, branch_id, course_id }) {
+    return executeSQLQueryParameterized("UPDATE INQUIRIES SET status=?,branch_id=?,course_id=? where id=?", [status, branch_id, course_id, id]).catch(
+        (error) => {
+            logger.error(`getInquiriesByUserId: ${error}`);
+        }
+    );
 }
 
 function getInquiriesByUserId({ userId }) {
@@ -49,4 +51,4 @@ function deleteInquiryById(id) {
     });
 }
 
-module.exports = { getInquiriesByUserId, deleteInquiryById, addInquiry, getInquiryById, updateInquiryStatusById };
+module.exports = { getInquiriesByUserId, deleteInquiryById, addInquiry, getInquiryById, updateInquiryById };

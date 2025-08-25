@@ -1,6 +1,6 @@
 const libExpress = require("express");
 const { validateRequestBody } = require("../utils");
-const { deleteInquiryById, updateInquiryStatusById, addInquiry, getInquiryByInquiryId, getInquiryById } = require("../db/inquiries");
+const { deleteInquiryById, updateInquiryStatusById, addInquiry, getInquiryById, updateInquiryById } = require("../db/inquiries");
 const { deleteInquiryNotesByInquiryId, getInquiryNotesByInquiryId, addInquiryNote, deleteInquiryNoteByInquiryNoteId } = require("../db/inquiry_notes");
 
 const router = libExpress.Router();
@@ -20,18 +20,21 @@ router.post("/", async (req, res) => {
     }
 });
 
-router.patch("/:id/status", async (req, res) => {
+router.patch("/", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing inquiry id" });
     }
 
-    const requiredBodyFields = ["status"];
+    const requiredBodyFields = ["id", "status", "branch_id", "course_id"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
-    updateInquiryStatusById({ id, ...validatedRequestBody });
-
-    res.sendStatus(200);
+    if (isRequestBodyValid) {
+        updateInquiryById({ ...validatedRequestBody });
+        res.sendStatus(200);
+    } else {
+        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+    }
 });
 
 router.delete("/:id", async (req, res) => {

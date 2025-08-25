@@ -101,10 +101,8 @@ function generateDBTables() {
             created_by INT NOT NULL,
             branch_id INT NOT NULL,
             course_id INT NOT NULL,
-            status INT NOT NULL DEFAULT 1,
             active BOOLEAN NOT NULL DEFAULT TRUE,
-            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
-            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         )`,
         `CREATE TABLE IF NOT EXISTS INQUIRY_NOTES (
             id INT AUTO_INCREMENT PRIMARY KEY,

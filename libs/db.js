@@ -95,7 +95,7 @@ function generateDBTables() {
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
           )
         `,
-        `CREATE TABLE IF NOT EXISTS USER_INQUIRIES (
+        `CREATE TABLE IF NOT EXISTS INQUIRIES (
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
             created_by INT NOT NULL,

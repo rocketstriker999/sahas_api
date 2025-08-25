@@ -37,12 +37,14 @@ const routers = {
     "/configs": { middlewares: [], router: require("./routes/configs") },
     "/authentication-tokens": { middlewares: [], router: require("./routes/authentication_tokens") },
     "/catelogue": { middlewares: [], router: require("./routes/catelogue") },
-
     "/filters": { middlewares: [], router: require("./routes/filters") },
     "/users": { middlewares: [], router: require("./routes/users") },
-    "/user-roles": { middlewares: [], router: require("./routes/user_roles") },
+
     "/inquiries": { middlewares: [], router: require("./routes/inquiries") },
     "/inquiry-notes": { middlewares: [], router: require("./routes/inquiry_notes") },
+
+    "/user-roles": { middlewares: [], router: require("./routes/user_roles") },
+
     "/enrollments": { middlewares: [], router: require("./routes/enrollments") },
     "/enrollment-courses": { middlewares: [], router: require("./routes/enrollment_courses") },
     "/authorities": { middlewares: [], router: require("./routes/authorities") },

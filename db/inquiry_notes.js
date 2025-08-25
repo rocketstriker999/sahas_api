@@ -32,7 +32,7 @@ function deleteInquiryNoteByInquiryNoteId(inquiryNoteId) {
 
 function deleteInquiryNotesByInquiryId(inquiryId) {
     return executeSQLQueryParameterized("DELETE  FROM INQUIRY_NOTES WHERE inquiry_id=?", [inquiryId]).catch((error) => {
-        logger.error(`deleteInquiryNotesById: ${error}`);
+        logger.error(`deleteInquiryNotesByInquiryId: ${error}`);
         return [];
     });
 }

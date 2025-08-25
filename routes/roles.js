@@ -2,7 +2,7 @@ const libExpress = require("express");
 const logger = require("../libs/logger");
 const { deleteRoleByRoleId } = require("../db/roles");
 const { deleteUserRoleByRoleId } = require("../db/user_roles");
-const { getRoleAuthoritiesByRoleId, addRoleAuthority } = require("../db/role_authorities");
+const { getRoleAuthoritiesByRoleId, addRoleAuthority, getRoleAuthorityByRoleAuthorityId } = require("../db/role_authorities");
 const { validateRequestBody } = require("../utils");
 
 const router = libExpress.Router();
@@ -35,9 +35,8 @@ router.post("/:roleId/authorities", async (req, res) => {
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
     if (isRequestBodyValid) {
-        const userRoleId = await addRoleAuthority({ role_id: req.params.roleId, created_by: req.user.id, ...validatedRequestBody });
-
-        res.status(201).json(await getUserRoleByUserRoleId(userRoleId));
+        const roleAuthorityId = await addRoleAuthority({ role_id: req.params.roleId, created_by: req.user.id, ...validatedRequestBody });
+        res.status(201).json(await getRoleAuthorityByRoleAuthorityId(roleAuthorityId));
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

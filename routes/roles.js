@@ -1,6 +1,6 @@
 const libExpress = require("express");
 const logger = require("../libs/logger");
-const { deleteRoleByRoleId } = require("../db/roles");
+const { deleteRoleByRoleId, addRole, getRoleByRoleId } = require("../db/roles");
 const { deleteUserRoleByRoleId } = require("../db/user_roles");
 const { getRoleAuthoritiesByRoleId, addRoleAuthority, getRoleAuthorityByRoleAuthorityId } = require("../db/role_authorities");
 const { validateRequestBody } = require("../utils");
@@ -37,6 +37,19 @@ router.post("/:roleId/authorities", async (req, res) => {
     if (isRequestBodyValid) {
         const roleAuthorityId = await addRoleAuthority({ role_id: req.params.roleId, created_by: req.user.id, ...validatedRequestBody });
         res.status(201).json(await getRoleAuthorityByRoleAuthorityId(roleAuthorityId));
+    } else {
+        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+    }
+});
+
+router.post("/", async (req, res) => {
+    const requiredBodyFields = ["title"];
+
+    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+
+    if (isRequestBodyValid) {
+        const roleId = await addRole(validatedRequestBody);
+        res.status(201).json(await getRoleByRoleId(roleId));
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

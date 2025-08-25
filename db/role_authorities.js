@@ -17,7 +17,7 @@ function getRoleAuthoritiesByRoleId(roleId) {
 }
 
 function addRoleAuthority({ role_id, authority_id, created_by }) {
-    return executeSQLQueryParameterized("INSERT INTO ROLE_AUHTORITIES (role_id,authority_id,created_by) VALUES(?,?,?)", [
+    return executeSQLQueryParameterized("INSERT INTO ROLE_AUTHORITIES (role_id,authority_id,created_by) VALUES(?,?,?)", [
         role_id,
         authority_id,
         created_by,

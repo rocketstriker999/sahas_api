@@ -14,7 +14,7 @@ function deleteRoleByRoleId(roleId) {
     });
 }
 
-function addRole(title) {
+function addRole({ title }) {
     return executeSQLQueryParameterized("INSERT INTO ROLES(title) VALUES(?)", [title])
         .then((result) => result.insertId)
         .catch((error) => logger.error(`addRole: ${error}`));

@@ -1,6 +1,7 @@
 const { executeSQLQueryParameterized } = require("../libs/db");
 const logger = require("../libs/logger");
 
+//freeze
 function addInquiry({ user_id, created_by, branch_id, course_id }) {
     return executeSQLQueryParameterized("INSERT INTO INQUIRIES(user_id,created_by,branch_id,course_id) VALUES(?,?,?,?)", [
         user_id,
@@ -14,6 +15,7 @@ function addInquiry({ user_id, created_by, branch_id, course_id }) {
         });
 }
 
+//freeze
 function updateInquiryById({ id, active, branch_id, course_id }) {
     return executeSQLQueryParameterized("UPDATE INQUIRIES SET active=?,branch_id=?,course_id=? where id=?", [active, branch_id, course_id, id]).catch(
         (error) => {
@@ -32,6 +34,7 @@ function getInquiriesByUserId({ userId }) {
     });
 }
 
+//freeze
 function getInquiryById({ id }) {
     return executeSQLQueryParameterized(
         "SELECT INQUIRIES.*, USERS.full_name AS created_by_full_name, COUNT(INQUIRY_NOTES.id) AS notes_count FROM INQUIRIES LEFT JOIN USERS ON INQUIRIES.created_by = USERS.id LEFT JOIN INQUIRY_NOTES ON INQUIRY_NOTES.inquiry_id = INQUIRIES.id WHERE INQUIRIES.id = ? GROUP BY INQUIRIES.id ",
@@ -44,7 +47,7 @@ function getInquiryById({ id }) {
         });
 }
 
-function deleteInquiryById(id) {
+function deleteInquiryById({ id }) {
     return executeSQLQueryParameterized("DELETE  FROM INQUIRIES WHERE id=?", [id]).catch((error) => {
         logger.error(`deleteInquiryById: ${error}`);
         return [];

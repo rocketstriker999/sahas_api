@@ -20,6 +20,7 @@ router.post("/", async (req, res) => {
     }
 });
 
+//update all attributes
 router.patch("/", async (req, res) => {
     const requiredBodyFields = ["id", "active", "branch_id", "course_id"];
 
@@ -37,8 +38,8 @@ router.delete("/:id", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing inquiry id" });
     }
-    deleteInquiryById(req.params.id);
-    deleteInquiryNotesByInquiryId(req.params.inquiryId);
+    deleteInquiryById({ id: req.params.id });
+    deleteInquiryNotesByInquiryId({ inquiry_id: req.params.id });
     res.sendStatus(204);
 });
 

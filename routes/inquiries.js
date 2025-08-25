@@ -5,7 +5,7 @@ const { deleteInquiryNotesByInquiryId, getInquiryNotesByInquiryId, addInquiryNot
 
 const router = libExpress.Router();
 
-//create  a new inquiry
+//tested
 router.post("/", async (req, res) => {
     const requiredBodyFields = ["user_id", "course_id", "note", "branch_id"];
 
@@ -20,7 +20,7 @@ router.post("/", async (req, res) => {
     }
 });
 
-//update all attributes
+//tested
 router.patch("/", async (req, res) => {
     const requiredBodyFields = ["id", "active", "branch_id", "course_id"];
 
@@ -34,6 +34,7 @@ router.patch("/", async (req, res) => {
     }
 });
 
+//tested
 router.delete("/:id", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing inquiry id" });

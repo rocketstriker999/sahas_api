@@ -15,9 +15,9 @@ function addInquiry({ user_id, created_by, branch_id, course_id }) {
 }
 
 function updateInquiryById({ id, status, branch_id, course_id }) {
-    return executeSQLQueryParameterized("UPDATE INQUIRIES SET status=?,branch_id=?,course_id=? where id=?", [status, branch_id, course_id, id]).catch(
+    return executeSQLQueryParameterized("UPDATE INQUIRIES SET active=?,branch_id=?,course_id=? where id=?", [status, branch_id, course_id, id]).catch(
         (error) => {
-            logger.error(`getInquiriesByUserId: ${error}`);
+            logger.error(`updateInquiryById: ${error}`);
         }
     );
 }

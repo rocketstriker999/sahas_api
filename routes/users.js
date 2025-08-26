@@ -37,12 +37,12 @@ router.get("/", async (req, res) => {
 });
 
 //tested
-router.get("/:userId", async (req, res) => {
-    if (!req.params.userId) {
+router.get("/:id", async (req, res) => {
+    if (!req.params.id) {
         return res.status(400).json({ error: "Missing User Id" });
     }
 
-    return res.status(200).json(await getUserById({ id: req.params.userId }));
+    return res.status(200).json(await getUserById({ ...req.params }));
 });
 
 //tested

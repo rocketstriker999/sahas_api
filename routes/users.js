@@ -12,7 +12,7 @@ const { getInquiriesByUserId } = require("../db/inquiries");
 const { validateRequestBody } = require("../utils");
 const { getEnrollmentsByUserId, addEnrollment } = require("../db/enrollments");
 const { getEnrollmentCoursesByEnrollmentId, addEnrollmentCourse } = require("../db/enrollment_courses");
-const { getTransactionsByEnrollmentId } = require("../db/transactions");
+const { getTransactionsByEnrollmentId } = require("../db/enrollment_transactions");
 const { addUserRoleByUserIdAndRoleId, getUserRoleByUserRoleId } = require("../db/user_roles");
 const {
     getWalletTransactionsByUserId,

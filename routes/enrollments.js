@@ -2,7 +2,7 @@ const libExpress = require("express");
 const { updateEnrollmentById, getEnrollmentById } = require("../db/enrollments");
 const { validateRequestBody } = require("../utils");
 const { addEnrollmentCourse, getEnrollmentCoursesByEnrollmentId } = require("../db/enrollment_courses");
-const { getTransactionsByEnrollmentId, addTransaction } = require("../db/transactions");
+const { getTransactionsByEnrollmentId, addTransaction } = require("../db/enrollment_transactions");
 const { readConfig } = require("../libs/config");
 const router = libExpress.Router();
 
@@ -18,6 +18,14 @@ router.put("/", async (req, res) => {
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }
+});
+
+router.get("/:id/transactions", async (req, res) => {
+    if (!req.params.id) {
+        return res.status(400).json({ error: "Missing Enrollment Id" });
+    }
+
+    res.status(200).json(getTransactionsByEnrollmentId({ enrollment_id: req.params.id }));
 });
 
 router.post("/:enrollmentId/courses", async (req, res) => {

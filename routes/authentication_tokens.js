@@ -18,8 +18,8 @@ const router = libExpress.Router();
 async function populateRolesAndAuthorities(user) {
     const userRoles = await getUserRolesByUserId(user.id);
     const authorities = await getAuthoritiesByRoleIds(userRoles.map(({ role_id }) => role_id).join(","));
-    user.roles = userRoles?.map(({ title }) => title);
-    user.authorities = authorities?.map((authority) => authority.title);
+    user.roles = await userRoles?.map(({ title }) => title);
+    user.authorities = await authorities?.map((authority) => authority.title);
 }
 
 router.patch("/", async (req, res) => {
@@ -87,36 +87,5 @@ router.get("/", async (req, res) => {
     }
     return res.status(401).json({ error: "Invalid Token" });
 });
-
-// //logout and invalidate the authentication token
-// router.delete("/verify", (req, res) => {
-//     res.clearCookie("token", {
-//         httpOnly: true,
-//         secure: true, // Set to true if using HTTPS
-//         sameSite: "None", // Required for cross-origin requests
-//         domain: process.env.CURRENT_DOMAIN,
-//     });
-//     return res.status(200).json({
-//         message: "Token Invalidated",
-//     });
-//     res.status(200);
-// });
-
-// //verify the details of user
-// router.get("/verify", async (req, res) => {
-//     //if token is present
-//     if (req.cookies.token) {
-//         const user = await getUserByToken(req.cookies.token);
-//         if (user) {
-//             res.status(200).json({
-//                 user: { ...user, groups: await getGroupsById(user.id), authorities: await getAuthoritiesById(user.id) },
-//             });
-//         } else {
-//             res.status(401).json({ error: "Invalid Token" });
-//         }
-//     } else {
-//         res.status(401).json({ error: "Invalid Token" });
-//     }
-// });
 
 module.exports = router;

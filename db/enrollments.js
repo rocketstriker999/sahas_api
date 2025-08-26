@@ -1,10 +1,10 @@
 const { executeSQLQueryParameterized } = require("../libs/db");
 const logger = require("../libs/logger");
 
-function getEnrollmentsByUserId(userId) {
+function getEnrollmentsByUserId({ user_id }) {
     return executeSQLQueryParameterized(
         "SELECT USER_ENROLLMENTS.*,USERS.full_name AS created_by_full_name FROM USER_ENROLLMENTS LEFT JOIN USERS ON USER_ENROLLMENTS.created_by=USERS.id WHERE user_id=? ORDER BY id DESC",
-        [userId]
+        [user_id]
     ).catch((error) => {
         logger.error(`getEnrollmentsByUserId: ${error}`);
         return [];

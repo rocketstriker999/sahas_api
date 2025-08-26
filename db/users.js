@@ -129,15 +129,11 @@ function getUserByTransactionId(transactionId) {
         });
 }
 
-function getUserById(id) {
+//freeze
+function getUserById({ id }) {
     return executeSQLQueryParameterized(`SELECT * FROM USERS WHERE id = ?`, [id])
-        .then((results) => {
-            return results.length > 0 ? results[0] : null;
-        })
-        .catch((error) => {
-            logger.error(`getUserById: ${error}`);
-            return null;
-        });
+        .then((results) => (results.length > 0 ? results[0] : null))
+        .catch((error) => logger.error(`getUserById: ${error}`));
 }
 
 function getUserRolesByUserId(userId) {
@@ -231,7 +227,8 @@ function getCountUsersBySearchAndFilters(search, appliedFilters) {
         });
 }
 
-function updateUserBasics({ id, full_name, phone, image, address, branch_id, active }) {
+//freeze
+function updateUserById({ id, full_name, phone, image, address, branch_id, active }) {
     return executeSQLQueryParameterized(`UPDATE USERS SET full_name = ?,phone=?,image=?,address=?,branch_id=?,active=? WHERE id = ?`, [
         full_name,
         phone,
@@ -260,5 +257,5 @@ module.exports = {
     getUserById,
     getUserRolesByUserId,
     getAuthoritiesByRoleIds,
-    updateUserBasics,
+    updateUserById,
 };

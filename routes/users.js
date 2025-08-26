@@ -1,9 +1,8 @@
 const libExpress = require("express");
 const logger = require("../libs/logger");
 const { getAllUsersBySearchAndFilters, getCountUsersBySearchAndFilters, getUserById, updateUserBasics, getUserRolesByUserId } = require("../db/users");
-const { getInquiriesByUserId, addInquiry, getInquiryByInquiryId } = require("../db/inquiries");
+const { getInquiriesByUserId } = require("../db/inquiries");
 const { validateRequestBody } = require("../utils");
-const { getInquiryNotesByInquiryId, addInquiryNote } = require("../db/inquiry_notes");
 const { getEnrollmentsByUserId, addEnrollment } = require("../db/enrollments");
 const { getEnrollmentCoursesByEnrollmentId, addEnrollmentCourse } = require("../db/enrollment_courses");
 const { getTransactionsByEnrollmentId } = require("../db/transactions");
@@ -30,51 +29,45 @@ router.get("/", async (req, res) => {
     res.status(200).json(users);
 });
 
-router.get("/:userId", async (req, res) => {
+//tested
+router.get("/:id", async (req, res) => {
     if (!req.params.userId) {
         return res.status(400).json({ error: "Missing User Id" });
     }
 
-    const basics = await getUserById(req.params.userId);
-
-    if (!basics) {
-        return res.status(400).json({ error: "User Not Found" });
-    }
-
-    return res.status(200).json(basics);
+    return res.status(200).json(await getUserById({ id: req.params.id }));
 });
 
-router.put("/:userId", async (req, res) => {
-    if (!req.params.userId) {
-        return res.status(400).json({ error: "Missing User Id" });
-    }
-
-    const requiredBodyFields = ["full_name", "phone", "image", "address", "branch_id", "active"];
+//tested
+router.put("/", async (req, res) => {
+    const requiredBodyFields = ["id", "full_name", "phone", "image", "address", "branch_id", "active"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
     if (isRequestBodyValid) {
-        await updateUserBasics({ ...validatedRequestBody, id: req.params.userId });
-        res.status(200).json(await getUserById(req.params.userId));
+        await updateUserById({ ...validatedRequestBody });
+        res.status(200).json(await getUserById({ id: req.params.userId }));
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }
 });
 
+//tested
 router.get("/:id/inquiries", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing User Id" });
     }
 
-    res.status(200).json(await getInquiriesByUserId({ userId: req.params.id }));
+    res.status(200).json(await getInquiriesByUserId({ user_id: req.params.id }));
 });
 
-router.get("/:userId/enrollments", async (req, res) => {
-    if (!req.params.userId) {
+//tested
+router.get("/:id/enrollments", async (req, res) => {
+    if (!req.params.id) {
         return res.status(400).json({ error: "Missing User Id" });
     }
 
-    const enrollments = await getEnrollmentsByUserId(req.params.userId);
+    const enrollments = await getEnrollmentsByUserId({ user_id: req.params.id });
 
     const enrollmentsWithCourses = await Promise.all(
         enrollments.map(async (enrollment) => ({

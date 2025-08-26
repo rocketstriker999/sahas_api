@@ -1,6 +1,13 @@
 const libExpress = require("express");
 const logger = require("../libs/logger");
-const { getAllUsersBySearchAndFilters, getCountUsersBySearchAndFilters, getUserById, updateUserBasics, getUserRolesByUserId } = require("../db/users");
+const {
+    getAllUsersBySearchAndFilters,
+    getCountUsersBySearchAndFilters,
+    getUserById,
+    updateUserBasics,
+    getUserRolesByUserId,
+    updateUserById,
+} = require("../db/users");
 const { getInquiriesByUserId } = require("../db/inquiries");
 const { validateRequestBody } = require("../utils");
 const { getEnrollmentsByUserId, addEnrollment } = require("../db/enrollments");
@@ -39,18 +46,14 @@ router.get("/:userId", async (req, res) => {
 });
 
 //tested
-router.put("/:userId", async (req, res) => {
-    if (!req.params.userId) {
-        return res.status(400).json({ error: "Missing User Id" });
-    }
-
-    const requiredBodyFields = ["full_name", "phone", "image", "address", "branch_id", "active"];
+router.put("/", async (req, res) => {
+    const requiredBodyFields = ["id", "full_name", "phone", "image", "address", "branch_id", "active"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
     if (isRequestBodyValid) {
-        await updateUserBasics({ ...validatedRequestBody, id: req.params.userId });
-        res.status(200).json(await getUserById(req.params.userId));
+        await updateUserById({ ...validatedRequestBody });
+        res.status(200).json(await getUserById({ ...validatedRequestBody }));
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

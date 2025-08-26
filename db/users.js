@@ -228,7 +228,7 @@ function getCountUsersBySearchAndFilters(search, appliedFilters) {
 }
 
 //
-function updateUserBasics({ id, full_name, phone, image, address, branch_id, active }) {
+function updateUserById({ id, full_name, phone, image, address, branch_id, active }) {
     return executeSQLQueryParameterized(`UPDATE USERS SET full_name = ?,phone=?,image=?,address=?,branch_id=?,active=? WHERE id = ?`, [
         full_name,
         phone,
@@ -237,7 +237,7 @@ function updateUserBasics({ id, full_name, phone, image, address, branch_id, act
         branch_id,
         active,
         id,
-    ]).catch((error) => logger.error(`updateUserBasics: ${error}`));
+    ]).catch((error) => logger.error(`updateUserById: ${error}`));
 }
 
 module.exports = {
@@ -257,5 +257,5 @@ module.exports = {
     getUserById,
     getUserRolesByUserId,
     getAuthoritiesByRoleIds,
-    updateUserBasics,
+    updateUserById,
 };

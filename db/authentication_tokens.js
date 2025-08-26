@@ -16,10 +16,9 @@ async function getTokenByOTP(token, otp) {
 
 async function activateToken(token) {
     //Activate Token
-    return executeSQLQueryParameterized(`UPDATE USER_AUTHENTICATION_TOKENS SET active = TRUE WHERE token = ?`, [token]).catch((error) => {
-        logger.error(`activateToken: ${error}`);
-        return [];
-    });
+    return executeSQLQueryParameterized(`UPDATE USER_AUTHENTICATION_TOKENS SET active = TRUE WHERE token = ?`, [token]).catch((error) =>
+        logger.error(`activateToken: ${error}`)
+    );
 }
 
 async function addInactiveToken(userId, otp, token, validity) {

@@ -52,7 +52,7 @@ function addUserByEmail(email) {
 
 function getUserByAuthenticationToken(token) {
     return (
-        token &&
+        !!token &&
         executeSQLQueryParameterized(
             `SELECT USERS.* FROM USER_AUTHENTICATION_TOKENS INNER JOIN USERS ON USER_AUTHENTICATION_TOKENS.user_id=USERS.id  WHERE USER_AUTHENTICATION_TOKENS.token=?`,
             [token]

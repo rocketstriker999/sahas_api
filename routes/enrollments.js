@@ -1,24 +1,19 @@
 const libExpress = require("express");
-const { updateEnrollmentByEnrollmentId, getEnrollmentByEnrollmentId } = require("../db/enrollments");
+const { updateEnrollmentById, getEnrollmentById } = require("../db/enrollments");
 const { validateRequestBody } = require("../utils");
 const { deleteEnrollmentCourseByEnrollmentCourseId, addEnrollmentCourse, getEnrollmentCoursesByEnrollmentId } = require("../db/enrollment_courses");
 const { getTransactionsByEnrollmentId, addTransaction } = require("../db/transactions");
 const { readConfig } = require("../libs/config");
 const router = libExpress.Router();
 
-//get catelogue for user
-router.put("/:enrollmentId", async (req, res) => {
-    if (!req.params.enrollmentId) {
-        return res.status(400).json({ error: "Missing Enrollment Id" });
-    }
-
-    const requiredBodyFields = ["active", "start_date", "end_date"];
+router.put("/", async (req, res) => {
+    const requiredBodyFields = ["id", "active", "start_date", "end_date"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
     if (isRequestBodyValid) {
-        await updateEnrollmentByEnrollmentId({ ...validatedRequestBody, id: req.params.enrollmentId });
-        res.status(200).json(await getEnrollmentByEnrollmentId(req.params.enrollmentId));
+        await updateEnrollmentById({ ...validatedRequestBody });
+        res.status(200).json(await getEnrollmentById(req.params.enrollmentId));
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

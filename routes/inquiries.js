@@ -60,20 +60,4 @@ router.get("/:id/notes", async (req, res) => {
     res.status(200).json(await getInquiryNotesByInquiryId({ inquiry_id: req.params.id }));
 });
 
-router.post("/:inquiryId/notes", async (req, res) => {
-    if (!req.params.inquiryId) {
-        return res.status(400).json({ error: "Missing inquiryId" });
-    }
-    const requiredBodyFields = ["note"];
-
-    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
-
-    if (isRequestBodyValid) {
-        await addInquiryNote({ ...validatedRequestBody, created_by: req.user.id, inquiry_id: req.params.inquiryId });
-        res.status(201).json(await getInquiryNotesByInquiryId(req.params.inquiryId));
-    } else {
-        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
-    }
-});
-
 module.exports = router;

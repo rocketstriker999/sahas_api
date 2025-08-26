@@ -7,7 +7,7 @@ const { readConfig } = require("../libs/config");
 const router = libExpress.Router();
 
 //tested
-router.put("/", async (req, res) => {
+router.patch("/", async (req, res) => {
     const requiredBodyFields = ["id", "active", "start_date", "end_date"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);

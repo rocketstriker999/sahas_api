@@ -75,21 +75,21 @@ router.get("/:id/enrollments", async (req, res) => {
 
     const enrollments = await getEnrollmentsByUserId({ user_id: req.params.id });
 
-    const enrollmentsWithCourses = await Promise.all(
-        enrollments.map(async (enrollment) => ({
-            ...enrollment,
-            courses: await getEnrollmentCoursesByEnrollmentId(enrollment.id),
-        }))
-    );
+    // const enrollmentsWithCourses = await Promise.all(
+    //     enrollments.map(async (enrollment) => ({
+    //         ...enrollment,
+    //         courses: await getEnrollmentCoursesByEnrollmentId(enrollment.id),
+    //     }))
+    // );
 
-    const enrollmentsWithCoursesAndTranscations = await Promise.all(
-        enrollmentsWithCourses.map(async (enrollment) => ({
-            ...enrollment,
-            transactions: await getTransactionsByEnrollmentId(enrollment.id),
-        }))
-    );
+    // const enrollmentsWithCoursesAndTranscations = await Promise.all(
+    //     enrollmentsWithCourses.map(async (enrollment) => ({
+    //         ...enrollment,
+    //         transactions: await getTransactionsByEnrollmentId(enrollment.id),
+    //     }))
+    // );
 
-    return res.status(200).json(enrollmentsWithCoursesAndTranscations);
+    return res.status(200).json(enrollments);
 });
 
 router.post("/:userId/enrollments", async (req, res) => {

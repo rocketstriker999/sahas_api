@@ -73,7 +73,7 @@ router.get("/:id/enrollments", async (req, res) => {
         return res.status(400).json({ error: "Missing User Id" });
     }
 
-    const enrollments = await getEnrollmentsByUserId(req.params.userId);
+    const enrollments = await getEnrollmentsByUserId({ user_id: req.params.id });
 
     const enrollmentsWithCourses = await Promise.all(
         enrollments.map(async (enrollment) => ({

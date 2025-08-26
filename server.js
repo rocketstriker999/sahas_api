@@ -43,10 +43,11 @@ const routers = {
     "/inquiries": { middlewares: [], router: require("./routes/inquiries") },
     "/inquiry-notes": { middlewares: [], router: require("./routes/inquiry_notes") },
 
-    "/user-roles": { middlewares: [], router: require("./routes/user_roles") },
-
     "/enrollments": { middlewares: [], router: require("./routes/enrollments") },
     "/enrollment-courses": { middlewares: [], router: require("./routes/enrollment_courses") },
+
+    "/user-roles": { middlewares: [], router: require("./routes/user_roles") },
+
     "/authorities": { middlewares: [], router: require("./routes/authorities") },
     "/roles": { middlewares: [], router: require("./routes/roles") },
     "/role-authorities": { middlewares: [], router: require("./routes/role_authorities") },

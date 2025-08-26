@@ -52,6 +52,13 @@ router.delete("/:inquiryId/notes/:noteId", async (req, res) => {
     res.sendStatus(204);
 });
 
+router.get("/:id/notes", async (req, res) => {
+    if (!req.params.id) {
+        return res.status(400).json({ error: "Missing inquiryId" });
+    }
+    res.status(200).json(await getInquiryNotesByInquiryId());
+});
+
 router.post("/:inquiryId/notes", async (req, res) => {
     if (!req.params.inquiryId) {
         return res.status(400).json({ error: "Missing inquiryId" });

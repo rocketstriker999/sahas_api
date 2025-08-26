@@ -18,6 +18,7 @@ router.post("/", async (req, res) => {
     }
 });
 
+//tested
 router.delete("/:id", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing inquiryNoteId" });

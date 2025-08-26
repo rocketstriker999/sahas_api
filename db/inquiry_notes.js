@@ -25,6 +25,7 @@ function getInquiryNoteById({ id }) {
         });
 }
 
+//freeze
 function deleteInquiryNoteById({ id }) {
     return executeSQLQueryParameterized("DELETE FROM INQUIRY_NOTES WHERE id=?", [id]).catch((error) => {
         logger.error(`deleteInquiryNoteById: ${error}`);

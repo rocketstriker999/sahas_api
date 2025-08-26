@@ -44,14 +44,6 @@ router.delete("/:id", async (req, res) => {
     res.sendStatus(204);
 });
 
-router.delete("/:inquiryId/notes/:noteId", async (req, res) => {
-    if (!req.params.inquiryId || !req.params.noteId) {
-        return res.status(400).json({ error: "Missing inquiryId or noteId" });
-    }
-    deleteInquiryNoteByInquiryNoteId(req.params.noteId);
-    res.sendStatus(204);
-});
-
 //tested
 router.get("/:id/notes", async (req, res) => {
     if (!req.params.id) {

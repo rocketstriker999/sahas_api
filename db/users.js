@@ -51,15 +51,18 @@ function addUserByEmail(email) {
 //affectedRows":1,"insertId":1
 
 function getUserByAuthenticationToken(token) {
-    return executeSQLQueryParameterized(
-        `SELECT USERS.* FROM USER_AUTHENTICATION_TOKENS INNER JOIN USERS ON USER_AUTHENTICATION_TOKENS.user_id=USERS.id  WHERE USER_AUTHENTICATION_TOKENS.token=?`,
-        [token]
-    )
-        .then((user) => (user && user.length > 0 ? user[0] : false))
-        .catch((error) => {
-            logger.error(`getUserByAuthenticationToken: ${error}`);
-            return false;
-        });
+    return (
+        token &&
+        executeSQLQueryParameterized(
+            `SELECT USERS.* FROM USER_AUTHENTICATION_TOKENS INNER JOIN USERS ON USER_AUTHENTICATION_TOKENS.user_id=USERS.id  WHERE USER_AUTHENTICATION_TOKENS.token=?`,
+            [token]
+        )
+            .then((user) => (user && user.length > 0 ? user[0] : false))
+            .catch((error) => {
+                logger.error(`getUserByAuthenticationToken: ${error}`);
+                return false;
+            })
+    );
 }
 
 function getGroupsById(id) {
@@ -224,8 +227,8 @@ function getCountUsersBySearchAndFilters(search, appliedFilters) {
         });
 }
 
-//freeze
-function updateUserById({ id, full_name, phone, image, address, branch_id, active }) {
+//
+function updateUserBasics({ id, full_name, phone, image, address, branch_id, active }) {
     return executeSQLQueryParameterized(`UPDATE USERS SET full_name = ?,phone=?,image=?,address=?,branch_id=?,active=? WHERE id = ?`, [
         full_name,
         phone,
@@ -254,5 +257,5 @@ module.exports = {
     getUserById,
     getUserRolesByUserId,
     getAuthoritiesByRoleIds,
-    updateUserById,
+    updateUserBasics,
 };

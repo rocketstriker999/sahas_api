@@ -25,7 +25,7 @@ router.get("/:id/transactions", async (req, res) => {
         return res.status(400).json({ error: "Missing Enrollment Id" });
     }
 
-    res.status(200).json(getTransactionsByEnrollmentId({ enrollment_id: req.params.id }));
+    res.status(200).json(await getTransactionsByEnrollmentId({ enrollment_id: req.params.id }));
 });
 
 router.post("/:enrollmentId/courses", async (req, res) => {

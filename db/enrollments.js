@@ -1,6 +1,7 @@
 const { executeSQLQueryParameterized } = require("../libs/db");
 const logger = require("../libs/logger");
 
+//freeze
 function getEnrollmentsByUserId({ user_id }) {
     return executeSQLQueryParameterized(
         "SELECT ENROLLMENTS.*,USERS.full_name AS created_by_full_name FROM ENROLLMENTS LEFT JOIN USERS ON ENROLLMENTS.created_by=USERS.id WHERE user_id=? ORDER BY id DESC",
@@ -11,12 +12,14 @@ function getEnrollmentsByUserId({ user_id }) {
     });
 }
 
+//freeze
 function updateEnrollmentById({ id, active, start_date, end_date }) {
     return executeSQLQueryParameterized("UPDATE ENROLLMENTS SET active=?,start_date=?,end_date=? WHERE id=?", [active, start_date, end_date, id]).catch(
         (error) => logger.error(`updateEnrollmentById: ${error}`)
     );
 }
 
+//freeze
 function getEnrollmentById({ id }) {
     return executeSQLQueryParameterized("SELECT * FROM ENROLLMENTS WHERE id =?", [id])
         .then((results) => (results.length > 0 ? results[0] : null))

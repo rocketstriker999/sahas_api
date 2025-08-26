@@ -21,7 +21,10 @@ function updateEnrollmentById({ id, active, start_date, end_date }) {
 
 //freeze
 function getEnrollmentById({ id }) {
-    return executeSQLQueryParameterized("SELECT * FROM ENROLLMENTS WHERE id =?", [id])
+    return executeSQLQueryParameterized(
+        "SELECT ENROLLMENTS.*,USERS.full_name AS created_by_full_name FROM ENROLLMENTS LEFT JOIN USERS ON ENROLLMENTS.created_by=USERS.id WHERE id=?",
+        [id]
+    )
         .then((results) => (results.length > 0 ? results[0] : null))
         .catch((error) => logger.error(`getEnrollmentByEnrollmentId: ${error}`));
 }

@@ -29,7 +29,7 @@ router.patch("/", async (req, res) => {
 
     if ((authenticationToken = await getTokenByOTP(req.body.authentication_token, req.body.otp))) {
         activateToken(req.body.authentication_token);
-        const user = await getUserById(authenticationToken.user_id);
+        const user = await getUserById({ id: authenticationToken.user_id });
         await populateRolesAndAuthorities(user);
 
         return res.status(200).json(user);

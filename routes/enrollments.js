@@ -20,12 +20,21 @@ router.patch("/", async (req, res) => {
     }
 });
 
+//tested
 router.get("/:id/transactions", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Enrollment Id" });
     }
 
     res.status(200).json(await getTransactionsByEnrollmentId({ enrollment_id: req.params.id }));
+});
+
+router.get("/:id/courses", async (req, res) => {
+    if (!req.params.id) {
+        return res.status(400).json({ error: "Missing Enrollment Id" });
+    }
+
+    res.status(200).json(await getEnrollmentCoursesByEnrollmentId({ enrollment_id: req.params.id }));
 });
 
 router.post("/:enrollmentId/courses", async (req, res) => {

@@ -145,6 +145,7 @@ const logger = require("../libs/logger");
 //         });
 // }
 
+//freeze
 function getTransactionsByEnrollmentId({ enrollment_id }) {
     return executeSQLQueryParameterized(
         `SELECT ENROLLMENT_TRANSACTIONS.*,USERS.full_name AS created_by_full_name FROM ENROLLMENT_TRANSACTIONS LEFT JOIN USERS ON ENROLLMENT_TRANSACTIONS.created_by=USERS.id WHERE enrollment_id=?`,

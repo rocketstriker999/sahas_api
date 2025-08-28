@@ -156,7 +156,7 @@ function getTransactionsByEnrollmentId({ enrollment_id }) {
     });
 }
 
-function addTransaction({ enrollment_id, amount, cgst, sgst, created_by, note, type }) {
+function addEnrollmentTransaction({ enrollment_id, amount, cgst, sgst, created_by, note, type }) {
     return executeSQLQueryParameterized(`INSERT INTO ENROLLMENT_TRANSACTIONS(enrollment_id,amount,cgst,sgst,created_by,note,type) VALUES(?,?,?,?,?,?,?)`, [
         enrollment_id,
         amount,
@@ -165,9 +165,13 @@ function addTransaction({ enrollment_id, amount, cgst, sgst, created_by, note, t
         created_by,
         note,
         type,
-    ]).catch((error) => {
-        logger.error(`addTransaction: ${error}`);
-    });
+    ])
+        .then(({ row }) => row)
+        .catch((error) => {
+            logger.error(`addTransaction: ${error}`);
+        });
 }
 
-module.exports = { addTransaction, getTransactionsByEnrollmentId };
+function getEnrollmentTransactionById({ id }) {}
+
+module.exports = { addEnrollmentTransaction, getTransactionsByEnrollmentId };

@@ -54,30 +54,4 @@ router.post("/:enrollmentId/courses", async (req, res) => {
     }
 });
 
-router.post("/:enrollmentId/transactions", async (req, res) => {
-    if (!req.params.enrollmentId) {
-        return res.status(400).json({ error: "Missing Enrollment Id" });
-    }
-
-    const { payment: { cgst, sgst } = {} } = await readConfig("app");
-
-    const requiredBodyFields = ["amount", "type"];
-
-    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
-
-    if (isRequestBodyValid) {
-        await addTransaction({
-            created_by: req.user.id,
-            enrollment_id: req.params.enrollmentId,
-            ...validatedRequestBody,
-            cgst: (validatedRequestBody?.amount * cgst) / (100 + cgst + sgst),
-            sgst: (validatedRequestBody?.amount * sgst) / (100 + cgst + sgst),
-            note: req.body.note,
-        });
-        res.status(201).json(await getTransactionsByEnrollmentId(req.params.enrollmentId));
-    } else {
-        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
-    }
-});
-
 module.exports = router;

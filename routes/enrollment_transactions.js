@@ -4,6 +4,8 @@ const { addEnrollmentTransaction } = require("../db/enrollment_transactions");
 const { readConfig } = require("../libs/config");
 const router = libExpress.Router();
 
+const logger = require("../libs/logger");
+
 //tested
 router.post("/", async (req, res) => {
     const requiredBodyFields = ["enrollment_id", "amount", "note", "type"];
@@ -20,7 +22,7 @@ router.post("/", async (req, res) => {
             sgst: (validatedRequestBody?.amount * sgst) / (100 + cgst + sgst),
         });
 
-        console.log(transaction);
+        logger.info(JSON.stringify(transaction));
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

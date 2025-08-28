@@ -22,7 +22,7 @@ router.post("/", async (req, res) => {
             sgst: (validatedRequestBody?.amount * sgst) / (100 + cgst + sgst),
         });
 
-        res.status(200).json(await getEnrollmentTransactionById(transactionId));
+        res.status(200).json(await getEnrollmentTransactionById({ id: transactionId }));
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

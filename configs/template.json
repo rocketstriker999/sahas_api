@@ -1,6 +1,6 @@
 {
     "global": {
-        "payment_types": ["CASH", "NET_BANKING", "UPI", "CHEQUE"]
+        "paymentTypes": ["CASH", "NET_BANKING", "UPI", "CHEQUE"]
     },
     "dash_board": {
         "carousel": {

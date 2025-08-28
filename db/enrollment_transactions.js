@@ -166,12 +166,19 @@ function addEnrollmentTransaction({ enrollment_id, amount, cgst, sgst, created_b
         note,
         type,
     ])
-        .then(({ row }) => row)
+        .then((result) => result.insertId)
         .catch((error) => {
             logger.error(`addTransaction: ${error}`);
         });
 }
 
-function getEnrollmentTransactionById({ id }) {}
+function getEnrollmentTransactionById({ id }) {
+    return executeSQLQueryParameterized(
+        "SELECT ENROLLMENT_TRANSACTIONS.*,USERS.full_name AS created_by_full_name FROM ENROLLMENT_TRANSACTIONS LEFT JOIN USERS ON ENROLLMENT_TRANSACTIONS.created_by = USERS.id WHERE ENROLLMENT_TRANSACTIONS.id=? ",
+        [id]
+    )
+        .then((result) => (result.length > 0 ? result[0] : false))
+        .catch((error) => logger.error(`getEnrollmentTransactionById: ${error}`));
+}
 
-module.exports = { addEnrollmentTransaction, getTransactionsByEnrollmentId };
+module.exports = { addEnrollmentTransaction, getTransactionsByEnrollmentId, getEnrollmentTransactionById };

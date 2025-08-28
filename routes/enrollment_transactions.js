@@ -1,6 +1,6 @@
 const libExpress = require("express");
 const { validateRequestBody } = require("../utils");
-const { addEnrollmentTransaction } = require("../db/enrollment_transactions");
+const { addEnrollmentTransaction, getEnrollmentTransactionById } = require("../db/enrollment_transactions");
 const { readConfig } = require("../libs/config");
 const router = libExpress.Router();
 
@@ -15,14 +15,14 @@ router.post("/", async (req, res) => {
     if (isRequestBodyValid) {
         const { payment: { cgst, sgst } = {} } = await readConfig("app");
 
-        const transaction = await addEnrollmentTransaction({
+        const transactionId = await addEnrollmentTransaction({
             ...validatedRequestBody,
             created_by: req.user.id,
             cgst: (validatedRequestBody?.amount * cgst) / (100 + cgst + sgst),
             sgst: (validatedRequestBody?.amount * sgst) / (100 + cgst + sgst),
         });
 
-        logger.info(JSON.stringify(transaction));
+        res.status(200).json(await getEnrollmentTransactionById(transactionId));
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

@@ -19,10 +19,7 @@ function getInquiryNoteById({ id }) {
         [id]
     )
         .then((result) => (result.length > 0 ? result[0] : false))
-        .catch((error) => {
-            logger.error(`getInquiryNoteById: ${error}`);
-            return [];
-        });
+        .catch((error) => logger.error(`getInquiryNoteById: ${error}`));
 }
 
 //freeze

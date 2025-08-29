@@ -1,5 +1,6 @@
 const libExpress = require("express");
 const { deleteEnrollmentCourseByEnrollmentCourseId, addEnrollmentCourse, getEnrollmentCourseById } = require("../db/enrollment_courses");
+const { validateRequestBody } = require("../utils");
 const router = libExpress.Router();
 
 router.post("/", async (req, res) => {

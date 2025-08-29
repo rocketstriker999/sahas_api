@@ -21,13 +21,16 @@ router.patch("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-    const requiredBodyFields = ["course_id", "end_date", "start_date", "user_id", "fees"];
+    const requiredBodyFields = ["course_ids", "end_date", "start_date", "user_id", "fees"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
     if (isRequestBodyValid) {
         const enrollmentId = await addEnrollment({ created_by: req.user.id, ...validatedRequestBody });
-        addEnrollmentCourse({ created_by: req.user.id, enrollment_id: enrollmentId, ...validatedRequestBody });
+        validatedRequestBody?.course_ids?.forEach((course) =>
+            addEnrollmentCourse({ created_by: req.user.id, enrollment_id: enrollmentId, course_id: course?.id })
+        );
+
         res.status(201).json(await getEnrollmentById({ id: enrollmentId }));
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });

@@ -29,6 +29,7 @@ function getEnrollmentById({ id }) {
         .catch((error) => logger.error(`getEnrollmentById: ${error}`));
 }
 
+//freeze
 function addEnrollment({ user_id, start_date, end_date, fees, created_by }) {
     return executeSQLQueryParameterized("INSERT INTO ENROLLMENTS(user_id,start_date,end_date,fees,created_by) VALUES(?,?,?,?,?)", [
         user_id,
@@ -38,10 +39,7 @@ function addEnrollment({ user_id, start_date, end_date, fees, created_by }) {
         created_by,
     ])
         .then((result) => result.insertId)
-        .catch((error) => {
-            logger.error(`addInquiry: ${error}`);
-            return false;
-        });
+        .catch((error) => logger.error(`addEnrollment: ${error}`));
 }
 
 module.exports = { getEnrollmentsByUserId, updateEnrollmentById, getEnrollmentById, addEnrollment };

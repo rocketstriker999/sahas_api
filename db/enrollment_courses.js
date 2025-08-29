@@ -35,6 +35,7 @@ function getEnrollmentCourseById({ id }) {
         .catch((error) => logger.error(`getEnrollmentTransactionById: ${error}`));
 }
 
+//freeze
 function deleteEnrollmentCourseById({ id }) {
     return executeSQLQueryParameterized(`DELETE FROM ENROLLMENT_COURSES WHERE id=? `, [id]).catch((error) => {
         logger.error(`deleteEnrollmentCourseById: ${error}`);

@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const { updateEnrollmentById, getEnrollmentById } = require("../db/enrollments");
+const { updateEnrollmentById, getEnrollmentById, addEnrollment } = require("../db/enrollments");
 const { validateRequestBody } = require("../utils");
 const { addEnrollmentCourse, getEnrollmentCoursesByEnrollmentId } = require("../db/enrollment_courses");
 const { getTransactionsByEnrollmentId, addTransaction } = require("../db/enrollment_transactions");
@@ -20,38 +20,33 @@ router.patch("/", async (req, res) => {
     }
 });
 
+router.post("/", async (req, res) => {
+    const requiredBodyFields = ["course_id", "end_date", "start_date", "user_id"];
+
+    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+
+    if (isRequestBodyValid) {
+        const enrollmentId = await addEnrollment({ created_by: req.user.id, ...validatedRequestBody });
+        res.status(200).json(await getEnrollmentById({ id: enrollmentId }));
+    } else {
+        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+    }
+});
+
 //tested
 router.get("/:id/transactions", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Enrollment Id" });
     }
-
     res.status(200).json(await getTransactionsByEnrollmentId({ enrollment_id: req.params.id }));
 });
 
+//tested
 router.get("/:id/courses", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Enrollment Id" });
     }
-
     res.status(200).json(await getEnrollmentCoursesByEnrollmentId({ enrollment_id: req.params.id }));
-});
-
-router.post("/:enrollmentId/courses", async (req, res) => {
-    if (!req.params.enrollmentId) {
-        return res.status(400).json({ error: "Missing Enrollment Id" });
-    }
-
-    const requiredBodyFields = ["course_id"];
-
-    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
-
-    if (isRequestBodyValid) {
-        await addEnrollmentCourse({ created_by: req.user.id, enrollment_id: req.params.enrollmentId, ...validatedRequestBody });
-        res.status(201).json(await getEnrollmentCoursesByEnrollmentId(req.params.enrollmentId));
-    } else {
-        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
-    }
 });
 
 module.exports = router;

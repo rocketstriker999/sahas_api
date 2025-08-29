@@ -1,8 +1,14 @@
 const libExpress = require("express");
-const { deleteEnrollmentCourseByEnrollmentCourseId, addEnrollmentCourse, getEnrollmentCourseById } = require("../db/enrollment_courses");
+const {
+    deleteEnrollmentCourseByEnrollmentCourseId,
+    addEnrollmentCourse,
+    getEnrollmentCourseById,
+    deleteEnrollmentCourseById,
+} = require("../db/enrollment_courses");
 const { validateRequestBody } = require("../utils");
 const router = libExpress.Router();
 
+//tested
 router.post("/", async (req, res) => {
     const requiredBodyFields = ["enrollment_id", "course_id"];
 
@@ -17,10 +23,10 @@ router.post("/", async (req, res) => {
 });
 
 router.delete("/:id", async (req, res) => {
-    if (!req.params.enrollmentCourseId) {
+    if (!req.params.id) {
         return res.status(400).json({ error: "Missing enrollmentCourseId" });
     }
-    deleteEnrollmentCourseByEnrollmentCourseId(req.params.enrollmentCourseId);
+    deleteEnrollmentCourseById(req.params.enrollmentCourseId);
     res.sendStatus(204);
 });
 

@@ -68,6 +68,7 @@ router.get("/:id/inquiries", async (req, res) => {
     res.status(200).json(await getInquiriesByUserId({ user_id: req.params.id }));
 });
 
+//tested
 router.get("/:id/enrollments", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing User Id" });
@@ -75,56 +76,7 @@ router.get("/:id/enrollments", async (req, res) => {
 
     const enrollments = await getEnrollmentsByUserId({ user_id: req.params.id });
 
-    // const enrollmentsWithCourses = await Promise.all(
-    //     enrollments.map(async (enrollment) => ({
-    //         ...enrollment,
-    //         courses: await getEnrollmentCoursesByEnrollmentId(enrollment.id),
-    //     }))
-    // );
-
-    // const enrollmentsWithCoursesAndTranscations = await Promise.all(
-    //     enrollmentsWithCourses.map(async (enrollment) => ({
-    //         ...enrollment,
-    //         transactions: await getTransactionsByEnrollmentId(enrollment.id),
-    //     }))
-    // );
-
     return res.status(200).json(enrollments);
-});
-
-router.post("/:userId/enrollments", async (req, res) => {
-    if (!req.params.userId) {
-        return res.status(400).json({ error: "Missing User Id" });
-    }
-
-    const requiredBodyFields = ["course", "end_date", "start_date", "fees"];
-
-    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
-
-    if (isRequestBodyValid) {
-        //add enrollment
-        const enrollmentId = await addEnrollment({ user_id: req.params.userId, created_by: req.user.id, ...validatedRequestBody });
-        //add course from it
-        if (enrollmentId) await addEnrollmentCourse({ created_by: req.user.id, enrollment_id: enrollmentId, course_id: validatedRequestBody?.course?.id });
-        else return res.status(400).json({ error: "Invalid Data for Enrollments" });
-
-        const enrollments = await getEnrollmentsByUserId(req.params.userId);
-        const enrollmentsWithCourses = await Promise.all(
-            enrollments.map(async (enrollment) => ({
-                ...enrollment,
-                courses: await getEnrollmentCoursesByEnrollmentId(enrollment.id),
-            }))
-        );
-        const enrollmentsWithCoursesAndTranscations = await Promise.all(
-            enrollmentsWithCourses.map(async (enrollment) => ({
-                ...enrollment,
-                transactions: await getTransactionsByEnrollmentId(enrollment.id),
-            }))
-        );
-        return res.status(201).json(enrollmentsWithCoursesAndTranscations);
-    } else {
-        return res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
-    }
 });
 
 router.get("/:userId/roles", async (req, res) => {

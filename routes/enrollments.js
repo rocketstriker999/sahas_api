@@ -4,7 +4,6 @@ const { validateRequestBody } = require("../utils");
 const { addEnrollmentCourse, getEnrollmentCoursesByEnrollmentId } = require("../db/enrollment_courses");
 const { getTransactionsByEnrollmentId } = require("../db/enrollment_transactions");
 const router = libExpress.Router();
-const logger = require("../libs/logger");
 
 //tested
 router.patch("/", async (req, res) => {
@@ -20,6 +19,7 @@ router.patch("/", async (req, res) => {
     }
 });
 
+//tested
 router.post("/", async (req, res) => {
     const requiredBodyFields = ["courses", "end_date", "start_date", "user_id", "fees"];
 

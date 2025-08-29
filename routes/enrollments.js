@@ -28,7 +28,7 @@ router.post("/", async (req, res) => {
     if (isRequestBodyValid) {
         const enrollmentId = await addEnrollment({ created_by: req.user.id, ...validatedRequestBody });
         addEnrollmentCourse({ created_by: req.user.id, enrollment_id: enrollmentId, ...validatedRequestBody });
-        res.status(200).json(await getEnrollmentById({ id: enrollmentId }));
+        res.status(201).json(await getEnrollmentById({ id: enrollmentId }));
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

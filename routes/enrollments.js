@@ -27,7 +27,6 @@ router.post("/", async (req, res) => {
 
     if (isRequestBodyValid) {
         const enrollmentId = await addEnrollment({ created_by: req.user.id, ...validatedRequestBody });
-        logger.info(JSON.stringify(validatedRequestBody));
         validatedRequestBody?.courses?.forEach((course) =>
             addEnrollmentCourse({ created_by: req.user.id, enrollment_id: enrollmentId, course_id: course?.id })
         );

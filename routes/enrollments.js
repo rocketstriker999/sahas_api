@@ -2,9 +2,9 @@ const libExpress = require("express");
 const { updateEnrollmentById, getEnrollmentById, addEnrollment } = require("../db/enrollments");
 const { validateRequestBody } = require("../utils");
 const { addEnrollmentCourse, getEnrollmentCoursesByEnrollmentId } = require("../db/enrollment_courses");
-const { getTransactionsByEnrollmentId, addTransaction } = require("../db/enrollment_transactions");
-const { readConfig } = require("../libs/config");
+const { getTransactionsByEnrollmentId } = require("../db/enrollment_transactions");
 const router = libExpress.Router();
+const logger = require("../libs/logger");
 
 //tested
 router.patch("/", async (req, res) => {
@@ -27,7 +27,8 @@ router.post("/", async (req, res) => {
 
     if (isRequestBodyValid) {
         const enrollmentId = await addEnrollment({ created_by: req.user.id, ...validatedRequestBody });
-        validatedRequestBody?.course_ids?.forEach((course) =>
+        logger.info(JSON.stringify(validateRequestBody));
+        validatedRequestBody?.courses?.forEach((course) =>
             addEnrollmentCourse({ created_by: req.user.id, enrollment_id: enrollmentId, course_id: course?.id })
         );
 

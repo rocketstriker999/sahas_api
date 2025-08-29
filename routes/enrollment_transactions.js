@@ -15,14 +15,14 @@ router.post("/", async (req, res) => {
     if (isRequestBodyValid) {
         const { payment: { cgst, sgst } = {} } = await readConfig("app");
 
-        const transactionId = await addEnrollmentTransaction({
+        const enrollmentTransactionId = await addEnrollmentTransaction({
             ...validatedRequestBody,
             created_by: req.user.id,
             cgst: (validatedRequestBody?.amount * cgst) / (100 + cgst + sgst),
             sgst: (validatedRequestBody?.amount * sgst) / (100 + cgst + sgst),
         });
 
-        res.status(201).json(await getEnrollmentTransactionById({ id: transactionId }));
+        res.status(201).json(await getEnrollmentTransactionById({ id: enrollmentTransactionId }));
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

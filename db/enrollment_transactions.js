@@ -171,6 +171,7 @@ function addEnrollmentTransaction({ enrollment_id, amount, cgst, sgst, created_b
         .catch((error) => logger.error(`addEnrollmentTransaction: ${error}`));
 }
 
+//freeze
 function getEnrollmentTransactionById({ id }) {
     return executeSQLQueryParameterized(
         "SELECT ENROLLMENT_TRANSACTIONS.*,USERS.full_name AS created_by_full_name FROM ENROLLMENT_TRANSACTIONS LEFT JOIN USERS ON ENROLLMENT_TRANSACTIONS.created_by = USERS.id WHERE ENROLLMENT_TRANSACTIONS.id=? ",

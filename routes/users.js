@@ -14,12 +14,7 @@ const { getEnrollmentsByUserId, addEnrollment } = require("../db/enrollments");
 const { getEnrollmentCoursesByEnrollmentId, addEnrollmentCourse } = require("../db/enrollment_courses");
 const { getTransactionsByEnrollmentId } = require("../db/enrollment_transactions");
 const { addUserRoleByUserIdAndRoleId, getUserRoleByUserRoleId } = require("../db/user_roles");
-const {
-    getWalletTransactionsByUserId,
-    getWalletBalanceByUserId,
-    addWalletTransaction,
-    getWalletTransactionByWalletTransactionId,
-} = require("../db/wallet_transactions");
+const { getWalletTransactionsByUserId, addWalletTransaction, getWalletTransactionByWalletTransactionId } = require("../db/wallet_transactions");
 
 const router = libExpress.Router();
 

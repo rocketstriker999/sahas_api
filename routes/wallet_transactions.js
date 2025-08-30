@@ -11,7 +11,7 @@ router.post("/", async (req, res) => {
 
     if (isRequestBodyValid) {
         const walletTransactionId = await addWalletTransaction({ created_by: req.user.id, ...validatedRequestBody });
-        res.status(201).json(await getWalletTransactionById(walletTransactionId));
+        res.status(201).json(await getWalletTransactionById({ id: walletTransactionId }));
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

@@ -31,4 +31,4 @@ function getWalletTransactionByWalletTransactionId(walletTransactionId) {
         });
 }
 
-module.exports = { getWalletTransactionsByUserId, getWalletBalanceByUserId, addWalletTransaction, getWalletTransactionByWalletTransactionId };
+module.exports = { getWalletTransactionsByUserId, addWalletTransaction, getWalletTransactionByWalletTransactionId };

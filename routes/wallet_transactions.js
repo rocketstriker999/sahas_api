@@ -5,10 +5,6 @@ const { addWalletTransaction, getWalletTransactionById } = require("../db/wallet
 const router = libExpress.Router();
 
 router.post("/", async (req, res) => {
-    if (!req.params.userId) {
-        return res.status(400).json({ error: "Missing User Id" });
-    }
-
     const requiredBodyFields = ["user_id", "amount", "note"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);

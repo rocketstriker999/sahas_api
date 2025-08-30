@@ -1,19 +1,12 @@
 const libExpress = require("express");
 const logger = require("../libs/logger");
-const {
-    getAllUsersBySearchAndFilters,
-    getCountUsersBySearchAndFilters,
-    getUserById,
-    updateUserBasics,
-    getUserRolesByUserId,
-    updateUserById,
-} = require("../db/users");
+const { getAllUsersBySearchAndFilters, getCountUsersBySearchAndFilters, getUserById, updateUserById } = require("../db/users");
 const { getInquiriesByUserId } = require("../db/inquiries");
 const { validateRequestBody } = require("../utils");
 const { getEnrollmentsByUserId } = require("../db/enrollments");
 
-const { addUserRoleByUserIdAndRoleId, getUserRoleByUserRoleId } = require("../db/user_roles");
 const { getWalletTransactionsByUserId } = require("../db/wallet_transactions");
+const { getUserRolesByUserId } = require("../db/user_roles");
 
 const router = libExpress.Router();
 
@@ -88,25 +81,7 @@ router.get("/:userId/roles", async (req, res) => {
         return res.status(400).json({ error: "Missing User Id" });
     }
 
-    res.status(200).json(await getUserRolesByUserId(req.params.userId));
-});
-
-router.post("/:userId/roles", async (req, res) => {
-    if (!req.params.userId) {
-        return res.status(400).json({ error: "Missing User Id" });
-    }
-
-    const requiredBodyFields = ["role_id"];
-
-    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
-
-    if (isRequestBodyValid) {
-        const userRoleId = await addUserRoleByUserIdAndRoleId({ user_id: req.params.userId, created_by: req.user.id, ...validatedRequestBody });
-
-        res.status(201).json(await getUserRoleByUserRoleId(userRoleId));
-    } else {
-        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
-    }
+    res.status(200).json(await getUserRolesByUserId({ user_id: req.params.userId }));
 });
 
 module.exports = router;

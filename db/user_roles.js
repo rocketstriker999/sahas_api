@@ -1,8 +1,8 @@
 const { executeSQLQueryParameterized } = require("../libs/db");
 const logger = require("../libs/logger");
 
-function deleteUserRoleByUserRoleId(userRoleId) {
-    return executeSQLQueryParameterized(`DELETE FROM USER_ROLES WHERE id=?`, [userRoleId]).catch((error) => {
+function deleteUserRoleById({ id }) {
+    return executeSQLQueryParameterized(`DELETE FROM USER_ROLES WHERE id=?`, [id]).catch((error) => {
         logger.error(`deleteUserRoleByUserRoleId: ${error}`);
     });
 }
@@ -32,4 +32,14 @@ function getUserRoleByUserRoleId(userRoleId) {
         });
 }
 
-module.exports = { deleteUserRoleByUserRoleId, addUserRoleByUserIdAndRoleId, getUserRoleByUserRoleId, deleteUserRoleByRoleId };
+function getUserRolesByUserId({ user_id }) {
+    return executeSQLQueryParameterized(
+        `SELECT USER_ROLES.id,ROLES.id as role_id, ROLES.title,USER_ROLES.created_on,USER_ROLES.created_by,USERS.full_name AS created_by_full_name FROM USER_ROLES LEFT JOIN ROLES ON USER_ROLES.role_id=ROLES.id LEFT JOIN USERS ON USER_ROLES.created_by=USERS.id WHERE ROLES.active=TRUE AND  USER_ROLES.user_id = ?`,
+        [user_id]
+    ).catch((error) => {
+        logger.error(`getUserRolesByUserId: ${error}`);
+        return [];
+    });
+}
+
+module.exports = { getUserRolesByUserId, deleteUserRoleById, addUserRoleByUserIdAndRoleId, getUserRoleByUserRoleId, deleteUserRoleByRoleId };

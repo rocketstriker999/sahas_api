@@ -136,16 +136,6 @@ function getUserById({ id }) {
         .catch((error) => logger.error(`getUserById: ${error}`));
 }
 
-function getUserRolesByUserId(userId) {
-    return executeSQLQueryParameterized(
-        `SELECT USER_ROLES.id,ROLES.id as role_id, ROLES.title,USER_ROLES.created_on,USER_ROLES.created_by,USERS.full_name AS created_by_full_name FROM USER_ROLES LEFT JOIN ROLES ON USER_ROLES.role_id=ROLES.id LEFT JOIN USERS ON USER_ROLES.created_by=USERS.id WHERE ROLES.active=TRUE AND  USER_ROLES.user_id = ?`,
-        [userId]
-    ).catch((error) => {
-        logger.error(`getUserRolesByUserId: ${error}`);
-        return [];
-    });
-}
-
 function getAuthoritiesByRoleIds(roleIds) {
     return executeSQLQueryParameterized(
         `SELECT AUTHORITIES.title FROM ROLE_AUTHORITIES LEFT JOIN AUTHORITIES ON ROLE_AUTHORITIES.authority_id=AUTHORITIES.id WHERE   ROLE_AUTHORITIES.role_id in (?)`,
@@ -255,7 +245,6 @@ module.exports = {
     updateUserProfilePrimaryDetails,
     addUserByEmail,
     getUserById,
-    getUserRolesByUserId,
     getAuthoritiesByRoleIds,
     updateUserById,
 };

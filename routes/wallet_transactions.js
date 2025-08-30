@@ -4,6 +4,7 @@ const { addWalletTransaction, getWalletTransactionById } = require("../db/wallet
 
 const router = libExpress.Router();
 
+//tested
 router.post("/", async (req, res) => {
     const requiredBodyFields = ["user_id", "amount", "note"];
 

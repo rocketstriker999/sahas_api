@@ -82,6 +82,7 @@ router.get("/:userId/wallet-transactions", async (req, res) => {
     res.status(200).json(await getWalletTransactionsByUserId(req.params.userId));
 });
 
+//tested
 router.get("/:userId/roles", async (req, res) => {
     if (!req.params.userId) {
         return res.status(400).json({ error: "Missing User Id" });

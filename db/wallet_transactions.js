@@ -2,10 +2,10 @@ const { executeSQLQueryParameterized } = require("../libs/db");
 const logger = require("../libs/logger");
 
 //freeze
-function getWalletTransactionsByUserId(userId) {
+function getWalletTransactionsByUserId({ user_id }) {
     return executeSQLQueryParameterized(
         `SELECT WALLET_TRANSACTIONS.*,USERS.full_name AS created_by_full_name FROM WALLET_TRANSACTIONS LEFT JOIN USERS ON WALLET_TRANSACTIONS.created_by=USERS.id WHERE user_id=? ORDER BY WALLET_TRANSACTIONS.id DESC`,
-        [userId]
+        [user_id]
     ).catch((error) => {
         logger.error(`getWalletTransactionsByUserId: ${error}`);
         return [];

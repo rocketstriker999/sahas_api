@@ -19,6 +19,7 @@ router.post("/", async (req, res) => {
     }
 });
 
+//tested
 router.delete("/:userRoleId", async (req, res) => {
     if (!req.params.userRoleId) {
         return res.status(400).json({ error: "Missing User Role Id" });

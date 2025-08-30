@@ -67,8 +67,8 @@ router.get("/:id/enrollments", async (req, res) => {
 });
 
 //tested
-router.get("/:userId/wallet-transactions", async (req, res) => {
-    if (!req.params.userId) {
+router.get("/:id/wallet-transactions", async (req, res) => {
+    if (!req.params.id) {
         return res.status(400).json({ error: "Missing User Id" });
     }
 
@@ -76,12 +76,12 @@ router.get("/:userId/wallet-transactions", async (req, res) => {
 });
 
 //tested
-router.get("/:userId/roles", async (req, res) => {
-    if (!req.params.userId) {
+router.get("/:id/roles", async (req, res) => {
+    if (!req.params.id) {
         return res.status(400).json({ error: "Missing User Id" });
     }
 
-    res.status(200).json(await getUserRolesByUserId({ user_id: req.params.userId }));
+    res.status(200).json(await getUserRolesByUserId({ user_id: req.params.id }));
 });
 
 module.exports = router;

@@ -79,6 +79,15 @@ router.get("/:id/enrollments", async (req, res) => {
     return res.status(200).json(enrollments);
 });
 
+//tested
+router.get("/:userId/wallet-transactions", async (req, res) => {
+    if (!req.params.userId) {
+        return res.status(400).json({ error: "Missing User Id" });
+    }
+
+    res.status(200).json(await getWalletTransactionsByUserId(req.params.userId));
+});
+
 router.get("/:userId/roles", async (req, res) => {
     if (!req.params.userId) {
         return res.status(400).json({ error: "Missing User Id" });
@@ -103,19 +112,6 @@ router.post("/:userId/roles", async (req, res) => {
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }
-});
-
-router.get("/:userId/wallet-transactions", async (req, res) => {
-    if (!req.params.userId) {
-        return res.status(400).json({ error: "Missing User Id" });
-    }
-
-    const transactions = {
-        balance: await getWalletBalanceByUserId(req.params.userId),
-        transactions: await getWalletTransactionsByUserId(req.params.userId),
-    };
-
-    res.status(200).json(transactions);
 });
 
 router.post("/:userId/wallet-transactions", async (req, res) => {

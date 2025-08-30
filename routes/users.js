@@ -10,11 +10,10 @@ const {
 } = require("../db/users");
 const { getInquiriesByUserId } = require("../db/inquiries");
 const { validateRequestBody } = require("../utils");
-const { getEnrollmentsByUserId, addEnrollment } = require("../db/enrollments");
-const { getEnrollmentCoursesByEnrollmentId, addEnrollmentCourse } = require("../db/enrollment_courses");
-const { getTransactionsByEnrollmentId } = require("../db/enrollment_transactions");
+const { getEnrollmentsByUserId } = require("../db/enrollments");
+
 const { addUserRoleByUserIdAndRoleId, getUserRoleByUserRoleId } = require("../db/user_roles");
-const { getWalletTransactionsByUserId, addWalletTransaction, getWalletTransactionByWalletTransactionId } = require("../db/wallet_transactions");
+const { getWalletTransactionsByUserId } = require("../db/wallet_transactions");
 
 const router = libExpress.Router();
 
@@ -104,23 +103,6 @@ router.post("/:userId/roles", async (req, res) => {
         const userRoleId = await addUserRoleByUserIdAndRoleId({ user_id: req.params.userId, created_by: req.user.id, ...validatedRequestBody });
 
         res.status(201).json(await getUserRoleByUserRoleId(userRoleId));
-    } else {
-        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
-    }
-});
-
-router.post("/:userId/wallet-transactions", async (req, res) => {
-    if (!req.params.userId) {
-        return res.status(400).json({ error: "Missing User Id" });
-    }
-
-    const requiredBodyFields = ["amount", "note"];
-
-    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
-
-    if (isRequestBodyValid) {
-        const walletTransactionId = await addWalletTransaction({ user_id: req.params.userId, created_by: req.user.id, ...validatedRequestBody });
-        res.status(201).json(await getWalletTransactionByWalletTransactionId(walletTransactionId));
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

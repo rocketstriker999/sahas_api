@@ -1,8 +1,8 @@
 const { executeSQLQueryParameterized } = require("../libs/db");
 const logger = require("../libs/logger");
 
-function deleteRoleAuthorityByAuthorityId(authorityId) {
-    return executeSQLQueryParameterized("DELETE FROM ROLE_AUTHORITIES WHERE authority_id = ?", [authorityId]).catch((error) => {
+function deleteRoleAuthoritiesByAuthorityId({ authority_id }) {
+    return executeSQLQueryParameterized("DELETE FROM ROLE_AUTHORITIES WHERE authority_id = ?", [authority_id]).catch((error) => {
         logger.error(`deleteRoleAuthorityByRoleAuthorityId: ${error}`);
     });
 }
@@ -48,7 +48,7 @@ function getRoleAuthorityByRoleAuthorityId(roleAuthorityId) {
 }
 
 module.exports = {
-    deleteRoleAuthorityByAuthorityId,
+    deleteRoleAuthoritiesByAuthorityId,
     deleteRoleAuthorityByRoleAuthorityId,
     getRoleAuthoritiesByRoleId,
     addRoleAuthority,

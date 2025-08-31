@@ -8,11 +8,11 @@ function getAllAuthorities() {
     });
 }
 
-function getAuthorityByAuthorityId(authorityId) {
-    return executeSQLQueryParameterized("SELECT * FROM AUTHORITIES WHERE id=?", [authorityId])
+function getAuthorityById({ id }) {
+    return executeSQLQueryParameterized("SELECT * FROM AUTHORITIES WHERE id=?", [id])
         .then((result) => (result.length > 0 ? result[0] : false))
         .catch((error) => {
-            logger.error(`getAuthorityByAuthorityId: ${error}`);
+            logger.error(`getAuthorityById: ${error}`);
         });
 }
 
@@ -28,4 +28,4 @@ function addAuthority({ title, description }) {
         .catch((error) => logger.error(`addAuthority: ${error}`));
 }
 
-module.exports = { getAllAuthorities, deleteAuthorityByAuthorityId, addAuthority, getAuthorityByAuthorityId };
+module.exports = { getAllAuthorities, deleteAuthorityByAuthorityId, addAuthority, getAuthorityById };

@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const { deleteAuthorityByAuthorityId, addAuthority, getAuthorityByAuthorityId } = require("../db/authorities");
+const { deleteAuthorityByAuthorityId, addAuthority, getAuthorityById } = require("../db/authorities");
 const { deleteRoleAuthorityByAuthorityId } = require("../db/role_authorities");
 const { validateRequestBody } = require("../utils");
 
@@ -24,7 +24,7 @@ router.post("/", async (req, res) => {
 
     if (isRequestBodyValid) {
         const authorityId = await addAuthority(validatedRequestBody);
-        res.status(201).json(await getAuthorityByAuthorityId(authorityId));
+        res.status(201).json(await getAuthorityById({ id: authorityId }));
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

@@ -1,29 +1,29 @@
 const libExpress = require("express");
 const logger = require("../libs/logger");
-const { deleteRoleByRoleId, addRole, getRoleById } = require("../db/roles");
+const { addRole, getRoleById, deleteRoleById } = require("../db/roles");
 const { deleteUserRoleByRoleId } = require("../db/user_roles");
 const {
     getRoleAuthoritiesByRoleId,
     addRoleAuthority,
     getRoleAuthorityByRoleAuthorityId,
-    deleteRoleAuthorityByAuthorityId,
-    deleteRoleAuthorityByRoleId,
+
+    deleteRoleAuthoritiesByRoleId,
 } = require("../db/role_authorities");
 const { validateRequestBody } = require("../utils");
 
 const router = libExpress.Router();
 
 //Specific Config
-router.delete("/:roleId", async (req, res) => {
-    if (!req.params.roleId) {
+router.delete("/:id", async (req, res) => {
+    if (!req.params.id) {
         return res.status(400).json({ error: "Missing roleId" });
     }
     //delete authority
-    deleteRoleByRoleId(req.params.roleId);
+    deleteRoleById({ id: req.params.id });
     //this authority needs to go away from roleauthorities
-    deleteUserRoleByRoleId(req.params.roleId);
+    deleteUserRoleByRoleId({ role_id: req.params.id });
     //need to delete authorities as well
-    deleteRoleAuthorityByRoleId(req.params.roleId);
+    deleteRoleAuthoritiesByRoleId(req.params.roleId);
     res.sendStatus(204);
 });
 
@@ -50,6 +50,7 @@ router.post("/:roleId/authorities", async (req, res) => {
     }
 });
 
+//tested
 router.post("/", async (req, res) => {
     const requiredBodyFields = ["title"];
 

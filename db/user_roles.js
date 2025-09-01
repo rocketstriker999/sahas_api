@@ -8,7 +8,7 @@ function deleteUserRoleById({ id }) {
     });
 }
 
-function deleteUserRoleByRoleId({ role_id }) {
+function deleteUserRolesByRoleId({ role_id }) {
     return executeSQLQueryParameterized(`DELETE FROM USER_ROLES WHERE role_id=?`, [role_id]).catch((error) => {
         logger.error(`deleteUserRoleByRoleId: ${error}`);
     });
@@ -46,4 +46,4 @@ function getUserRolesByUserId({ user_id }) {
     });
 }
 
-module.exports = { getUserRolesByUserId, deleteUserRoleById, addUserRole, getUserRoleById, deleteUserRoleByRoleId };
+module.exports = { getUserRolesByUserId, deleteUserRoleById, addUserRole, getUserRoleById, deleteUserRolesByRoleId };

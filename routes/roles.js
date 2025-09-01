@@ -23,7 +23,7 @@ router.delete("/:id", async (req, res) => {
     //this authority needs to go away from roleauthorities
     deleteUserRoleByRoleId({ role_id: req.params.id });
     //need to delete authorities as well
-    deleteRoleAuthoritiesByRoleId(req.params.roleId);
+    deleteRoleAuthoritiesByRoleId({ role_id: req.params.id });
     res.sendStatus(204);
 });
 

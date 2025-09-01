@@ -14,18 +14,18 @@ function deleteRoleByRoleId(roleId) {
     });
 }
 
+//freeze
 function addRole({ title }) {
     return executeSQLQueryParameterized("INSERT INTO ROLES(title) VALUES(?)", [title])
         .then((result) => result.insertId)
         .catch((error) => logger.error(`addRole: ${error}`));
 }
 
-function getRoleByRoleId(roleId) {
-    return executeSQLQueryParameterized("SELECT * FROM ROLES WHERE id=?", [roleId])
+//freeze
+function getRoleById({ id }) {
+    return executeSQLQueryParameterized("SELECT * FROM ROLES WHERE id=?", [id])
         .then((result) => (result.length > 0 ? result[0] : false))
-        .catch((error) => {
-            logger.error(`getRoleByRoleId: ${error}`);
-        });
+        .catch((error) => logger.error(`getRoleById: ${error}`));
 }
 
-module.exports = { getAllRoles, deleteRoleByRoleId, addRole, getRoleByRoleId };
+module.exports = { getAllRoles, deleteRoleByRoleId, addRole, getRoleById };

@@ -7,6 +7,7 @@ function deleteRoleAuthoritiesByAuthorityId({ authority_id }) {
     });
 }
 
+//freeze
 function deleteRoleAuthoritiesByRoleId({ role_id }) {
     return executeSQLQueryParameterized("DELETE FROM ROLE_AUTHORITIES WHERE role_id = ?", [role_id]).catch((error) => {
         logger.error(`deleteRoleAuthorityByRoleId: ${error}`);

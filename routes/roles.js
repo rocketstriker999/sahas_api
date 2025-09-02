@@ -2,18 +2,12 @@ const libExpress = require("express");
 const logger = require("../libs/logger");
 const { addRole, getRoleById, deleteRoleById } = require("../db/roles");
 const { deleteUserRolesByRoleId } = require("../db/user_roles");
-const {
-    getRoleAuthoritiesByRoleId,
-    addRoleAuthority,
-    getRoleAuthorityByRoleAuthorityId,
-
-    deleteRoleAuthoritiesByRoleId,
-} = require("../db/role_authorities");
+const { getRoleAuthoritiesByRoleId, addRoleAuthority, getRoleAuthorityByRoleAuthorityId, deleteRoleAuthoritiesByRoleId } = require("../db/role_authorities");
 const { validateRequestBody } = require("../utils");
 
 const router = libExpress.Router();
 
-//Specific Config
+//tested
 router.delete("/:id", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing roleId" });

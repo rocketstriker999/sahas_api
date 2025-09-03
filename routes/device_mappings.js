@@ -15,7 +15,9 @@ router.delete("/", async (req, res) => {
 
     logger.info(`Resetting Device Mapping For  - ${email}`);
 
-    deleteUserDeviceMappings(email);
+    const userId = await getUserIdByEmail(email);
+
+    deleteUserDeviceMappings(userId);
 
     res.sendStatus(204);
 });

@@ -5,9 +5,6 @@ const { validateRequestBody } = require("../utils");
 const router = libExpress.Router();
 
 router.post("/", async (req, res) => {
-    if (!req.params.roleId) {
-        return res.status(400).json({ error: "Missing roleId" });
-    }
     const requiredBodyFields = ["role_id", "authority_id"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);

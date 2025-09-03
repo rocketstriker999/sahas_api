@@ -29,22 +29,6 @@ router.get("/:id/authorities", async (req, res) => {
     res.status(200).json(await getRoleAuthoritiesByRoleId({ role_id: req.params.id }));
 });
 
-router.post("/:roleId/authorities", async (req, res) => {
-    if (!req.params.roleId) {
-        return res.status(400).json({ error: "Missing roleId" });
-    }
-    const requiredBodyFields = ["authority_id"];
-
-    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
-
-    if (isRequestBodyValid) {
-        const roleAuthorityId = await addRoleAuthority({ role_id: req.params.roleId, created_by: req.user.id, ...validatedRequestBody });
-        res.status(201).json(await getRoleAuthorityByRoleAuthorityId(roleAuthorityId));
-    } else {
-        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
-    }
-});
-
 //tested
 router.patch("/", async (req, res) => {
     const requiredBodyFields = ["id", "title", "active"];

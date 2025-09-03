@@ -1,6 +1,6 @@
 const libExpress = require("express");
 const logger = require("../libs/logger");
-const { addRole, getRoleById, deleteRoleById } = require("../db/roles");
+const { addRole, getRoleById, deleteRoleById, updateRoleById } = require("../db/roles");
 const { deleteUserRolesByRoleId } = require("../db/user_roles");
 const { getRoleAuthoritiesByRoleId, addRoleAuthority, getRoleAuthorityByRoleAuthorityId, deleteRoleAuthoritiesByRoleId } = require("../db/role_authorities");
 const { validateRequestBody } = require("../utils");
@@ -21,11 +21,12 @@ router.delete("/:id", async (req, res) => {
     res.sendStatus(204);
 });
 
-router.get("/:roleId/authorities", async (req, res) => {
-    if (!req.params.roleId) {
+//tested
+router.get("/:id/authorities", async (req, res) => {
+    if (!req.params.id) {
         return res.status(400).json({ error: "Missing roleId" });
     }
-    res.status(200).json(await getRoleAuthoritiesByRoleId(req.params.roleId));
+    res.status(200).json(await getRoleAuthoritiesByRoleId({ role_id: req.params.id }));
 });
 
 router.post("/:roleId/authorities", async (req, res) => {
@@ -39,6 +40,20 @@ router.post("/:roleId/authorities", async (req, res) => {
     if (isRequestBodyValid) {
         const roleAuthorityId = await addRoleAuthority({ role_id: req.params.roleId, created_by: req.user.id, ...validatedRequestBody });
         res.status(201).json(await getRoleAuthorityByRoleAuthorityId(roleAuthorityId));
+    } else {
+        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+    }
+});
+
+//tested
+router.patch("/", async (req, res) => {
+    const requiredBodyFields = ["id", "title", "active"];
+
+    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+
+    if (isRequestBodyValid) {
+        await updateRoleById({ ...validatedRequestBody });
+        res.status(200).json(await getRoleById({ ...validatedRequestBody }));
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

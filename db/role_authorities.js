@@ -20,10 +20,11 @@ function deleteRoleAuthorityByRoleAuthorityId(roleAuthorityId) {
     });
 }
 
-function getRoleAuthoritiesByRoleId(roleId) {
+//freeze
+function getRoleAuthoritiesByRoleId({ role_id }) {
     return executeSQLQueryParameterized(
         "SELECT AUTHORITIES.*, ROLE_AUTHORITIES.id AS roleAuthorityId, ROLE_AUTHORITIES.created_on, ROLE_AUTHORITIES.created_by,ROLE_AUTHORITIES.created_on, USERS.id AS user_id, USERS.full_name AS created_by_full_name FROM AUTHORITIES LEFT JOIN ROLE_AUTHORITIES ON AUTHORITIES.id = ROLE_AUTHORITIES.authority_id AND ROLE_AUTHORITIES.role_id = ? LEFT JOIN USERS ON ROLE_AUTHORITIES.created_by = USERS.id",
-        [roleId]
+        [role_id]
     ).catch((error) => {
         logger.error(`getRoleAuthoritiesByRoleId: ${error}`);
     });

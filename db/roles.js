@@ -29,4 +29,11 @@ function getRoleById({ id }) {
         .catch((error) => logger.error(`getRoleById: ${error}`));
 }
 
-module.exports = { getAllRoles, deleteRoleById, addRole, getRoleById };
+//freeze
+function updateRoleById({ id, title, active }) {
+    return executeSQLQueryParameterized("UPDATE ROLES SET title=?,active=? WHERE id=?", [title, active, id]).catch((error) =>
+        logger.error(`updateRoleById: ${error}`)
+    );
+}
+
+module.exports = { getAllRoles, deleteRoleById, addRole, getRoleById, updateRoleById };

@@ -14,8 +14,9 @@ function deleteRoleAuthoritiesByRoleId({ role_id }) {
     });
 }
 
-function deleteRoleAuthorityByRoleAuthorityId(roleAuthorityId) {
-    return executeSQLQueryParameterized("DELETE FROM ROLE_AUTHORITIES WHERE id = ?", [roleAuthorityId]).catch((error) => {
+//freeze
+function deleteRoleAuthorityById({ id }) {
+    return executeSQLQueryParameterized("DELETE FROM ROLE_AUTHORITIES WHERE id = ?", [id]).catch((error) => {
         logger.error(`deleteRoleAuthorityByRoleAuthorityId: ${error}`);
     });
 }
@@ -51,7 +52,7 @@ function getRoleAuthorityByRoleAuthorityId(roleAuthorityId) {
 
 module.exports = {
     deleteRoleAuthoritiesByAuthorityId,
-    deleteRoleAuthorityByRoleAuthorityId,
+    deleteRoleAuthorityById,
     getRoleAuthoritiesByRoleId,
     addRoleAuthority,
     getRoleAuthorityByRoleAuthorityId,

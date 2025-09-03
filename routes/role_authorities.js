@@ -1,14 +1,14 @@
 const libExpress = require("express");
-const { deleteRoleAuthorityByRoleAuthorityId } = require("../db/role_authorities");
+const { deleteRoleAuthorityById } = require("../db/role_authorities");
 
 const router = libExpress.Router();
 
-router.delete("/:roleAuthorityId", async (req, res) => {
-    if (!req.params.roleAuthorityId) {
+router.delete("/:id", async (req, res) => {
+    if (!req.params.id) {
         return res.status(400).json({ error: "Missing roleAuthorityId" });
     }
 
-    deleteRoleAuthorityByRoleAuthorityId(req.params.roleAuthorityId);
+    deleteRoleAuthorityById({ id: req.params.id });
     res.sendStatus(204);
 });
 

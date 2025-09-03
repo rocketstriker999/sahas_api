@@ -38,6 +38,13 @@ function addActiveUserDeviceMapping(userId, deviceId) {
     });
 }
 
+function deleteUserDeviceMappings(userId) {
+    return executeSQLQueryParameterized(`DELETE FROM MAPPING_USER_DEVICES where user_id=?`, [userId]).catch((error) => {
+        logger.error(`deleteUserDeviceMappings: ${error}`);
+        return false;
+    });
+}
+
 function hasUserAnyActiveDeviceMapping(userId) {
     return executeSQLQueryParameterized(`SELECT COUNT(*) AS count FROM MAPPING_USER_DEVICES WHERE user_id = ? AND active=TRUE`, [userId])
         .then(([result]) => result.count > 0)
@@ -67,6 +74,7 @@ module.exports = {
     getDeviceByFingerPrint,
     addDevice,
     isDeviceAssignedToThisUser,
+    deleteUserDeviceMappings,
     hasUserAnyActiveDeviceMapping,
     addActiveUserDeviceMapping,
     userDeviceMappingExist,

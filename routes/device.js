@@ -1,5 +1,6 @@
 const libExpress = require("express");
 const { addDevice } = require("../db/devices");
+const logger = require("../libs/logger");
 
 const router = libExpress.Router();
 

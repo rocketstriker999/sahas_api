@@ -33,6 +33,7 @@ const routers = {
     "/token": { middlewares: [], router: require("./routes/token") },
     "/otp": { middlewares: [], router: require("./routes/otp") },
     "/device": { middlewares: [], router: require("./routes/device") },
+    "/device-mappings": { middlewares: [], router: require("./routes/device_mappings") },
     "/transactions": { middlewares: [], router: require("./routes/transaction") },
     "/media": { middlewares: [], router: require("./routes/media") },
     "/extract": { middlewares: [], router: require("./routes/extract") },

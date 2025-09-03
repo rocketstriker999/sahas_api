@@ -12,11 +12,11 @@ router.delete("/:id", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing roleId" });
     }
-    //delete authority
+    //delete role
     deleteRoleById({ id: req.params.id });
-    //this authority needs to go away from roleauthorities
+    //this authority needs to go away from user-role
     deleteUserRolesByRoleId({ role_id: req.params.id });
-    //need to delete authorities as well
+    //need to delete role-authorities as well
     deleteRoleAuthoritiesByRoleId({ role_id: req.params.id });
     res.sendStatus(204);
 });

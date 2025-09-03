@@ -49,10 +49,10 @@ const routers = {
 
     "/wallet-transactions": { middlewares: [], router: require("./routes/wallet_transactions") },
 
+    "/roles": { middlewares: [], router: require("./routes/roles") },
     "/user-roles": { middlewares: [], router: require("./routes/user_roles") },
 
     "/authorities": { middlewares: [], router: require("./routes/authorities") },
-    "/roles": { middlewares: [], router: require("./routes/roles") },
     "/role-authorities": { middlewares: [], router: require("./routes/role_authorities") },
 };
 

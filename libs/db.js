@@ -146,7 +146,7 @@ function generateDBTables() {
         `CREATE TABLE IF NOT EXISTS PRODUCT_CATEGORIES(
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(96) NOT NULL UNIQUE,
-            image VARCHAR(64) NULL UNIQUE,
+            image VARCHAR(64) NULL,
             view_index INT NOT NULL DEFAULT 0,
             active BOOLEAN NOT NULL DEFAULT TRUE
         )`,
@@ -154,6 +154,7 @@ function generateDBTables() {
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(96) NOT NULL UNIQUE,
             view_index INT NOT NULL DEFAULT 0,
+            image VARCHAR(64) NULL,
             active BOOLEAN NOT NULL DEFAULT TRUE,
             category INT NOT NULL DEFAULT 0,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

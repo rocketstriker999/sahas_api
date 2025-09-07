@@ -9,6 +9,7 @@ router.get("/", async (req, res) => {
     res.status(200).json(await getAllproductCategories());
 });
 
+//tested
 router.post("/", async (req, res) => {
     const requiredBodyFields = ["title", "image"];
 

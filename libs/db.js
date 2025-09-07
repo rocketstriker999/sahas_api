@@ -129,8 +129,7 @@ function generateDBTables() {
             course_id INT NOT NULL,
             created_by INT NOT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP
-          )
-        `,
+          )`,
         `CREATE TABLE IF NOT EXISTS ENROLLMENT_TRANSACTIONS (
             id INT AUTO_INCREMENT PRIMARY KEY,
             enrollment_id INT NOT NULL,
@@ -142,96 +141,108 @@ function generateDBTables() {
             note VARCHAR(256) NOT NULL,
             type VARCHAR(16) NOT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-        `,
-        `CREATE TABLE IF NOT EXISTS CATEGORIES(
+        )`,
+        `CREATE TABLE IF NOT EXISTS PRODUCT_CATEGORIES(
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(96) NOT NULL UNIQUE,
             view_index INT NOT NULL DEFAULT 0,
             active BOOLEAN NOT NULL DEFAULT TRUE,
-            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
-        `CREATE TABLE IF NOT EXISTS CATEGORIZED_COURSES (
+        `CREATE TABLE IF NOT EXISTS PRODUCTS(
             id INT AUTO_INCREMENT PRIMARY KEY,
-            category_id INT NOT NULL,
-            title VARCHAR(128) NOT NULL UNIQUE,
-            description VARCHAR(256) NOT NULL,
-            image VARCHAR(32) NOT NULL UNIQUE,
-            price DECIMAL(8, 2) NOT NULL,
-            whatsapp_group VARCHAR(98) NULL,
-            view_index INT NULL,
+            title VARCHAR(96) NOT NULL UNIQUE,
+            view_index INT NOT NULL DEFAULT 0,
             active BOOLEAN NOT NULL DEFAULT TRUE,
-            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-          )`,
-        `CREATE TABLE IF NOT EXISTS COURSE_SUBJECTS(
+        )`,
+        `CREATE TABLE IF NOT EXISTS PRODUCT_COURSES(
             id INT AUTO_INCREMENT PRIMARY KEY,
-            course_id INT NOT NULL,
-            title VARCHAR(128) NOT NULL UNIQUE,
-            media_group_id CHAR(36) DEFAULT (UUID()) UNIQUE,
-            view_index INT NULL,
+            title VARCHAR(96) NOT NULL UNIQUE,
+            view_index INT NOT NULL DEFAULT 0,
             active BOOLEAN NOT NULL DEFAULT TRUE,
-            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
-        `CREATE TABLE IF NOT EXISTS SUBJECT_CHAPTERS(
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            subject_id INT NOT NULL,
-            title VARCHAR(128) NOT NULL UNIQUE,
-            media_group_id CHAR(36) DEFAULT (UUID()) UNIQUE,
-            view_index INT NULL,
-            active BOOLEAN NOT NULL DEFAULT TRUE,
-            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
-            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-        )`,
-        `CREATE TABLE IF NOT EXISTS MEDIA(
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            title VARCHAR(128) NOT NULL UNIQUE,
-            media_group_id CHAR(36) NULL,
-            cdn_id CHAR(48) NOT NULL,
-            type CHAR(12) NULL,
-            view_index INT NULL,
-            downloadable BOOLEAN DEFAULT FALSE
-        )`,
-        `CREATE TABLE IF NOT EXISTS USER_TRANSACTIONS (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            user_id INT NOT NULL,
-            product_id INT NOT NULL,
-            status VARCHAR(16) DEFAULT 'IN_PROGRESS',
-            price DECIMAL(8, 2) DEFAULT 0,
-            discounted DECIMAL(8, 2) DEFAULT 0,
-            coupon_id INT DEFAULT NULL,
-            benifit DECIMAL(8, 2) DEFAULT 0,
-            sgst DECIMAL(8, 2) DEFAULT 0,
-            cgst DECIMAL(8, 2) DEFAULT 0,
-            pay DECIMAL(8, 2) DEFAULT 0,
-            hash VARCHAR(128) NULL,
-            invoice CHAR(36) DEFAULT (CONCAT(REPLACE(UUID(), '-', ''), '.pdf')) UNIQUE,
-            company VARCHAR(36) NULL,
-            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
-            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-        )`,
-        `CREATE TABLE IF NOT EXISTS COUPONS (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            coupon_code VARCHAR(8) UNIQUE,
-            validity DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            active BOOLEAN NOT NULL DEFAULT TRUE
-        )`,
-        `CREATE TABLE IF NOT EXISTS COUPON_COURSES (
-            coupon_code_id INT NOT NULL,
-            product_id INT NOT NULL,
-            product_access_validity DATETIME NULL,
-            value DECIMAL(8, 2) NOT NULL DEFAULT 0,
-            type VARCHAR(12)  DEFAULT 'PERCENTAGE'
-        )`,
-        `CREATE TABLE IF NOT EXISTS COUPON_DISTRIBUTORS(
-            coupon_code_id INT NOT NULL,
-            user_id INT NOT NULL,
-            product_id INT NOT NULL,
-            commision DECIMAL(8, 2) DEFAULT 0,
-            commision_type VARCHAR(12) DEFAULT 'PERCENTAGE'
-        )`,
+        // `CREATE TABLE IF NOT EXISTS CATEGORIZED_COURSES (
+        //     id INT AUTO_INCREMENT PRIMARY KEY,
+        //     category_id INT NOT NULL,
+        //     title VARCHAR(128) NOT NULL UNIQUE,
+        //     description VARCHAR(256) NOT NULL,
+        //     image VARCHAR(32) NOT NULL UNIQUE,
+        //     price DECIMAL(8, 2) NOT NULL,
+        //     whatsapp_group VARCHAR(98) NULL,
+        //     view_index INT NULL,
+        //     active BOOLEAN NOT NULL DEFAULT TRUE,
+        //     created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+        //     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        //   )`,
+        // `CREATE TABLE IF NOT EXISTS COURSE_SUBJECTS(
+        //     id INT AUTO_INCREMENT PRIMARY KEY,
+        //     course_id INT NOT NULL,
+        //     title VARCHAR(128) NOT NULL UNIQUE,
+        //     media_group_id CHAR(36) DEFAULT (UUID()) UNIQUE,
+        //     view_index INT NULL,
+        //     active BOOLEAN NOT NULL DEFAULT TRUE,
+        //     created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+        //     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        // )`,
+        // `CREATE TABLE IF NOT EXISTS SUBJECT_CHAPTERS(
+        //     id INT AUTO_INCREMENT PRIMARY KEY,
+        //     subject_id INT NOT NULL,
+        //     title VARCHAR(128) NOT NULL UNIQUE,
+        //     media_group_id CHAR(36) DEFAULT (UUID()) UNIQUE,
+        //     view_index INT NULL,
+        //     active BOOLEAN NOT NULL DEFAULT TRUE,
+        //     created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+        //     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        // )`,
+        // `CREATE TABLE IF NOT EXISTS MEDIA(
+        //     id INT AUTO_INCREMENT PRIMARY KEY,
+        //     title VARCHAR(128) NOT NULL UNIQUE,
+        //     media_group_id CHAR(36) NULL,
+        //     cdn_id CHAR(48) NOT NULL,
+        //     type CHAR(12) NULL,
+        //     view_index INT NULL,
+        //     downloadable BOOLEAN DEFAULT FALSE
+        // )`,
+        // `CREATE TABLE IF NOT EXISTS USER_TRANSACTIONS (
+        //     id INT AUTO_INCREMENT PRIMARY KEY,
+        //     user_id INT NOT NULL,
+        //     product_id INT NOT NULL,
+        //     status VARCHAR(16) DEFAULT 'IN_PROGRESS',
+        //     price DECIMAL(8, 2) DEFAULT 0,
+        //     discounted DECIMAL(8, 2) DEFAULT 0,
+        //     coupon_id INT DEFAULT NULL,
+        //     benifit DECIMAL(8, 2) DEFAULT 0,
+        //     sgst DECIMAL(8, 2) DEFAULT 0,
+        //     cgst DECIMAL(8, 2) DEFAULT 0,
+        //     pay DECIMAL(8, 2) DEFAULT 0,
+        //     hash VARCHAR(128) NULL,
+        //     invoice CHAR(36) DEFAULT (CONCAT(REPLACE(UUID(), '-', ''), '.pdf')) UNIQUE,
+        //     company VARCHAR(36) NULL,
+        //     created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+        //     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        // )`,
+        // `CREATE TABLE IF NOT EXISTS COUPONS (
+        //     id INT AUTO_INCREMENT PRIMARY KEY,
+        //     coupon_code VARCHAR(8) UNIQUE,
+        //     validity DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        //     active BOOLEAN NOT NULL DEFAULT TRUE
+        // )`,
+        // `CREATE TABLE IF NOT EXISTS COUPON_COURSES (
+        //     coupon_code_id INT NOT NULL,
+        //     product_id INT NOT NULL,
+        //     product_access_validity DATETIME NULL,
+        //     value DECIMAL(8, 2) NOT NULL DEFAULT 0,
+        //     type VARCHAR(12)  DEFAULT 'PERCENTAGE'
+        // )`,
+        // `CREATE TABLE IF NOT EXISTS COUPON_DISTRIBUTORS(
+        //     coupon_code_id INT NOT NULL,
+        //     user_id INT NOT NULL,
+        //     product_id INT NOT NULL,
+        //     commision DECIMAL(8, 2) DEFAULT 0,
+        //     commision_type VARCHAR(12) DEFAULT 'PERCENTAGE'
+        // )`,
     ];
 
     return Promise.all(createUserTableQuery.map((query) => executeSQLQueryRaw(query)));

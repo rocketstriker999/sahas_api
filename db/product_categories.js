@@ -18,9 +18,9 @@ function getProductCategoryById({ id }) {
 
 //freeze
 function addProductCategory({ title, image }) {
-    return executeSQLQueryParameterized(`INSERT INTO PRODUCT_CATEGORIES(title,image) VALUES(?,?)`, [title, image]).catch((error) =>
-        logger.error(`addProductCategory: ${error}`)
-    );
+    return executeSQLQueryParameterized(`INSERT INTO PRODUCT_CATEGORIES(title,image) VALUES(?,?)`, [title, image])
+        .then((result) => result.insertId)
+        .catch((error) => logger.error(`addProductCategory: ${error}`));
 }
 
 module.exports = { getAllproductCategories, addProductCategory, getProductCategoryById };

@@ -142,23 +142,25 @@ function generateDBTables() {
             type VARCHAR(16) NOT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP
         )`,
+
         `CREATE TABLE IF NOT EXISTS PRODUCT_CATEGORIES(
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(96) NOT NULL UNIQUE,
+            image VARCHAR(64) NULL UNIQUE,
             view_index INT NOT NULL DEFAULT 0,
-            active BOOLEAN NOT NULL DEFAULT TRUE,
-            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            active BOOLEAN NOT NULL DEFAULT TRUE
         )`,
         `CREATE TABLE IF NOT EXISTS PRODUCTS(
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(96) NOT NULL UNIQUE,
             view_index INT NOT NULL DEFAULT 0,
             active BOOLEAN NOT NULL DEFAULT TRUE,
+            category INT NOT NULL DEFAULT 0,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
+
         `CREATE TABLE IF NOT EXISTS PRODUCT_COURSES(
             id INT AUTO_INCREMENT PRIMARY KEY,
-            title VARCHAR(96) NOT NULL UNIQUE,
             view_index INT NOT NULL DEFAULT 0,
             active BOOLEAN NOT NULL DEFAULT TRUE,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

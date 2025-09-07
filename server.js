@@ -35,7 +35,9 @@ sahasAPI.use(logRequest);
 const routers = {
     "/configs": { middlewares: [], router: require("./routes/configs") },
     "/authentication-tokens": { middlewares: [], router: require("./routes/authentication_tokens") },
-    "/catelogue": { middlewares: [], router: require("./routes/catelogue") },
+
+    "/product-categories": { middlewares: [], router: require("./routes/product_categories") },
+
     "/filters": { middlewares: [], router: require("./routes/filters") },
 
     "/users": { middlewares: [], router: require("./routes/users") },

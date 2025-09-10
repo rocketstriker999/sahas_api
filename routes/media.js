@@ -1,8 +1,4 @@
 const libExpress = require("express");
-const { getMediaBySubjectId, getMediaByChapterId } = require("../db/media");
-const { verifyAccessByTokenForChapter } = require("../db/accesses");
-const requiresUserDeviceActiveMapping = require("../middlewares/check_device");
-
 const router = libExpress.Router();
 
 //request for demo content from subjectid

@@ -12,9 +12,7 @@ const storage = libMulter.diskStorage({
     },
 });
 
-const uploadManager = libMulter({ storage });
-
-router.post("/", uploadManager.single("file"), (req, res) => {
+router.post("/", libMulter({ storage }).single("file"), (req, res) => {
     res.status(201).json({ success: true, file: req.file });
 });
 

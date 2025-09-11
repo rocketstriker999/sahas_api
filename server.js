@@ -58,7 +58,6 @@ const routers = {
     "/role-authorities": { middlewares: [], router: require("./routes/role_authorities") },
 
     "/media": { middlewares: [], router: require("./routes/media") },
-    "/media-binary": { middlewares: [], router: require("./routes/media_binary") },
 };
 
 //apply all routes -

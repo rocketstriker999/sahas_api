@@ -3,19 +3,19 @@ const router = libExpress.Router();
 const libMulter = require("multer");
 const libPath = require("path");
 
-const uploadManager = libMulter({
-    storage: libMulter.diskStorage({
-        filename: (req, file, next) => {
-            next(null, Date.now() + libPath.extname(file.originalname));
-        },
-        destination: (req, file, next) => {
-            next(null, process.env.DIRECTORY_UPLOAD_BINARIES);
-        },
-    }),
+const storage = libMulter.diskStorage({
+    destination: (req, file, next) => {
+        next(null, process.env.DIRECTORY_UPLOAD_BINARIES);
+    },
+    filename: (req, file, next) => {
+        // Keep timestamp + extension
+        next(null, Date.now() + libPath.extname(file.originalname));
+    },
 });
 
-router.post("/upload", uploadManager, (req, res) => {
-    console.log("File received:", req.file);
+const uploadManager = libMulter({ storage });
+
+router.post("/upload", uploadManager.single("file"), (req, res) => {
     res.json({ success: true, file: req.file });
 });
 

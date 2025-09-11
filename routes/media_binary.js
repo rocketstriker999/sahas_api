@@ -8,8 +8,8 @@ const storage = libMulter.diskStorage({
         cb(null, process.env.DIRECTORY_UPLOAD_BINARIES);
     },
     filename: (req, file, cb) => {
-        const ext = libPath.extname(file.originalname); // .png, .jpg etc
-        const baseName = libPath.basename(file.originalname, ext); // Hostinger_logo
+        const ext = libPath.extname(file.originalname);
+        const baseName = libPath.basename(file.originalname, ext);
         cb(null, `${baseName}-${Date.now()}${ext}`);
     },
 });

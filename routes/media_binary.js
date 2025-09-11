@@ -8,7 +8,7 @@ const uploadManager = libMulter({
         filename: (req, file, next) => {
             next(null, Date.now() + libPath.extname(file.originalname));
         },
-        destination: (_, _, next) => {
+        destination: (req, file, next) => {
             next(null, process.env.DIRECTORY_UPLOAD_BINARIES);
         },
     }),

@@ -4,13 +4,11 @@ const libMulter = require("multer");
 const libPath = require("path");
 
 const storage = libMulter.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, process.env.DIRECTORY_UPLOAD_BINARIES);
+    destination: (req, file, next) => {
+        next(null, process.env.DIRECTORY_UPLOAD_BINARIES);
     },
-    filename: (req, file, cb) => {
-        const ext = libPath.extname(file.originalname);
-        const baseName = libPath.basename(file.originalname, ext);
-        cb(null, `${baseName}-${Date.now()}${ext}`);
+    filename: (req, file, next) => {
+        next(null, `${Date.now()}${libPath.extname(file.originalname)}`);
     },
 });
 

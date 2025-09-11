@@ -14,7 +14,7 @@ const uploadManager = libMulter({
     }),
 });
 
-router.post("/upload", uploadManager.single("file"), (req, res) => {
+router.post("/upload", uploadManager, (req, res) => {
     console.log("File received:", req.file);
     res.json({ success: true, file: req.file });
 });

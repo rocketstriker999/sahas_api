@@ -16,7 +16,7 @@ router.post(
         }),
     }).single("file"),
     (req, res) => {
-        res.status(201).json({ success: true, file: req.file });
+        res.status(201).json({ success: true, file: req.file.filename });
     }
 );
 

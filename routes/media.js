@@ -1,5 +1,6 @@
 const libExpress = require("express");
 const router = libExpress.Router();
+import multer from "multer";
 
 //request for demo content from subjectid
 // router.get("/subjects/:subjectId", async (req, res) => {
@@ -25,18 +26,12 @@ const router = libExpress.Router();
 //     return res.status(400).json({ error: "Missing Required Details" });
 // });
 
-router.post("/image", libExpress.raw({ type: "image/*", limit: "10mb" }), (req, res) => {
-    if (!req.body || !req.headers["x-filename"]) {
-        return res.status(400).json({ error: "No file uploaded" });
-    }
+const upload = multer({ dest: "uploads/" });
 
-    const fileBuffer = req.body;
-    const filename = req.headers["x-filename"];
-    const mimeType = req.headers["content-type"];
-
-    res.setHeader("Content-Type", mimeType);
-    res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
-    res.send(fileBuffer);
+router.post("/api/upload", upload.single("file"), (req, res) => {
+    console.log("File received:", req.file);
+    // req.file.size > 0 confirms it’s not empty
+    res.json({ success: true, file: req.file });
 });
 
 module.exports = router;

@@ -25,7 +25,7 @@ const router = libExpress.Router();
 //     return res.status(400).json({ error: "Missing Required Details" });
 // });
 
-router.post("/image", libExpress.raw({ type: "image/*", limit: "10mb" }), (req, res) => {
+router.post("/image", (req, res) => {
     try {
         const buffer = req.body; // raw image buffer
 

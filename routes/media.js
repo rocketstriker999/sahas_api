@@ -1,6 +1,6 @@
 const libExpress = require("express");
 const router = libExpress.Router();
-import multer from "multer";
+const multer = require("multer");
 
 //request for demo content from subjectid
 // router.get("/subjects/:subjectId", async (req, res) => {

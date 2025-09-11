@@ -28,7 +28,7 @@ const multer = require("multer");
 
 const upload = multer({ dest: "uploads/" });
 
-router.post("/api/upload", upload.single("file"), (req, res) => {
+router.post("/upload", upload.single("file"), (req, res) => {
     console.log("File received:", req.file);
     // req.file.size > 0 confirms it’s not empty
     res.json({ success: true, file: req.file });

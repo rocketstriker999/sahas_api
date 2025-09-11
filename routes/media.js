@@ -25,28 +25,18 @@ const router = libExpress.Router();
 //     return res.status(400).json({ error: "Missing Required Details" });
 // });
 
-router.post("/image", (req, res) => {
-    try {
-        const buffer = req.body; // raw image buffer
-
-        if (!buffer || !buffer.length) {
-            return res.status(400).json({ error: "No image received" });
-        }
-
-        // Use the same content type as the uploaded file
-        const contentType = req.headers["content-type"] || "application/octet-stream";
-        const filename = req.headers["x-filename"] || `upload-${Date.now()}.png`;
-
-        // Set headers for download/preview
-        res.setHeader("Content-Type", contentType);
-        res.setHeader("Content-Disposition", `inline; filename="${filename}"`);
-
-        // Send the image buffer back
-        res.send(buffer);
-    } catch (err) {
-        console.error("Error processing file:", err);
-        res.status(500).json({ error: "Failed to echo image" });
+router.post("/upload", express.raw({ type: "image/*", limit: "10mb" }), (req, res) => {
+    if (!req.body || !req.headers["x-filename"]) {
+        return res.status(400).json({ error: "No file uploaded" });
     }
+
+    const fileBuffer = req.body;
+    const filename = req.headers["x-filename"];
+    const mimeType = req.headers["content-type"];
+
+    res.setHeader("Content-Type", mimeType);
+    res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+    res.send(fileBuffer);
 });
 
 module.exports = router;

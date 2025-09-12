@@ -17,7 +17,7 @@ router.post("/", async (req, res) => {
 
     if (isRequestBodyValid) {
         const productCategoryId = await addProductCategory(validatedRequestBody);
-        res.status(201).json(await getProductCategoryById({ id: productCategoryId }));
+        if (productCategoryId) res.status(201).json(await getProductCategoryById({ id: productCategoryId }));
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

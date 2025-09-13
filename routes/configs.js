@@ -5,6 +5,7 @@ const { getAllBranches } = require("../db/branches");
 const { getAllCourses } = require("../db/courses");
 const { getAllRoles } = require("../db/roles");
 const { getAllAuthorities } = require("../db/authorities");
+const { validateRequestBody } = require("../utils");
 const router = libExpress.Router();
 
 //Specific Config

@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const { readConfig } = require("../libs/config");
+const { readConfig, writeConfig } = require("../libs/config");
 const logger = require("../libs/logger");
 const { getAllBranches } = require("../db/branches");
 const { getAllCourses } = require("../db/courses");
@@ -21,6 +21,27 @@ router.get("/template", async (req, res) => {
         logger.error(error);
     } finally {
         res.status(200).json(config);
+    }
+});
+
+router.patch("/template/dashboard/carousel_images", async (req, res) => {
+    const requiredBodyFields = ["click_link", "source"];
+
+    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+
+    if (isRequestBodyValid) {
+        try {
+            const config = await readConfig("template");
+            config.dashboard.carousel_images = [...config.dashboard.carousel_images, validatedRequestBody];
+            writeConfig("template", config);
+        } catch (error) {
+            logger.error(error);
+            res.status(400).json({ error });
+        }
+
+        res.sendStatus(201);
+    } else {
+        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }
 });
 

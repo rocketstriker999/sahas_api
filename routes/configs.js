@@ -32,7 +32,7 @@ router.patch("/template/dashboard/carousel_images", async (req, res) => {
         const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
         if (isRequestBodyValid) {
             const config = await readConfig("template");
-            config.dash_board.carousel_images = [...config.dashboard.carousel_images, validatedRequestBody];
+            config.dash_board.carousel_images = [...config.dash_board.carousel_images, validatedRequestBody];
             writeConfig("template", config);
             res.sendStatus(201);
         } else {

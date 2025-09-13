@@ -3,26 +3,24 @@
         "paymentTypes": ["CASH", "NET_BANKING", "UPI", "CHEQUE"]
     },
     "dash_board": {
-        "carousel": {
-            "images": [
-                {
-                    "type": "image",
-                    "image": "https://dummyimage.com/398x128/000/fff"
-                },
-                {
-                    "type": "image",
-                    "image": "https://dummyimage.com/398x128/ccc/fff"
-                },
-                {
-                    "type": "image",
-                    "image": "https://dummyimage.com/398x128/eee/fff"
-                },
-                {
-                    "type": "image",
-                    "image": "https://dummyimage.com/398x128/000/fff"
-                }
-            ]
-        }
+        "carousel_items": [
+            {
+                "type": "image",
+                "image": "https://dummyimage.com/398x128/000/fff"
+            },
+            {
+                "type": "image",
+                "image": "https://dummyimage.com/398x128/ccc/fff"
+            },
+            {
+                "type": "image",
+                "image": "https://dummyimage.com/398x128/eee/fff"
+            },
+            {
+                "type": "image",
+                "image": "https://dummyimage.com/398x128/000/fff"
+            }
+        ]
     },
     "users": {
         "count": 5

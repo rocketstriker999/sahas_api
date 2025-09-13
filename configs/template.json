@@ -6,19 +6,19 @@
         "carousel_items": [
             {
                 "type": "image",
-                "image": "https://dummyimage.com/398x128/000/fff"
+                "source": "https://dummyimage.com/398x128/000/fff"
             },
             {
                 "type": "image",
-                "image": "https://dummyimage.com/398x128/ccc/fff"
+                "source": "https://dummyimage.com/398x128/ccc/fff"
             },
             {
                 "type": "image",
-                "image": "https://dummyimage.com/398x128/eee/fff"
+                "source": "https://dummyimage.com/398x128/eee/fff"
             },
             {
                 "type": "image",
-                "image": "https://dummyimage.com/398x128/000/fff"
+                "source": "https://dummyimage.com/398x128/000/fff"
             }
         ]
     },

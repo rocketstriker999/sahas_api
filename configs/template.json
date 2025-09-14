@@ -3,20 +3,7 @@
         "paymentTypes": ["CASH", "NET_BANKING", "UPI", "CHEQUE"]
     },
     "dash_board": {
-        "carousel_images": [
-            {
-                "id": "188b91b7-464d-42ff-8602-bf34eee8af0b",
-                "source": "https://dummyimage.com/398x128/000/fff"
-            },
-            {
-                "id": "d1efe45e-5d40-40b3-bdd3-c09eb8c19d61",
-                "source": "https://dummyimage.com/398x128/ccc/fff"
-            },
-            {
-                "id": "9c4ccdff-0375-44e2-bb08-5f10bef32971",
-                "source": "https://dummyimage.com/398x128/eee/fff"
-            }
-        ]
+        "carousel_images": []
     },
     "users": {
         "count": 5

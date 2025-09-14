@@ -33,9 +33,10 @@ router.post("/dashboard/carousel-images", async (req, res) => {
         const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
         if (isRequestBodyValid) {
             const config = await readConfig("template");
-            config.dash_board.carousel_images = [...config.dash_board.carousel_images, { id: uuidv4(), ...validatedRequestBody }];
+            validatedRequestBody.id = uuidv4();
+            config.dash_board.carousel_images = [...config.dash_board.carousel_images, validatedRequestBody];
             writeConfig("template", config);
-            res.sendStatus(201);
+            res.status(201).json(validatedRequestBody);
         } else {
             throw new Error(`Missing ${missingRequestBodyFields?.join(",")}`);
         }

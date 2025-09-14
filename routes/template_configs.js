@@ -7,9 +7,10 @@ const { getAllRoles } = require("../db/roles");
 const { getAllAuthorities } = require("../db/authorities");
 const { validateRequestBody } = require("../utils");
 const router = libExpress.Router();
+const { v4: uuidv4 } = require("uuid");
 
-//Specific Config
-router.get("/template", async (req, res) => {
+//Template Config
+router.get("/", async (req, res) => {
     let config = {};
     //configs
     try {
@@ -25,7 +26,7 @@ router.get("/template", async (req, res) => {
     }
 });
 
-router.patch("/template/dashboard/carousel_images", async (req, res) => {
+router.post("/dashboard/carousel-images", async (req, res) => {
     const requiredBodyFields = ["click_link", "source"];
 
     try {
@@ -38,6 +39,22 @@ router.patch("/template/dashboard/carousel_images", async (req, res) => {
         } else {
             throw new Error(`Missing ${missingRequestBodyFields?.join(",")}`);
         }
+    } catch (error) {
+        logger.error(error);
+        res.status(400).json({ error });
+    }
+});
+
+router.delete("/dashboard/carousel-images/:id", async (req, res) => {
+    if (!req.params.id) {
+        return res.status(400).json({ error: "Missing Carousel Image Id" });
+    }
+
+    try {
+        const config = await readConfig("template");
+        config.dash_board.carousel_images = config?.dash_board?.carousel_images?.filter((carouselImage) => carouselImage?.id !== req.params.id);
+        writeConfig("template", config);
+        res.sendStatus(204);
     } catch (error) {
         logger.error(error);
         res.status(400).json({ error });

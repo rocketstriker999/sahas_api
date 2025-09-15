@@ -23,6 +23,17 @@ router.post("/", async (req, res) => {
     }
 });
 
+//testing
+router.delete("/:id", async (req, res) => {
+    if (!req.params.id) {
+        return res.status(400).json({ error: "Missing Product Category Id" });
+    }
+    //delete category
+
+    //delete products
+    res.sendStatus(204);
+});
+
 router.get("/:id/products", async (req, res) => {
     res.status(200).json([]);
 });

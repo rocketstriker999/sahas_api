@@ -143,29 +143,33 @@ function generateDBTables() {
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP
         )`,
 
-        `CREATE TABLE IF NOT EXISTS PRODUCT_CATEGORIES(
+        `CREATE TABLE IF NOT EXISTS COURSE_CATEGORIES(
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(96) NOT NULL UNIQUE,
             image VARCHAR(64) NULL,
             view_index INT NOT NULL DEFAULT 0,
             active BOOLEAN NOT NULL DEFAULT TRUE
         )`,
-        `CREATE TABLE IF NOT EXISTS PRODUCTS(
+
+        `CREATE TABLE IF NOT EXISTS COURSES(
             id INT AUTO_INCREMENT PRIMARY KEY,
+            category_id INT NOT NULL,
             title VARCHAR(96) NOT NULL UNIQUE,
-            view_index INT NOT NULL DEFAULT 0,
+            description VARCHAR(256) NOT NULL,
             image VARCHAR(64) NULL,
+            price DECIMAL(8, 2) DEFAULT 0,
+            whatsapp_group VARCHAR(64) NULL,
+            view_index INT NOT NULL DEFAULT 0,
             active BOOLEAN NOT NULL DEFAULT TRUE,
-            category INT NOT NULL DEFAULT 0,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
 
-        `CREATE TABLE IF NOT EXISTS PRODUCT_COURSES(
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            view_index INT NOT NULL DEFAULT 0,
-            active BOOLEAN NOT NULL DEFAULT TRUE,
-            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-        )`,
+        // `CREATE TABLE IF NOT EXISTS PRODUCT_COURSES(
+        //     id INT AUTO_INCREMENT PRIMARY KEY,
+        //     view_index INT NOT NULL DEFAULT 0,
+        //     active BOOLEAN NOT NULL DEFAULT TRUE,
+        //     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        // )`,
         // `CREATE TABLE IF NOT EXISTS CATEGORIZED_COURSES (
         //     id INT AUTO_INCREMENT PRIMARY KEY,
         //     category_id INT NOT NULL,

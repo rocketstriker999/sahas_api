@@ -1,12 +1,13 @@
 const libExpress = require("express");
-const { getAllproductCategories, addProductCategory, getProductCategoryById } = require("../db/product_categories");
+const { addCourseCategory, getCourseCategoryById, deleteCourseCategoryById } = require("../db/course_categories");
 const { validateRequestBody } = require("../utils");
+const { getAllCourseCategories } = require("../db/course_categories");
 const router = libExpress.Router();
 
 //tested
 router.get("/", async (req, res) => {
     //provide all the product categories
-    res.status(200).json(await getAllproductCategories());
+    res.status(200).json(await getAllCourseCategories());
 });
 
 //tested
@@ -16,8 +17,8 @@ router.post("/", async (req, res) => {
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
     if (isRequestBodyValid) {
-        const productCategoryId = await addProductCategory(validatedRequestBody);
-        if (productCategoryId) res.status(201).json(await getProductCategoryById({ id: productCategoryId }));
+        const CourseCategoryId = await addCourseCategory(validatedRequestBody);
+        if (CourseCategoryId) res.status(201).json(await getCourseCategoryById({ id: CourseCategoryId }));
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }
@@ -26,9 +27,11 @@ router.post("/", async (req, res) => {
 //testing
 router.delete("/:id", async (req, res) => {
     if (!req.params.id) {
-        return res.status(400).json({ error: "Missing Product Category Id" });
+        return res.status(400).json({ error: "Missing Course Category Id" });
     }
     //delete category
+    deleteCourseCategoryById({ id: req.params.id });
+    //products releated to category needs to be deleted
 
     //delete products
     res.sendStatus(204);

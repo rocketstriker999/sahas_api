@@ -25,7 +25,7 @@ router.post("/", async (req, res) => {
     }
 });
 
-//testing
+//tested
 router.delete("/:id", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Course Category Id" });
@@ -37,7 +37,7 @@ router.delete("/:id", async (req, res) => {
     res.sendStatus(204);
 });
 
-//testing
+//tested
 router.patch("/view_indexes", async (req, res) => {
     if (req.body?.length) {
         req.body.forEach((courseCategory) => updateCourseCategoryViewIndexById(courseCategory));
@@ -47,7 +47,7 @@ router.patch("/view_indexes", async (req, res) => {
     return res.status(400).json({ error: "Missing Course Categories" });
 });
 
-router.get("/:id/products", async (req, res) => {
+router.get("/:id/courses", async (req, res) => {
     res.status(200).json([]);
 });
 

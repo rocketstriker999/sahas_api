@@ -31,4 +31,11 @@ function deleteCourseCategoryById({ id }) {
     });
 }
 
-module.exports = { getAllCourseCategories, addCourseCategory, getCourseCategoryById, deleteCourseCategoryById };
+//freeze
+function updateCourseCategoryViewIndexById({ id, view_index }) {
+    return executeSQLQueryParameterized("UPDATE COURSE_CATEGORIES SET view_index=? WHERE id=?", [view_index, id]).catch((error) => {
+        logger.error(`updateCourseCategoryViewIndexById: ${error}`);
+    });
+}
+
+module.exports = { getAllCourseCategories, addCourseCategory, getCourseCategoryById, deleteCourseCategoryById, updateCourseCategoryViewIndexById };

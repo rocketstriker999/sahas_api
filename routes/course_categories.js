@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const { addCourseCategory, getCourseCategoryById, deleteCourseCategoryById } = require("../db/course_categories");
+const { addCourseCategory, getCourseCategoryById, deleteCourseCategoryById, updateCourseCategoryViewIndexById } = require("../db/course_categories");
 const { validateRequestBody } = require("../utils");
 const { getAllCourseCategories } = require("../db/course_categories");
 const router = libExpress.Router();
@@ -31,10 +31,19 @@ router.delete("/:id", async (req, res) => {
     }
     //delete category
     deleteCourseCategoryById({ id: req.params.id });
-    //products releated to category needs to be deleted
+    //courses releated to category needs to be deleted
 
-    //delete products
     res.sendStatus(204);
+});
+
+//testing
+router.patch("/view_indexes", async (req, res) => {
+    if (req.body?.length) {
+        req.body.forEach((courseCategory) => updateCourseCategoryViewIndexById(courseCategory));
+        return res.sendStatus(200);
+    }
+
+    return res.sendStatus(400);
 });
 
 router.get("/:id/products", async (req, res) => {

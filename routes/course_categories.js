@@ -54,7 +54,7 @@ router.get("/:id/courses", async (req, res) => {
         return res.status(400).json({ error: "Missing Course Category Id" });
     }
 
-    res.status(200).json(await getCoursesByCategoryId());
+    res.status(200).json(await getCoursesByCategoryId({ category_id: req.params.id }));
 });
 
 module.exports = router;

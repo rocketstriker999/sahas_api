@@ -8,6 +8,14 @@ function getAllCourses() {
     });
 }
 
+function getCoursesByCategoryId({ category_id }) {
+    return executeSQLQueryParameterized(`SELECT * FROM COURSES WHERE category_id=?`, [category_id]).catch((error) => {
+        logger.error(`getCoursesByCategoryId: ${error}`);
+        return [];
+    });
+}
+
 module.exports = {
     getAllCourses,
+    getCoursesByCategoryId,
 };

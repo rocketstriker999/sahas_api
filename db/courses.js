@@ -17,7 +17,34 @@ function getCoursesByCategoryId({ category_id }) {
     });
 }
 
+//freeze
+function addCourse({ category_id, title, description, image, fees, whatsapp_group }) {
+    return executeSQLQueryParameterized(`INSERT INTO COURSES(category_id, title, description, image, fees, whatsapp_group) VALUES(?,?,?,?,?,?)`, [
+        category_id,
+        title,
+        description,
+        image,
+        fees,
+        whatsapp_group,
+    ])
+        .then((result) => result.insertId)
+        .catch((error) => {
+            logger.error(`addCourse: ${error}`);
+        });
+}
+
+//freeze
+function getCourseById({ id }) {
+    return executeSQLQueryParameterized(`SELECT * FROM COURSES WHERE id=?`, [id])
+        .then((result) => result.insertId)
+        .catch((error) => {
+            logger.error(`addCourse: ${error}`);
+        });
+}
+
 module.exports = {
     getAllCourses,
     getCoursesByCategoryId,
+    addCourse,
+    getCourseById,
 };

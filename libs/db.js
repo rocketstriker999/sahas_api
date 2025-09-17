@@ -157,7 +157,7 @@ function generateDBTables() {
             title VARCHAR(96) NOT NULL UNIQUE,
             description VARCHAR(256) NOT NULL,
             image VARCHAR(64) NULL,
-            price DECIMAL(8, 2) DEFAULT 0,
+            fees DECIMAL(8, 2) DEFAULT 0,
             whatsapp_group VARCHAR(64) NULL,
             view_index INT NOT NULL DEFAULT 0,
             active BOOLEAN NOT NULL DEFAULT TRUE,

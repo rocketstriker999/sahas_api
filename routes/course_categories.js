@@ -2,8 +2,7 @@ const libExpress = require("express");
 const { addCourseCategory, getCourseCategoryById, deleteCourseCategoryById, updateCourseCategoryViewIndexById } = require("../db/course_categories");
 const { validateRequestBody } = require("../utils");
 const { getAllCourseCategories } = require("../db/course_categories");
-const { error } = require("../libs/logger");
-const { getAllCourses, getCoursesByCategoryId } = require("../db/courses");
+const { getCoursesByCategoryId } = require("../db/courses");
 const router = libExpress.Router();
 
 //tested
@@ -48,7 +47,7 @@ router.patch("/view_indexes", async (req, res) => {
     return res.status(400).json({ error: "Missing Course Categories" });
 });
 
-//testing
+//tested
 router.get("/:id/courses", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Course Category Id" });

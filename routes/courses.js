@@ -1,3 +1,4 @@
+const libExpress = require("express");
 const { addCourse, getCourseById } = require("../db/courses");
 const { validateRequestBody } = require("../utils");
 

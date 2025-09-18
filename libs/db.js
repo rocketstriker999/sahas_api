@@ -117,7 +117,8 @@ function generateDBTables() {
             start_date DATETIME DEFAULT CURRENT_TIMESTAMP,
             end_date DATETIME DEFAULT CURRENT_TIMESTAMP,
             fees DECIMAL(8, 2) DEFAULT 0,
-            active BOOLEAN NOT NULL DEFAULT TRUE,
+            on_site_access BOOLEAN NOT NULL DEFAULT TRUE,
+            digital_access BOOLEAN NOT NULL DEFAULT TRUE,
             created_by INT NOT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

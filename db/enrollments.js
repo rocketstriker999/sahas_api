@@ -30,12 +30,13 @@ function getEnrollmentById({ id }) {
 }
 
 //freeze
-function addEnrollment({ user_id, start_date, end_date, fees, created_by }) {
-    return executeSQLQueryParameterized("INSERT INTO ENROLLMENTS(user_id,start_date,end_date,fees,created_by) VALUES(?,?,?,?,?)", [
+function addEnrollment({ user_id, start_date, end_date, fees, on_site_access, created_by }) {
+    return executeSQLQueryParameterized("INSERT INTO ENROLLMENTS(user_id,start_date,end_date,fees,on_site_access,created_by) VALUES(?,?,?,?,?,?)", [
         user_id,
         start_date,
         end_date,
         fees,
+        on_site_access,
         created_by,
     ])
         .then((result) => result.insertId)

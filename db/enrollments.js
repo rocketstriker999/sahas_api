@@ -13,10 +13,15 @@ function getEnrollmentsByUserId({ user_id }) {
 }
 
 //freeze
-function updateEnrollmentById({ id, active, start_date, end_date }) {
-    return executeSQLQueryParameterized("UPDATE ENROLLMENTS SET active=?,start_date=?,end_date=? WHERE id=?", [active, start_date, end_date, id]).catch(
-        (error) => logger.error(`updateEnrollmentById: ${error}`)
-    );
+function updateEnrollmentById({ id, active, start_date, end_date, on_site_access, digital_access }) {
+    return executeSQLQueryParameterized("UPDATE ENROLLMENTS SET active=?,start_date=?,end_date=?,on_site_access=?,digital_access=? WHERE id=?", [
+        active,
+        start_date,
+        end_date,
+        on_site_access,
+        digital_access,
+        id,
+    ]).catch((error) => logger.error(`updateEnrollmentById: ${error}`));
 }
 
 //freeze

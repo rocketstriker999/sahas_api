@@ -12,7 +12,7 @@ router.post("/", async (req, res) => {
 
     if (isRequestBodyValid) {
         const courseId = await addCourse(validatedRequestBody);
-        courseId ? res.status(201).json(await getCourseById({ id: CourseCategoryId })) : res.status(400).json({ error: "Failed To Create Course" });
+        courseId ? res.status(201).json(await getCourseById({ id: courseId })) : res.status(400).json({ error: "Failed To Create Course" });
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

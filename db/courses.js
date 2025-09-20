@@ -1,4 +1,4 @@
-const { executeSQLQueryParameterized, executeSQLQueryRaw } = require("../libs/db");
+const { executeSQLQueryParameterized } = require("../libs/db");
 const logger = require("../libs/logger");
 
 //freeze
@@ -42,9 +42,17 @@ function getCourseById({ id }) {
         });
 }
 
+//freeze
+function deleteCourseById({ id }) {
+    return executeSQLQueryParameterized(`DELETE FROM COURSES WHERE id=?`, [id]).catch((error) => {
+        logger.error(`deleteCourseById: ${error}`);
+    });
+}
+
 module.exports = {
     getAllCourses,
     getCoursesByCategoryId,
     addCourse,
     getCourseById,
+    deleteCourseById,
 };

@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const { addCourse, getCourseById } = require("../db/courses");
+const { addCourse, getCourseById, deleteCourseById } = require("../db/courses");
 const { validateRequestBody } = require("../utils");
 
 const router = libExpress.Router();
@@ -16,6 +16,15 @@ router.post("/", async (req, res) => {
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }
+});
+
+//tested
+router.delete("/:id", async (req, res) => {
+    if (!req.params.id) {
+        return res.status(400).json({ error: "Missing Course Id" });
+    }
+    deleteCourseById({ id: req.params.id });
+    res.sendStatus(204);
 });
 
 module.exports = router;

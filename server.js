@@ -60,7 +60,7 @@ const routers = {
     "/role-authorities": { middlewares: [], router: require("./routes/role_authorities") },
 };
 
-//apply all routes -
+//apply all routes
 Object.entries(routers).forEach(([path, routeHandler]) => sahasAPI.use(path, ...routeHandler?.middlewares, routeHandler.router));
 
 //if api path is not processable

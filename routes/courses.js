@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const { addCourse, getCourseById, deleteCourseById } = require("../db/courses");
+const { addCourse, getCourseById, deleteCourseById, updateCourseViewIndexById } = require("../db/courses");
 const { validateRequestBody } = require("../utils");
 
 const router = libExpress.Router();
@@ -25,6 +25,16 @@ router.delete("/:id", async (req, res) => {
     }
     deleteCourseById({ id: req.params.id });
     res.sendStatus(204);
+});
+
+//tested
+router.patch("/view_indexes", async (req, res) => {
+    if (req.body?.length) {
+        req.body.forEach((courseCategory) => updateCourseViewIndexById(courseCategory));
+        return res.sendStatus(200);
+    }
+
+    return res.status(400).json({ error: "Missing Courses" });
 });
 
 module.exports = router;

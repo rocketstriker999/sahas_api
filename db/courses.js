@@ -49,10 +49,18 @@ function deleteCourseById({ id }) {
     });
 }
 
+//freeze
+function updateCourseViewIndexById({ id, view_index }) {
+    return executeSQLQueryParameterized("UPDATE COURSES SET view_index=? WHERE id=?", [view_index, id]).catch((error) =>
+        logger.error(`updateCourseViewIndexById: ${error}`)
+    );
+}
+
 module.exports = {
     getAllCourses,
     getCoursesByCategoryId,
     addCourse,
     getCourseById,
     deleteCourseById,
+    updateCourseViewIndexById,
 };

@@ -30,7 +30,7 @@ router.delete("/:id", async (req, res) => {
 //tested
 router.patch("/view_indexes", async (req, res) => {
     if (req.body?.length) {
-        req.body.forEach((courseCategory) => updateCourseViewIndexById(courseCategory));
+        req.body.forEach(updateCourseViewIndexById);
         return res.sendStatus(200);
     }
 

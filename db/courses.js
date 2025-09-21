@@ -3,7 +3,7 @@ const logger = require("../libs/logger");
 
 //freeze
 function getAllCourses() {
-    return executeSQLQueryParameterized(`SELECT * FROM COURSES`).catch((error) => {
+    return executeSQLQueryParameterized(`SELECT * FROM COURSES ORDER BY view_index`).catch((error) => {
         logger.error(`getAllCourses: ${error}`);
         return [];
     });

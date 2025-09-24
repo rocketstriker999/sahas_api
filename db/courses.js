@@ -56,6 +56,18 @@ function updateCourseViewIndexById({ id, view_index }) {
     );
 }
 
+//freeze
+function updateCourseById({ id, title, description, image, fees, whatsapp_group }) {
+    return executeSQLQueryParameterized("UPDATE COURSES SET title=?,description=?,image=?,fees=?,whatsapp_group=? WHERE id=?", [
+        title,
+        description,
+        image,
+        fees,
+        whatsapp_group,
+        id,
+    ]).catch((error) => logger.error(`updateCourse: ${error}`));
+}
+
 module.exports = {
     getAllCourses,
     getCoursesByCategoryId,
@@ -63,4 +75,5 @@ module.exports = {
     getCourseById,
     deleteCourseById,
     updateCourseViewIndexById,
+    updateCourseById,
 };

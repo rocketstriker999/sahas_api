@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const { addCourse, getCourseById, deleteCourseById, updateCourseViewIndexById } = require("../db/courses");
+const { addCourse, getCourseById, deleteCourseById, updateCourseViewIndexById, updateCourse } = require("../db/courses");
 const { validateRequestBody } = require("../utils");
 
 const router = libExpress.Router();
@@ -35,6 +35,20 @@ router.patch("/view_indexes", async (req, res) => {
     }
 
     return res.status(400).json({ error: "Missing Courses" });
+});
+
+//tested
+router.patch("/", async (req, res) => {
+    const requiredBodyFields = ["id", "title", "description", "image", "fees", "whatsapp_group"];
+
+    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+
+    if (isRequestBodyValid) {
+        updateCourse(validatedRequestBody);
+        res.status(200).json(validatedRequestBody);
+    } else {
+        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+    }
 });
 
 module.exports = router;

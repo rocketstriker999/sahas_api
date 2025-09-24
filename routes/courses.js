@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const { addCourse, getCourseById, deleteCourseById, updateCourseViewIndexById, updateCourse } = require("../db/courses");
+const { addCourse, getCourseById, deleteCourseById, updateCourseViewIndexById, updateCourse, updateCourseById } = require("../db/courses");
 const { validateRequestBody } = require("../utils");
 
 const router = libExpress.Router();
@@ -44,7 +44,7 @@ router.patch("/", async (req, res) => {
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
     if (isRequestBodyValid) {
-        updateCourse(validatedRequestBody);
+        updateCourseById(validatedRequestBody);
         res.status(200).json(validatedRequestBody);
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });

@@ -1,6 +1,7 @@
 const libExpress = require("express");
 const { addCourse, getCourseById, deleteCourseById, updateCourseViewIndexById, updateCourse, updateCourseById } = require("../db/courses");
 const { validateRequestBody } = require("../utils");
+const { getEnrollmentByCourseIdAndUserId } = require("../db/enrollments");
 
 const router = libExpress.Router();
 
@@ -49,6 +50,21 @@ router.patch("/", async (req, res) => {
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }
+});
+
+//tested
+router.get("/:id", async (req, res) => {
+    if (!req.params.id) {
+        return res.status(400).json({ error: "Missing Course Id" });
+    }
+
+    const course = getCourseById({ id: req.params.id });
+
+    course.enrollment = await getEnrollmentByCourseIdAndUserId({ course_id: course?.id, user_id: req?.user?.id });
+
+    course.subjects = [];
+
+    res.status(200).json(course);
 });
 
 module.exports = router;

@@ -44,7 +44,7 @@ function addEnrollment({ user_id, start_date, end_date, fees, on_site_access, di
 }
 
 //freeze
-function verifyEnrollmentByCourseIdAndUserId({ user_id, course_id }) {
+function getEnrollmentByCourseIdAndUserId({ user_id, course_id }) {
     return executeSQLQueryParameterized(
         "SELECT ENROLLMENTS.* FROM ENROLLMENTS LEFT JOIN ENROLLMENT_COURSES ON ENROLLMENTS.id=ENROLLMENT_COURSES.enrollment_id WHERE ENROLLMENTS.user_id=? AND ENROLLMENT_COURSES.course_id=? AND ENROLLMENTS.digital_access=TRUE AND ENROLLMENTS.end_date >= NOW()",
         [user_id, course_id]
@@ -53,4 +53,4 @@ function verifyEnrollmentByCourseIdAndUserId({ user_id, course_id }) {
         .catch((error) => logger.error(`addEnrollment: ${error}`));
 }
 
-module.exports = { getEnrollmentsByUserId, updateEnrollmentById, getEnrollmentById, addEnrollment, verifyEnrollmentByCourseIdAndUserId };
+module.exports = { getEnrollmentsByUserId, updateEnrollmentById, getEnrollmentById, addEnrollment, getEnrollmentByCourseIdAndUserId };

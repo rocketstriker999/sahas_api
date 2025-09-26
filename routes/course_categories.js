@@ -3,7 +3,7 @@ const { addCourseCategory, getCourseCategoryById, deleteCourseCategoryById, upda
 const { validateRequestBody } = require("../utils");
 const { getAllCourseCategories } = require("../db/course_categories");
 const { getCoursesByCategoryId } = require("../db/courses");
-const { verifyEnrollmentByCourseIdAndUserId } = require("../db/enrollments");
+const { verifyEnrollmentByCourseIdAndUserId, getEnrollmentByCourseIdAndUserId } = require("../db/enrollments");
 const router = libExpress.Router();
 
 //tested
@@ -60,7 +60,7 @@ router.get("/:id/courses", async (req, res) => {
         await Promise.all(
             courses.map(async (course) => ({
                 ...course,
-                enrollment: await verifyEnrollmentByCourseIdAndUserId({ course_id: course?.id, user_id: req?.user?.id }),
+                enrollment: await getEnrollmentByCourseIdAndUserId({ course_id: course?.id, user_id: req?.user?.id }),
             }))
         )
     );

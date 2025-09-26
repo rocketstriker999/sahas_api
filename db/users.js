@@ -109,10 +109,7 @@ function getUserIdByEmail(email) {
         .then((results) => {
             return results.length > 0 ? results[0].id : null;
         })
-        .catch((error) => {
-            logger.error(`getUserIdByEmail: ${error}`);
-            return [];
-        });
+        .catch((error) => logger.error(`getUserIdByEmail: ${error}`));
 }
 
 //get user by transaction id

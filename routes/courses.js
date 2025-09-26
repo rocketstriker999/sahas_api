@@ -58,7 +58,7 @@ router.get("/:id", async (req, res) => {
         return res.status(400).json({ error: "Missing Course Id" });
     }
 
-    const course = getCourseById({ id: req.params.id });
+    const course = await getCourseById({ id: req.params.id });
 
     course.enrollment = await getEnrollmentByCourseIdAndUserId({ course_id: course?.id, user_id: req?.user?.id });
 

@@ -38,7 +38,7 @@ function getCourseById({ id }) {
     return executeSQLQueryParameterized(`SELECT * FROM COURSES WHERE id=?`, [id])
         .then((result) => (result?.length ? result[0] : false))
         .catch((error) => {
-            logger.error(`addCourse: ${error}`);
+            logger.error(`getCourseById: ${error}`);
         });
 }
 

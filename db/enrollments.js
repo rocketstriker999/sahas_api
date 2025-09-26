@@ -50,7 +50,7 @@ function getEnrollmentByCourseIdAndUserId({ user_id, course_id }) {
         [user_id, course_id]
     )
         .then((results) => (results.length > 0 ? results[0] : null))
-        .catch((error) => logger.error(`addEnrollment: ${error}`));
+        .catch((error) => logger.error(`getEnrollmentByCourseIdAndUserId: ${error}`));
 }
 
 module.exports = { getEnrollmentsByUserId, updateEnrollmentById, getEnrollmentById, addEnrollment, getEnrollmentByCourseIdAndUserId };

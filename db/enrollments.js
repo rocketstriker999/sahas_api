@@ -53,4 +53,13 @@ function getEnrollmentByCourseIdAndUserId({ user_id, course_id }) {
         .catch((error) => logger.error(`getEnrollmentByCourseIdAndUserId: ${error}`));
 }
 
+// res.status(200).json(
+//     await Promise.all(
+//         courses.map(async (course) => ({
+//             ...course,
+//             enrollment: await getEnrollmentByCourseIdAndUserId({ course_id: course?.id, user_id: req?.user?.id }),
+//         }))
+//     )
+// );
+
 module.exports = { getEnrollmentsByUserId, updateEnrollmentById, getEnrollmentById, addEnrollment, getEnrollmentByCourseIdAndUserId };

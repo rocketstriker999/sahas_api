@@ -55,15 +55,6 @@ router.get("/:id/courses", async (req, res) => {
     }
 
     res.status(200).json(await getCoursesByCategoryId({ category_id: req.params.id }));
-
-    // res.status(200).json(
-    //     await Promise.all(
-    //         courses.map(async (course) => ({
-    //             ...course,
-    //             enrollment: await getEnrollmentByCourseIdAndUserId({ course_id: course?.id, user_id: req?.user?.id }),
-    //         }))
-    //     )
-    // );
 });
 
 module.exports = router;

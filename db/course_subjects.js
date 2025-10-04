@@ -19,4 +19,9 @@ function updateCourseSubjectViewIndexById({ id, view_index }) {
     );
 }
 
-module.exports = { getCourseSubjectsByCourseId, updateCourseSubjectViewIndexById };
+//freeze
+function deleteCourseSubjectById({ id }) {
+    return executeSQLQueryParameterized("DELETE FROM COURSE_SUBJECTS  WHERE id=?", [id]).catch((error) => logger.error(`deleteCourseSubjectById: ${error}`));
+}
+
+module.exports = { getCourseSubjectsByCourseId, updateCourseSubjectViewIndexById, deleteCourseSubjectById };

@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const { updateCourseSubjectViewIndexById } = require("../db/course_subjects");
+const { updateCourseSubjectViewIndexById, deleteCourseSubjectById } = require("../db/course_subjects");
 
 const router = libExpress.Router();
 
@@ -16,9 +16,9 @@ router.patch("/view_indexes", async (req, res) => {
 //tested
 router.delete("/:id", async (req, res) => {
     if (!req.params.id) {
-        return res.status(400).json({ error: "Missing Subject Id" });
+        return res.status(400).json({ error: "Missing subjectCourseId" });
     }
-    deleteCourseById({ id: req.params.id });
+    deleteCourseSubjectById({ id: req.params.id });
     res.sendStatus(204);
 });
 

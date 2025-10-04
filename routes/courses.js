@@ -2,7 +2,6 @@ const libExpress = require("express");
 const { addCourse, getCourseById, deleteCourseById, updateCourseViewIndexById, updateCourse, updateCourseById } = require("../db/courses");
 const { validateRequestBody } = require("../utils");
 const { getEnrollmentByCourseIdAndUserId } = require("../db/enrollments");
-const { getCourseSubjects } = require("../db/courses_subjects");
 const { getSubjectsByCourseId } = require("../db/subjects");
 
 const router = libExpress.Router();

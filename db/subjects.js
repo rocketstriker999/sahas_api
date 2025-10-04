@@ -29,4 +29,11 @@ function getAllSubjects() {
     });
 }
 
-module.exports = { getSubjectsCountByProductId, getSubjectsByCourseId, getAllSubjects };
+//freeze
+function updateSubjectViewIndexById({ id, view_index }) {
+    return executeSQLQueryParameterized("UPDATE SUBJECTS SET view_index=? WHERE id=?", [view_index, id]).catch((error) =>
+        logger.error(`updateSubjectViewIndexById: ${error}`)
+    );
+}
+
+module.exports = { getSubjectsCountByProductId, getSubjectsByCourseId, getAllSubjects, updateSubjectViewIndexById };

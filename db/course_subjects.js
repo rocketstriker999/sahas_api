@@ -4,7 +4,7 @@ const logger = require("../libs/logger");
 //freeze
 function getCourseSubjectsByCourseId({ course_id }) {
     return executeSQLQueryParameterized(
-        `SELECT COURSE_SUBJECTS.id,SUBJECTS.title,SUBJECTS.active,SUBJECTS.updated_at FROM COURSE_SUBJECTS LEFT JOIN SUBJECTS ON COURSE_SUBJECTS.subject_id=SUBJECTS.id WHERE COURSE_SUBJECTS.course_id=? ORDER BY COURSE_SUBJECTS.view_index ASC`,
+        `SELECT COURSE_SUBJECTS.id,SUBJECTS.id AS subject_id,SUBJECTS.title,SUBJECTS.active,SUBJECTS.updated_at FROM COURSE_SUBJECTS LEFT JOIN SUBJECTS ON COURSE_SUBJECTS.subject_id=SUBJECTS.id WHERE COURSE_SUBJECTS.course_id=? ORDER BY COURSE_SUBJECTS.view_index ASC`,
         [course_id]
     ).catch((error) => {
         logger.error(`getCourseSubjectsByCourseId: ${error}`);

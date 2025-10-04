@@ -1,13 +1,12 @@
 const libExpress = require("express");
-
-const { updateSubjectViewIndexById } = require("../db/course_subjects");
+const { updateCourseSubjectViewIndexById } = require("../db/course_subjects");
 
 const router = libExpress.Router();
 
 //tested
 router.patch("/view_indexes", async (req, res) => {
     if (req.body?.length) {
-        req.body.forEach(updateSubjectViewIndexById);
+        req.body.forEach(updateCourseSubjectViewIndexById);
         return res.sendStatus(200);
     }
 

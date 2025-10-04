@@ -172,7 +172,7 @@ function generateDBTables() {
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
 
-        `CREATE TABLE IF NOT EXISTS COURSES_SUBJECTS(
+        `CREATE TABLE IF NOT EXISTS COURSE_SUBJECTS(
             id INT AUTO_INCREMENT PRIMARY KEY,
             course_id INT NOT NULL,
             subject_id INT NOT NULL,

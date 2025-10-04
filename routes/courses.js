@@ -3,6 +3,7 @@ const { addCourse, getCourseById, deleteCourseById, updateCourseViewIndexById, u
 const { validateRequestBody } = require("../utils");
 const { getEnrollmentByCourseIdAndUserId } = require("../db/enrollments");
 const { getCourseSubjects } = require("../db/courses_subjects");
+const { getSubjectsByCourseId } = require("../db/subjects");
 
 const router = libExpress.Router();
 
@@ -63,7 +64,7 @@ router.get("/:id", async (req, res) => {
 
     course.enrollment = await getEnrollmentByCourseIdAndUserId({ course_id: course?.id, user_id: req?.user?.id });
 
-    course.subjects = await getCourseSubjects({ course_id: req.params.id });
+    course.subjects = await getSubjectsByCourseId({ course_id: req.params.id });
 
     res.status(200).json(course);
 });

@@ -3,13 +3,14 @@ const { addCourse, getCourseById, deleteCourseById, updateCourseViewIndexById, u
 const { validateRequestBody } = require("../utils");
 const { getEnrollmentByCourseIdAndUserId } = require("../db/enrollments");
 const { getCourseSubjects, updateCoursesSubjectsViewIndexById } = require("../db/courses_subjects");
+const { updateSubjectViewIndexById } = require("../db/subjects");
 
 const router = libExpress.Router();
 
 //tested
 router.patch("/view_indexes", async (req, res) => {
     if (req.body?.length) {
-        req.body.forEach(updateCoursesSubjectsViewIndexById);
+        req.body.forEach(updateSubjectViewIndexById);
         return res.sendStatus(200);
     }
 

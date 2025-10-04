@@ -59,7 +59,7 @@ const routers = {
     "/user-roles": { middlewares: [], router: require("./routes/user_roles") },
 
     "/authorities": { middlewares: [], router: require("./routes/authorities") },
-    "/role-authorities": { middlewares: [], router: require("./routes/roles_authorities") },
+    "/role-authorities": { middlewares: [], router: require("./routes/role_authorities") },
 };
 
 //apply all routes

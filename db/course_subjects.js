@@ -36,7 +36,9 @@ function getCourseSubjectById({ id }) {
     return executeSQLQueryParameterized(
         `SELECT COURSE_SUBJECTS.id,SUBJECTS.id AS subject_id,SUBJECTS.title,SUBJECTS.active,SUBJECTS.updated_at FROM COURSE_SUBJECTS LEFT JOIN SUBJECTS ON COURSE_SUBJECTS.subject_id=SUBJECTS.id WHERE COURSE_SUBJECTS.id=? ORDER BY COURSE_SUBJECTS.view_index ASC`,
         [id]
-    ).catch((error) => logger.error(`getCourseSubjectById: ${error}`));
+    )
+        .then((result) => (result.length > 0 ? result[0] : false))
+        .catch((error) => logger.error(`getCourseSubjectById: ${error}`));
 }
 
 module.exports = { getCourseSubjectsByCourseId, updateCourseSubjectViewIndexById, deleteCourseSubjectById, addCourseSubject, getCourseSubjectById };

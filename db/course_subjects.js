@@ -24,4 +24,19 @@ function deleteCourseSubjectById({ id }) {
     return executeSQLQueryParameterized("DELETE FROM COURSE_SUBJECTS  WHERE id=?", [id]).catch((error) => logger.error(`deleteCourseSubjectById: ${error}`));
 }
 
-module.exports = { getCourseSubjectsByCourseId, updateCourseSubjectViewIndexById, deleteCourseSubjectById };
+//freeze
+function addCourseSubject({ course_id, subject_id }) {
+    return executeSQLQueryParameterized("INSERT INTO COURSE_SUBJECTS", [course_id, subject_id])
+        .then((result) => result.insertId)
+        .catch((error) => logger.error(`addCourseSubject: ${error}`));
+}
+
+//freeze
+function getCourseSubjectById({ id }) {
+    return executeSQLQueryParameterized(
+        `SELECT COURSE_SUBJECTS.id,SUBJECTS.id AS subject_id,SUBJECTS.title,SUBJECTS.active,SUBJECTS.updated_at FROM COURSE_SUBJECTS LEFT JOIN SUBJECTS ON COURSE_SUBJECTS.subject_id=SUBJECTS.id WHERE COURSE_SUBJECTS.id=? ORDER BY COURSE_SUBJECTS.view_index ASC`,
+        [id]
+    ).catch((error) => logger.error(`getCourseSubjectById: ${error}`));
+}
+
+module.exports = { getCourseSubjectsByCourseId, updateCourseSubjectViewIndexById, deleteCourseSubjectById, addCourseSubject, getCourseSubjectById };

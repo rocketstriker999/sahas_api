@@ -168,6 +168,7 @@ function generateDBTables() {
         `CREATE TABLE IF NOT EXISTS SUBJECTS(
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(96) NOT NULL UNIQUE,
+            background_color VARCHAR(32) ,
             active BOOLEAN NOT NULL DEFAULT TRUE,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
@@ -178,7 +179,6 @@ function generateDBTables() {
             subject_id INT NOT NULL,
             view_index INT NOT NULL DEFAULT 0,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-            
         )`,
 
         // `CREATE TABLE IF NOT EXISTS SUBJECT_CHAPTERS(

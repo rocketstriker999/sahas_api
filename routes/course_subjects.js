@@ -22,10 +22,6 @@ router.post("/", async (req, res) => {
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
-    logger.info(JSON.stringify(req.body));
-
-    logger.info(JSON.stringify(validatedRequestBody));
-
     if (isRequestBodyValid) {
         const subjectId = await addSubject(validatedRequestBody);
         const courseSubjectId = await addCourseSubject({ course_id: validatedRequestBody.course_id, subject_id: subjectId });

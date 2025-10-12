@@ -59,7 +59,7 @@ function validateRequestBody(body, requiredFields) {
     return {
         isRequestBodyValid: missingRequestBodyFields.length === 0,
         missingRequestBodyFields,
-        validatedRequestBody: requiredFields.reduce((obj, key) => {
+        validatedRequestBody: Object.keys(body).reduce((obj, key) => {
             let value = body[key];
             if (typeof value === "string") {
                 value = value.trim();

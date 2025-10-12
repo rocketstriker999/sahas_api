@@ -2,6 +2,7 @@ const libExpress = require("express");
 const { updateCourseSubjectViewIndexById, deleteCourseSubjectById, addCourseSubject, getCourseSubjectById } = require("../db/course_subjects");
 const { addSubject } = require("../db/subjects");
 const { validateRequestBody } = require("../utils");
+const logger = require("../libs/logger");
 
 const router = libExpress.Router();
 
@@ -20,6 +21,10 @@ router.post("/", async (req, res) => {
     const requiredBodyFields = ["title", "course_id"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+
+    logger.info(JSON.stringify(req.body));
+
+    logger.info(JSON.stringify(validatedRequestBody));
 
     if (isRequestBodyValid) {
         const subjectId = await addSubject(validatedRequestBody);

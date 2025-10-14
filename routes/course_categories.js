@@ -4,13 +4,12 @@ const { validateRequestBody } = require("../utils");
 const { getAllCourseCategories } = require("../db/course_categories");
 const { getCoursesByCategoryId } = require("../db/courses");
 const { verifyEnrollmentByCourseIdAndUserId, getEnrollmentByCourseIdAndUserId } = require("../db/enrollments");
-const { getAllSubjects } = require("../db/subjects");
 const router = libExpress.Router();
 
 //tested
 router.get("/", async (req, res) => {
     //provide all the product categories
-    res.status(200).json(await getAllSubjects());
+    res.status(200).json(await getAllCourseCategories());
 });
 
 //tested

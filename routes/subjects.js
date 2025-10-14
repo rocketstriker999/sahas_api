@@ -1,7 +1,7 @@
 const libExpress = require("express");
 
 const { validateRequestBody } = require("../utils");
-const { updateSubjectById, addSubject } = require("../db/subjects");
+const { updateSubjectById, addSubject, getAllSubjects } = require("../db/subjects");
 const { addCourseSubject, getCourseSubjectById } = require("../db/course_subjects");
 
 const router = libExpress.Router();
@@ -23,7 +23,7 @@ router.patch("/", async (req, res) => {
 //tested
 router.get("/", async (req, res) => {
     //provide all the subjects
-    res.status(200).json(await getAllCourseCategories());
+    res.status(200).json(await getAllSubjects());
 });
 
 //tested

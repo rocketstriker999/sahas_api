@@ -5,6 +5,7 @@ const { validateRequestBody } = require("../utils");
 
 const router = libExpress.Router();
 
+//tested
 router.post("/", async (req, res) => {
     const requiredBodyFields = ["user_id", "role_id"];
 

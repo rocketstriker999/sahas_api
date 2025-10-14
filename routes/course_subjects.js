@@ -1,7 +1,5 @@
 const libExpress = require("express");
-const { updateCourseSubjectViewIndexById, deleteCourseSubjectById, addCourseSubject, getCourseSubjectById } = require("../db/course_subjects");
-const { addSubject } = require("../db/subjects");
-const { validateRequestBody } = require("../utils");
+const { updateCourseSubjectViewIndexById, deleteCourseSubjectById, addCourseSubject } = require("../db/course_subjects");
 const logger = require("../libs/logger");
 
 const router = libExpress.Router();
@@ -18,17 +16,24 @@ router.patch("/view_indexes", async (req, res) => {
 
 //tested
 router.post("/", async (req, res) => {
-    const requiredBodyFields = ["course_id", "subject_id"];
-
-    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
-
-    if (isRequestBodyValid) {
-        const subjectId = await addSubject(validatedRequestBody);
-        const courseSubjectId = await addCourseSubject({ course_id: validatedRequestBody.course_id, subject_id: subjectId });
-        res.status(201).json(await getCourseSubjectById({ id: courseSubjectId }));
-    } else {
-        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+    if (req.body?.length) {
+        req.body.forEach(addCourseSubject);
+        return res.sendStatus(200);
     }
+
+    return res.status(400).json({ error: "Missing Course Subjects" });
+
+    // const requiredBodyFields = ["course_id", "subject_id"];
+
+    // const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+
+    // if (isRequestBodyValid) {
+    //     const subjectId = await addSubject(validatedRequestBody);
+    //     const courseSubjectId = await addCourseSubject({ course_id: validatedRequestBody.course_id, subject_id: subjectId });
+    //     res.status(201).json(await getCourseSubjectById({ id: courseSubjectId }));
+    // } else {
+    //     res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+    // }
 });
 
 //tested

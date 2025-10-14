@@ -7,7 +7,7 @@ const router = libExpress.Router();
 
 //tested
 router.patch("/", async (req, res) => {
-    const requiredBodyFields = ["id", "title", "background_color"];
+    const requiredBodyFields = ["id", "title"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 

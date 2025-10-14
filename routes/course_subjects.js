@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const { updateCourseSubjectViewIndexById, deleteCourseSubjectById, addCourseSubject } = require("../db/course_subjects");
+const { updateCourseSubjectViewIndexById, deleteCourseSubjectById, addCourseSubject, getCourseSubjectsByCourseId } = require("../db/course_subjects");
 const { validateRequestBody } = require("../utils");
 
 const router = libExpress.Router();
@@ -21,8 +21,8 @@ router.post("/", async (req, res) => {
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
     if (isRequestBodyValid && validatedRequestBody?.subjects?.length) {
-        validatedRequestBody?.subjects?.forEach(({ id }) => addCourseSubject({ subject_id: id, course_id: validatedRequestBody?.course_id }));
-        return res.sendStatus(201);
+        validatedRequestBody?.subjects?.forawaitof(({ id }) => addCourseSubject({ subject_id: id, course_id: validatedRequestBody?.course_id }));
+        return res.status(201).json(await getCourseSubjectsByCourseId({ course_id: validatedRequestBody?.course_id }));
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

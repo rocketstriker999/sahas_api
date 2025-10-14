@@ -15,4 +15,9 @@ function updateSubjectById({ id, title, background_color }) {
         .catch((error) => logger.error(`updateSubjectById: ${error}`));
 }
 
-module.exports = { addSubject, updateSubjectById };
+//freeze
+function getAllSubjects() {
+    return executeSQLQueryParameterized(`SELECT * FROM SUBJECTS`).catch((error) => logger.error(`getAllSubjects: ${error}`));
+}
+
+module.exports = { addSubject, updateSubjectById, getAllSubjects };

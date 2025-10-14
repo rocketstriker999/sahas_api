@@ -1,6 +1,6 @@
 const libExpress = require("express");
 const { updateCourseSubjectViewIndexById, deleteCourseSubjectById, addCourseSubject } = require("../db/course_subjects");
-const logger = require("../libs/logger");
+const { validateRequestBody } = require("../utils");
 
 const router = libExpress.Router();
 
@@ -16,24 +16,16 @@ router.patch("/view_indexes", async (req, res) => {
 
 //tested
 router.post("/", async (req, res) => {
-    if (req.body?.length) {
-        req.body.forEach(addCourseSubject);
-        return res.sendStatus(200);
+    const requiredBodyFields = ["subjects", "course_id"];
+
+    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+
+    if (isRequestBodyValid && validatedRequestBody?.subjects?.length) {
+        validatedRequestBody?.subjects?.forEach(({ id }) => addCourseSubject({ subject_id: id, course_id: validatedRequestBody?.course_id }));
+        return res.sendStatus(201);
+    } else {
+        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }
-
-    return res.status(400).json({ error: "Missing Course Subjects" });
-
-    // const requiredBodyFields = ["course_id", "subject_id"];
-
-    // const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
-
-    // if (isRequestBodyValid) {
-    //     const subjectId = await addSubject(validatedRequestBody);
-    //     const courseSubjectId = await addCourseSubject({ course_id: validatedRequestBody.course_id, subject_id: subjectId });
-    //     res.status(201).json(await getCourseSubjectById({ id: courseSubjectId }));
-    // } else {
-    //     res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
-    // }
 });
 
 //tested

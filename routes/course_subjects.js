@@ -21,11 +21,13 @@ router.post("/", async (req, res) => {
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
     if (isRequestBodyValid && validatedRequestBody?.subjects?.length) {
-        await Promise.all(validatedRequestBody?.subjects).map(({ id }) =>
-            addCourseSubject({
-                subject_id: id,
-                course_id: validatedRequestBody?.course_id,
-            })
+        await Promise.all(
+            validatedRequestBody?.subjects?.map(({ id }) =>
+                addCourseSubject({
+                    subject_id: id,
+                    course_id: validatedRequestBody?.course_id,
+                })
+            )
         );
 
         return res.status(201).json(await getCourseSubjectsByCourseId({ course_id: validatedRequestBody?.course_id }));

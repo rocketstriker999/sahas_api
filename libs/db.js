@@ -181,16 +181,15 @@ function generateDBTables() {
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
 
-        // `CREATE TABLE IF NOT EXISTS SUBJECT_CHAPTERS(
-        //     id INT AUTO_INCREMENT PRIMARY KEY,
-        //     subject_id INT NOT NULL,
-        //     title VARCHAR(128) NOT NULL UNIQUE,
-        //     media_group_id CHAR(36) DEFAULT (UUID()) UNIQUE,
-        //     view_index INT NULL,
-        //     active BOOLEAN NOT NULL DEFAULT TRUE,
-        //     created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
-        //     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-        // )`,
+        `CREATE TABLE IF NOT EXISTS SUBJECT_CHAPTERS(
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            subject_id INT NOT NULL,
+            title VARCHAR(128) NOT NULL UNIQUE,
+            view_index INT NULL,
+            offer_as_demo BOOLEAN DEFAULT FALSE,        
+            active BOOLEAN NOT NULL DEFAULT TRUE,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        )`,
         // `CREATE TABLE IF NOT EXISTS MEDIA(
         //     id INT AUTO_INCREMENT PRIMARY KEY,
         //     title VARCHAR(128) NOT NULL UNIQUE,

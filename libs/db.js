@@ -143,7 +143,6 @@ function generateDBTables() {
             type VARCHAR(16) NOT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP
         )`,
-
         `CREATE TABLE IF NOT EXISTS COURSE_CATEGORIES(
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(96) NOT NULL UNIQUE,
@@ -151,7 +150,6 @@ function generateDBTables() {
             view_index INT NOT NULL DEFAULT 0,
             active BOOLEAN NOT NULL DEFAULT TRUE
         )`,
-
         `CREATE TABLE IF NOT EXISTS COURSES(
             id INT AUTO_INCREMENT PRIMARY KEY,
             category_id INT NOT NULL,
@@ -164,7 +162,6 @@ function generateDBTables() {
             active BOOLEAN NOT NULL DEFAULT TRUE,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
-
         `CREATE TABLE IF NOT EXISTS SUBJECTS(
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(96) NOT NULL UNIQUE,
@@ -172,7 +169,6 @@ function generateDBTables() {
             active BOOLEAN NOT NULL DEFAULT TRUE,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
-
         `CREATE TABLE IF NOT EXISTS COURSE_SUBJECTS(
             id INT AUTO_INCREMENT PRIMARY KEY,
             course_id INT NOT NULL,
@@ -180,16 +176,23 @@ function generateDBTables() {
             view_index INT NOT NULL DEFAULT 0,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
-
         `CREATE TABLE IF NOT EXISTS SUBJECT_CHAPTERS(
             id INT AUTO_INCREMENT PRIMARY KEY,
             subject_id INT NOT NULL,
             title VARCHAR(128) NOT NULL UNIQUE,
+            type INT NOT NULL,
             view_index INT NULL,
-            offer_as_demo BOOLEAN DEFAULT FALSE,        
             active BOOLEAN NOT NULL DEFAULT TRUE,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
+        `CREATE TABLE IF NOT EXISTS CHAPTER_TYPES(
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            title VARCHAR(128) NOT NULL UNIQUE,
+            view_index INT NULL,
+            active BOOLEAN NOT NULL DEFAULT TRUE,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        )`,
+
         // `CREATE TABLE IF NOT EXISTS MEDIA(
         //     id INT AUTO_INCREMENT PRIMARY KEY,
         //     title VARCHAR(128) NOT NULL UNIQUE,

@@ -19,6 +19,7 @@ router.get("/", async (req, res) => {
         config.global.courses = await getAllCourses();
         config.global.roles = await getAllRoles();
         config.global.authorities = await getAllAuthorities();
+        config.global.content_types = await getAllContentTypes();
     } catch (error) {
         logger.error(error);
     } finally {

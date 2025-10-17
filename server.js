@@ -41,6 +41,7 @@ const routers = {
     "/courses": { middlewares: [], router: require("./routes/courses") },
     "/course-subjects": { middlewares: [], router: require("./routes/course_subjects") },
     "/subjects": { middlewares: [], router: require("./routes/subjects") },
+    "/chapter-types": { middlewares: [], router: require("./routes/chapter_types") },
 
     "/filters": { middlewares: [], router: require("./routes/filters") },
 

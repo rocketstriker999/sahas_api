@@ -9,4 +9,11 @@ function getAllChapterTypes() {
     });
 }
 
-module.exports = { getAllChapterTypes };
+//freeze
+function updateChapterTypeViewIndexById({ id, view_index }) {
+    return executeSQLQueryParameterized("UPDATE CHAPTER_TYPES SET view_index=? WHERE id=?", [view_index, id]).catch((error) =>
+        logger.error(`updateChapterTypeViewIndexById: ${error}`)
+    );
+}
+
+module.exports = { getAllChapterTypes, updateChapterTypeViewIndexById };

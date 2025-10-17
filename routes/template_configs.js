@@ -8,6 +8,7 @@ const { getAllAuthorities } = require("../db/authorities");
 const { validateRequestBody } = require("../utils");
 const router = libExpress.Router();
 const { v4: uuidv4 } = require("uuid");
+const { getAllChapterTypes } = require("../db/chapter_types");
 
 //Template Config
 router.get("/", async (req, res) => {
@@ -19,7 +20,7 @@ router.get("/", async (req, res) => {
         config.global.courses = await getAllCourses();
         config.global.roles = await getAllRoles();
         config.global.authorities = await getAllAuthorities();
-        config.global.content_types = await getAllContentTypes();
+        config.global.chapter_types = await getAllChapterTypes();
     } catch (error) {
         logger.error(error);
     } finally {

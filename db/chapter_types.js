@@ -19,7 +19,7 @@ function updateChapterTypeViewIndexById({ id, view_index }) {
 //freeze
 function updateChapterTypeById({ id, title, requires_enrollment }) {
     return executeSQLQueryParameterized("UPDATE CHAPTER_TYPES SET title=?,requires_enrollment=? WHERE id=?", [title, requires_enrollment, id]).catch((error) =>
-        logger.error(`updateChapterTypeViewIndexById: ${error}`)
+        logger.error(`updateChapterTypeById: ${error}`)
     );
 }
 

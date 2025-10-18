@@ -16,4 +16,9 @@ function updateChapterTypeViewIndexById({ id, view_index }) {
     );
 }
 
-module.exports = { getAllChapterTypes, updateChapterTypeViewIndexById };
+//freeze
+function deleteChapterTypeById({ id }) {
+    return executeSQLQueryParameterized("DELETE FROM CHAPTER_TYPES  WHERE id=?", [id]).catch((error) => logger.error(`deleteChapterTypeById: ${error}`));
+}
+
+module.exports = { getAllChapterTypes, updateChapterTypeViewIndexById, deleteChapterTypeById };

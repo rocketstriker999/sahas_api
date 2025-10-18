@@ -1,6 +1,5 @@
 const libExpress = require("express");
-const { validateRequestBody } = require("../utils");
-const { updateChapterTypeViewIndexById } = require("../db/chapter_types");
+const { updateChapterTypeViewIndexById, deleteChapterTypeById } = require("../db/chapter_types");
 
 const router = libExpress.Router();
 
@@ -12,6 +11,16 @@ router.patch("/view_indexes", async (req, res) => {
     }
 
     return res.status(400).json({ error: "Missing Chapter Types" });
+});
+
+//tested
+router.delete("/:id", (req, res) => {
+    if (!req.params.id) {
+        return res.status(400).json({ error: "Missing Chapter Type Id" });
+    }
+    //delete chapter Type
+    deleteChapterTypeById({ id: req.params.id });
+    res.sendStatus(204);
 });
 
 module.exports = router;

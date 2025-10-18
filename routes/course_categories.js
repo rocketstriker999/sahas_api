@@ -34,7 +34,6 @@ router.delete("/:id", async (req, res) => {
     //delete category
     deleteCourseCategoryById({ id: req.params.id });
     //courses releated to category needs to be deleted
-
     res.sendStatus(204);
 });
 

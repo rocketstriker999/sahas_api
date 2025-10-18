@@ -17,7 +17,7 @@ function updateSubjectById({ id, title, background_color }) {
 
 //freeze
 function getAllSubjects() {
-    return executeSQLQueryParameterized(`SELECT * FROM SUBJECTS ORDER BY view_index ASC`).catch((error) => logger.error(`getAllSubjects: ${error}`));
+    return executeSQLQueryParameterized(`SELECT * FROM SUBJECTS `).catch((error) => logger.error(`getAllSubjects: ${error}`));
 }
 
 module.exports = { addSubject, updateSubjectById, getAllSubjects };

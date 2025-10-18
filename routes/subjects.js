@@ -3,6 +3,7 @@ const libExpress = require("express");
 const { validateRequestBody } = require("../utils");
 const { updateSubjectById, addSubject, getAllSubjects } = require("../db/subjects");
 const { addCourseSubject, getCourseSubjectById } = require("../db/course_subjects");
+const { getChaptersBySubjectId } = require("../db/chapters");
 
 const router = libExpress.Router();
 
@@ -24,6 +25,15 @@ router.patch("/", async (req, res) => {
 router.get("/", async (req, res) => {
     //provide all the subjects
     res.status(200).json(await getAllSubjects());
+});
+
+//tested
+router.get("/:id/chapters", async (req, res) => {
+    if (!req.params.id) {
+        return res.status(400).json({ error: "Missing Subject id" });
+    }
+    //provide all the subjects
+    res.status(200).json(await getChaptersBySubjectId({ subject_id: req.params.id }));
 });
 
 //tested

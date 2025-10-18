@@ -17,8 +17,22 @@ function updateChapterTypeViewIndexById({ id, view_index }) {
 }
 
 //freeze
+function addChapterType({ title, requires_enrollment }) {
+    return executeSQLQueryParameterized("INSERT INTO CHAPTER_TYPES(title,requires_enrollment) VALUES(?,?)", [title, requires_enrollment])
+        .then((result) => result.insertId)
+        .catch((error) => logger.error(`addSubject: ${error}`));
+}
+
+//freeze
+function getChapterTypeById({ id }) {
+    return executeSQLQueryParameterized("SELECT * FROM CHAPTER_TYPES WHERE id = ?", [id])
+        .then((result) => (result.length > 0 ? result[0] : false))
+        .catch((error) => logger.error(`getChapterTypeById: ${error}`));
+}
+
+//freeze
 function deleteChapterTypeById({ id }) {
     return executeSQLQueryParameterized("DELETE FROM CHAPTER_TYPES  WHERE id=?", [id]).catch((error) => logger.error(`deleteChapterTypeById: ${error}`));
 }
 
-module.exports = { getAllChapterTypes, updateChapterTypeViewIndexById, deleteChapterTypeById };
+module.exports = { getAllChapterTypes, updateChapterTypeViewIndexById, deleteChapterTypeById, addChapterType, getChapterTypeById };

@@ -1,7 +1,21 @@
 const libExpress = require("express");
-const { updateChapterTypeViewIndexById, deleteChapterTypeById } = require("../db/chapter_types");
+const { updateChapterTypeViewIndexById, deleteChapterTypeById, addChapterType, getChapterTypeById } = require("../db/chapter_types");
 
 const router = libExpress.Router();
+
+//tested
+router.post("/", async (req, res) => {
+    const requiredBodyFields = ["title"];
+
+    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+
+    if (isRequestBodyValid) {
+        const chapterTypeId = await addChapterType(validatedRequestBody);
+        res.status(201).json(await getChapterTypeById({ id: chapterTypeId }));
+    } else {
+        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+    }
+});
 
 //tested
 router.patch("/view_indexes", async (req, res) => {

@@ -17,6 +17,13 @@ function updateChapterTypeViewIndexById({ id, view_index }) {
 }
 
 //freeze
+function updateChapterTypeById({ id, title, requires_enrollment }) {
+    return executeSQLQueryParameterized("UPDATE CHAPTER_TYPES SET title=?,requires_enrollment=? WHERE id=?", [title, requires_enrollment, id]).catch((error) =>
+        logger.error(`updateChapterTypeViewIndexById: ${error}`)
+    );
+}
+
+//freeze
 function addChapterType({ title, requires_enrollment }) {
     return executeSQLQueryParameterized("INSERT INTO CHAPTER_TYPES(title,requires_enrollment) VALUES(?,?)", [title, requires_enrollment])
         .then((result) => result.insertId)
@@ -35,4 +42,4 @@ function deleteChapterTypeById({ id }) {
     return executeSQLQueryParameterized("DELETE FROM CHAPTER_TYPES  WHERE id=?", [id]).catch((error) => logger.error(`deleteChapterTypeById: ${error}`));
 }
 
-module.exports = { getAllChapterTypes, updateChapterTypeViewIndexById, deleteChapterTypeById, addChapterType, getChapterTypeById };
+module.exports = { getAllChapterTypes, updateChapterTypeViewIndexById, deleteChapterTypeById, addChapterType, getChapterTypeById, updateChapterTypeById };

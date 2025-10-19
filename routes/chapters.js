@@ -38,7 +38,7 @@ const router = libExpress.Router();
 
 //tested
 router.post("/", async (req, res) => {
-    const requiredBodyFields = ["title", "subject_id"];
+    const requiredBodyFields = ["title", "subject_id", "type"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 

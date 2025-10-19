@@ -3,7 +3,7 @@ const libExpress = require("express");
 const { validateRequestBody } = require("../utils");
 const { updateSubjectById, addSubject, getAllSubjects } = require("../db/subjects");
 const { addCourseSubject, getCourseSubjectById } = require("../db/course_subjects");
-const { getChaptersBySubjectId, addChapter, getChapterById, updateChapterViewIndexById } = require("../db/chapters");
+const { getChaptersBySubjectId, addChapter, getChapterById, updateChapterViewIndexById, deleteChapterById } = require("../db/chapters");
 
 const router = libExpress.Router();
 
@@ -35,6 +35,15 @@ const router = libExpress.Router();
 //     //provide all the subjects
 //     res.status(200).json(await getChaptersBySubjectId({ subject_id: req.params.id }));
 // });
+
+//tested
+router.delete("/:id", async (req, res) => {
+    if (!req.params.id) {
+        return res.status(400).json({ error: "Missing Chapter Id" });
+    }
+    deleteChapterById({ id: req.params.id });
+    res.sendStatus(204);
+});
 
 //tested
 router.patch("/view_indexes", async (req, res) => {

@@ -195,7 +195,7 @@ function generateDBTables() {
         )`,
         `CREATE TABLE IF NOT EXISTS COUPON_CODES (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            coupon_code VARCHAR(16) UNIQUE
+            code VARCHAR(16) UNIQUE
         )`,
         `CREATE TABLE IF NOT EXISTS COUPON_CODE_COURSES (
             id INT AUTO_INCREMENT PRIMARY KEY,

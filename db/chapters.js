@@ -19,7 +19,7 @@ function addChapter({ title, subject_id, type }) {
 //freeze
 function getChapterById({ id }) {
     return executeSQLQueryParameterized(`SELECT * FROM SUBJECT_CHAPTERS WHERE id=?`, [id])
-        .then((result) => result.insertId)
+        .then((result) => (result.length > 0 ? result[0] : false))
         .catch((error) => logger.error(`addChapter: ${error}`));
 }
 

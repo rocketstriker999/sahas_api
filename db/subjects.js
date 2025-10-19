@@ -10,9 +10,9 @@ function addSubject({ title, background_color }) {
 
 //freeze
 function updateSubjectById({ id, title, background_color }) {
-    return executeSQLQueryParameterized(`UPDATE SUBJECTS SET title=?,background_color=? WHERE id=?`, [title, background_color, id])
-        .then((result) => result.insertId)
-        .catch((error) => logger.error(`updateSubjectById: ${error}`));
+    return executeSQLQueryParameterized(`UPDATE SUBJECTS SET title=?,background_color=? WHERE id=?`, [title, background_color, id]).catch((error) =>
+        logger.error(`updateSubjectById: ${error}`)
+    );
 }
 
 //freeze

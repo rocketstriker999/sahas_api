@@ -37,7 +37,7 @@ function deleteChapterById({ id }) {
 
 //freeze
 function updateChapterById({ id, title, type }) {
-    return executeSQLQueryParameterized("UPDATE SUBJECT_CHAPTERS SET title=?,type=? WHERE id=?", [title, type]).catch((error) =>
+    return executeSQLQueryParameterized("UPDATE SUBJECT_CHAPTERS SET title=?,type=? WHERE id=?", [title, type, id]).catch((error) =>
         logger.error(`updateChapterById: ${error}`)
     );
 }

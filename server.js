@@ -57,6 +57,8 @@ const routers = {
 
     "/wallet-transactions": { middlewares: [], router: require("./routes/wallet_transactions") },
 
+    "/coupon-codes": { middlewares: [], router: require("./routes/coupon_codes") },
+
     "/roles": { middlewares: [], router: require("./routes/roles") },
     "/user-roles": { middlewares: [], router: require("./routes/user_roles") },
 

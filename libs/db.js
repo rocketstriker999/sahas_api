@@ -195,7 +195,8 @@ function generateDBTables() {
         )`,
         `CREATE TABLE IF NOT EXISTS COUPON_CODES (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            code VARCHAR(16) UNIQUE
+            code VARCHAR(16) UNIQUE,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
         `CREATE TABLE IF NOT EXISTS COUPON_CODE_COURSES (
             id INT AUTO_INCREMENT PRIMARY KEY,

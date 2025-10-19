@@ -193,6 +193,21 @@ function generateDBTables() {
             active BOOLEAN NOT NULL DEFAULT TRUE,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
+        `CREATE TABLE IF NOT EXISTS COUPON_CODES (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            coupon_code VARCHAR(16) UNIQUE,
+        )`,
+        `CREATE TABLE IF NOT EXISTS COUPON_CODE_COURSES (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            coupon_code_id INT NOT NULL,
+            course_id INT NOT NULL,
+            discount DECIMAL(8, 2) NOT NULL DEFAULT 0,
+            disount_type VARCHAR(12)  DEFAULT 'PERCENTAGE',
+            distributor INT NULL,
+            commision DECIMAL(8, 2) NOT NULL DEFAULT 0,
+            commision_type VARCHAR(12)  DEFAULT 'PERCENTAGE',
+            active BOOLEAN NOT NULL DEFAULT TRUE
+        )`,
 
         // `CREATE TABLE IF NOT EXISTS MEDIA(
         //     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -220,26 +235,6 @@ function generateDBTables() {
         //     company VARCHAR(36) NULL,
         //     created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
         //     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-        // )`,
-        // `CREATE TABLE IF NOT EXISTS COUPONS (
-        //     id INT AUTO_INCREMENT PRIMARY KEY,
-        //     coupon_code VARCHAR(8) UNIQUE,
-        //     validity DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        //     active BOOLEAN NOT NULL DEFAULT TRUE
-        // )`,
-        // `CREATE TABLE IF NOT EXISTS COUPON_COURSES (
-        //     coupon_code_id INT NOT NULL,
-        //     product_id INT NOT NULL,
-        //     product_access_validity DATETIME NULL,
-        //     value DECIMAL(8, 2) NOT NULL DEFAULT 0,
-        //     type VARCHAR(12)  DEFAULT 'PERCENTAGE'
-        // )`,
-        // `CREATE TABLE IF NOT EXISTS COUPON_DISTRIBUTORS(
-        //     coupon_code_id INT NOT NULL,
-        //     user_id INT NOT NULL,
-        //     product_id INT NOT NULL,
-        //     commision DECIMAL(8, 2) DEFAULT 0,
-        //     commision_type VARCHAR(12) DEFAULT 'PERCENTAGE'
         // )`,
     ];
 

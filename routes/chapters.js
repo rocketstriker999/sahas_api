@@ -3,7 +3,7 @@ const libExpress = require("express");
 const { validateRequestBody } = require("../utils");
 const { updateSubjectById, addSubject, getAllSubjects } = require("../db/subjects");
 const { addCourseSubject, getCourseSubjectById } = require("../db/course_subjects");
-const { getChaptersBySubjectId, addChapter, getChapterById, updateChapterViewIndexById, deleteChapterById } = require("../db/chapters");
+const { getChaptersBySubjectId, addChapter, getChapterById, updateChapterViewIndexById, deleteChapterById, updateChapterById } = require("../db/chapters");
 
 const router = libExpress.Router();
 
@@ -64,6 +64,20 @@ router.post("/", async (req, res) => {
     if (isRequestBodyValid) {
         const chapterId = await addChapter(validatedRequestBody);
         res.status(201).json(await getChapterById({ id: chapterId }));
+    } else {
+        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+    }
+});
+
+//tested
+router.patch("/", async (req, res) => {
+    const requiredBodyFields = ["id", "title", "type"];
+
+    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+
+    if (isRequestBodyValid) {
+        await updateChapterById(validatedRequestBody);
+        res.status(200).json(await getChapterById({ id: validatedRequestBody.id }));
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

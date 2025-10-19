@@ -35,4 +35,9 @@ function deleteChapterById({ id }) {
     return executeSQLQueryParameterized("DELETE FROM SUBJECT_CHAPTERS WHERE id=?", [id]).catch((error) => logger.error(`deleteChapterById: ${error}`));
 }
 
-module.exports = { getChaptersBySubjectId, addChapter, getChapterById, updateChapterViewIndexById, deleteChapterById };
+//freeze
+function updateChapterById({ id }) {
+    return executeSQLQueryParameterized("DELETE FROM SUBJECT_CHAPTERS WHERE id=?", [id]).catch((error) => logger.error(`deleteChapterById: ${error}`));
+}
+
+module.exports = { getChaptersBySubjectId, addChapter, getChapterById, updateChapterViewIndexById, deleteChapterById, updateChapterById };

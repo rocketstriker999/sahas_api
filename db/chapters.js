@@ -9,4 +9,18 @@ function getChaptersBySubjectId({ subject_id }) {
     });
 }
 
-module.exports = { getChaptersBySubjectId };
+//freeze
+function addChapter({ title, subject_id }) {
+    return executeSQLQueryParameterized(`INSERT INTO SUBJECT_CHAPTERS(title,subject_id)`, [title, subject_id])
+        .then((result) => result.insertId)
+        .catch((error) => logger.error(`addChapter: ${error}`));
+}
+
+//freeze
+function getChapterById({ id }) {
+    return executeSQLQueryParameterized(`SELECT * FROM SUBJECT_CHAPTERS WHERE id=?`, [id])
+        .then((result) => result.insertId)
+        .catch((error) => logger.error(`addChapter: ${error}`));
+}
+
+module.exports = { getChaptersBySubjectId, addChapter, getChapterById };

@@ -181,7 +181,7 @@ function generateDBTables() {
             subject_id INT NOT NULL,
             title VARCHAR(128) NOT NULL UNIQUE,
             type INT NOT NULL,
-            view_index INT NULL,
+            view_index INT NOT NULL DEFAULT 0,
             active BOOLEAN NOT NULL DEFAULT TRUE,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,

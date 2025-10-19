@@ -23,4 +23,11 @@ function getChapterById({ id }) {
         .catch((error) => logger.error(`addChapter: ${error}`));
 }
 
-module.exports = { getChaptersBySubjectId, addChapter, getChapterById };
+//freeze
+function updateChapterViewIndexById({ id, view_index }) {
+    return executeSQLQueryParameterized("UPDATE SUBJECT_CHAPTERS SET view_index=? WHERE id=?", [view_index, id]).catch((error) =>
+        logger.error(`updateChapterViewIndexById: ${error}`)
+    );
+}
+
+module.exports = { getChaptersBySubjectId, addChapter, getChapterById, updateChapterViewIndexById };

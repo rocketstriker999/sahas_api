@@ -3,7 +3,7 @@ const libExpress = require("express");
 const { validateRequestBody } = require("../utils");
 const { updateSubjectById, addSubject, getAllSubjects } = require("../db/subjects");
 const { addCourseSubject, getCourseSubjectById } = require("../db/course_subjects");
-const { getChaptersBySubjectId, addChapter, getChapterById } = require("../db/chapters");
+const { getChaptersBySubjectId, addChapter, getChapterById, updateChapterViewIndexById } = require("../db/chapters");
 
 const router = libExpress.Router();
 
@@ -35,6 +35,16 @@ const router = libExpress.Router();
 //     //provide all the subjects
 //     res.status(200).json(await getChaptersBySubjectId({ subject_id: req.params.id }));
 // });
+
+//tested
+router.patch("/view_indexes", async (req, res) => {
+    if (req.body?.length) {
+        req.body.forEach(updateChapterViewIndexById);
+        return res.sendStatus(200);
+    }
+
+    return res.status(400).json({ error: "Missing Chapters" });
+});
 
 //tested
 router.post("/", async (req, res) => {

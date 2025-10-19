@@ -8,6 +8,11 @@ function getAllCouponCodes() {
     });
 }
 
+function deleteCouponCodeById({ id }) {
+    return executeSQLQueryParameterized(`DELETE FROM COUPON_CODES WHERE id=?`, [id]).catch((error) => logger.error(`getAllCouponCodes: ${error}`));
+}
+
 module.exports = {
     getAllCouponCodes,
+    deleteCouponCodeById,
 };

@@ -205,7 +205,7 @@ function generateDBTables() {
             course_id INT NOT NULL,
             discount DECIMAL(8, 2) NOT NULL DEFAULT 0,
             disount_type VARCHAR(12)  DEFAULT 'PERCENTAGE',
-            distributor INT NULL,
+            distributor_email VARCHAR(48) NULL,
             commision DECIMAL(8, 2) NOT NULL DEFAULT 0,
             commision_type VARCHAR(12)  DEFAULT 'PERCENTAGE'
         )`,

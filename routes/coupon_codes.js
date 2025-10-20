@@ -1,5 +1,6 @@
 const libExpress = require("express");
 const { getAllCouponCodes, deleteCouponCodeById, addCouponCode, getCouponCodeById } = require("../db/coupon_codes");
+const { validateRequestBody } = require("../utils");
 const router = libExpress.Router();
 
 //tested
@@ -15,6 +16,7 @@ router.delete("/:id", (req, res) => {
     }
     //delete coupon code
     deleteCouponCodeById({ id: req.params.id });
+    //COUPON_CODE_COURSES also needed to be deleted
     res.sendStatus(204);
 });
 

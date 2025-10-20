@@ -12,7 +12,23 @@ function deleteCouponCodeById({ id }) {
     return executeSQLQueryParameterized(`DELETE FROM COUPON_CODES WHERE id=?`, [id]).catch((error) => logger.error(`getAllCouponCodes: ${error}`));
 }
 
+//freeze
+function addCouponCode({ code }) {
+    return executeSQLQueryParameterized(`INSERT INTO COUPON_CODES(code) VALUES(?)`, [code])
+        .then((result) => result.insertId)
+        .catch((error) => logger.error(`addCouponCode: ${error}`));
+}
+
+//freeze
+function getCouponCodeById({ id }) {
+    return executeSQLQueryParameterized(`SELECT * FROM COUPON_CODES WHERE id=?`, [id])
+        .then((result) => (result.length > 0 ? result[0] : false))
+        .catch((error) => logger.error(`getCouponCodeById: ${error}`));
+}
+
 module.exports = {
     getAllCouponCodes,
     deleteCouponCodeById,
+    addCouponCode,
+    getCouponCodeById,
 };

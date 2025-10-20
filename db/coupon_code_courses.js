@@ -15,10 +15,18 @@ function addCouponCodeCourse({ coupon_code_id, course_id, discount, discount_typ
         [coupon_code_id, course_id, discount, discount_type, distributor_email, commision, commision_type]
     )
         .then((result) => result.insertId)
-        .catch((error) => logger.error(`addCouponCode: ${error}`));
+        .catch((error) => logger.error(`addCouponCodeCourse: ${error}`));
+}
+
+//freeze
+function getCouponCodeCoursesByIds({ ids }) {
+    return executeSQLQueryParameterized(`SELECT * FROM COUPON_CODE_COURSES WHERE id in [?]`, [ids])
+        .then((result) => (result.length > 0 ? result[0] : false))
+        .catch((error) => logger.error(`getCouponCodeCoursesByIds: ${error}`));
 }
 
 module.exports = {
     getCouponCodeCoursesByCouponCodeId,
     addCouponCodeCourse,
+    getCouponCodeCoursesByIds,
 };

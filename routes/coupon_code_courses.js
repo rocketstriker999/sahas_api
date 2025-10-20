@@ -1,6 +1,6 @@
 const libExpress = require("express");
 const { validateRequestBody } = require("../utils");
-const { addCouponCodeCourse } = require("../db/coupon_code_courses");
+const { addCouponCodeCourse, getCouponCodeCoursesByIds } = require("../db/coupon_code_courses");
 const router = libExpress.Router();
 const logger = require("../libs/logger");
 
@@ -13,9 +13,9 @@ router.post("/", async (req, res) => {
     if (isRequestBodyValid) {
         const { course_ids: courseIds, ...rest } = validatedRequestBody;
 
-        const ids = await Promise.all(courseIds.map(({ id }) => addCouponCodeCourse({ course_id: id, ...rest })));
+        const couponCodeCourseIds = await Promise.all(courseIds.map(({ id }) => addCouponCodeCourse({ course_id: id, ...rest })));
 
-        logger.info(ids);
+        res.status(201).json(await getCouponCodeCoursesByIds(couponCodeCourseIds));
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

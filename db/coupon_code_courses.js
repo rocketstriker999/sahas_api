@@ -8,6 +8,14 @@ function getCouponCodeCoursesByCouponCodeId({ coupon_code_id }) {
     });
 }
 
+//freeze
+function addCouponCodeCourse({ code }) {
+    return executeSQLQueryParameterized(`INSERT INTO COUPON_CODES(code) VALUES(?)`, [code])
+        .then((result) => result.insertId)
+        .catch((error) => logger.error(`addCouponCode: ${error}`));
+}
+
 module.exports = {
     getCouponCodeCoursesByCouponCodeId,
+    addCouponCodeCourse,
 };

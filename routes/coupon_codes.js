@@ -5,7 +5,7 @@ const router = libExpress.Router();
 
 //tested
 router.get("/", async (req, res) => {
-    //provide all the coupon Codes
+    //provide all the coupon Codes $#
     res.status(200).json(await getAllCouponCodes());
 });
 

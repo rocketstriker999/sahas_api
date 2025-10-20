@@ -13,7 +13,7 @@ router.post("/", async (req, res) => {
     if (isRequestBodyValid) {
         const { course_ids: courseIds, ...rest } = validatedRequestBody;
 
-        const ids = await Promise.all(courseIds.map((course_id) => addCouponCodeCourse({ course_id, ...rest })));
+        const ids = await Promise.all(courseIds.map(({ id }) => addCouponCodeCourse({ course_id: id, ...rest })));
 
         logger.info(ids);
     } else {

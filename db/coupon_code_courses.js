@@ -20,7 +20,7 @@ function addCouponCodeCourse({ coupon_code_id, course_id, discount, discount_typ
 
 //freeze
 function getCouponCodeCoursesByIds({ ids }) {
-    return executeSQLQueryParameterized(`SELECT * FROM COUPON_CODE_COURSES WHERE id in (?)`, [ids.join(",")]).catch((error) =>
+    return executeSQLQueryParameterized(`SELECT * FROM COUPON_CODE_COURSES WHERE id in (?)`, [ids]).catch((error) =>
         logger.error(`getCouponCodeCoursesByIds: ${error}`)
     );
 }

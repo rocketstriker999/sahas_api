@@ -1,12 +1,22 @@
 const libExpress = require("express");
 const { getAllCouponCodes, deleteCouponCodeById, addCouponCode, getCouponCodeById, updateCouponCodeById } = require("../db/coupon_codes");
 const { validateRequestBody } = require("../utils");
+const { getCouponCodeCoursesByCouponCodeId } = require("../db/coupon_code_courses");
 const router = libExpress.Router();
 
 //tested
 router.get("/", async (req, res) => {
     //provide all the coupon Codes
     res.status(200).json(await getAllCouponCodes());
+});
+
+//tested
+router.get("/:id/courses", async (req, res) => {
+    if (!req.params.id) {
+        return res.status(400).json({ error: "Missing Coupon Code Id" });
+    }
+    //provide all the coupon Codes
+    res.status(200).json(await getCouponCodeCoursesByCouponCodeId({ coupon_code_id: req.params.id }));
 });
 
 //tested

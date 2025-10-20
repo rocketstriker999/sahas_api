@@ -15,7 +15,7 @@ router.post("/", async (req, res) => {
 
         const couponCodeCourseIds = await Promise.all(courseIds.map(({ id }) => addCouponCodeCourse({ course_id: id, ...rest })));
 
-        res.status(201).json(await getCouponCodeCoursesByIds(couponCodeCourseIds));
+        res.status(201).json(await getCouponCodeCoursesByIds({ ids: couponCodeCourseIds }));
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

@@ -11,7 +11,7 @@ function getCouponCodeCoursesByCouponCodeId({ coupon_code_id }) {
 //freeze
 function addCouponCodeCourse({ coupon_code_id, course_id, discount, discount_type, distributor_email, commision, commision_type }) {
     return executeSQLQueryParameterized(
-        `INSERT INTO COUPON_CODES(coupon_code_id, course_id, discount, discount_type, distributor_email, commision, commision_type) VALUES(?,?,?,?,?,?,?)`,
+        `INSERT INTO COUPON_CODE_COURSES(coupon_code_id, course_id, discount, discount_type, distributor_email, commision, commision_type) VALUES(?,?,?,?,?,?,?)`,
         [coupon_code_id, course_id, discount, discount_type, distributor_email, commision, commision_type]
     )
         .then((result) => result.insertId)

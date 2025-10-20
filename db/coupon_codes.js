@@ -20,6 +20,13 @@ function addCouponCode({ code }) {
 }
 
 //freeze
+function updateCouponCodeById({ id, code, active }) {
+    return executeSQLQueryParameterized(`UPDATE COUPON_CODES SET code=?,active=? WHERE id=?`, [code, active, id]).catch((error) =>
+        logger.error(`updateCouponCodeById: ${error}`)
+    );
+}
+
+//freeze
 function getCouponCodeById({ id }) {
     return executeSQLQueryParameterized(`SELECT * FROM COUPON_CODES WHERE id=?`, [id])
         .then((result) => (result.length > 0 ? result[0] : false))
@@ -31,4 +38,5 @@ module.exports = {
     deleteCouponCodeById,
     addCouponCode,
     getCouponCodeById,
+    updateCouponCodeById,
 };

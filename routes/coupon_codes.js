@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const { getAllCouponCodes, deleteCouponCodeById, addCouponCode, getCouponCodeById } = require("../db/coupon_codes");
+const { getAllCouponCodes, deleteCouponCodeById, addCouponCode, getCouponCodeById, updateCouponCodeById } = require("../db/coupon_codes");
 const { validateRequestBody } = require("../utils");
 const router = libExpress.Router();
 
@@ -18,6 +18,20 @@ router.delete("/:id", (req, res) => {
     deleteCouponCodeById({ id: req.params.id });
     //COUPON_CODE_COURSES also needed to be deleted
     res.sendStatus(204);
+});
+
+//tested
+router.patch("/", async (req, res) => {
+    const requiredBodyFields = ["id", "code", "active"];
+
+    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+
+    if (isRequestBodyValid) {
+        await updateCouponCodeById(validatedRequestBody);
+        res.status(200).json(await getCouponCodeById({ id: validatedRequestBody.id }));
+    } else {
+        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+    }
 });
 
 //tested

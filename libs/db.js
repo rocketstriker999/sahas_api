@@ -209,7 +209,8 @@ function generateDBTables() {
             commision DECIMAL(8, 2) NOT NULL DEFAULT 0,
             commision_type VARCHAR(12)  DEFAULT 'PERCENTAGE',
             validity INT NULL,
-            validity_type VARCHAR(12)  DEFAULT 'EXTEND'
+            validity_type VARCHAR(12)  DEFAULT 'EXTEND',
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
 
         // `CREATE TABLE IF NOT EXISTS MEDIA(

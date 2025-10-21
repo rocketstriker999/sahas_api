@@ -7,7 +7,7 @@ function getCouponCodeCoursesByCouponCodeId({ coupon_code_id }) {
         [coupon_code_id]
     ).catch((error) => {
         logger.error(`getAllCouponCodes: ${error}`);
-        return false;
+        return [];
     });
 }
 
@@ -25,7 +25,10 @@ function addCouponCodeCourse({ coupon_code_id, course_id, discount, discount_typ
 function getCouponCodeCoursesByIds({ couponCodeCourseIds }) {
     return executeSQLQueryParameterized(
         `SELECT COUPON_CODE_COURSES.*,COURSES.title FROM COUPON_CODE_COURSES LEFT JOIN COURSES ON COUPON_CODE_COURSES.course_id=COURSES.id WHERE COUPON_CODE_COURSES.id in (${couponCodeCourseIds})`
-    ).catch((error) => logger.error(`getCouponCodeCoursesByIds: ${error}`));
+    ).catch((error) => {
+        logger.error(`getCouponCodeCoursesByIds: ${error}`);
+        return [];
+    });
 }
 
 module.exports = {

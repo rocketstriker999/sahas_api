@@ -1,6 +1,7 @@
 const { executeSQLQueryParameterized } = require("../libs/db");
 const logger = require("../libs/logger");
 
+//freeze
 function getCouponCodeCoursesByCouponCodeId({ coupon_code_id }) {
     return executeSQLQueryParameterized(
         `SELECT 
@@ -18,6 +19,25 @@ WHERE COUPON_CODE_COURSES.coupon_code_id = ?`,
         logger.error(`getAllCouponCodes: ${error}`);
         return [];
     });
+}
+
+//freeze
+function getCouponCodeCourseByCouponCodeId({ id }) {
+    return executeSQLQueryParameterized(
+        `SELECT 
+    COUPON_CODE_COURSES.*, 
+    COURSES.title, 
+    USERS.full_name AS distributor_name
+FROM COUPON_CODE_COURSES
+LEFT JOIN COURSES 
+    ON COUPON_CODE_COURSES.course_id = COURSES.id
+LEFT JOIN USERS 
+    ON COUPON_CODE_COURSES.distributor_email = USERS.email
+WHERE COUPON_CODE_COURSES.id = ?`,
+        [id]
+    )
+        .then((result) => (result.length > 0 ? result[0] : false))
+        .catch((error) => logger.error(`getAllCouponCodes: ${error}`));
 }
 
 //freeze
@@ -49,10 +69,19 @@ WHERE  COUPON_CODE_COURSES.id in (${couponCodeCourseIds})`
     });
 }
 
+//freeze
 function deleteCouponCodeCourseById({ id }) {
     return executeSQLQueryParameterized(`DELETE FROM COUPON_CODE_COURSES WHERE id=?`, [id]).catch((error) =>
         logger.error(`deleteCouponCodeCourseById: ${error}`)
     );
+}
+
+//freeze
+function updateCouponCodeCourseById({ id, discount, discount_type, distributor_email, commision, commision_type, validity, validity_type }) {
+    return executeSQLQueryParameterized(
+        `UPDATE COUPON_CODES SET discount=?,discount_type=?,distributor_email=?,commision=?,commision_type=?,validity=?,validity_type=? WHERE id=?`,
+        [discount, discount_type, distributor_email, commision, commision_type, validity, validity_type, id]
+    ).catch((error) => logger.error(`updateCouponCodeCourseById: ${error}`));
 }
 
 module.exports = {
@@ -60,4 +89,6 @@ module.exports = {
     addCouponCodeCourse,
     getCouponCodeCoursesByIds,
     deleteCouponCodeCourseById,
+    updateCouponCodeCourseById,
+    getCouponCodeCourseByCouponCodeId,
 };

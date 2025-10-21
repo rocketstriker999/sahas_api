@@ -49,8 +49,15 @@ WHERE  COUPON_CODE_COURSES.id in (${couponCodeCourseIds})`
     });
 }
 
+function deleteCouponCodeCourseById({ id }) {
+    return executeSQLQueryParameterized(`DELETE FROM COUPON_CODE_COURSES WHERE id=?`, [id]).catch((error) =>
+        logger.error(`deleteCouponCodeCourseById: ${error}`)
+    );
+}
+
 module.exports = {
     getCouponCodeCoursesByCouponCodeId,
     addCouponCodeCourse,
     getCouponCodeCoursesByIds,
+    deleteCouponCodeCourseById,
 };

@@ -1,6 +1,6 @@
 const libExpress = require("express");
 const { validateRequestBody } = require("../utils");
-const { addCouponCodeCourse, getCouponCodeCoursesByIds } = require("../db/coupon_code_courses");
+const { addCouponCodeCourse, getCouponCodeCoursesByIds, deleteCouponCodeCourseById } = require("../db/coupon_code_courses");
 const router = libExpress.Router();
 const logger = require("../libs/logger");
 
@@ -19,6 +19,16 @@ router.post("/", async (req, res) => {
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }
+});
+
+//tested
+router.delete("/:id", (req, res) => {
+    if (!req.params.id) {
+        return res.status(400).json({ error: "Missing Coupon Code Course Id" });
+    }
+    //delete coupon code course
+    deleteCouponCodeCourseById({ id: req.params.id });
+    res.sendStatus(204);
 });
 
 module.exports = router;

@@ -2,7 +2,10 @@ const { executeSQLQueryParameterized } = require("../libs/db");
 const logger = require("../libs/logger");
 
 function getCouponCodeCoursesByCouponCodeId({ coupon_code_id }) {
-    return executeSQLQueryParameterized(`SELECT * FROM COUPON_CODE_COURSES where coupon_code_id=?`, [coupon_code_id]).catch((error) => {
+    return executeSQLQueryParameterized(
+        `SELECT COUPON_CODE_COURSES.*,COURSES.title FROM COUPON_CODE_COURSES LEFT JOIN COURSES ON COUPON_CODE_COURSES.course_id=COURSES.id WHERE COUPON_CODE_COURSES.coupon_code_id=?`,
+        [coupon_code_id]
+    ).catch((error) => {
         logger.error(`getAllCouponCodes: ${error}`);
         return false;
     });
@@ -21,7 +24,7 @@ function addCouponCodeCourse({ coupon_code_id, course_id, discount, discount_typ
 //freeze - need to optimizae as well
 function getCouponCodeCoursesByIds({ couponCodeCourseIds }) {
     return executeSQLQueryParameterized(
-        `SELECT COUPON_CODE_COURSES.*,COURSES.title FROM COUPON_CODE_COURSES LEFT JOIN COURSES WHERE COUPON_CODE_COURSES.id in (${couponCodeCourseIds})`
+        `SELECT COUPON_CODE_COURSES.*,COURSES.title FROM COUPON_CODE_COURSES LEFT JOIN COURSES ON COUPON_CODE_COURSES.course_id=COURSES.id WHERE COUPON_CODE_COURSES.id in (${couponCodeCourseIds})`
     ).catch((error) => logger.error(`getCouponCodeCoursesByIds: ${error}`));
 }
 

@@ -42,16 +42,6 @@ WHERE COUPON_CODE_COURSES.id = ?`,
 
 //freeze
 function addCouponCodeCourse({ coupon_code_id, course_id, discount, discount_type, distributor_email, commision, commision_type, validity, validity_type }) {
-    logger.info(coupon_code_id);
-    logger.info(course_id);
-    logger.info(discount);
-    logger.info(discount_type);
-    logger.info(distributor_email);
-    logger.info(commision);
-    logger.info(commision_type);
-    logger.info(validity);
-    logger.info(validity_type);
-
     return executeSQLQueryParameterized(
         `INSERT INTO COUPON_CODE_COURSES(coupon_code_id, course_id, discount, discount_type, distributor_email, commision, commision_type,validity, validity_type) VALUES(?,?,?,?,?,?,?,?,?)`,
         [coupon_code_id, course_id, discount, discount_type, distributor_email, commision, commision_type, validity, validity_type]

@@ -207,7 +207,9 @@ function generateDBTables() {
             discount_type VARCHAR(12)  DEFAULT 'PERCENTAGE',
             distributor_email VARCHAR(48) NULL,
             commision DECIMAL(8, 2) NOT NULL DEFAULT 0,
-            commision_type VARCHAR(12)  DEFAULT 'PERCENTAGE'
+            commision_type VARCHAR(12)  DEFAULT 'PERCENTAGE',
+            validity INT NULL,
+            commision_type VARCHAR(12)  DEFAULT 'EXTEND'
         )`,
 
         // `CREATE TABLE IF NOT EXISTS MEDIA(

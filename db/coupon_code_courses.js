@@ -22,7 +22,7 @@ WHERE COUPON_CODE_COURSES.coupon_code_id = ?`,
 }
 
 //freeze
-function getCouponCodeCourseByCouponCodeId({ id }) {
+function getCouponCodeCourseById({ id }) {
     return executeSQLQueryParameterized(
         `SELECT 
     COUPON_CODE_COURSES.*, 
@@ -90,5 +90,5 @@ module.exports = {
     getCouponCodeCoursesByIds,
     deleteCouponCodeCourseById,
     updateCouponCodeCourseById,
-    getCouponCodeCourseByCouponCodeId,
+    getCouponCodeCourseById,
 };

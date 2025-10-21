@@ -20,9 +20,9 @@ function addCouponCodeCourse({ coupon_code_id, course_id, discount, discount_typ
 
 //freeze - need to optimizae as well
 function getCouponCodeCoursesByIds({ couponCodeCourseIds }) {
-    return executeSQLQueryParameterized(`SELECT * FROM COUPON_CODE_COURSES WHERE id in (${couponCodeCourseIds})`).catch((error) =>
-        logger.error(`getCouponCodeCoursesByIds: ${error}`)
-    );
+    return executeSQLQueryParameterized(
+        `SELECT COUPON_CODE_COURSES.*,COURSES.title FROM COUPON_CODE_COURSES LEFT JOIN COURSES WHERE COUPON_CODE_COURSES.id in (${couponCodeCourseIds})`
+    ).catch((error) => logger.error(`getCouponCodeCoursesByIds: ${error}`));
 }
 
 module.exports = {

@@ -6,6 +6,8 @@ const { getCourseSubjectsByCourseId } = require("../db/course_subjects");
 
 const router = libExpress.Router();
 
+const paymentHashes = [];
+
 //tested
 router.post("/", async (req, res) => {
     const requiredBodyFields = ["category_id", "title", "description", "image", "fees", "whatsapp_group"];
@@ -64,6 +66,21 @@ router.get("/:id", async (req, res) => {
     course.enrollment = await getEnrollmentByCourseIdAndUserId({ course_id: course?.id, user_id: req?.user?.id });
 
     course.subjects = await getCourseSubjectsByCourseId({ course_id: req.params.id });
+
+    res.status(200).json(course);
+});
+
+//tested
+router.post("/:id/payment-gateway-payload", async (req, res) => {
+    if (!req.params.id) {
+        return res.status(400).json({ error: "Missing Course Id" });
+    }
+
+    const course = await getCourseById({ id: req.params.id });
+
+    //course.enrollment = await getEnrollmentByCourseIdAndUserId({ course_id: course?.id, user_id: req?.user?.id });
+
+    //if already existing enrollment is there then do not give back the payment hash
 
     res.status(200).json(course);
 });

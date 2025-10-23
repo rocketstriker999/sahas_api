@@ -1,6 +1,7 @@
-const { getAllCategories } = require("../db/categories");
-const { getAllChapters } = require("../db/chapters");
+const { CACHE_KEY_COURSE_CATEGORIES, CACHE_KEY_COURSES, CACHE_KEY_SUBJECTS } = require("../constants");
+const { getAllCourseCategories } = require("../db/course_categories");
 const { getAllCourses } = require("../db/courses");
+const { getAllSubjects } = require("../db/subjects");
 const logger = require("./logger");
 
 const cache = {};
@@ -20,9 +21,9 @@ const refresh = (key) =>
     });
 
 const generateCaches = async () => {
-    await add(process.env.CACHE_KEYS_CATEGORIES, getAllCategories);
-    await add(process.env.CACHE_KEYS_COURSES, getAllCourses);
-    await add(process.env.CACHE_KEYS_CHAPTERS, getAllChapters);
+    await add(CACHE_KEY_COURSE_CATEGORIES, getAllCourseCategories);
+    await add(CACHE_KEY_COURSES, getAllCourses);
+    await add(CACHE_KEY_SUBJECTS, getAllSubjects);
 };
 
 module.exports = { add, get, refresh, generateCaches };

@@ -13,6 +13,6 @@ prepareDirectories([process.env.DIRECTORY_LOGS, process.env.DIR_CONFIGS]);
 
 generateDBTables()
     .then(() => logger.success("Database Ready"))
-    // .then(generateCaches) // need to integrate for speed , config can be into cache
+    .then(generateCaches)
     .then(allowTraffic)
     .catch((error) => logger.error(`Failed To Prepare Database ${error}`));

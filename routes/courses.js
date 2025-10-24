@@ -70,21 +70,4 @@ router.get("/:id", async (req, res) => {
     res.status(200).json(course);
 });
 
-//tested
-router.get("/:id/payment-gateway-payload", async (req, res) => {
-    if (!req.params.id) {
-        return res.status(400).json({ error: "Missing Course Id" });
-    }
-
-    const payload = {
-        course: await getCourseById({ id: req.params.id }),
-    };
-
-    //course.enrollment = await getEnrollmentByCourseIdAndUserId({ course_id: course?.id, user_id: req?.user?.id });
-
-    //if already existing enrollment is there then do not give back the payment hash
-
-    res.status(200).json(payload);
-});
-
 module.exports = router;

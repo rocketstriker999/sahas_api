@@ -111,6 +111,24 @@ function generateDBTables() {
             created_by INT NOT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP
         )`,
+        `CREATE TABLE IF NOT EXISTS PAYMENT_GATEWAY_PAYLOADS (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            user_id INT NOT NULL,
+            course_id INT NOT NULL,
+
+            paid BOOLEAN NOT NULL DEFAULT FALSE,
+
+            amount DECIMAL(8, 2) DEFAULT 0,
+            cgst DECIMAL(8, 2) DEFAULT 0,
+            sgst DECIMAL(8, 2) DEFAULT 0,
+            original DECIMAL(8, 2) AS (amount - cgst - sgst) STORED,
+
+            coupon_code_id INT DEFAULT NULL,
+            coupon_code_benifit DECIMAL(8, 2) DEFAULT 0,
+            
+            hash VARCHAR(128) NULL,
+          )
+        `,
         `CREATE TABLE IF NOT EXISTS ENROLLMENTS (
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
@@ -141,6 +159,7 @@ function generateDBTables() {
             created_by INT NOT NULL,
             note VARCHAR(256) NOT NULL,
             type VARCHAR(16) NOT NULL,
+            invoice CHAR(36) DEFAULT (CONCAT(REPLACE(UUID(), '-', ''), '.pdf')) UNIQUE,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP
         )`,
         `CREATE TABLE IF NOT EXISTS COURSE_CATEGORIES(

@@ -1,6 +1,7 @@
 const { executeSQLQueryParameterized } = require("../libs/db");
 const logger = require("../libs/logger");
 
+//freeze
 function getAllRoles() {
     return executeSQLQueryParameterized("SELECT * FROM ROLES").catch((error) => {
         logger.error(`getAllRoles: ${error}`);

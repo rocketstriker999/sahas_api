@@ -40,7 +40,6 @@ function generateDBTables() {
             created_by INT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP
             )`,
-
         `CREATE TABLE IF NOT EXISTS ROLES(
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(36) UNIQUE NOT NULL,
@@ -112,7 +111,7 @@ function generateDBTables() {
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP
         )`,
         `CREATE TABLE IF NOT EXISTS PAYMENT_GATEWAY_PAYLOADS (
-            id INT AUTO_INCREMENT PRIMARY KEY,
+            id VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
             user_id INT NOT NULL,
             course_id INT NOT NULL,
 
@@ -124,9 +123,12 @@ function generateDBTables() {
             original DECIMAL(8, 2) AS (amount - cgst - sgst) STORED,
 
             coupon_code_id INT DEFAULT NULL,
-            coupon_code_benifit DECIMAL(8, 2) DEFAULT 0,
+            discount DECIMAL(8, 2) DEFAULT 0,
+
+            validity INT DEFAULT NULL,
+            validity_type VARCHAR(12)  NOT NULL,
             
-            hash VARCHAR(128) NULL,
+            hash VARCHAR(128) NULL
           )
         `,
         `CREATE TABLE IF NOT EXISTS ENROLLMENTS (

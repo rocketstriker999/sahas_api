@@ -51,6 +51,8 @@ const routers = {
     "/inquiries": { middlewares: [], router: require("./routes/inquiries") },
     "/inquiry-notes": { middlewares: [], router: require("./routes/inquiry_notes") },
 
+    "/payment-gateway-payloads": { middlewares: [], router: require("./routes/payment_gateway_payloads") },
+
     "/enrollments": { middlewares: [], router: require("./routes/enrollments") },
     "/enrollment-transactions": { middlewares: [], router: require("./routes/enrollment_transactions") },
     "/enrollment-courses": { middlewares: [], router: require("./routes/enrollment_courses") },

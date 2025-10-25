@@ -40,7 +40,7 @@ router.post("/", async (req, res) => {
         paymentGateWayPayLoad.transcation.hash = libCrypto
             .createHash("sha512")
             .update(
-                `${paymentGateWayPayLoad.paymentGateWay.merchantKey}|${paymentGateWayPayLoad.transcation.id}|${paymentGateWayPayLoad.transaction.amount}|${paymentGateWayPayLoad.product}|${paymentGateWayPayLoad.user.firstName}|${paymentGateWayPayLoad.user.email}|||||||||||${process.env.MERCHANT_SALT}`
+                `${paymentGateWayPayLoad.paymentGateWay.merchantKey}|${paymentGateWayPayLoad.transcation.id}|${paymentGateWayPayLoad.transcation.amount}|${paymentGateWayPayLoad.product}|${paymentGateWayPayLoad.user.firstName}|${paymentGateWayPayLoad.user.email}|||||||||||${process.env.MERCHANT_SALT}`
             )
             .digest("hex");
 

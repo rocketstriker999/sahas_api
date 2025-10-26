@@ -26,6 +26,10 @@ router.post("/", async (req, res) => {
                 id: libCrypto.randomUUID(),
                 successURL: process.env.TRANSACTION_SUCCESS_URL,
                 failureURL: process.env.TRANSACTION_FAILURE_URL,
+
+                sgst: (course.fees * Number(process.env.SGST)) / 100,
+                cgst: (course.fees * Number(process.env.CGST)) / 100,
+
                 amount: Number(course.fees),
             },
             user: {
@@ -36,6 +40,9 @@ router.post("/", async (req, res) => {
             },
             product: course.title,
         };
+
+        paymentGateWayPayLoad.transcation.original =
+            paymentGateWayPayLoad.transcation.amount - (paymentGateWayPayLoad.transcation.sgst + paymentGateWayPayLoad.transcation.cgst);
 
         paymentGateWayPayLoad.transcation.hash = libCrypto
             .createHash("sha512")

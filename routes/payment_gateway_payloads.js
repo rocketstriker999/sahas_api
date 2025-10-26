@@ -22,7 +22,7 @@ router.post("/", async (req, res) => {
                 merchantKey: process.env.MERCHANT_KEY,
                 url: process.env.PAYU_URL,
             },
-            transcation: {
+            transaction: {
                 id: libCrypto.randomUUID(),
                 successURL: process.env.TRANSACTION_SUCCESS_URL,
                 failureURL: process.env.TRANSACTION_FAILURE_URL,
@@ -41,13 +41,13 @@ router.post("/", async (req, res) => {
             product: course.title,
         };
 
-        paymentGateWayPayLoad.transcation.original =
-            paymentGateWayPayLoad.transcation.amount - (paymentGateWayPayLoad.transcation.sgst + paymentGateWayPayLoad.transcation.cgst);
+        paymentGateWayPayLoad.transaction.original =
+            paymentGateWayPayLoad.transaction.amount - (paymentGateWayPayLoad.transaction.sgst + paymentGateWayPayLoad.transaction.cgst);
 
-        paymentGateWayPayLoad.transcation.hash = libCrypto
+        paymentGateWayPayLoad.transaction.hash = libCrypto
             .createHash("sha512")
             .update(
-                `${paymentGateWayPayLoad.paymentGateWay.merchantKey}|${paymentGateWayPayLoad.transcation.id}|${paymentGateWayPayLoad.transcation.amount}|${paymentGateWayPayLoad.product}|${paymentGateWayPayLoad.user.firstName}|${paymentGateWayPayLoad.user.email}|||||||||||${process.env.MERCHANT_SALT}`
+                `${paymentGateWayPayLoad.paymentGateWay.merchantKey}|${paymentGateWayPayLoad.transaction.id}|${paymentGateWayPayLoad.transaction.amount}|${paymentGateWayPayLoad.product}|${paymentGateWayPayLoad.user.firstName}|${paymentGateWayPayLoad.user.email}|||||||||||${process.env.MERCHANT_SALT}`
             )
             .digest("hex");
 

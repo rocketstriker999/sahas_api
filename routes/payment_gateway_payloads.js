@@ -16,6 +16,10 @@ router.post("/", async (req, res) => {
     if (isRequestBodyValid) {
         const course = await getCourseById({ id: validatedRequestBody.courseId });
 
+        if (validatedRequestBody?.useWalletBalance && Number(req.user.wallet) > 0) {
+            course.fees = Math.min(Number(course.fees) - Number(req.user.wallet), 0);
+        }
+
         const paymentGateWayPayLoad = {
             course,
             paymentGateWay: {
@@ -30,6 +34,8 @@ router.post("/", async (req, res) => {
                 sgst: (course.fees * Number(process.env.SGST)) / 100,
                 cgst: (course.fees * Number(process.env.CGST)) / 100,
 
+                walletDeduction: !!validatedRequestBody?.useWalletBalance ? 12 : 0,
+
                 amount: Number(course.fees),
             },
             user: {
@@ -37,7 +43,7 @@ router.post("/", async (req, res) => {
                 firstName: req.user.full_name?.split(" ")[0],
                 lastName: req.user.full_name?.split(" ")?.[1] || "NA",
                 phone: req.user.phone,
-                wallet: req.user.wallet,
+                wallet: Number(req.user.wallet),
             },
             product: course.title,
         };
@@ -51,6 +57,8 @@ router.post("/", async (req, res) => {
                 `${paymentGateWayPayLoad.paymentGateWay.merchantKey}|${paymentGateWayPayLoad.transaction.id}|${paymentGateWayPayLoad.transaction.amount}|${paymentGateWayPayLoad.product}|${paymentGateWayPayLoad.user.firstName}|${paymentGateWayPayLoad.user.email}|||||||||||${process.env.MERCHANT_SALT}`
             )
             .digest("hex");
+
+        //add transcation in to table
 
         res.status(201).json(paymentGateWayPayLoad);
     } else {

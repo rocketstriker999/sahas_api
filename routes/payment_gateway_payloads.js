@@ -16,10 +16,6 @@ router.post("/", async (req, res) => {
     if (isRequestBodyValid) {
         const course = await getCourseById({ id: validatedRequestBody.courseId });
 
-        if (validatedRequestBody?.useWalletBalance && Number(req.user.wallet) > 0) {
-            course.fees = Math.max(Number(course.fees) - Number(req.user.wallet), 0);
-        }
-
         const paymentGateWayPayLoad = {
             course,
             paymentGateWay: {
@@ -50,6 +46,10 @@ router.post("/", async (req, res) => {
 
         paymentGateWayPayLoad.transaction.original =
             paymentGateWayPayLoad.transaction.amount - (paymentGateWayPayLoad.transaction.sgst + paymentGateWayPayLoad.transaction.cgst);
+
+        if (validatedRequestBody?.useWalletBalance && Number(req.user.wallet) > 0) {
+            paymentGateWayPayLoad.transaction.amount = Math.max(Number(paymentGateWayPayLoad.transaction.amount) - Number(req.user.wallet), 0);
+        }
 
         paymentGateWayPayLoad.transaction.hash = libCrypto
             .createHash("sha512")

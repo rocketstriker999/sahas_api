@@ -37,6 +37,7 @@ router.post("/", async (req, res) => {
                 firstName: req.user.full_name?.split(" ")[0],
                 lastName: req.user.full_name?.split(" ")?.[1] || "NA",
                 phone: req.user.phone,
+                wallet: req.user.wallet,
             },
             product: course.title,
         };

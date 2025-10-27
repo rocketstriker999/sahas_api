@@ -17,7 +17,7 @@ router.post("/", async (req, res) => {
         const course = await getCourseById({ id: validatedRequestBody.courseId });
 
         if (validatedRequestBody?.useWalletBalance && Number(req.user.wallet) > 0) {
-            course.fees = Math.min(Number(course.fees) - Number(req.user.wallet), 0);
+            course.fees = Math.max(Number(course.fees) - Number(req.user.wallet), 0);
         }
 
         const paymentGateWayPayLoad = {

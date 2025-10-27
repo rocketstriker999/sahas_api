@@ -30,8 +30,6 @@ router.post("/", async (req, res) => {
                 sgst: (course.fees * Number(process.env.SGST)) / 100,
                 cgst: (course.fees * Number(process.env.CGST)) / 100,
 
-                walletDeduction: !!validatedRequestBody?.useWalletBalance ? 12 : 0,
-
                 amount: Number(course.fees),
             },
             user: {
@@ -48,6 +46,7 @@ router.post("/", async (req, res) => {
             paymentGateWayPayLoad.transaction.amount - (paymentGateWayPayLoad.transaction.sgst + paymentGateWayPayLoad.transaction.cgst);
 
         if (validatedRequestBody?.useWalletBalance && Number(req.user.wallet) > 0) {
+            paymentGateWayPayLoad.transaction.usedWalletBalance = Math.min(Number(req.user.wallet), Number(paymentGateWayPayLoad.transaction.amount));
             paymentGateWayPayLoad.transaction.amount = Math.max(Number(paymentGateWayPayLoad.transaction.amount) - Number(req.user.wallet), 0);
         }
 

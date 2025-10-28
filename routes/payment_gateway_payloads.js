@@ -27,7 +27,6 @@ router.post("/", async (req, res) => {
                 successURL: process.env.TRANSACTION_SUCCESS_URL,
                 failureURL: process.env.TRANSACTION_FAILURE_URL,
 
-                original: Number(course.fees),
                 amount: Number(course.fees),
             },
             user: {
@@ -41,6 +40,7 @@ router.post("/", async (req, res) => {
         };
 
         paymentGateWayPayLoad.transaction.discount = -100;
+        paymentGateWayPayLoad.transaction.couponCode = "SAHAS20";
         paymentGateWayPayLoad.transaction.amount += paymentGateWayPayLoad.transaction.discount;
 
         //if use wallet

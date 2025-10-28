@@ -39,9 +39,11 @@ router.post("/", async (req, res) => {
             product: course.title,
         };
 
-        paymentGateWayPayLoad.transaction.discount = -100;
-        paymentGateWayPayLoad.transaction.couponCode = "SAHAS20";
-        paymentGateWayPayLoad.transaction.amount += paymentGateWayPayLoad.transaction.discount;
+        if (validatedRequestBody.couponCode) {
+            paymentGateWayPayLoad.transaction.discount = -100;
+            paymentGateWayPayLoad.transaction.couponCode = "SAHAS20";
+            paymentGateWayPayLoad.transaction.amount += paymentGateWayPayLoad.transaction.discount;
+        }
 
         //if use wallet
         if (validatedRequestBody?.useWalletBalance && Number(req.user.wallet) > 0 && paymentGateWayPayLoad.transaction.amount > 0) {

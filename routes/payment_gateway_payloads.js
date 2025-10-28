@@ -44,13 +44,16 @@ router.post("/", async (req, res) => {
         // paymentGateWayPayLoad.transaction.original =
         //     paymentGateWayPayLoad.transaction.amount - (paymentGateWayPayLoad.transaction.sgst + paymentGateWayPayLoad.transaction.cgst);
 
-        paymentGateWayPayLoad.transaction.discount = 100;
-        paymentGateWayPayLoad.transaction.amount -= paymentGateWayPayLoad.transaction.discount;
+        paymentGateWayPayLoad.transaction.discount = -100;
+        paymentGateWayPayLoad.transaction.amount += paymentGateWayPayLoad.transaction.discount;
 
         //if use wallet
         if (validatedRequestBody?.useWalletBalance && Number(req.user.wallet) > 0 && paymentGateWayPayLoad.transaction.amount > 0) {
             paymentGateWayPayLoad.transaction.usedWalletBalance = -Math.min(Number(req.user.wallet), Number(paymentGateWayPayLoad.transaction.amount));
-            paymentGateWayPayLoad.transaction.amount = Math.max(Number(paymentGateWayPayLoad.transaction.amount) - Number(req.user.wallet), 0); //80
+            paymentGateWayPayLoad.transaction.amount = Math.max(
+                paymentGateWayPayLoad.transaction.amount + paymentGateWayPayLoad.transaction.usedWalletBalance,
+                0
+            );
         }
 
         paymentGateWayPayLoad.transaction.sgst = (paymentGateWayPayLoad.transaction.amount * Number(process.env.SGST)) / 100;

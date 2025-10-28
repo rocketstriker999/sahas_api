@@ -115,19 +115,18 @@ function generateDBTables() {
             user_id INT NOT NULL,
             course_id INT NOT NULL,
 
-            paid BOOLEAN NOT NULL DEFAULT FALSE,
-
-            amount DECIMAL(8, 2) DEFAULT 0,
-            cgst DECIMAL(8, 2) DEFAULT 0,
-            sgst DECIMAL(8, 2) DEFAULT 0,
-            original DECIMAL(8, 2) AS (amount - cgst - sgst) STORED,
-
+            original DECIMAL(8, 2) DEFAULT 0,
             coupon_code_id INT DEFAULT NULL,
             discount DECIMAL(8, 2) DEFAULT 0,
+            cgst DECIMAL(8, 2) DEFAULT 0,
+            sgst DECIMAL(8, 2) DEFAULT 0,
+            amount DECIMAL(8, 2) DEFAULT 0,
 
             validity INT DEFAULT NULL,
             validity_type VARCHAR(12)  NOT NULL,
             
+            paid BOOLEAN NOT NULL DEFAULT FALSE,
+
             hash VARCHAR(128) NULL
           )
         `,

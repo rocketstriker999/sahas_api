@@ -27,10 +27,7 @@ router.post("/", async (req, res) => {
                 successURL: process.env.TRANSACTION_SUCCESS_URL,
                 failureURL: process.env.TRANSACTION_FAILURE_URL,
 
-                sgst: (course.fees * Number(process.env.SGST)) / 100,
-                cgst: (course.fees * Number(process.env.CGST)) / 100,
-
-                amount: Number(course.fees),
+                original: Number(course.fees),
             },
             user: {
                 email: req.user.email,
@@ -42,13 +39,20 @@ router.post("/", async (req, res) => {
             product: course.title,
         };
 
-        paymentGateWayPayLoad.transaction.original =
-            paymentGateWayPayLoad.transaction.amount - (paymentGateWayPayLoad.transaction.sgst + paymentGateWayPayLoad.transaction.cgst);
+        //if coupon
+        // paymentGateWayPayLoad.transaction.original =
+        //     paymentGateWayPayLoad.transaction.amount - (paymentGateWayPayLoad.transaction.sgst + paymentGateWayPayLoad.transaction.cgst);
 
+        //if use wallet
         if (validatedRequestBody?.useWalletBalance && Number(req.user.wallet) > 0) {
             paymentGateWayPayLoad.transaction.usedWalletBalance = -Math.min(Number(req.user.wallet), Number(paymentGateWayPayLoad.transaction.amount));
-            paymentGateWayPayLoad.transaction.amount = Math.max(Number(paymentGateWayPayLoad.transaction.amount) - Number(req.user.wallet), 0);
+            paymentGateWayPayLoad.transaction.amount = Math.max(Number(paymentGateWayPayLoad.transaction.amount) - Number(req.user.wallet), 0); //80
         }
+
+        paymentGateWayPayLoad.transaction.sgst = (paymentGateWayPayLoad.transaction.amount * Number(process.env.SGST)) / 100;
+        paymentGateWayPayLoad.transaction.cgst = (paymentGateWayPayLoad.transaction.amount * Number(process.env.CGST)) / 100;
+
+        paymentGateWayPayLoad.transaction.amount += paymentGateWayPayLoad.transaction.sgst + paymentGateWayPayLoad.transaction.cgst;
 
         paymentGateWayPayLoad.transaction.hash = libCrypto
             .createHash("sha512")

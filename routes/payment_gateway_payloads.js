@@ -28,6 +28,7 @@ router.post("/", async (req, res) => {
                 failureURL: process.env.TRANSACTION_FAILURE_URL,
 
                 original: Number(course.fees),
+                amount: Number(course.fees),
             },
             user: {
                 email: req.user.email,

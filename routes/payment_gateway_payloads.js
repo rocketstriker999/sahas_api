@@ -40,10 +40,6 @@ router.post("/", async (req, res) => {
             product: course.title,
         };
 
-        //if coupon
-        // paymentGateWayPayLoad.transaction.original =
-        //     paymentGateWayPayLoad.transaction.amount - (paymentGateWayPayLoad.transaction.sgst + paymentGateWayPayLoad.transaction.cgst);
-
         paymentGateWayPayLoad.transaction.discount = -100;
         paymentGateWayPayLoad.transaction.amount += paymentGateWayPayLoad.transaction.discount;
 
@@ -55,6 +51,8 @@ router.post("/", async (req, res) => {
                 0
             );
         }
+
+        paymentGateWayPayLoad.transaction.preTaxAmount = paymentGateWayPayLoad.transaction.amount;
 
         paymentGateWayPayLoad.transaction.sgst = (paymentGateWayPayLoad.transaction.amount * Number(process.env.SGST)) / 100;
         paymentGateWayPayLoad.transaction.cgst = (paymentGateWayPayLoad.transaction.amount * Number(process.env.CGST)) / 100;

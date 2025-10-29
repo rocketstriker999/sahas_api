@@ -3,6 +3,7 @@ const { getCourseById } = require("../db/courses");
 const { validateRequestBody } = require("../utils");
 const libCrypto = require("crypto");
 const { readConfig } = require("../libs/config");
+const { addPaymentGateWayPayLoad } = require("../db/payment_gateway_payloads");
 
 const router = libExpress.Router();
 
@@ -57,17 +58,21 @@ router.post("/", async (req, res) => {
             );
         }
 
+        //pre tax amount
         paymentGateWayPayLoad.transaction.preTaxAmount = paymentGateWayPayLoad.transaction.amount.toFixed(2);
 
+        //add cgst and sgst
         paymentGateWayPayLoad.transaction.cgst = ((paymentGateWayPayLoad.transaction.amount * cgst) / 100).toFixed(2);
         paymentGateWayPayLoad.transaction.sgst = ((paymentGateWayPayLoad.transaction.amount * sgst) / 100).toFixed(2);
 
+        //final amount
         paymentGateWayPayLoad.transaction.amount = (
             Number(paymentGateWayPayLoad.transaction.amount) +
             Number(paymentGateWayPayLoad.transaction.sgst) +
             Number(paymentGateWayPayLoad.transaction.cgst)
         ).toFixed(2);
 
+        //hash generation
         paymentGateWayPayLoad.transaction.hash = libCrypto
             .createHash("sha512")
             .update(
@@ -76,6 +81,20 @@ router.post("/", async (req, res) => {
             .digest("hex");
 
         //add transcation in to table
+        addPaymentGateWayPayLoad({
+            id: paymentGateWayPayLoad.transaction.id,
+            user_id: paymentGateWayPayLoad.user.id,
+            course_id: paymentGateWayPayLoad.course.id,
+            original: paymentGateWayPayLoad.course.fees,
+            coupon_code_id: 1,
+            discount: paymentGateWayPayLoad.transaction.discount,
+            cgst: paymentGateWayPayLoad.transaction.cgst,
+            sgst: paymentGateWayPayLoad.transaction.sgst,
+            amount: paymentGateWayPayLoad.transaction.amount,
+            validity,
+            validity_type,
+            hash,
+        });
 
         res.status(201).json(paymentGateWayPayLoad);
     } else {

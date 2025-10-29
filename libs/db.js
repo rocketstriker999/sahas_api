@@ -111,19 +111,14 @@ function generateDBTables() {
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP
         )`,
         `CREATE TABLE IF NOT EXISTS PAYMENT_GATEWAY_PAYLOADS (
-            id VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
+            id VARCHAR(36) PRIMARY KEY ,
             user_id INT NOT NULL,
             course_id INT NOT NULL,
 
             original DECIMAL(8, 2) DEFAULT 0,
             coupon_code_id INT DEFAULT NULL,
-            discount DECIMAL(8, 2) DEFAULT 0,
-            cgst DECIMAL(8, 2) DEFAULT 0,
-            sgst DECIMAL(8, 2) DEFAULT 0,
-            amount DECIMAL(8, 2) DEFAULT 0,
 
-            validity INT DEFAULT NULL,
-            validity_type VARCHAR(12)  NOT NULL,
+            amount DECIMAL(8, 2) DEFAULT 0,
             
             paid BOOLEAN NOT NULL DEFAULT FALSE,
 
@@ -135,7 +130,7 @@ function generateDBTables() {
             user_id INT NOT NULL,
             start_date DATETIME DEFAULT CURRENT_TIMESTAMP,
             end_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-            fees DECIMAL(8, 2) DEFAULT 0,
+            amount DECIMAL(8, 2) DEFAULT 0,
             on_site_access BOOLEAN NOT NULL DEFAULT TRUE,
             digital_access BOOLEAN NOT NULL DEFAULT TRUE,
             created_by INT NOT NULL,

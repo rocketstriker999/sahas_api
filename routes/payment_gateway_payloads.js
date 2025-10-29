@@ -39,13 +39,14 @@ router.post("/", async (req, res) => {
             product: course.title,
         };
 
+        //calculate coupon code first
         if (validatedRequestBody.couponCode) {
             paymentGateWayPayLoad.transaction.discount = -100;
             paymentGateWayPayLoad.transaction.couponCode = "SAHAS20";
-            paymentGateWayPayLoad.transaction.amount += paymentGateWayPayLoad.transaction.discount;
+            paymentGateWayPayLoad.transaction.amount += Number(paymentGateWayPayLoad.transaction.discount);
         }
 
-        //if use wallet
+        //if use wallet is required
         if (validatedRequestBody?.useWalletBalance && Number(req.user.wallet) > 0 && paymentGateWayPayLoad.transaction.amount > 0) {
             paymentGateWayPayLoad.transaction.usedWalletBalance = -Math.min(Number(req.user.wallet), Number(paymentGateWayPayLoad.transaction.amount));
             paymentGateWayPayLoad.transaction.amount = Math.max(

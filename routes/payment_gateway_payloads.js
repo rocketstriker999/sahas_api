@@ -62,7 +62,9 @@ router.post("/", async (req, res) => {
         paymentGateWayPayLoad.transaction.cgst = ((paymentGateWayPayLoad.transaction.amount * cgst) / 100).toFixed(2);
         paymentGateWayPayLoad.transaction.sgst = ((paymentGateWayPayLoad.transaction.amount * sgst) / 100).toFixed(2);
 
-        paymentGateWayPayLoad.transaction.amount += paymentGateWayPayLoad.transaction.sgst + paymentGateWayPayLoad.transaction.cgst;
+        paymentGateWayPayLoad.transaction.amount += (Number(paymentGateWayPayLoad.transaction.sgst) + Number(paymentGateWayPayLoad.transaction.cgst)).toFixed(
+            2
+        );
 
         paymentGateWayPayLoad.transaction.hash = libCrypto
             .createHash("sha512")

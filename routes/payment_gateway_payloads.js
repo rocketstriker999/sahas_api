@@ -57,7 +57,7 @@ router.post("/", async (req, res) => {
             );
         }
 
-        paymentGateWayPayLoad.transaction.preTaxAmount = paymentGateWayPayLoad.transaction.amount;
+        paymentGateWayPayLoad.transaction.preTaxAmount = paymentGateWayPayLoad.transaction.amount.toFixed(2);
 
         paymentGateWayPayLoad.transaction.cgst = (paymentGateWayPayLoad.transaction.amount * cgst) / 100;
         paymentGateWayPayLoad.transaction.sgst = (paymentGateWayPayLoad.transaction.amount * sgst) / 100;

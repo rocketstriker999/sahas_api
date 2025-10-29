@@ -1,14 +1,12 @@
-const { executeSQLQueryParameterized } = require("../libs/db");
-const logger = require("../libs/logger");
+const { CACHE_KEY_PAYMENT_GATEWAY_PAYLOADS } = require("../constants");
+const { refresh } = require("../libs/cacher");
+
+const paymentGateWayPayLoads = [];
 
 //freeze
-function addPaymentGateWayPayLoad({ id, user_id, course_id, original, coupon_code_id, discount, cgst, sgst, amount, validity, validity_type, hash }) {
-    return executeSQLQueryParameterized(
-        "INSERT INTO PAYMENT_GATEWAY_PAYLOADS(id,user_id, course_id,original, coupon_code_id, discount, cgst, sgst, amount, validity, validity_type, hash ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
-        [id, user_id, course_id, original, coupon_code_id, discount, cgst, sgst, amount, validity, validity_type, hash]
-    )
-        .then((result) => result.insertId)
-        .catch((error) => logger.error(`addPaymentGateWayPayLoad: ${error}`));
+function addPaymentGateWayPayLoad(paymentGateWayPayLoad) {
+    paymentGateWayPayLoads.push(paymentGateWayPayLoad);
+    refresh(CACHE_KEY_PAYMENT_GATEWAY_PAYLOADS);
 }
 
 module.exports = { addPaymentGateWayPayLoad };

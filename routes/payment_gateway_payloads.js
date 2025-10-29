@@ -81,20 +81,7 @@ router.post("/", async (req, res) => {
             .digest("hex");
 
         //add transcation in to table
-        addPaymentGateWayPayLoad({
-            id: paymentGateWayPayLoad.transaction.id,
-            user_id: paymentGateWayPayLoad.user.id,
-            course_id: paymentGateWayPayLoad.course.id,
-            original: paymentGateWayPayLoad.course.fees,
-            coupon_code_id: 1,
-            discount: paymentGateWayPayLoad.transaction.discount,
-            cgst: paymentGateWayPayLoad.transaction.cgst,
-            sgst: paymentGateWayPayLoad.transaction.sgst,
-            amount: paymentGateWayPayLoad.transaction.amount,
-            validity,
-            validity_type,
-            hash,
-        });
+        addPaymentGateWayPayLoad(paymentGateWayPayLoad);
 
         res.status(201).json(paymentGateWayPayLoad);
     } else {

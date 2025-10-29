@@ -43,7 +43,7 @@ router.post("/", async (req, res) => {
 
         //calculate coupon code first
         if (validatedRequestBody.couponCode) {
-            paymentGateWayPayLoad.transaction.discount = -100;
+            paymentGateWayPayLoad.transaction.discount = -(100.0).toFixed(2);
             paymentGateWayPayLoad.transaction.couponCode = "SAHAS20";
             paymentGateWayPayLoad.transaction.amount += Number(paymentGateWayPayLoad.transaction.discount);
         }

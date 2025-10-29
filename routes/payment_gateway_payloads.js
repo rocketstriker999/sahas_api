@@ -2,6 +2,7 @@ const libExpress = require("express");
 const { getCourseById } = require("../db/courses");
 const { validateRequestBody } = require("../utils");
 const libCrypto = require("crypto");
+const { readConfig } = require("../libs/config");
 
 const router = libExpress.Router();
 
@@ -10,6 +11,8 @@ router.post("/", async (req, res) => {
     const requiredBodyFields = ["courseId"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+
+    const { payment: { cgst, sgst } = {} } = await readConfig("app");
 
     //if already existing enrollment is there then do not give back the payment hash
 
@@ -26,7 +29,6 @@ router.post("/", async (req, res) => {
                 id: libCrypto.randomUUID(),
                 successURL: process.env.TRANSACTION_SUCCESS_URL,
                 failureURL: process.env.TRANSACTION_FAILURE_URL,
-
                 amount: Number(course.fees),
             },
             user: {
@@ -47,7 +49,7 @@ router.post("/", async (req, res) => {
         }
 
         //if use wallet is required
-        if (validatedRequestBody?.useWalletBalance && Number(req.user.wallet) > 0 && paymentGateWayPayLoad.transaction.amount > 0) {
+        if (validatedRequestBody?.useWalletBalance && req.user.wallet > 0 && paymentGateWayPayLoad.transaction.amount > 0) {
             paymentGateWayPayLoad.transaction.usedWalletBalance = -Math.min(Number(req.user.wallet), Number(paymentGateWayPayLoad.transaction.amount));
             paymentGateWayPayLoad.transaction.amount = Math.max(
                 paymentGateWayPayLoad.transaction.amount + paymentGateWayPayLoad.transaction.usedWalletBalance,
@@ -57,8 +59,8 @@ router.post("/", async (req, res) => {
 
         paymentGateWayPayLoad.transaction.preTaxAmount = paymentGateWayPayLoad.transaction.amount;
 
-        paymentGateWayPayLoad.transaction.sgst = (paymentGateWayPayLoad.transaction.amount * Number(process.env.SGST)) / 100;
-        paymentGateWayPayLoad.transaction.cgst = (paymentGateWayPayLoad.transaction.amount * Number(process.env.CGST)) / 100;
+        paymentGateWayPayLoad.transaction.cgst = (paymentGateWayPayLoad.transaction.amount * cgst) / 100;
+        paymentGateWayPayLoad.transaction.sgst = (paymentGateWayPayLoad.transaction.amount * sgst) / 100;
 
         paymentGateWayPayLoad.transaction.amount += paymentGateWayPayLoad.transaction.sgst + paymentGateWayPayLoad.transaction.cgst;
 

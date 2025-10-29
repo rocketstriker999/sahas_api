@@ -110,21 +110,7 @@ function generateDBTables() {
             created_by INT NOT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP
         )`,
-        `CREATE TABLE IF NOT EXISTS PAYMENT_GATEWAY_PAYLOADS (
-            id VARCHAR(36) PRIMARY KEY ,
-            user_id INT NOT NULL,
-            course_id INT NOT NULL,
 
-            original DECIMAL(8, 2) DEFAULT 0,
-            coupon_code_id INT DEFAULT NULL,
-
-            amount DECIMAL(8, 2) DEFAULT 0,
-            
-            paid BOOLEAN NOT NULL DEFAULT FALSE,
-
-            hash VARCHAR(128) NULL
-          )
-        `,
         `CREATE TABLE IF NOT EXISTS ENROLLMENTS (
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,

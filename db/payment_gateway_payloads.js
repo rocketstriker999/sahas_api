@@ -14,7 +14,6 @@ function getAllPaymentGateWayPayLoads() {
 
 //freeze
 function getPaymentGateWayPayLoadById({ id }) {
-    logger.info(JSON.stringify(paymentGateWayPayLoads));
     return paymentGateWayPayLoads?.find(({ transaction }) => transaction?.id == id);
 }
 

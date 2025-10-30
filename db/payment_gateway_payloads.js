@@ -19,7 +19,7 @@ function getPaymentGateWayPayLoadById({ id }) {
 
 //freeze
 function removePaymentGateWayPayLoadsByIds({ ids }) {
-    paymentGateWayPayLoads?.filter(({ transaction }) => !ids.includes(transaction?.id));
+    paymentGateWayPayLoads = paymentGateWayPayLoads?.filter(({ transaction }) => !ids.includes(transaction?.id));
     logger.info("removePaymentGateWayPayLoadsByIds");
     logger.info(JSON.stringify(paymentGateWayPayLoads));
 }

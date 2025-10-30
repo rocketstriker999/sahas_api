@@ -73,15 +73,15 @@ function validateRequestBody(body, requiredFields) {
 }
 
 async function verifyPaymentGatewayPayLoadStatus(paymentGateWayPayLoad) {
-    const { paymentGateWay: { verificationAPI, merchantSalt } = {} } = await readConfig("app");
+    const { paymentGateWay: { verificationAPI, merchantKey, merchantSalt } = {} } = await readConfig("app");
 
     const headers = new Headers();
     headers.append("Content-Type", "application/x-www-form-urlencoded");
     const urlencoded = new URLSearchParams();
-    urlencoded.append("key", paymentGateWay?.merchantKey);
+    urlencoded.append("key", merchantKey);
     urlencoded.append("command", "verify_payment");
     urlencoded.append("var1", paymentGateWayPayLoad?.transaction?.id);
-    urlencoded.append("hash", generateSHA512(`${paymentGateWay.merchantKey}|${"verify_payment"}|${paymentGateWayPayLoad?.transaction.id}|${merchantSalt}`));
+    urlencoded.append("hash", generateSHA512(`${merchantKey}|${"verify_payment"}|${paymentGateWayPayLoad?.transaction?.id}|${merchantSalt}`));
 
     const fetchOptions = {
         method: "POST",

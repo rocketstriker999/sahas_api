@@ -22,6 +22,12 @@ router.post("/", [requiresDeviceFingerPrint, parseAuthenticationToken, parseUser
 
     //if already existing enrollment is there then do not give back the payment hash
 
+    logger.info(merchantKey);
+    logger.info(merchantSalt);
+    logger.info(successURL);
+    logger.info(failureURL);
+    logger.info(url);
+
     if (isRequestBodyValid) {
         const course = await getCourseById({ id: validatedRequestBody.courseId });
 

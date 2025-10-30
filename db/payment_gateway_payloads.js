@@ -1,4 +1,4 @@
-const { logger } = require("sequelize/lib/utils/logger");
+const logger = require("../libs/logger");
 
 let paymentGateWayPayLoads = [];
 

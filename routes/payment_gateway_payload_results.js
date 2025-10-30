@@ -14,8 +14,8 @@ router.post("/", async (req, res) => {
     if (isRequestBodyValid) {
         logger.success("Verified");
 
-        const { paymentGateWay: { redirectionHost, postVerificationRoute } = {} } = await readConfig("app");
-        res.redirect(redirectionHost.concat(postVerificationRoute.concat(`id=${validatedRequestBody.txnid}`)));
+        const { paymentGateWay: { redirectionHost, postPaymentRoute } = {} } = await readConfig("app");
+        res.redirect(redirectionHost.concat(postPaymentRoute.concat(validatedRequestBody.txnid)));
     }
 });
 

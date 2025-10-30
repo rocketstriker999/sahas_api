@@ -14,7 +14,7 @@ router.post("/", async (req, res) => {
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
-    const { payment: { cgst, sgst } = {}, paymentGateWay: { merchantKey, merchantSalt, redirectionHost, resultEndPoint, url } = {} } = await readConfig("app");
+    const { payment: { cgst, sgst } = {}, paymentGateWay: { merchantKey, merchantSalt, redirectionHost, resultAPI, url } = {} } = await readConfig("app");
 
     //if already existing enrollment is there then do not give back the payment hash
 
@@ -29,8 +29,8 @@ router.post("/", async (req, res) => {
             },
             transaction: {
                 id: libCrypto.randomUUID(),
-                successURL: redirectionHost.concat(resultEndPoint),
-                failureURL: redirectionHost.concat(resultEndPoint),
+                successURL: redirectionHost.concat(resultAPI),
+                failureURL: redirectionHost.concat(resultAPI),
                 amount: Number(course.fees),
             },
             user: {

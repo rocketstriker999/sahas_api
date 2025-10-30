@@ -5,6 +5,7 @@ const libCrypto = require("crypto");
 const { readConfig } = require("../libs/config");
 const { addPaymentGateWayPayLoad, getAllPaymentGateWayPayLoads, removePaymentGateWayPayLoadsByIds } = require("../db/payment_gateway_payloads");
 const logger = require("../libs/logger");
+const { getCouponCodeCourseByCouponCodeAndCourseId } = require("../db/coupon_code_courses");
 
 const router = libExpress.Router();
 
@@ -45,6 +46,9 @@ router.post("/", async (req, res) => {
 
         //calculate coupon code first
         if (validatedRequestBody.couponCode) {
+            const couponCodeCourse = await getCouponCodeCourseByCouponCodeAndCourseId({ code: validatedRequestBody.couponCode, course_id: course?.id });
+            logger.info(JSON.stringify(couponCodeCourse));
+
             paymentGateWayPayLoad.transaction.discount = -(100.12).toFixed(2);
             paymentGateWayPayLoad.transaction.couponCode = "SAHAS20";
             paymentGateWayPayLoad.transaction.amount += Number(paymentGateWayPayLoad.transaction.discount);

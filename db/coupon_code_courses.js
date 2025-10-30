@@ -22,6 +22,17 @@ WHERE COUPON_CODE_COURSES.coupon_code_id = ?`,
 }
 
 //freeze
+function getCouponCodeCourseByCouponCodeAndCourseId({ code, course_id }) {
+    return executeSQLQueryParameterized(
+        `SELECT COUPON_CODE_COURSES.* FROM COUPON_CODES LEFT JOIN COUPON_CODE_COURSES ON COUPON_CODES.id=COUPON_CODE_COURSES.coupon_code_id WHERE COUPON_CODES.code=? AND COUPON_CODE_COURSES.course_id=?`,
+        [code, course_id]
+    ).catch((error) => {
+        logger.error(`getCouponCodeCourseByCouponCode: ${error}`);
+        return [];
+    });
+}
+
+//freeze
 function getCouponCodeCourseById({ id }) {
     return executeSQLQueryParameterized(
         `SELECT 
@@ -91,4 +102,5 @@ module.exports = {
     deleteCouponCodeCourseById,
     updateCouponCodeCourseById,
     getCouponCodeCourseById,
+    getCouponCodeCourseByCouponCodeAndCourseId,
 };

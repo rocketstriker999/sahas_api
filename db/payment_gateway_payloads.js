@@ -20,8 +20,6 @@ function getPaymentGateWayPayLoadById({ id }) {
 //freeze
 function removePaymentGateWayPayLoadsByIds({ ids }) {
     paymentGateWayPayLoads = paymentGateWayPayLoads?.filter(({ transaction }) => !ids.includes(transaction?.id));
-    logger.info("removePaymentGateWayPayLoadsByIds");
-    logger.info(JSON.stringify(paymentGateWayPayLoads));
 }
 
 module.exports = { addPaymentGateWayPayLoad, getAllPaymentGateWayPayLoads, getPaymentGateWayPayLoadById, removePaymentGateWayPayLoadsByIds };

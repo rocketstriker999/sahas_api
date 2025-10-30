@@ -1,6 +1,6 @@
 const libExpress = require("express");
 const { getCourseById } = require("../db/courses");
-const { validateRequestBody, verifyPaymentGatewayPayLoadStatus } = require("../utils");
+const { validateRequestBody, verifyPaymentGatewayPayLoadStatus, getDateByInterval } = require("../utils");
 const libCrypto = require("crypto");
 const { readConfig } = require("../libs/config");
 const { addPaymentGateWayPayLoad, getAllPaymentGateWayPayLoads, removePaymentGateWayPayLoadsByIds } = require("../db/payment_gateway_payloads");
@@ -22,7 +22,7 @@ router.post("/", async (req, res) => {
         const course = await getCourseById({ id: validatedRequestBody.courseId });
 
         const paymentGateWayPayLoad = {
-            course,
+            course: { ...course, validity: getDateByInterval(course?.validity) },
             paymentGateWay: {
                 merchantKey,
                 url,
@@ -99,9 +99,6 @@ router.get("/:id", async (req, res) => {
     const verifiedPaymentGatewayPayLoads = await Promise.all(getAllPaymentGateWayPayLoads()?.map(verifyPaymentGatewayPayLoadStatus));
     //find those payment gateway payloads with success status
     const paidPaymentGatewayPayLoads = verifiedPaymentGatewayPayLoads?.filter(({ transaction }) => transaction?.paid);
-
-    logger.info("paidPaymentGatewayPayLoads");
-    logger.info(JSON.stringify(paidPaymentGatewayPayLoads));
 
     // process those payloads which are paid succesfully
     await Promise.all(

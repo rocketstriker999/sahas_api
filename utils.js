@@ -3,6 +3,7 @@ const libPath = require("path");
 const libCrypto = require("crypto");
 const logger = require("./libs/logger");
 const { readConfig } = require("./libs/config");
+const libMoment = require("moment");
 
 const prepareDirectories = (directories) => {
     directories.forEach((directory) => {
@@ -18,6 +19,10 @@ function generateToken() {
     const randomPart = Math.random().toString(36).substring(2, 18); // Random alphanumeric string
     const token = (timestamp + randomPart).substring(0, 36); // Ensure token is 32 characters long
     return token;
+}
+
+function getDateByInterval(days) {
+    return libMoment().add(days, "days");
 }
 
 function generateSHA512(targetString) {
@@ -157,4 +162,5 @@ module.exports = {
     getDeviceDescriptionByFingerPrint,
     validateRequestBody,
     verifyPaymentGatewayPayLoadStatus,
+    getDateByInterval,
 };

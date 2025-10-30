@@ -159,6 +159,7 @@ function generateDBTables() {
             image VARCHAR(64) NULL,
             fees DECIMAL(8, 2) DEFAULT 0,
             whatsapp_group VARCHAR(64) NULL,
+            validity INT NOT NULL DEFAULT 365,
             view_index INT NOT NULL DEFAULT 0,
             active BOOLEAN NOT NULL DEFAULT TRUE,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

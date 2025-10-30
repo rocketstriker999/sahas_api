@@ -6,7 +6,6 @@ const paymentGateWayPayLoads = [];
 //freeze
 function addPaymentGateWayPayLoad(paymentGateWayPayLoad) {
     paymentGateWayPayLoads.push(paymentGateWayPayLoad);
-    refresh(CACHE_KEY_PAYMENT_GATEWAY_PAYLOADS);
 }
 
 //freeze
@@ -16,7 +15,7 @@ function getAllPaymentGateWayPayLoads() {
 
 //freeze
 function getPaymentGateWayPayLoadById({ id }) {
-    return paymentGateWayPayLoads?.find(({ txnid }) => txnid == id);
+    return paymentGateWayPayLoads?.find(({ transaction }) => transaction?.id == id);
 }
 
 module.exports = { addPaymentGateWayPayLoad, getAllPaymentGateWayPayLoads, getPaymentGateWayPayLoadById };

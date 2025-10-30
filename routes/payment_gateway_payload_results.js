@@ -11,19 +11,17 @@ router.post("/", async (req, res) => {
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
-    const { paymentGateWay: { redirectionHost } = {} } = await readConfig("app");
+    const { paymentGateWay: { redirectionHost, postVerificationRoute } = {} } = await readConfig("app");
 
-    //verify into payu if payment is success
-
-    if (isRequestBodyValid) {
-        const paymentGatewayPayLoad = getPaymentGateWayPayLoadById({ id: validatedRequestBody.txnid });
-
-        await verifyPaymentGatewayPayLoadStatus(paymentGatewayPayLoad);
-
-        res.redirect(redirectionHost);
-    } else {
-        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+    if (
+        isRequestBodyValid &&
+        (paymentGatewayPayLoad = getPaymentGateWayPayLoadById({ id: validatedRequestBody.txnid })) &&
+        (await verifyPaymentGatewayPayLoadStatus(paymentGatewayPayLoad))
+    ) {
+        //insert into enrollment transcations
+        logger.success("Verified");
     }
+    res.redirect(redirectionHost.concat(postVerificationRoute.replace("?", paymentGatewayPayLoad?.course?.id)));
 });
 
 module.exports = router;

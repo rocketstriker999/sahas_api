@@ -18,6 +18,7 @@
         "merchantSalt": "U1nL25sV5ccsznsSBZW3MtaBhZH7oxdI",
         "resultAPI": "api/payment-gateway-payload-results",
         "redirectionHost": "https://dev.sahasinstitute.com/",
-        "verificationAPI": "https://test.payu.in/merchant/postservice?form=2"
+        "verificationAPI": "https://test.payu.in/merchant/postservice?form=2",
+        "postVerificationRoute": "courses/?/subjects"
     }
 }

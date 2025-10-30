@@ -1,6 +1,7 @@
 const libExpress = require("express");
 const { validateRequestBody } = require("../utils");
 const logger = require("../libs/logger");
+const { readConfig } = require("../libs/config");
 
 const router = libExpress.Router();
 

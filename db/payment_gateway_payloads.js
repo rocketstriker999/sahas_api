@@ -9,4 +9,9 @@ function addPaymentGateWayPayLoad(paymentGateWayPayLoad) {
     refresh(CACHE_KEY_PAYMENT_GATEWAY_PAYLOADS);
 }
 
-module.exports = { addPaymentGateWayPayLoad };
+//freeze
+function getAllPaymentGateWayPayLoads() {
+    return paymentGateWayPayLoads;
+}
+
+module.exports = { addPaymentGateWayPayLoad, getAllPaymentGateWayPayLoads };

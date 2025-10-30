@@ -14,7 +14,7 @@ router.post("/", async (req, res) => {
 
     //verify into payu if payment is success
 
-    logger.info(JSON.stringify(req));
+    logger.info(validatedRequestBody);
 
     if (isRequestBodyValid) {
         res.redirect(redirectionHost);

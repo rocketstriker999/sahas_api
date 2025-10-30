@@ -12,19 +12,9 @@ router.post("/", async (req, res) => {
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
     if (isRequestBodyValid) {
-        logger.success("Verified");
-
         const { paymentGateWay: { redirectionHost, postPaymentRoute } = {} } = await readConfig("app");
         res.redirect(redirectionHost.concat(postPaymentRoute.concat(validatedRequestBody.txnid)));
     }
-});
-
-router.get("/:id", async (req, res) => {
-    if (!req.params.id) {
-        return res.status(400).json({ error: "Missing Payment GateWay PayLoad Id" });
-    }
-
-    res.status(200).json({ status: "done" });
 });
 
 module.exports = router;

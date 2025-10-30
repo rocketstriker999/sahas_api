@@ -72,7 +72,7 @@ function validateRequestBody(body, requiredFields) {
     };
 }
 
-async function verifyPaymentGatewayPayLoadStatus({ paymentGateWay, transaction }) {
+async function verifyPaymentGatewayPayLoadStatus(paymentGateWayPayLoad) {
     const { paymentGateWay: { verificationAPI, merchantSalt } = {} } = await readConfig("app");
 
     const headers = new Headers();
@@ -80,8 +80,8 @@ async function verifyPaymentGatewayPayLoadStatus({ paymentGateWay, transaction }
     const urlencoded = new URLSearchParams();
     urlencoded.append("key", paymentGateWay?.merchantKey);
     urlencoded.append("command", "verify_payment");
-    urlencoded.append("var1", transaction?.id);
-    urlencoded.append("hash", generateSHA512(`${paymentGateWay.merchantKey}|${"verify_payment"}|${transaction.id}|${merchantSalt}`));
+    urlencoded.append("var1", paymentGateWayPayLoad?.transaction?.id);
+    urlencoded.append("hash", generateSHA512(`${paymentGateWay.merchantKey}|${"verify_payment"}|${paymentGateWayPayLoad?.transaction.id}|${merchantSalt}`));
 
     const fetchOptions = {
         method: "POST",
@@ -92,10 +92,11 @@ async function verifyPaymentGatewayPayLoadStatus({ paymentGateWay, transaction }
     try {
         const response = await fetch(verificationAPI, fetchOptions);
         const verificationResponse = await response.json();
-        return verificationResponse?.transaction_details[transaction.id]?.status === "success";
+        paymentGateWayPayLoad.transcation.paid = verificationResponse?.transaction_details[paymentGateWayPayLoad?.transaction?.id]?.status === "success";
     } catch {
-        logger.error(`Failed to Check Status For Transaction - ${transaction.id}`);
-        return false;
+        logger.error(`Failed to Check Status For Transaction - ${paymentGateWayPayLoad.transaction.id}`);
+    } finally {
+        return paymentGateWayPayLoad;
     }
 }
 

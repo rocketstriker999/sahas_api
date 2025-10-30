@@ -1,9 +1,9 @@
 const libExpress = require("express");
 const { getCourseById } = require("../db/courses");
-const { validateRequestBody } = require("../utils");
+const { validateRequestBody, verifyPaymentGatewayPayLoadStatus } = require("../utils");
 const libCrypto = require("crypto");
 const { readConfig } = require("../libs/config");
-const { addPaymentGateWayPayLoad } = require("../db/payment_gateway_payloads");
+const { addPaymentGateWayPayLoad, getAllPaymentGateWayPayLoads } = require("../db/payment_gateway_payloads");
 const logger = require("../libs/logger");
 
 const router = libExpress.Router();
@@ -95,7 +95,9 @@ router.get("/:id", async (req, res) => {
         return res.status(400).json({ error: "Missing Payment GateWay PayLoad Id" });
     }
 
-    res.status(200).json({ status: "done" });
+    const verifiedPaymentGatewayPayLoads = await Promise.all(getAllPaymentGateWayPayLoads()?.map(verifyPaymentGatewayPayLoadStatus));
+
+    res.status(200).json(verifiedPaymentGatewayPayLoads?.find(({ transaction }) => transaction?.id == req.params.id));
 });
 
 module.exports = router;

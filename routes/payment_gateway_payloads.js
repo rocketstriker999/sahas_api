@@ -5,10 +5,15 @@ const libCrypto = require("crypto");
 const { readConfig } = require("../libs/config");
 const { addPaymentGateWayPayLoad } = require("../db/payment_gateway_payloads");
 
+const requiresDeviceFingerPrint = require("../middlewares/requires_device_finger_print");
+const parseAuthenticationToken = require("../middlewares/parse_authentication_token");
+const parseUserDevice = require("../middlewares/parse_user_device");
+const logRequest = require("../middlewares/log_request");
+
 const router = libExpress.Router();
 
 //tested
-router.post("/", async (req, res) => {
+router.post("/", [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest], async (req, res) => {
     const requiredBodyFields = ["courseId"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
@@ -86,6 +91,22 @@ router.post("/", async (req, res) => {
         addPaymentGateWayPayLoad(paymentGateWayPayLoad);
 
         res.status(201).json(paymentGateWayPayLoad);
+    } else {
+        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+    }
+});
+
+router.post("/status", async (req, res) => {
+    const requiredBodyFields = ["status"];
+
+    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+
+    //verify into payu if payment is success
+
+    logger.info(JSON.stringify(req));
+
+    if (isRequestBodyValid) {
+        res.redirect("http://localhost:3000/");
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

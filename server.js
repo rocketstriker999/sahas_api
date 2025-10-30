@@ -23,49 +23,89 @@ sahasAPI.use(libExpress.json());
 sahasAPI.use(libExpress.urlencoded({ extended: true }));
 
 //Apply Middlewares #17
-
 sahasAPI.use(requiresNoMaintenance);
-sahasAPI.use(requiresDeviceFingerPrint);
-sahasAPI.use(parseAuthenticationToken);
-sahasAPI.use(parseUserDevice);
-sahasAPI.use(logRequest);
 
 //api end points and routers
 const routers = {
-    "/template-configs": { middlewares: [], router: require("./routes/template_configs") },
+    "/template-configs": {
+        middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
+        router: require("./routes/template_configs"),
+    },
 
-    "/authentication-tokens": { middlewares: [], router: require("./routes/authentication_tokens") },
+    "/authentication-tokens": {
+        middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
+        router: require("./routes/authentication_tokens"),
+    },
 
-    "/course-categories": { middlewares: [], router: require("./routes/course_categories") },
-    "/courses": { middlewares: [], router: require("./routes/courses") },
-    "/course-subjects": { middlewares: [], router: require("./routes/course_subjects") },
-    "/subjects": { middlewares: [], router: require("./routes/subjects") },
-    "/chapter-types": { middlewares: [], router: require("./routes/chapter_types") },
-    "/chapters": { middlewares: [], router: require("./routes/chapters") },
+    "/course-categories": {
+        middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
+        router: require("./routes/course_categories"),
+    },
+    "/courses": { middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest], router: require("./routes/courses") },
+    "/course-subjects": {
+        middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
+        router: require("./routes/course_subjects"),
+    },
+    "/subjects": { middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest], router: require("./routes/subjects") },
+    "/chapter-types": {
+        middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
+        router: require("./routes/chapter_types"),
+    },
+    "/chapters": { middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest], router: require("./routes/chapters") },
 
-    "/filters": { middlewares: [], router: require("./routes/filters") },
+    "/filters": { middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest], router: require("./routes/filters") },
 
-    "/users": { middlewares: [], router: require("./routes/users") },
+    "/users": { middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest], router: require("./routes/users") },
 
-    "/inquiries": { middlewares: [], router: require("./routes/inquiries") },
-    "/inquiry-notes": { middlewares: [], router: require("./routes/inquiry_notes") },
+    "/inquiries": { middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest], router: require("./routes/inquiries") },
+    "/inquiry-notes": {
+        middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
+        router: require("./routes/inquiry_notes"),
+    },
 
-    "/payment-gateway-payloads": { middlewares: [], router: require("./routes/payment_gateway_payloads") },
+    "/payment-gateway-payloads": {
+        middlewares: [],
+        router: require("./routes/payment_gateway_payloads"),
+    },
 
-    "/enrollments": { middlewares: [], router: require("./routes/enrollments") },
-    "/enrollment-transactions": { middlewares: [], router: require("./routes/enrollment_transactions") },
-    "/enrollment-courses": { middlewares: [], router: require("./routes/enrollment_courses") },
+    "/enrollments": {
+        middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
+        router: require("./routes/enrollments"),
+    },
+    "/enrollment-transactions": {
+        middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
+        router: require("./routes/enrollment_transactions"),
+    },
+    "/enrollment-courses": {
+        middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
+        router: require("./routes/enrollment_courses"),
+    },
 
-    "/wallet-transactions": { middlewares: [], router: require("./routes/wallet_transactions") },
+    "/wallet-transactions": {
+        middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
+        router: require("./routes/wallet_transactions"),
+    },
 
-    "/coupon-codes": { middlewares: [], router: require("./routes/coupon_codes") },
-    "/coupon-code-courses": { middlewares: [], router: require("./routes/coupon_code_courses") },
+    "/coupon-codes": {
+        middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
+        router: require("./routes/coupon_codes"),
+    },
+    "/coupon-code-courses": {
+        middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
+        router: require("./routes/coupon_code_courses"),
+    },
 
-    "/roles": { middlewares: [], router: require("./routes/roles") },
-    "/user-roles": { middlewares: [], router: require("./routes/user_roles") },
+    "/roles": { middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest], router: require("./routes/roles") },
+    "/user-roles": { middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest], router: require("./routes/user_roles") },
 
-    "/authorities": { middlewares: [], router: require("./routes/authorities") },
-    "/role-authorities": { middlewares: [], router: require("./routes/role_authorities") },
+    "/authorities": {
+        middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
+        router: require("./routes/authorities"),
+    },
+    "/role-authorities": {
+        middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
+        router: require("./routes/role_authorities"),
+    },
 };
 
 //apply all routes

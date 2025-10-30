@@ -3,7 +3,7 @@ const { validateRequestBody } = require("../utils");
 const logger = require("../libs/logger");
 const { readConfig } = require("../libs/config");
 const { get } = require("../libs/cacher");
-const { KEY_AUTHENTICATION_TOKEN, CACHE_KEY_PAYMENT_GATEWAY_PAYLOADS } = require("../constants");
+const { CACHE_KEY_PAYMENT_GATEWAY_PAYLOADS } = require("../constants");
 
 const router = libExpress.Router();
 

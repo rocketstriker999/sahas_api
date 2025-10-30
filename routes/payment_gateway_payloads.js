@@ -99,6 +99,10 @@ router.get("/:id", async (req, res) => {
     const verifiedPaymentGatewayPayLoads = await Promise.all(getAllPaymentGateWayPayLoads()?.map(verifyPaymentGatewayPayLoadStatus));
     //find those payment gateway payloads with success status
     const paidPaymentGatewayPayLoads = verifiedPaymentGatewayPayLoads?.filter(({ transaction }) => transaction?.paid);
+
+    logger.info("paidPaymentGatewayPayLoads");
+    logger.info(JSON.stringify(paidPaymentGatewayPayLoads));
+
     // process those payloads which are paid succesfully
     await Promise.all(
         paidPaymentGatewayPayLoads?.map(async (paymentGateWayPayLoad) => {

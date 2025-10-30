@@ -3,7 +3,7 @@ const { getCourseById } = require("../db/courses");
 const { validateRequestBody, verifyPaymentGatewayPayLoadStatus } = require("../utils");
 const libCrypto = require("crypto");
 const { readConfig } = require("../libs/config");
-const { addPaymentGateWayPayLoad, getAllPaymentGateWayPayLoads } = require("../db/payment_gateway_payloads");
+const { addPaymentGateWayPayLoad, getAllPaymentGateWayPayLoads, removePaymentGateWayPayLoadsByIds } = require("../db/payment_gateway_payloads");
 const logger = require("../libs/logger");
 
 const router = libExpress.Router();
@@ -94,9 +94,20 @@ router.get("/:id", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Payment GateWay PayLoad Id" });
     }
-    const verifiedPaymentGatewayPayLoads = await Promise.all(getAllPaymentGateWayPayLoads()?.map(verifyPaymentGatewayPayLoadStatus));
 
-    logger.info(JSON.stringify(verifiedPaymentGatewayPayLoads));
+    //verify status with payment gateway
+    const verifiedPaymentGatewayPayLoads = await Promise.all(getAllPaymentGateWayPayLoads()?.map(verifyPaymentGatewayPayLoadStatus));
+    //find those payment gateway payloads with success status
+    const paidPaymentGatewayPayLoads = verifiedPaymentGatewayPayLoads?.filter(({ transaction }) => transaction?.paid);
+    // process those payloads which are paid succesfully
+    await Promise.all(
+        paidPaymentGatewayPayLoads?.map(async (paymentGateWayPayLoad) => {
+            logger.info(JSON.stringify(paymentGateWayPayLoad));
+        })
+    );
+
+    //remove all the payloads which are verified and processed
+    removePaymentGateWayPayLoadsByIds({ ids: verifiedPaymentGatewayPayLoads?.map(({ transaction }) => transaction?.id) });
 
     res.status(200).json(verifiedPaymentGatewayPayLoads?.find(({ transaction }) => transaction?.id == req.params.id));
 });

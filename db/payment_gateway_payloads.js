@@ -1,4 +1,6 @@
-const paymentGateWayPayLoads = [];
+const { logger } = require("sequelize/lib/utils/logger");
+
+let paymentGateWayPayLoads = [];
 
 //freeze
 function addPaymentGateWayPayLoad(paymentGateWayPayLoad) {
@@ -15,4 +17,10 @@ function getPaymentGateWayPayLoadById({ id }) {
     return paymentGateWayPayLoads?.find(({ transaction }) => transaction?.id == id);
 }
 
-module.exports = { addPaymentGateWayPayLoad, getAllPaymentGateWayPayLoads, getPaymentGateWayPayLoadById };
+//freeze
+function removePaymentGateWayPayLoadsByIds({ ids }) {
+    paymentGateWayPayLoads?.filter(({ transaction }) => !ids.includes(transaction?.id));
+    logger.info(paymentGateWayPayLoads);
+}
+
+module.exports = { addPaymentGateWayPayLoad, getAllPaymentGateWayPayLoads, getPaymentGateWayPayLoadById, removePaymentGateWayPayLoadsByIds };

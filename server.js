@@ -64,8 +64,12 @@ const routers = {
     },
 
     "/payment-gateway-payloads": {
-        middlewares: [],
+        middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
         router: require("./routes/payment_gateway_payloads"),
+    },
+    "/payment-gateway-payload-results": {
+        middlewares: [],
+        router: require("./routes/payment_gateway_payload_results"),
     },
 
     "/enrollments": {

@@ -1,9 +1,7 @@
 const libExpress = require("express");
-const { validateRequestBody } = require("../utils");
+const { validateRequestBody, verifyPaymentGatewayPayLoadStatus } = require("../utils");
 const logger = require("../libs/logger");
 const { readConfig } = require("../libs/config");
-const { get } = require("../libs/cacher");
-const { CACHE_KEY_PAYMENT_GATEWAY_PAYLOADS } = require("../constants");
 const { getPaymentGateWayPayLoadById } = require("../db/payment_gateway_payloads");
 
 const router = libExpress.Router();
@@ -18,8 +16,9 @@ router.post("/", async (req, res) => {
     //verify into payu if payment is success
 
     if (isRequestBodyValid) {
-        const transaction = getPaymentGateWayPayLoadById({ id: validatedRequestBody.txnid });
-        logger.info(JSON.stringify(transaction));
+        const paymentGatewayPayLoad = getPaymentGateWayPayLoadById({ id: validatedRequestBody.txnid });
+
+        await verifyPaymentGatewayPayLoadStatus(paymentGatewayPayLoad);
 
         res.redirect(redirectionHost);
     } else {

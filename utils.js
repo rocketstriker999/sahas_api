@@ -2,6 +2,7 @@ const libFs = require("fs");
 const libPath = require("path");
 const libCrypto = require("crypto");
 const logger = require("./libs/logger");
+const { readConfig } = require("./libs/config");
 
 const prepareDirectories = (directories) => {
     directories.forEach((directory) => {
@@ -71,6 +72,34 @@ function validateRequestBody(body, requiredFields) {
     };
 }
 
+async function verifyPaymentGatewayPayLoadStatus({ paymentGateWay, transaction }) {
+    const { paymentGateWay: { verificationAPI } = {} } = await readConfig("app");
+
+    const headers = new Headers();
+    headers.append("Content-Type", "application/x-www-form-urlencoded");
+    const urlencoded = new URLSearchParams();
+    urlencoded.append("key", paymentGateWay?.merchantKey);
+    urlencoded.append("command", "verify_payment");
+    urlencoded.append("var1", transaction.id);
+    urlencoded.append("hash", transaction.hash);
+
+    const fetchOptions = {
+        method: "POST",
+        headers: headers,
+        body: urlencoded,
+        redirect: "follow",
+    };
+    try {
+        const response = await fetch(verificationAPI, fetchOptions);
+        const verificationResponse = await response.json();
+        logger.info(JSON.stringify(verificationResponse));
+        return verificationResponse?.transaction_details[transaction.id]?.status === "success";
+    } catch {
+        logger.error(`Failed to Check Status For Transaction - ${transaction.id}`);
+        return false;
+    }
+}
+
 async function requestService({
     requestHeaders = {},
     requestServiceName,
@@ -127,4 +156,5 @@ module.exports = {
     generateSHA512,
     getDeviceDescriptionByFingerPrint,
     validateRequestBody,
+    verifyPaymentGatewayPayLoadStatus,
 };

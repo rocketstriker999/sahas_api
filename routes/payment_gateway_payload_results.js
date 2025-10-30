@@ -19,7 +19,7 @@ router.post("/", async (req, res) => {
 
     if (isRequestBodyValid) {
         const transaction = getPaymentGateWayPayLoadById({ id: validatedRequestBody.txnid });
-        logger.info(transaction);
+        logger.info(JSON.stringify(transaction));
 
         res.redirect(redirectionHost);
     } else {

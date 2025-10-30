@@ -94,8 +94,9 @@ router.get("/:id", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Payment GateWay PayLoad Id" });
     }
-
+    logger.info("CALLED1");
     const verifiedPaymentGatewayPayLoads = await Promise.all(getAllPaymentGateWayPayLoads()?.map(verifyPaymentGatewayPayLoadStatus));
+    logger.info("CALLED2");
 
     res.status(200).json(verifiedPaymentGatewayPayLoads?.find(({ transaction }) => transaction?.id == req.params.id));
 });

@@ -16,6 +16,8 @@ router.post("/", async (req, res) => {
 
     //verify into payu if payment is success
 
+    logger.info(get(CACHE_KEY_PAYMENT_GATEWAY_PAYLOADS));
+
     if (isRequestBodyValid) {
         const transaction = get(CACHE_KEY_PAYMENT_GATEWAY_PAYLOADS)?.find(({ id }) => id == validatedRequestBody.txnid);
         logger.info(transaction);

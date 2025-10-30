@@ -96,7 +96,7 @@ router.get("/:id", async (req, res) => {
     }
     const verifiedPaymentGatewayPayLoads = await Promise.all(getAllPaymentGateWayPayLoads()?.map(verifyPaymentGatewayPayLoadStatus));
 
-    logger.info(verifiedPaymentGatewayPayLoads);
+    logger.info(JSON.stringify(verifiedPaymentGatewayPayLoads));
 
     res.status(200).json(verifiedPaymentGatewayPayLoads?.find(({ transaction }) => transaction?.id == req.params.id));
 });

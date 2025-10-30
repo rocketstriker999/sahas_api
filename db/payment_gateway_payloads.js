@@ -1,5 +1,7 @@
+const { logger } = require("sequelize/lib/utils/logger");
 const { CACHE_KEY_PAYMENT_GATEWAY_PAYLOADS } = require("../constants");
 const { refresh } = require("../libs/cacher");
+const logger = require("../libs/logger");
 
 const paymentGateWayPayLoads = [];
 
@@ -15,6 +17,7 @@ function getAllPaymentGateWayPayLoads() {
 
 //freeze
 function getPaymentGateWayPayLoadById({ id }) {
+    logger.info(JSON.stringify(paymentGateWayPayLoads));
     return paymentGateWayPayLoads?.find(({ transaction }) => transaction?.id == id);
 }
 

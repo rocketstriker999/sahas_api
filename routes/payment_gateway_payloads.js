@@ -13,23 +13,25 @@ router.post("/", async (req, res) => {
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
-    const { payment: { cgst, sgst } = {} } = await readConfig("app");
+    const { payment: { cgst, sgst } = {}, paymentGateWay: { merchantKey, merchantSalt, successURL, failureURL, url } = {} } = await readConfig("app");
 
     //if already existing enrollment is there then do not give back the payment hash
 
     if (isRequestBodyValid) {
         const course = await getCourseById({ id: validatedRequestBody.courseId });
 
+        const transcationId = libCrypto.randomUUID();
+
         const paymentGateWayPayLoad = {
             course,
             paymentGateWay: {
-                merchantKey: process.env.MERCHANT_KEY,
-                url: process.env.PAYU_URL,
+                merchantKey,
+                url,
             },
             transaction: {
-                id: libCrypto.randomUUID(),
-                successURL: process.env.TRANSACTION_SUCCESS_URL,
-                failureURL: process.env.TRANSACTION_FAILURE_URL,
+                id: transcationId,
+                successURL: successURL.concat(transcationId),
+                failureURL: failureURL.concat(transcationId),
                 amount: Number(course.fees),
             },
             user: {
@@ -76,7 +78,7 @@ router.post("/", async (req, res) => {
         paymentGateWayPayLoad.transaction.hash = libCrypto
             .createHash("sha512")
             .update(
-                `${paymentGateWayPayLoad.paymentGateWay.merchantKey}|${paymentGateWayPayLoad.transaction.id}|${paymentGateWayPayLoad.transaction.amount}|${paymentGateWayPayLoad.product}|${paymentGateWayPayLoad.user.firstName}|${paymentGateWayPayLoad.user.email}|||||||||||${process.env.MERCHANT_SALT}`
+                `${merchantKey}|${transcationId}|${paymentGateWayPayLoad.transaction.amount}|${paymentGateWayPayLoad.product}|${paymentGateWayPayLoad.user.firstName}|${paymentGateWayPayLoad.user.email}|||||||||||${merchantSalt}`
             )
             .digest("hex");
 

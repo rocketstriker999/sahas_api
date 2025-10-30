@@ -4,8 +4,6 @@ const { addEnrollmentTransaction, getEnrollmentTransactionById } = require("../d
 const { readConfig } = require("../libs/config");
 const router = libExpress.Router();
 
-const logger = require("../libs/logger");
-
 //tested
 router.post("/", async (req, res) => {
     const requiredBodyFields = ["enrollment_id", "amount", "note", "type"];

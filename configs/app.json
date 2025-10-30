@@ -11,5 +11,12 @@
     "payment": {
         "cgst": 9,
         "sgst": 9
+    },
+    "paymentGateWay": {
+        "url": "https://test.payu.in/_payment",
+        "merchantKey": "6xRVEH",
+        "merchantSalt": "U1nL25sV5ccsznsSBZW3MtaBhZH7oxdI",
+        "successURL": "http://localhost:3000/payment-gateway-payloads/",
+        "failureURL": "http://localhost:3000/payment-gateway-payloads/"
     }
 }

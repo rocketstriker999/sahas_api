@@ -25,7 +25,6 @@ const generateCaches = async () => {
     await add(CACHE_KEY_COURSE_CATEGORIES, getAllCourseCategories);
     await add(CACHE_KEY_COURSES, getAllCourses);
     await add(CACHE_KEY_SUBJECTS, getAllSubjects);
-    await add(CACHE_KEY_PAYMENT_GATEWAY_PAYLOADS, getAllPaymentGateWayPayLoads);
 };
 
 module.exports = { add, get, refresh, generateCaches };

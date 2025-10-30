@@ -14,4 +14,9 @@ function getAllPaymentGateWayPayLoads() {
     return paymentGateWayPayLoads;
 }
 
-module.exports = { addPaymentGateWayPayLoad, getAllPaymentGateWayPayLoads };
+//freeze
+function getPaymentGateWayPayLoadById({ id }) {
+    return paymentGateWayPayLoads?.find(({ txnid }) => txnid == id);
+}
+
+module.exports = { addPaymentGateWayPayLoad, getAllPaymentGateWayPayLoads, getPaymentGateWayPayLoadById };

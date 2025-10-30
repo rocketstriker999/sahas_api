@@ -4,6 +4,7 @@ const { validateRequestBody } = require("../utils");
 const libCrypto = require("crypto");
 const { readConfig } = require("../libs/config");
 const { addPaymentGateWayPayLoad } = require("../db/payment_gateway_payloads");
+const logger = require("../libs/logger");
 
 const requiresDeviceFingerPrint = require("../middlewares/requires_device_finger_print");
 const parseAuthenticationToken = require("../middlewares/parse_authentication_token");

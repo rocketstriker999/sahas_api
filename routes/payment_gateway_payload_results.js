@@ -19,6 +19,14 @@ router.post("/", async (req, res) => {
     }
 });
 
+router.get("/:id", async (req, res) => {
+    if (!req.params.id) {
+        return res.status(400).json({ error: "Missing Payment GateWay PayLoad Id" });
+    }
+
+    res.status(200).json({ status: "done" });
+});
+
 module.exports = router;
 
 //  &&

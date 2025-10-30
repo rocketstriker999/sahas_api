@@ -7,21 +7,20 @@ const { getPaymentGateWayPayLoadById } = require("../db/payment_gateway_payloads
 const router = libExpress.Router();
 
 router.post("/", async (req, res) => {
-    const requiredBodyFields = ["status", "txnid"];
+    const requiredBodyFields = ["txnid"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
-    const { paymentGateWay: { redirectionHost, postVerificationRoute } = {} } = await readConfig("app");
-
-    if (
-        isRequestBodyValid &&
-        (paymentGatewayPayLoad = getPaymentGateWayPayLoadById({ id: validatedRequestBody.txnid })) &&
-        (await verifyPaymentGatewayPayLoadStatus(paymentGatewayPayLoad))
-    ) {
-        //insert into enrollment transcations
+    if (isRequestBodyValid) {
         logger.success("Verified");
+
+        const { paymentGateWay: { redirectionHost, postVerificationRoute } = {} } = await readConfig("app");
+        res.redirect(redirectionHost.concat(postVerificationRoute.concat(`id=${validatedRequestBody.txnid}`)));
     }
-    res.redirect(redirectionHost.concat(postVerificationRoute.replace("?", paymentGatewayPayLoad?.course?.id)));
 });
 
 module.exports = router;
+
+//  &&
+//         (paymentGatewayPayLoad = getPaymentGateWayPayLoadById({ id: validatedRequestBody.txnid })) &&
+//         (await verifyPaymentGatewayPayLoadStatus(paymentGatewayPayLoad))

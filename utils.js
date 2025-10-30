@@ -92,7 +92,6 @@ async function verifyPaymentGatewayPayLoadStatus({ paymentGateWay, transaction }
     try {
         const response = await fetch(verificationAPI, fetchOptions);
         const verificationResponse = await response.json();
-        logger.info(JSON.stringify(verificationResponse));
         return verificationResponse?.transaction_details[transaction.id]?.status === "success";
     } catch {
         logger.error(`Failed to Check Status For Transaction - ${transaction.id}`);

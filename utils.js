@@ -81,7 +81,7 @@ async function verifyPaymentGatewayPayLoadStatus(paymentGateWayPayLoad) {
     urlencoded.append("key", merchantKey);
     urlencoded.append("command", "verify_payment");
     urlencoded.append("var1", paymentGateWayPayLoad?.transaction?.id);
-    urlencoded.append("hash", generateSHA512(`${merchantKey}|${"verify_payment"}|${paymentGateWayPayLoad?.transaction?.id}|${merchantSalt}`));
+    urlencoded.append("hash", generateSHA512(`${merchantKey}|verify_payment|${paymentGateWayPayLoad?.transaction?.id}|${merchantSalt}`));
 
     const fetchOptions = {
         method: "POST",
@@ -93,8 +93,8 @@ async function verifyPaymentGatewayPayLoadStatus(paymentGateWayPayLoad) {
         const response = await fetch(verificationAPI, fetchOptions);
         const verificationResponse = await response.json();
         paymentGateWayPayLoad.transcation.paid = verificationResponse?.transaction_details[paymentGateWayPayLoad?.transaction?.id]?.status === "success";
-    } catch {
-        logger.error(`Failed to Check Status For Transaction - ${paymentGateWayPayLoad.transaction.id}`);
+    } catch (error) {
+        logger.error(`Failed to Check Status For Transaction - ${paymentGateWayPayLoad.transaction.id} - error ${error}`);
     } finally {
         return paymentGateWayPayLoad;
     }

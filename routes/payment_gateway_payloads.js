@@ -6,11 +6,6 @@ const { readConfig } = require("../libs/config");
 const { addPaymentGateWayPayLoad } = require("../db/payment_gateway_payloads");
 const logger = require("../libs/logger");
 
-const requiresDeviceFingerPrint = require("../middlewares/requires_device_finger_print");
-const parseAuthenticationToken = require("../middlewares/parse_authentication_token");
-const parseUserDevice = require("../middlewares/parse_user_device");
-const logRequest = require("../middlewares/log_request");
-
 const router = libExpress.Router();
 
 //tested
@@ -19,14 +14,12 @@ router.post("/", async (req, res) => {
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
-    const { payment: { cgst, sgst } = {}, paymentGateWay: { merchantKey, merchantSalt, successURL, failureURL, url } = {} } = await readConfig("app");
+    const { payment: { cgst, sgst } = {}, paymentGateWay: { merchantKey, merchantSalt, redirectionHost, resultEndPoint, url } = {} } = await readConfig("app");
 
     //if already existing enrollment is there then do not give back the payment hash
 
     if (isRequestBodyValid) {
         const course = await getCourseById({ id: validatedRequestBody.courseId });
-
-        const transcationId = libCrypto.randomUUID();
 
         const paymentGateWayPayLoad = {
             course,
@@ -35,9 +28,9 @@ router.post("/", async (req, res) => {
                 url,
             },
             transaction: {
-                id: transcationId,
-                successURL: successURL.concat(transcationId),
-                failureURL: failureURL.concat(transcationId),
+                id: libCrypto.randomUUID(),
+                successURL: redirectionHost.concat(resultEndPoint),
+                failureURL: redirectionHost.concat(resultEndPoint),
                 amount: Number(course.fees),
             },
             user: {
@@ -84,7 +77,7 @@ router.post("/", async (req, res) => {
         paymentGateWayPayLoad.transaction.hash = libCrypto
             .createHash("sha512")
             .update(
-                `${merchantKey}|${transcationId}|${paymentGateWayPayLoad.transaction.amount}|${paymentGateWayPayLoad.product}|${paymentGateWayPayLoad.user.firstName}|${paymentGateWayPayLoad.user.email}|||||||||||${merchantSalt}`
+                `${merchantKey}|${paymentGateWayPayLoad.transaction.id}|${paymentGateWayPayLoad.transaction.amount}|${paymentGateWayPayLoad.product}|${paymentGateWayPayLoad.user.firstName}|${paymentGateWayPayLoad.user.email}|||||||||||${merchantSalt}`
             )
             .digest("hex");
 

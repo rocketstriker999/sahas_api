@@ -1,9 +1,5 @@
 const libExpress = require("express");
-const { getCourseById } = require("../db/courses");
 const { validateRequestBody } = require("../utils");
-const libCrypto = require("crypto");
-const { readConfig } = require("../libs/config");
-const { addPaymentGateWayPayLoad } = require("../db/payment_gateway_payloads");
 const logger = require("../libs/logger");
 
 const router = libExpress.Router();
@@ -13,12 +9,14 @@ router.post("/", async (req, res) => {
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
+    const { paymentGateWay: { redirectionHost } = {} } = await readConfig("app");
+
     //verify into payu if payment is success
 
     logger.info(JSON.stringify(req));
 
     if (isRequestBodyValid) {
-        res.redirect("http://localhost:3000/");
+        res.redirect(redirectionHost);
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

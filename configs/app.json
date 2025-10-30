@@ -16,7 +16,7 @@
         "url": "https://test.payu.in/_payment",
         "merchantKey": "6xRVEH",
         "merchantSalt": "U1nL25sV5ccsznsSBZW3MtaBhZH7oxdI",
-        "successURL": "https://dev.sahasinstitute.com/payment-gateway-payloads/",
-        "failureURL": "https://dev.sahasinstitute.com/payment-gateway-payloads/"
+        "resultEndPoint": "payment-gateway-payload-results",
+        "redirectionHost": "https://dev.sahasinstitute.com/"
     }
 }

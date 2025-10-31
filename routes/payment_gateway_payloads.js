@@ -44,7 +44,7 @@ router.post("/", async (req, res) => {
                 firstName: req.user.full_name?.split(" ")[0],
                 lastName: req.user.full_name?.split(" ")?.[1] || "NA",
                 phone: req.user.phone,
-                wallet: await getWalletBalanceByUserId({ user_id: req?.user?.id }),
+                wallet: (await getWalletBalanceByUserId({ user_id: req?.user?.id })).toFixed(2),
             },
             product: course.title,
         };

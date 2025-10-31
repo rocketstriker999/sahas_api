@@ -53,7 +53,7 @@ router.post("/", async (req, res) => {
                 if (couponCodeCourse?.discount_type === "%") {
                     paymentGateWayPayLoad.transaction.discount = (paymentGateWayPayLoad.transaction.amount * couponCodeCourse.discount) / 100;
                 }
-                paymentGateWayPayLoad.transaction.discount = -paymentGateWayPayLoad.transaction.discount.toFixed(2);
+                paymentGateWayPayLoad.transaction.discount = paymentGateWayPayLoad.transaction.discount.toFixed(2);
                 logger.info(paymentGateWayPayLoad.transaction.discount);
             } else {
                 paymentGateWayPayLoad.transaction.discount = 0;

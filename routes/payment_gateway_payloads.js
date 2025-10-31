@@ -49,11 +49,14 @@ router.post("/", async (req, res) => {
             paymentGateWayPayLoad.transaction.couponCode = validatedRequestBody.couponCode;
 
             if ((couponCodeCourse = await getCouponCodeCourseByCouponCodeAndCourseId({ code: validatedRequestBody.couponCode, course_id: course?.id }))) {
-                paymentGateWayPayLoad.transaction.discount = Number(couponCodeCourse?.discount);
-                if (couponCodeCourse?.discount_type === "%") {
-                    paymentGateWayPayLoad.transaction.discount = (paymentGateWayPayLoad.transaction.amount * couponCodeCourse.discount) / 100;
+                //if having discount
+                if (couponCodeCourse?.discount > 0) {
+                    paymentGateWayPayLoad.transaction.discount = Number(couponCodeCourse?.discount);
+                    if (couponCodeCourse?.discount_type === "%") {
+                        paymentGateWayPayLoad.transaction.discount = (paymentGateWayPayLoad.transaction.amount * couponCodeCourse.discount) / 100;
+                    }
+                    paymentGateWayPayLoad.transaction.discount = paymentGateWayPayLoad.transaction.discount.toFixed(2);
                 }
-                paymentGateWayPayLoad.transaction.discount = paymentGateWayPayLoad.transaction.discount.toFixed(2);
 
                 //if we have coupon code having validity as well
                 if (!!couponCodeCourse.validity) {

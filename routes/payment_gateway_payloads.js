@@ -47,9 +47,12 @@ router.post("/", async (req, res) => {
         //calculate coupon code first
         if (validatedRequestBody.couponCode) {
             const couponCodeCourse = await getCouponCodeCourseByCouponCodeAndCourseId({ code: validatedRequestBody.couponCode, course_id: course?.id });
-            logger.info(JSON.stringify(couponCodeCourse));
 
-            paymentGateWayPayLoad.transaction.discount = -(100.12).toFixed(2);
+            paymentGateWayPayLoad.transaction.discount = -(
+                couponCodeCourse?.discount === "₹"
+                    ? couponCodeCourse?.discount
+                    : (paymentGateWayPayLoad?.transaction?.amount * couponCodeCourse?.discount) / 100
+            ).toFixed(2);
             paymentGateWayPayLoad.transaction.couponCode = "SAHAS20";
             paymentGateWayPayLoad.transaction.amount += Number(paymentGateWayPayLoad.transaction.discount);
         }

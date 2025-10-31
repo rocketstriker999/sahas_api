@@ -52,15 +52,12 @@ router.post("/", async (req, res) => {
                 paymentGateWayPayLoad.transaction.discount = couponCodeCourse?.discount;
                 if (couponCodeCourse?.discount_type === "%") {
                     paymentGateWayPayLoad.transaction.discount = (paymentGateWayPayLoad.transaction.amount * couponCodeCourse.discount) / 100;
-                    logger.info(paymentGateWayPayLoad.transaction.discount);
                 }
-                paymentGateWayPayLoad.transaction.discount = -Number(paymentGateWayPayLoad.transaction.discount.toFixed(2));
+                paymentGateWayPayLoad.transaction.discount = -paymentGateWayPayLoad.transaction.discount.toFixed(2);
                 logger.info(paymentGateWayPayLoad.transaction.discount);
             } else {
                 paymentGateWayPayLoad.transaction.discount = 0;
             }
-
-            logger.info(couponCodeCourse);
 
             paymentGateWayPayLoad.transaction.amount += Number(paymentGateWayPayLoad.transaction.discount);
         }

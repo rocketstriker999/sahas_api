@@ -78,7 +78,7 @@ router.post("/", async (req, res) => {
         }
 
         //if use wallet is required
-        if (validatedRequestBody?.useWalletBalance && req.user.wallet > 0 && paymentGateWayPayLoad.transaction.amount > 0) {
+        if (validatedRequestBody?.useWalletBalance && paymentGateWayPayLoad?.user?.wallet > 0 && paymentGateWayPayLoad.transaction.amount > 0) {
             paymentGateWayPayLoad.transaction.usedWalletBalance = Math.min(req.user.wallet, paymentGateWayPayLoad.transaction.amount).toFixed(2);
             paymentGateWayPayLoad.transaction.amount = Math.max(
                 paymentGateWayPayLoad.transaction.amount - paymentGateWayPayLoad.transaction.usedWalletBalance,
@@ -155,6 +155,7 @@ router.get("/:id", async (req, res) => {
                 type: "PAYMENT_GATEWAY",
             });
 
+            //deduct wallet if used
             if (paymentGateWayPayLoad?.transaction?.usedWalletBalance) {
                 addWalletTransaction({
                     user_id: req?.user?.id,
@@ -163,8 +164,6 @@ router.get("/:id", async (req, res) => {
                     created_by: req?.user?.id,
                 });
             }
-
-            //deduct wallet if needed
 
             //add analytics for coupon code usage
 

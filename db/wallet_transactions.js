@@ -16,10 +16,7 @@ function getWalletTransactionsByUserId({ user_id }) {
 function addWalletTransaction({ user_id, amount, note, created_by }) {
     return executeSQLQueryParameterized(`INSERT INTO WALLET_TRANSACTIONS (user_id,amount,note,created_by) VALUES(?,?,?,?)`, [user_id, amount, note, created_by])
         .then((result) => result.insertId)
-        .catch((error) => {
-            logger.error(`addWalletTransaction: ${error}`);
-            return 0;
-        });
+        .catch((error) => logger.error(`addWalletTransaction: ${error}`));
 }
 
 //freeze

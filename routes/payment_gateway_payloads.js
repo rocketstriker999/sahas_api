@@ -10,6 +10,7 @@ const { addEnrollment } = require("../db/enrollments");
 const libMoment = require("moment");
 const { addEnrollmentCourse } = require("../db/enrollment_courses");
 const { addEnrollmentTransaction } = require("../db/enrollment_transactions");
+const { addWalletTransaction } = require("../db/wallet_transactions");
 
 const router = libExpress.Router();
 
@@ -155,6 +156,12 @@ router.get("/:id", async (req, res) => {
             });
 
             if (paymentGateWayPayLoad?.transaction?.usedWalletBalance) {
+                addWalletTransaction({
+                    user_id: req?.user?.id,
+                    amount: -paymentGateWayPayLoad?.transaction?.usedWalletBalance,
+                    note: `Course Purchase - ${paymentGateWayPayLoad?.course?.title}`,
+                    created_by: req?.user?.id,
+                });
             }
 
             //deduct wallet if needed

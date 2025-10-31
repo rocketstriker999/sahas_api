@@ -132,7 +132,7 @@ router.get("/:id", async (req, res) => {
             logger.info(JSON.stringify(paymentGateWayPayLoad));
             // add Enrollment
             const enrollmentId = await addEnrollment({
-                user_id: req.user.id,
+                user_id: req?.user?.id,
                 start_date: getDateByInterval({ baseDate: libMoment(), days: 0 }),
                 end_date: paymentGateWayPayLoad?.course?.validity,
                 amount: paymentGateWayPayLoad?.transaction?.amount,
@@ -140,11 +140,9 @@ router.get("/:id", async (req, res) => {
                 digital_access: true,
                 created_by: req?.user?.id,
             });
-            logger.info("addEnrollment");
 
             //add course for it
             await addEnrollmentCourse({ created_by: req?.user?.id, enrollment_id: enrollmentId, course_id: paymentGateWayPayLoad?.course?.id });
-            logger.info("addEnrollmentCourse");
 
             //add transaction for it
             await addEnrollmentTransaction({
@@ -153,6 +151,7 @@ router.get("/:id", async (req, res) => {
                 cgst: paymentGateWayPayLoad?.transaction?.cgst,
                 sgst: paymentGateWayPayLoad?.transaction?.sgst,
                 created_by: req?.user?.id,
+                note: "Self Purchased",
                 type: "PAYMENT_GATEWAY",
             });
             logger.info("addEnrollmentTransaction");

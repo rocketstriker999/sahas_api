@@ -50,8 +50,8 @@ router.post("/", async (req, res) => {
 
             paymentGateWayPayLoad.transaction.discount = -(
                 couponCodeCourse?.discount_type === "₹"
-                    ? couponCodeCourse?.discount
-                    : (paymentGateWayPayLoad?.transaction?.amount * couponCodeCourse?.discount) / 100
+                    ? Number(couponCodeCourse?.discount)
+                    : (Number(paymentGateWayPayLoad?.transaction?.amount) * Number(couponCodeCourse?.discount)) / 100
             ).toFixed(2);
             paymentGateWayPayLoad.transaction.couponCode = validatedRequestBody.couponCode;
             paymentGateWayPayLoad.transaction.amount += Number(paymentGateWayPayLoad.transaction.discount);

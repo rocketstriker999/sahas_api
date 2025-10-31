@@ -20,6 +20,13 @@ function addWalletTransaction({ user_id, amount, note, created_by }) {
 }
 
 //freeze
+function getWalletBalanceByUserId({ user_id }) {
+    return executeSQLQueryParameterized(`SELECT SUM(amount) FROM WALLET_TRANSACTIONS WHERE user_id=? `, [user_id])
+        .then((result) => result.insertId)
+        .catch((error) => logger.error(`getWalletBalanceByUserId: ${error}`));
+}
+
+//freeze
 function getWalletTransactionById({ id }) {
     return executeSQLQueryParameterized(
         `SELECT WALLET_TRANSACTIONS.*,USERS.full_name AS created_by_full_name FROM WALLET_TRANSACTIONS LEFT JOIN USERS ON WALLET_TRANSACTIONS.created_by=USERS.id WHERE WALLET_TRANSACTIONS.id=? `,
@@ -29,4 +36,4 @@ function getWalletTransactionById({ id }) {
         .catch((error) => logger.error(`getWalletTransactionById: ${error}`));
 }
 
-module.exports = { getWalletTransactionsByUserId, addWalletTransaction, getWalletTransactionById };
+module.exports = { getWalletTransactionsByUserId, addWalletTransaction, getWalletTransactionById, getWalletBalanceByUserId };

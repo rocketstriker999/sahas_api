@@ -10,7 +10,7 @@ const { addEnrollment } = require("../db/enrollments");
 const libMoment = require("moment");
 const { addEnrollmentCourse } = require("../db/enrollment_courses");
 const { addEnrollmentTransaction } = require("../db/enrollment_transactions");
-const { addWalletTransaction } = require("../db/wallet_transactions");
+const { addWalletTransaction, getWalletBalanceByUserId } = require("../db/wallet_transactions");
 
 const router = libExpress.Router();
 
@@ -44,7 +44,7 @@ router.post("/", async (req, res) => {
                 firstName: req.user.full_name?.split(" ")[0],
                 lastName: req.user.full_name?.split(" ")?.[1] || "NA",
                 phone: req.user.phone,
-                wallet: Number(req.user.wallet),
+                wallet: await getWalletBalanceByUserId({ user_id: req?.user?.id }),
             },
             product: course.title,
         };

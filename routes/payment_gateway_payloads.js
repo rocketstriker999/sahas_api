@@ -58,7 +58,7 @@ router.post("/", async (req, res) => {
                 paymentGateWayPayLoad.transaction.discount = 0;
             }
 
-            paymentGateWayPayLoad.transaction.amount += Number(paymentGateWayPayLoad.transaction.discount);
+            paymentGateWayPayLoad.transaction.amount -= Number(paymentGateWayPayLoad.transaction.discount);
         }
 
         //if use wallet is required

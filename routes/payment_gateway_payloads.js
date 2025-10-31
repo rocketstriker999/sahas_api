@@ -1,6 +1,6 @@
 const libExpress = require("express");
 const { getCourseById } = require("../db/courses");
-const { validateRequestBody, verifyPaymentGatewayPayLoadStatus, getDateByInterval } = require("../utils");
+const { validateRequestBody, verifyPaymentGatewayPayLoadStatus, getDateByInterval, getFormattedDate } = require("../utils");
 const libCrypto = require("crypto");
 const { readConfig } = require("../libs/config");
 const { addPaymentGateWayPayLoad, getAllPaymentGateWayPayLoads, removePaymentGateWayPayLoadsByIds } = require("../db/payment_gateway_payloads");
@@ -132,8 +132,8 @@ router.get("/:id", async (req, res) => {
             // add Enrollment
             const enrollmentId = await addEnrollment({
                 user_id: req?.user?.id,
-                start_date: getDateByInterval({ baseDate: libMoment(), days: 0 }),
-                end_date: paymentGateWayPayLoad?.course?.validity,
+                start_date: getFormattedDate({ date: libMoment() }),
+                end_date: getFormattedDate({ date: paymentGateWayPayLoad?.course?.validity }),
                 amount: paymentGateWayPayLoad?.transaction?.amount,
                 on_site_access: false,
                 digital_access: true,

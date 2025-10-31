@@ -25,6 +25,10 @@ function getDateByInterval({ baseDate = libMoment(), days }) {
     return libMoment(baseDate).add(days, "days");
 }
 
+export function getFormattedDate({ date, format = "DD-MM-YYYY" }) {
+    return libMoment(date).format(format);
+}
+
 function generateSHA512(targetString) {
     return libCrypto.createHash("sha512").update(targetString).digest("hex");
 }
@@ -163,4 +167,5 @@ module.exports = {
     validateRequestBody,
     verifyPaymentGatewayPayLoadStatus,
     getDateByInterval,
+    getFormattedDate,
 };

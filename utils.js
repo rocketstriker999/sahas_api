@@ -25,7 +25,7 @@ function getDateByInterval({ baseDate = libMoment(), days }) {
     return libMoment(baseDate).add(days, "days");
 }
 
-function getFormattedDate({ date, format = "DD-MM-YYYY" }) {
+function getFormattedDate({ date, format = "YYYY-MM-DD" }) {
     return libMoment(date).format(format);
 }
 

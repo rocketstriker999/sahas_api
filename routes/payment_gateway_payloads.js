@@ -83,6 +83,7 @@ router.post("/", async (req, res) => {
                 paymentGateWayPayLoad?.user?.wallet,
                 paymentGateWayPayLoad.transaction.amount
             ).toFixed(2);
+
             logger.info(paymentGateWayPayLoad.transaction.amount);
 
             paymentGateWayPayLoad.transaction.amount = Math.max(

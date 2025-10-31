@@ -6,6 +6,10 @@ const { readConfig } = require("../libs/config");
 const { addPaymentGateWayPayLoad, getAllPaymentGateWayPayLoads, removePaymentGateWayPayLoadsByIds } = require("../db/payment_gateway_payloads");
 const logger = require("../libs/logger");
 const { getCouponCodeCourseByCouponCodeAndCourseId } = require("../db/coupon_code_courses");
+const { addEnrollment } = require("../db/enrollments");
+const libMoment = require("moment");
+const { addEnrollmentCourse } = require("../db/enrollment_courses");
+const { addEnrollmentTransaction } = require("../db/enrollment_transactions");
 
 const router = libExpress.Router();
 
@@ -126,6 +130,28 @@ router.get("/:id", async (req, res) => {
     await Promise.all(
         paidPaymentGatewayPayLoads?.map(async (paymentGateWayPayLoad) => {
             logger.info(JSON.stringify(paymentGateWayPayLoad));
+            // add Enrollment
+            const enrollmentId = await addEnrollment({
+                user_id: req.user.id,
+                start_date: libMoment(),
+                end_date: paidPaymentGatewayPayLoads?.course?.validity,
+                amount: paidPaymentGatewayPayLoads?.transaction?.amount,
+                on_site_access: false,
+                digital_access: true,
+                created_by: req?.user?.id,
+            });
+
+            //add course for it
+            await addEnrollmentCourse({ created_by: req?.user?.id, enrollment_id: enrollmentId, course_id: paymentGateWayPayLoad?.course?.id });
+            //add transaction for it
+            await addEnrollmentTransaction({
+                enrollment_id: enrollmentId,
+                amount: paymentGateWayPayLoad?.transaction?.amount,
+                cgst: paymentGateWayPayLoad?.transaction?.cgst,
+                sgst: paymentGateWayPayLoad?.transaction?.sgst,
+                created_by: req?.user?.id,
+                type: "PAYMENT_GATEWAY",
+            });
         })
     );
 

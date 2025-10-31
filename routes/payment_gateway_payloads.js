@@ -54,6 +54,11 @@ router.post("/", async (req, res) => {
                     paymentGateWayPayLoad.transaction.discount = (paymentGateWayPayLoad.transaction.amount * couponCodeCourse.discount) / 100;
                 }
                 paymentGateWayPayLoad.transaction.discount = paymentGateWayPayLoad.transaction.discount.toFixed(2);
+
+                //if we have coupon code having validity as well
+                if (!!couponCode.validity) {
+                    logger.info(couponCode.validity);
+                }
             } else {
                 paymentGateWayPayLoad.transaction.discount = 0;
             }

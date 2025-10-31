@@ -35,7 +35,13 @@ function getEnrollmentById({ id }) {
 
 //freeze
 function addEnrollment({ user_id, start_date, end_date, amount, on_site_access, digital_access, created_by }) {
-    logger.info(user_id, start_date, end_date, amount, on_site_access, digital_access, created_by);
+    logger.info(user_id);
+    logger.info(start_date);
+    logger.info(end_date);
+    logger.info(amount);
+    logger.info(on_site_access);
+    logger.info(digital_access);
+    logger.info(created_by);
 
     return executeSQLQueryParameterized(
         "INSERT INTO ENROLLMENTS(user_id,start_date,end_date,amount,on_site_access,digital_access,created_by) VALUES(?,?,?,?,?,?,?)",

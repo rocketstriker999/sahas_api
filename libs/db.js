@@ -208,9 +208,9 @@ function generateDBTables() {
             discount DECIMAL(8, 2) NOT NULL DEFAULT 0,
             discount_type VARCHAR(12)  DEFAULT '₹',
             distributor_email VARCHAR(48)  NULL,
-            commision DECIMAL(8, 2) NULL,
+            commision DECIMAL(8, 2) NOT NULL DEFAULT 0,
             commision_type VARCHAR(12)  DEFAULT '₹',
-            validity INT DEFAULT NULL,
+            validity INT  NOT NULL DEFAULT 0,
             validity_type VARCHAR(12)  DEFAULT 'EXTEND',
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,

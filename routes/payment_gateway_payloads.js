@@ -134,8 +134,8 @@ router.get("/:id", async (req, res) => {
             const enrollmentId = await addEnrollment({
                 user_id: req.user.id,
                 start_date: libMoment(),
-                end_date: paidPaymentGatewayPayLoads?.course?.validity,
-                amount: paidPaymentGatewayPayLoads?.transaction?.amount,
+                end_date: paymentGateWayPayLoad?.course?.validity,
+                amount: paymentGateWayPayLoad?.transaction?.amount,
                 on_site_access: false,
                 digital_access: true,
                 created_by: req?.user?.id,

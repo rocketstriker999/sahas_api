@@ -50,10 +50,12 @@ router.post("/", async (req, res) => {
 
             if ((couponCodeCourse = await getCouponCodeCourseByCouponCodeAndCourseId({ code: validatedRequestBody.couponCode, course_id: course?.id }))) {
                 paymentGateWayPayLoad.transaction.discount = couponCodeCourse?.discount;
+                logger.info(paymentGateWayPayLoad.transaction.discount);
                 if (couponCodeCourse?.discount_type === "%") {
                     paymentGateWayPayLoad.transaction.discount = (paymentGateWayPayLoad.transaction.amount * couponCodeCourse.discount) / 100;
                 }
                 paymentGateWayPayLoad.transaction.discount = -Number(paymentGateWayPayLoad.transaction.discount.toFixed(2));
+                logger.info(paymentGateWayPayLoad.transaction.discount);
             } else {
                 paymentGateWayPayLoad.transaction.discount = 0;
             }

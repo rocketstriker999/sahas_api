@@ -140,9 +140,12 @@ router.get("/:id", async (req, res) => {
                 digital_access: true,
                 created_by: req?.user?.id,
             });
+            logger.info("addEnrollment");
 
             //add course for it
             await addEnrollmentCourse({ created_by: req?.user?.id, enrollment_id: enrollmentId, course_id: paymentGateWayPayLoad?.course?.id });
+            logger.info("addEnrollmentCourse");
+
             //add transaction for it
             await addEnrollmentTransaction({
                 enrollment_id: enrollmentId,
@@ -152,6 +155,7 @@ router.get("/:id", async (req, res) => {
                 created_by: req?.user?.id,
                 type: "PAYMENT_GATEWAY",
             });
+            logger.info("addEnrollmentTransaction");
         })
     );
 

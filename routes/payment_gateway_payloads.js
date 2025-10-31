@@ -49,7 +49,7 @@ router.post("/", async (req, res) => {
             const couponCodeCourse = await getCouponCodeCourseByCouponCodeAndCourseId({ code: validatedRequestBody.couponCode, course_id: course?.id });
 
             paymentGateWayPayLoad.transaction.discount = -(
-                couponCodeCourse?.discount === "₹"
+                couponCodeCourse?.discount_type === "₹"
                     ? couponCodeCourse?.discount
                     : (paymentGateWayPayLoad?.transaction?.amount * couponCodeCourse?.discount) / 100
             ).toFixed(2);

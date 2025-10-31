@@ -21,8 +21,8 @@ function generateToken() {
     return token;
 }
 
-function getDateByInterval(days) {
-    return libMoment().add(days, "days");
+function getDateByInterval({ baseDate = libMoment(), days }) {
+    return libMoment(baseDate).add(days, "days");
 }
 
 function generateSHA512(targetString) {

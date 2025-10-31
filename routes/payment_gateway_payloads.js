@@ -23,7 +23,7 @@ router.post("/", async (req, res) => {
         const course = await getCourseById({ id: validatedRequestBody.courseId });
 
         const paymentGateWayPayLoad = {
-            course: { ...course, validity: getDateByInterval(course?.validity) },
+            course: { ...course, validity: getDateByInterval({ days: course?.validity }) },
             paymentGateWay: {
                 merchantKey,
                 url,
@@ -57,7 +57,10 @@ router.post("/", async (req, res) => {
 
                 //if we have coupon code having validity as well
                 if (!!couponCodeCourse.validity) {
-                    logger.info(couponCodeCourse.validity);
+                    paymentGateWayPayLoad.course.validity =
+                        couponCodeCourse.validity_type === "EXTEND"
+                            ? getDateByInterval({ baseDate: paymentGateWayPayLoad.course.validity, days: couponCodeCourse.validity })
+                            : getDateByInterval({ days: couponCodeCourse.validity });
                 }
             } else {
                 paymentGateWayPayLoad.transaction.discount = 0;

@@ -21,8 +21,8 @@ function addWalletTransaction({ user_id, amount, note, created_by }) {
 
 //freeze
 function getWalletBalanceByUserId({ user_id }) {
-    return executeSQLQueryParameterized(`SELECT SUM(amount) FROM WALLET_TRANSACTIONS WHERE user_id=? `, [user_id])
-        .then((result) => result.insertId)
+    return executeSQLQueryParameterized(`SELECT SUM(amount) AS wallet_balance FROM WALLET_TRANSACTIONS WHERE user_id=? `, [user_id])
+        .then((results) => (results.length > 0 ? results[0]?.wallet_balance : 0))
         .catch((error) => logger.error(`getWalletBalanceByUserId: ${error}`));
 }
 

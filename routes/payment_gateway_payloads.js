@@ -129,7 +129,6 @@ router.get("/:id", async (req, res) => {
     // process those payloads which are paid succesfully
     await Promise.all(
         paidPaymentGatewayPayLoads?.map(async (paymentGateWayPayLoad) => {
-            logger.info(JSON.stringify(paymentGateWayPayLoad));
             // add Enrollment
             const enrollmentId = await addEnrollment({
                 user_id: req?.user?.id,
@@ -154,7 +153,17 @@ router.get("/:id", async (req, res) => {
                 note: "Self Purchased",
                 type: "PAYMENT_GATEWAY",
             });
-            logger.info("addEnrollmentTransaction");
+
+            if (paymentGateWayPayLoad?.transaction?.usedWalletBalance) {
+            }
+
+            //deduct wallet if needed
+
+            //add analytics for coupon code usage
+
+            //add distributor's commision
+
+            //generate invoice
         })
     );
 

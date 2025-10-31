@@ -56,8 +56,8 @@ router.post("/", async (req, res) => {
                 paymentGateWayPayLoad.transaction.discount = paymentGateWayPayLoad.transaction.discount.toFixed(2);
 
                 //if we have coupon code having validity as well
-                if (!!couponCode.validity) {
-                    logger.info(couponCode.validity);
+                if (!!couponCodeCourse.validity) {
+                    logger.info(couponCodeCourse.validity);
                 }
             } else {
                 paymentGateWayPayLoad.transaction.discount = 0;

@@ -49,9 +49,11 @@ router.post("/", async (req, res) => {
             paymentGateWayPayLoad.transaction.couponCode = validatedRequestBody.couponCode;
 
             if ((couponCodeCourse = await getCouponCodeCourseByCouponCodeAndCourseId({ code: validatedRequestBody.couponCode, course_id: course?.id }))) {
-                paymentGateWayPayLoad.transaction.discount = -(couponCodeCourse?.discount_type === "₹"
-                    ? couponCodeCourse?.discount?.toFixed(2)
-                    : (paymentGateWayPayLoad?.transaction?.amount * couponCodeCourse?.discount) / 100);
+                paymentGateWayPayLoad.transaction.discount = couponCodeCourse?.discount;
+                if (couponCodeCourse?.discount_type === "%") {
+                    paymentGateWayPayLoad.transaction.discount = (paymentGateWayPayLoad.transaction.amount * couponCodeCourse.discount) / 100;
+                }
+                paymentGateWayPayLoad.transaction.discount = -Number(paymentGateWayPayLoad.transaction.discount.toFixed(2));
             } else {
                 paymentGateWayPayLoad.transaction.discount = 0;
             }

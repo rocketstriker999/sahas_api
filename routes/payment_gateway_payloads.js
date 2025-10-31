@@ -65,7 +65,7 @@ router.post("/", async (req, res) => {
         if (validatedRequestBody?.useWalletBalance && req.user.wallet > 0 && paymentGateWayPayLoad.transaction.amount > 0) {
             paymentGateWayPayLoad.transaction.usedWalletBalance = -Math.min(Number(req.user.wallet), Number(paymentGateWayPayLoad.transaction.amount));
             paymentGateWayPayLoad.transaction.amount = Math.max(
-                paymentGateWayPayLoad.transaction.amount + paymentGateWayPayLoad.transaction.usedWalletBalance,
+                paymentGateWayPayLoad.transaction.amount - paymentGateWayPayLoad.transaction.usedWalletBalance,
                 0
             );
         }

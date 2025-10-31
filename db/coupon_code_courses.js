@@ -26,10 +26,9 @@ function getCouponCodeCourseByCouponCodeAndCourseId({ code, course_id }) {
     return executeSQLQueryParameterized(
         `SELECT COUPON_CODE_COURSES.* FROM COUPON_CODES LEFT JOIN COUPON_CODE_COURSES ON COUPON_CODES.id=COUPON_CODE_COURSES.coupon_code_id WHERE COUPON_CODES.code=? AND COUPON_CODE_COURSES.course_id=? AND COUPON_CODES.active=TRUE AND COUPON_CODE_COURSES.discount>0`,
         [code, course_id]
-    ).catch((error) => {
-        logger.error(`getCouponCodeCourseByCouponCode: ${error}`);
-        return [];
-    });
+    )
+        .then((result) => (result.length > 0 ? result[0] : false))
+        .catch((error) => logger.error(`getCouponCodeCourseByCouponCodeAndCourseId: ${error}`));
 }
 
 //freeze

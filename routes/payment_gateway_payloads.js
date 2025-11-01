@@ -193,7 +193,7 @@ router.get("/:id", async (req, res) => {
                 await addWalletTransaction({
                     user_id: paymentGateWayPayLoad.transaction.distributor_user.id,
                     amount: paymentGateWayPayLoad.transaction.commision,
-                    note: `Coupon Distribution Benifit - ${paymentGateWayPayLoad.transaction.couponCode}`,
+                    note: `Coupon Distribution Benifit - ${paymentGateWayPayLoad.transaction.couponCode} - ${paymentGateWayPayLoad?.user?.email}`,
                     created_by: req?.user?.id,
                 });
             }

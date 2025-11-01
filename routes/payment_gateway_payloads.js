@@ -76,9 +76,9 @@ router.post("/", async (req, res) => {
                 if (
                     !!couponCodeCourse.distributor_email &&
                     !!couponCodeCourse.commision &&
-                    (distributorUserId = await getUserByEmail({ email: couponCodeCourse.distributor_email }))
+                    (distributorUser = await getUserByEmail({ email: couponCodeCourse.distributor_email }))
                 ) {
-                    paymentGateWayPayLoad.transaction.distributor_user_id = distributorUserId;
+                    paymentGateWayPayLoad.transaction.distributor_user = distributorUser;
                     paymentGateWayPayLoad.transaction.commision = couponCodeCourse.commision;
 
                     if (couponCodeCourse?.commision_type === "%") {
@@ -187,11 +187,11 @@ router.get("/:id", async (req, res) => {
             //add distributor's commision
             if (
                 !!paymentGateWayPayLoad?.transaction?.couponCode &&
-                !!paymentGateWayPayLoad?.transaction?.distributor_user_id &&
+                !!paymentGateWayPayLoad?.transaction?.distributor_user &&
                 !!paymentGateWayPayLoad?.transaction?.commision
             ) {
                 await addWalletTransaction({
-                    user_id: paymentGateWayPayLoad.transaction.distributor_user_id,
+                    user_id: paymentGateWayPayLoad.transaction.distributor_user.id,
                     amount: paymentGateWayPayLoad.transaction.commision,
                     note: `Coupon Distribution Benifit - ${paymentGateWayPayLoad.transaction.couponCode}`,
                     created_by: req?.user?.id,

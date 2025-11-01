@@ -126,6 +126,8 @@ async function requestService({
     //api specific path
     requestPath = process.env.SERVICE_NGINX.concat(requestServiceName).concat(requestPath);
 
+    logger.info(requestPath);
+
     if (requestGetQuery) {
         requestPath = requestPath + "?";
         requestPath =

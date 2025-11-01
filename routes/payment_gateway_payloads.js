@@ -203,9 +203,7 @@ router.get("/:id", async (req, res) => {
 
             //generate invoice
 
-            const { payment: { cgst, sgst } = {}, paymentGateWay: { merchantKey, merchantSalt, redirectionHost, resultAPI, url } = {} } = await readConfig(
-                "app"
-            );
+            const { payment: { cgst, sgst } = {} } = await readConfig("app");
 
             requestService({
                 requestServiceName: process.env.SERVICE_MEDIA,
@@ -234,36 +232,14 @@ router.get("/:id", async (req, res) => {
                         price_pay_words: libNumbersToWords.toWords(paymentGateWayPayLoad?.transaction?.amount).toUpperCase(),
                     },
                 },
-                onResponseReceieved: (otpDetails, responseCode) => {
-                    if (otpDetails && responseCode === 200) {
-                        res.status(201).json({ authentication_token });
+                onResponseReceieved: ({ cdn_url }, responseCode) => {
+                    if (cdn_url && responseCode === 201) {
+                        logger.success(`Invoice For Transaction - ${transactionId} Generated !`);
                     } else {
-                        res.status(500).json({ error: "Something Seems to be Broken , Please Try Again Later" });
+                        logger.error(`Failed To Generate Invoice For Transaction - ${transactionId}`);
                     }
                 },
             });
-            // requestService({
-            //     requestServiceName: process.env.SERVICE_MEDIA,
-            //     requestPath: "generate/invoice",
-            //     requestMethod: "POST",
-            //     requestPostBody: {
-            //         transaction,
-            //         user: await getUserByTransactionId(transaction.id),
-            //         product: await getProductById(transaction.product_id),
-            //         percent_sgst: process.env.SGST,
-            //         percent_cgst: process.env.CGST,
-            //     },
-            //     onResponseReceieved: ({ invoice }, responseCode) => {
-            //         if (responseCode === 201) {
-            //             return res.redirect(`/resources/invoices/${invoice}`);
-            //         }
-            //         return res.redirect(`/not-found`);
-            //     },
-            //     onRequestFailure: (error) => {
-            //         logger.error(`Failed To regenerate Invoice for transcation - ${transaction.id} error - ${error}`);
-            //         return res.redirect(`/not-found`);
-            //     },
-            // });
 
             //send notification emails
         })

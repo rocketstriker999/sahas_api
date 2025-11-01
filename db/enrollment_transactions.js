@@ -28,6 +28,13 @@ function addEnrollmentTransaction({ enrollment_id, amount, cgst, sgst, created_b
 }
 
 //freeze
+function updateEnrollmentTransactionInvoiceById({ id, invoice }) {
+    return executeSQLQueryParameterized(`UPDATE ENROLLMENT_TRANSACTIONS SET invoice=? where id=?`, [id, invoice]).catch((error) =>
+        logger.error(`updateEnrollmentTransactionInvoiceById: ${error}`)
+    );
+}
+
+//freeze
 function getEnrollmentTransactionById({ id }) {
     return executeSQLQueryParameterized(
         "SELECT ENROLLMENT_TRANSACTIONS.*,USERS.full_name AS created_by_full_name FROM ENROLLMENT_TRANSACTIONS LEFT JOIN USERS ON ENROLLMENT_TRANSACTIONS.created_by = USERS.id WHERE ENROLLMENT_TRANSACTIONS.id=? ",
@@ -37,4 +44,4 @@ function getEnrollmentTransactionById({ id }) {
         .catch((error) => logger.error(`getEnrollmentTransactionById: ${error}`));
 }
 
-module.exports = { addEnrollmentTransaction, getTransactionsByEnrollmentId, getEnrollmentTransactionById };
+module.exports = { addEnrollmentTransaction, getTransactionsByEnrollmentId, getEnrollmentTransactionById, updateEnrollmentTransactionInvoiceById };

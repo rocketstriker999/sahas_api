@@ -1,29 +1,8 @@
 const { executeSQLQueryParameterized } = require("../libs/db");
 const logger = require("../libs/logger");
 
-function updateUserToken(email, token) {
-    return executeSQLQueryParameterized(`UPDATE USERS SET token=? WHERE email=?`, [token, email]).catch((error) => {
-        logger.error(`updateUserToken: ${error}`);
-        return false;
-    });
-}
-
-function updateUserPrimaryDetails(id, name, phone) {
-    return executeSQLQueryParameterized(`UPDATE USERS SET name=?, phone=? WHERE id=?`, [name, phone, id]).catch((error) => {
-        logger.error(`updateUserPrimaryDetails: ${error}`);
-        return false;
-    });
-}
-
-function updateUserProfilePrimaryDetails(id, formData) {
-    const { name, phone, address } = formData;
-    return executeSQLQueryParameterized(`UPDATE USERS SET name=?, phone=?, address=? WHERE id=?`, [name, phone, address, id]).catch((error) => {
-        logger.error(`updateUserPrimaryDetails: ${error}`);
-        return false;
-    });
-}
-
-function getUserByEmail(email) {
+//tested
+function getUserByEmail({ email }) {
     return executeSQLQueryParameterized(`SELECT * FROM USERS WHERE email=?`, [email])
         .then((user) => (user && user.length > 0 ? user[0] : false))
         .catch((error) => {
@@ -95,21 +74,6 @@ function validateUserOTP(email, otp) {
             logger.error(`validateUserOTP: ${error}`);
             return false;
         });
-}
-
-// function creditUserWallet(userId, credit) {
-//     executeSQLQueryParameterized(`UPDATE USERS SET wallet = wallet + ? WHERE id = ?`, [credit, userId]).catch((error) =>
-//         logger.error(`creditCuponReward: ${error}`)
-//     );
-// }
-
-// Temporary need to be removed Find user_id by email
-function getUserIdByEmail(email) {
-    return executeSQLQueryParameterized(`SELECT id FROM USERS WHERE email = ?`, [email])
-        .then((results) => {
-            return results.length > 0 ? results[0].id : null;
-        })
-        .catch((error) => logger.error(`getUserIdByEmail: ${error}`));
 }
 
 //get user by transaction id

@@ -52,7 +52,7 @@ router.post("/", async (req, res) => {
     //Get The user
     await addUserByEmail(req.body.email);
 
-    const user = await getUserByEmail(req.body.email);
+    const user = await getUserByEmail({ email: req.body.email });
 
     //generate an otp and token
     const otp = Math.floor(1000 + Math.random() * 9000);

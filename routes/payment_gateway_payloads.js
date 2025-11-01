@@ -11,6 +11,7 @@ const libMoment = require("moment");
 const { addEnrollmentCourse } = require("../db/enrollment_courses");
 const { addEnrollmentTransaction } = require("../db/enrollment_transactions");
 const { addWalletTransaction, getWalletBalanceByUserId } = require("../db/wallet_transactions");
+const { getUserByEmail } = require("../db/users");
 
 const router = libExpress.Router();
 
@@ -70,6 +71,20 @@ router.post("/", async (req, res) => {
                             ? getDateByInterval({ baseDate: paymentGateWayPayLoad.course.validity, days: couponCodeCourse.validity })
                             : getDateByInterval({ days: couponCodeCourse.validity });
                 }
+                //if we have coupon code distributor commision is there
+                //it will also check if given email is correct or not
+                if (
+                    !!couponCodeCourse.distributor_email &&
+                    !!couponCodeCourse.commision &&
+                    (distributorUserId = await getUserByEmail({ email: couponCodeCourse.distributor_email }))
+                ) {
+                    paymentGateWayPayLoad.transaction.distributor_user_id = distributorUserId;
+                    paymentGateWayPayLoad.transaction.commision = couponCodeCourse.commision;
+
+                    if (couponCodeCourse?.commision_type === "%") {
+                        paymentGateWayPayLoad.transaction.commision = (paymentGateWayPayLoad.course.fees * couponCodeCourse.discount) / 100;
+                    }
+                }
             } else {
                 paymentGateWayPayLoad.transaction.discount = 0;
             }
@@ -84,14 +99,10 @@ router.post("/", async (req, res) => {
                 paymentGateWayPayLoad.transaction.amount
             ).toFixed(2);
 
-            logger.info(paymentGateWayPayLoad.transaction.amount);
-
             paymentGateWayPayLoad.transaction.amount = Math.max(
                 paymentGateWayPayLoad.transaction.amount - paymentGateWayPayLoad.transaction.usedWalletBalance,
                 0
             );
-
-            logger.info(paymentGateWayPayLoad.transaction.amount);
         }
 
         //pre tax amount
@@ -165,7 +176,7 @@ router.get("/:id", async (req, res) => {
 
             //deduct wallet if used
             if (paymentGateWayPayLoad?.transaction?.usedWalletBalance) {
-                addWalletTransaction({
+                await addWalletTransaction({
                     user_id: req?.user?.id,
                     amount: -paymentGateWayPayLoad?.transaction?.usedWalletBalance,
                     note: `Course Purchase - ${paymentGateWayPayLoad?.course?.title}`,
@@ -173,9 +184,21 @@ router.get("/:id", async (req, res) => {
                 });
             }
 
-            //add analytics for coupon code usage
-
             //add distributor's commision
+            if (
+                !!paymentGateWayPayLoad?.transaction?.couponCode &&
+                !!paymentGateWayPayLoad?.transaction?.distributor_user_id &&
+                !!paymentGateWayPayLoad?.transaction?.commision
+            ) {
+                await addWalletTransaction({
+                    user_id: paymentGateWayPayLoad.transaction.distributor_user_id,
+                    amount: paymentGateWayPayLoad.transaction.commision,
+                    note: `Coupon Distribution Benifit - ${paymentGateWayPayLoad.transaction.couponCode}`,
+                    created_by: req?.user?.id,
+                });
+            }
+
+            //add analytics for coupon code usage
 
             //generate invoice
         })
@@ -184,7 +207,7 @@ router.get("/:id", async (req, res) => {
     //remove all the payloads which are verified and processed
     removePaymentGateWayPayLoadsByIds({ ids: verifiedPaymentGatewayPayLoads?.map(({ transaction }) => transaction?.id) });
 
-    res.status(200).json(verifiedPaymentGatewayPayLoads?.find(({ transaction }) => transaction?.id == req.params.id));
+    res.status(200).json({ ...verifiedPaymentGatewayPayLoads?.find(({ transaction }) => transaction?.id == req.params.id) });
 });
 
 module.exports = router;

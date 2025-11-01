@@ -12,6 +12,7 @@ const { addEnrollmentCourse } = require("../db/enrollment_courses");
 const { addEnrollmentTransaction } = require("../db/enrollment_transactions");
 const { addWalletTransaction, getWalletBalanceByUserId } = require("../db/wallet_transactions");
 const { getUserByEmail } = require("../db/users");
+const libNumbersToWords = require("number-to-words");
 
 const router = libExpress.Router();
 
@@ -164,7 +165,7 @@ router.get("/:id", async (req, res) => {
             await addEnrollmentCourse({ created_by: req?.user?.id, enrollment_id: enrollmentId, course_id: paymentGateWayPayLoad?.course?.id });
 
             //add transaction for it
-            await addEnrollmentTransaction({
+            const transactionId = await addEnrollmentTransaction({
                 enrollment_id: enrollmentId,
                 amount: paymentGateWayPayLoad?.transaction?.amount,
                 cgst: paymentGateWayPayLoad?.transaction?.cgst,
@@ -198,9 +199,73 @@ router.get("/:id", async (req, res) => {
                 });
             }
 
-            //add analytics for coupon code usage
+            //add analytics for coupon code usage later
 
             //generate invoice
+
+            const { payment: { cgst, sgst } = {}, paymentGateWay: { merchantKey, merchantSalt, redirectionHost, resultAPI, url } = {} } = await readConfig(
+                "app"
+            );
+
+            requestService({
+                requestServiceName: process.env.SERVICE_MEDIA,
+                onRequestStart: () => logger.info("Generating Invoice"),
+                requestPath: "generate/pdf",
+                requestMethod: "POST",
+                requestPostBody: {
+                    template: "invoice",
+                    injects: {
+                        invoice_date: getFormattedDate({ date: libMoment(), format: "DD-MM-YY" }),
+                        transaction_id: transactionId,
+                        product_title: paymentGateWayPayLoad?.course?.title,
+                        user_name: `${paymentGateWayPayLoad?.user?.firstName} ${paymentGateWayPayLoad?.user?.lastName}`,
+                        user_email: paymentGateWayPayLoad?.user?.email,
+                        user_phone: paymentGateWayPayLoad?.user?.phone,
+                        validity: paymentGateWayPayLoad?.course?.validity,
+                        payment_date: getFormattedDate({ date: libMoment(), format: "DD-MM-YY HH:mm:ss" }),
+                        cgst_percentage: cgst,
+                        sgst_percentage: sgst,
+                        price_original: paymentGateWayPayLoad?.course?.fees,
+                        price_discounted: paymentGateWayPayLoad?.transcation?.preTaxAmount,
+                        total_tax: (Number(paymentGateWayPayLoad?.transaction?.cgst) + Number(paymentGateWayPayLoad?.transaction?.sgst)).toFixed(2),
+                        cgst: paymentGateWayPayLoad?.transaction?.cgst,
+                        sgst: paymentGateWayPayLoad?.transaction?.sgst,
+                        price_pay: paymentGateWayPayLoad?.transaction?.amount,
+                        price_pay_words: libNumbersToWords.toWords(paymentGateWayPayLoad?.transaction?.amount).toUpperCase(),
+                    },
+                },
+                onResponseReceieved: (otpDetails, responseCode) => {
+                    if (otpDetails && responseCode === 200) {
+                        res.status(201).json({ authentication_token });
+                    } else {
+                        res.status(500).json({ error: "Something Seems to be Broken , Please Try Again Later" });
+                    }
+                },
+            });
+            // requestService({
+            //     requestServiceName: process.env.SERVICE_MEDIA,
+            //     requestPath: "generate/invoice",
+            //     requestMethod: "POST",
+            //     requestPostBody: {
+            //         transaction,
+            //         user: await getUserByTransactionId(transaction.id),
+            //         product: await getProductById(transaction.product_id),
+            //         percent_sgst: process.env.SGST,
+            //         percent_cgst: process.env.CGST,
+            //     },
+            //     onResponseReceieved: ({ invoice }, responseCode) => {
+            //         if (responseCode === 201) {
+            //             return res.redirect(`/resources/invoices/${invoice}`);
+            //         }
+            //         return res.redirect(`/not-found`);
+            //     },
+            //     onRequestFailure: (error) => {
+            //         logger.error(`Failed To regenerate Invoice for transcation - ${transaction.id} error - ${error}`);
+            //         return res.redirect(`/not-found`);
+            //     },
+            // });
+
+            //send notification emails
         })
     );
 

@@ -141,7 +141,7 @@ function generateDBTables() {
             created_by INT NOT NULL,
             note VARCHAR(256) NOT NULL,
             type VARCHAR(16) NOT NULL,
-            invoice CHAR(36) DEFAULT (CONCAT(REPLACE(UUID(), '-', ''), '.pdf')) UNIQUE,
+            invoice CHAR(36) NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP
         )`,
         `CREATE TABLE IF NOT EXISTS COURSE_CATEGORIES(
@@ -214,34 +214,6 @@ function generateDBTables() {
             validity_type VARCHAR(12)  DEFAULT 'EXTEND',
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
-
-        // `CREATE TABLE IF NOT EXISTS MEDIA(
-        //     id INT AUTO_INCREMENT PRIMARY KEY,
-        //     title VARCHAR(128) NOT NULL UNIQUE,
-        //     media_group_id CHAR(36) NULL,
-        //     cdn_id CHAR(48) NOT NULL,
-        //     type CHAR(12) NULL,
-        //     view_index INT NULL,
-        //     downloadable BOOLEAN DEFAULT FALSE
-        // )`,
-        // `CREATE TABLE IF NOT EXISTS USER_TRANSACTIONS (
-        //     id INT AUTO_INCREMENT PRIMARY KEY,
-        //     user_id INT NOT NULL,
-        //     product_id INT NOT NULL,
-        //     status VARCHAR(16) DEFAULT 'IN_PROGRESS',
-        //     price DECIMAL(8, 2) DEFAULT 0,
-        //     discounted DECIMAL(8, 2) DEFAULT 0,
-        //     coupon_id INT DEFAULT NULL,
-        //     benifit DECIMAL(8, 2) DEFAULT 0,
-        //     sgst DECIMAL(8, 2) DEFAULT 0,
-        //     cgst DECIMAL(8, 2) DEFAULT 0,
-        //     pay DECIMAL(8, 2) DEFAULT 0,
-        //     hash VARCHAR(128) NULL,
-        //     invoice CHAR(36) DEFAULT (CONCAT(REPLACE(UUID(), '-', ''), '.pdf')) UNIQUE,
-        //     company VARCHAR(36) NULL,
-        //     created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
-        //     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-        // )`,
     ];
 
     return Promise.all(createUserTableQuery.map((query) => executeSQLQueryRaw(query)));

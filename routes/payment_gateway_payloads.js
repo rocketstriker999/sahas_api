@@ -202,10 +202,9 @@ router.get("/:id", async (req, res) => {
             //add analytics for coupon code usage later
 
             //generate invoice
-
             const { payment: { cgst, sgst } = {} } = await readConfig("app");
 
-            requestService({
+            await requestService({
                 requestServiceName: process.env.SERVICE_MEDIA,
                 onRequestStart: () => logger.info("Generating Invoice"),
                 requestPath: "generate/pdf",

@@ -264,9 +264,9 @@ router.get("/:id", async (req, res) => {
                 },
                 onResponseReceieved: (_, responseCode) => {
                     if (responseCode === 201) {
-                        res.status(201).json({ authentication_token });
+                        logger.success(`Enrollment Email Sent`);
                     } else {
-                        res.status(500).json({ error: "Something Seems to be Broken , Please Try Again Later" });
+                        logger.error(`Failed To Send Enrollment Email`);
                     }
                 },
             });

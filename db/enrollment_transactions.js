@@ -29,7 +29,7 @@ function addEnrollmentTransaction({ enrollment_id, amount, cgst, sgst, created_b
 
 //freeze
 function updateEnrollmentTransactionInvoiceById({ id, invoice }) {
-    return executeSQLQueryParameterized(`UPDATE ENROLLMENT_TRANSACTIONS SET invoice=? where id=?`, [id, invoice]).catch((error) =>
+    return executeSQLQueryParameterized(`UPDATE ENROLLMENT_TRANSACTIONS SET invoice=? where id=?`, [invoice, id]).catch((error) =>
         logger.error(`updateEnrollmentTransactionInvoiceById: ${error}`)
     );
 }

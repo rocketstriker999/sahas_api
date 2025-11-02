@@ -67,6 +67,7 @@ router.post("/", async (req, res) => {
         requestServiceName: process.env.SERVICE_MAILER,
         onRequestStart: () => logger.info("Generating OTP"),
         requestMethod: "POST",
+        parseResponseBody: false,
         requestPostBody: {
             from: "otp-mailer@sahasinstitute.com",
             to: req.body.email,
@@ -74,8 +75,8 @@ router.post("/", async (req, res) => {
             template: "otp",
             injects: { verification_code: otp, validity_duration: otp_validity, requested_email: user.email },
         },
-        onResponseReceieved: (otpDetails, responseCode) => {
-            if (otpDetails && responseCode === 200) {
+        onResponseReceieved: (_, responseCode) => {
+            if (responseCode === 201) {
                 res.status(201).json({ authentication_token });
             } else {
                 res.status(500).json({ error: "Something Seems to be Broken , Please Try Again Later" });

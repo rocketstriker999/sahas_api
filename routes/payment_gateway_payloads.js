@@ -233,9 +233,10 @@ router.get("/:id", async (req, res) => {
                         price_pay_words: libNumbersToWords.toWords(paymentGateWayPayLoad?.transaction?.amount).toUpperCase(),
                     },
                 },
-                onResponseReceieved: ({ cdn_url }, responseCode) => {
+                onResponseReceieved: async ({ cdn_url }, responseCode) => {
                     if (cdn_url && responseCode === 201) {
                         logger.success(`Invoice For Transaction - ${enrollmentTransactionId} Generated !`);
+                        paymentGateWayPayLoad.transaction.invoice = cdn_url;
                         updateEnrollmentTransactionInvoiceById({ id: enrollmentTransactionId, invoice: cdn_url });
                     } else {
                         logger.error(`Failed To Generate Invoice For Transaction - ${enrollmentTransactionId}`);
@@ -248,6 +249,7 @@ router.get("/:id", async (req, res) => {
                 requestServiceName: process.env.SERVICE_MAILER,
                 onRequestStart: () => logger.info("Sending Enrollment Transcation Email"),
                 requestMethod: "POST",
+                parseResponseBody: false,
                 requestPostBody: {
                     from: "otp-mailer@sahasinstitute.com",
                     to: paymentGateWayPayLoad?.user?.email,
@@ -257,11 +259,11 @@ router.get("/:id", async (req, res) => {
                         user_name: `${paymentGateWayPayLoad?.user?.firstName} ${paymentGateWayPayLoad?.user?.lastName}`,
                         course_title: paymentGateWayPayLoad?.course?.title,
                         amount: paymentGateWayPayLoad?.transaction?.amount,
-                        invoice,
+                        invoice: paymentGateWayPayLoad.transaction.invoice,
                     },
                 },
                 onResponseReceieved: (_, responseCode) => {
-                    if (otpDetails && responseCode === 200) {
+                    if (responseCode === 201) {
                         res.status(201).json({ authentication_token });
                     } else {
                         res.status(500).json({ error: "Something Seems to be Broken , Please Try Again Later" });

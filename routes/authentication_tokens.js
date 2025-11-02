@@ -68,8 +68,11 @@ router.post("/", async (req, res) => {
         requestPath: "otp",
         requestMethod: "POST",
         requestPostBody: {
+            from: "otp-mailer@sahasinstitute.com",
             to: req.body.email,
-            body_paramters: { verification_code: otp, validity_duration: otp_validity, requested_email: user.email },
+            subject: "Verification OTP",
+            template: "otp",
+            injects: { verification_code: otp, validity_duration: otp_validity, requested_email: user.email },
         },
         onResponseReceieved: (otpDetails, responseCode) => {
             if (otpDetails && responseCode === 200) {

@@ -141,7 +141,7 @@ function generateDBTables() {
             created_by INT NOT NULL,
             note VARCHAR(256) NOT NULL,
             type VARCHAR(16) NOT NULL,
-            invoice CHAR(36) NULL,
+            invoice VARCHAR(64) NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP
         )`,
         `CREATE TABLE IF NOT EXISTS COURSE_CATEGORIES(

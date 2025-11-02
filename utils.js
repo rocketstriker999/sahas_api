@@ -109,59 +109,8 @@ async function verifyPaymentGatewayPayLoadStatus(paymentGateWayPayLoad) {
     }
 }
 
-async function requestService({
-    requestHeaders = {},
-    requestServiceName,
-    requestPath = "/",
-    requestMethod = "GET",
-    requestGetQuery = false,
-    requestPostBody = false,
-    onRequestStart = false,
-    onResponseReceieved = false,
-    onRequestFailure = false,
-    onRequestEnd = false,
-} = {}) {
-    if (onRequestStart) await onRequestStart();
-
-    //api specific path
-    requestPath = process.env.SERVICE_NGINX.concat(requestServiceName).concat(requestPath);
-
-    logger.info(requestPath);
-
-    if (requestGetQuery) {
-        requestPath = requestPath + "?";
-        requestPath =
-            requestPath +
-            Object.keys(requestGetQuery)
-                .map((key) => encodeURIComponent(key) + "=" + encodeURIComponent(requestGetQuery[key]))
-                .join("&");
-    }
-
-    const fetchOptions = {
-        headers: {
-            "Content-Type": "application/json",
-            ...requestHeaders,
-        },
-        // Adding method type
-        method: requestMethod.toUpperCase(),
-    };
-
-    if (requestPostBody) {
-        fetchOptions.body = JSON.stringify(requestPostBody);
-    }
-    try {
-        const response = await fetch(requestPath, fetchOptions);
-        const jsonResponse = await response.json();
-
-        if (onResponseReceieved) onResponseReceieved(jsonResponse, response.status);
-    } catch (e) {
-        if (onRequestFailure) onRequestFailure(e);
-    }
-    if (onRequestEnd) onRequestEnd();
-}
 module.exports = {
     prepareDirectories,
-    requestService,
     generateToken,
     requestPayUVerification,
     generateSHA512,

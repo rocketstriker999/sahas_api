@@ -1,5 +1,6 @@
 const libExpress = require("express");
-const { requestService } = require("../utils");
+const { requestService } = require("sahas_utils");
+
 const { getUserByEmail, addUserByEmail, getUserById, getAuthoritiesByRoleIds } = require("../db/users");
 const libValidator = require("validator");
 const { generateToken } = require("../utils");
@@ -65,7 +66,6 @@ router.post("/", async (req, res) => {
     requestService({
         requestServiceName: process.env.SERVICE_MAILER,
         onRequestStart: () => logger.info("Generating OTP"),
-        requestPath: "otp",
         requestMethod: "POST",
         requestPostBody: {
             from: "otp-mailer@sahasinstitute.com",

@@ -1,6 +1,8 @@
 const libExpress = require("express");
 const { getCourseById } = require("../db/courses");
-const { validateRequestBody, verifyPaymentGatewayPayLoadStatus, getDateByInterval, getFormattedDate, requestService } = require("../utils");
+const { validateRequestBody, verifyPaymentGatewayPayLoadStatus, getDateByInterval, getFormattedDate } = require("../utils");
+const { requestService } = require("sahas_utils");
+
 const libCrypto = require("crypto");
 const { readConfig } = require("../libs/config");
 const { addPaymentGateWayPayLoad, getAllPaymentGateWayPayLoads, removePaymentGateWayPayLoadsByIds } = require("../db/payment_gateway_payloads");
@@ -9,7 +11,7 @@ const { getCouponCodeCourseByCouponCodeAndCourseId } = require("../db/coupon_cod
 const { addEnrollment } = require("../db/enrollments");
 const libMoment = require("moment");
 const { addEnrollmentCourse } = require("../db/enrollment_courses");
-const { addEnrollmentTransaction } = require("../db/enrollment_transactions");
+const { addEnrollmentTransaction, updateEnrollmentTransactionInvoiceById } = require("../db/enrollment_transactions");
 const { addWalletTransaction, getWalletBalanceByUserId } = require("../db/wallet_transactions");
 const { getUserByEmail } = require("../db/users");
 const libNumbersToWords = require("number-to-words");
@@ -165,7 +167,7 @@ router.get("/:id", async (req, res) => {
             await addEnrollmentCourse({ created_by: req?.user?.id, enrollment_id: enrollmentId, course_id: paymentGateWayPayLoad?.course?.id });
 
             //add transaction for it
-            const transactionId = await addEnrollmentTransaction({
+            const enrollmentTransactionId = await addEnrollmentTransaction({
                 enrollment_id: enrollmentId,
                 amount: paymentGateWayPayLoad?.transaction?.amount,
                 cgst: paymentGateWayPayLoad?.transaction?.cgst,
@@ -207,13 +209,13 @@ router.get("/:id", async (req, res) => {
             await requestService({
                 requestServiceName: process.env.SERVICE_MEDIA,
                 onRequestStart: () => logger.info("Generating Invoice"),
-                requestPath: "generate/pdf",
+                requestPath: "templated/pdf",
                 requestMethod: "POST",
                 requestPostBody: {
                     template: "invoice",
                     injects: {
                         invoice_date: getFormattedDate({ date: libMoment(), format: "DD-MM-YY" }),
-                        transaction_id: transactionId,
+                        transaction_id: enrollmentTransactionId,
                         course_title: paymentGateWayPayLoad?.course?.title,
                         user_name: `${paymentGateWayPayLoad?.user?.firstName} ${paymentGateWayPayLoad?.user?.lastName}`,
                         user_email: paymentGateWayPayLoad?.user?.email,
@@ -233,14 +235,39 @@ router.get("/:id", async (req, res) => {
                 },
                 onResponseReceieved: ({ cdn_url }, responseCode) => {
                     if (cdn_url && responseCode === 201) {
-                        logger.success(`Invoice For Transaction - ${transactionId} Generated !`);
+                        logger.success(`Invoice For Transaction - ${enrollmentTransactionId} Generated !`);
+                        updateEnrollmentTransactionInvoiceById({ id: enrollmentTransactionId, invoice: cdn_url });
                     } else {
-                        logger.error(`Failed To Generate Invoice For Transaction - ${transactionId}`);
+                        logger.error(`Failed To Generate Invoice For Transaction - ${enrollmentTransactionId}`);
                     }
                 },
             });
 
             //send notification emails
+            await requestService({
+                requestServiceName: process.env.SERVICE_MAILER,
+                onRequestStart: () => logger.info("Sending Enrollment Transcation Email"),
+                requestMethod: "POST",
+                requestPostBody: {
+                    from: "otp-mailer@sahasinstitute.com",
+                    to: paymentGateWayPayLoad?.user?.email,
+                    subject: "Course Enrollment Transaction",
+                    template: "enrollment",
+                    injects: {
+                        user_name: `${paymentGateWayPayLoad?.user?.firstName} ${paymentGateWayPayLoad?.user?.lastName}`,
+                        course_title: paymentGateWayPayLoad?.course?.title,
+                        amount: paymentGateWayPayLoad?.transaction?.amount,
+                        invoice,
+                    },
+                },
+                onResponseReceieved: (_, responseCode) => {
+                    if (otpDetails && responseCode === 200) {
+                        res.status(201).json({ authentication_token });
+                    } else {
+                        res.status(500).json({ error: "Something Seems to be Broken , Please Try Again Later" });
+                    }
+                },
+            });
         })
     );
 

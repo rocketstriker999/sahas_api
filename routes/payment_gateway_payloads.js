@@ -145,6 +145,9 @@ router.get("/:id", async (req, res) => {
         return res.status(400).json({ error: "Missing Payment GateWay PayLoad Id" });
     }
 
+    //get config before we check all transcations
+    const { payment: { cgst, sgst } = {} } = await readConfig("app");
+
     //verify status with payment gateway
     const verifiedPaymentGatewayPayLoads = await Promise.all(getAllPaymentGateWayPayLoads()?.map(verifyPaymentGatewayPayLoadStatus));
     //find those payment gateway payloads with success status
@@ -237,8 +240,6 @@ router.get("/:id", async (req, res) => {
             //add analytics for coupon code usage later
 
             //generate invoice
-            const { payment: { cgst, sgst } = {} } = await readConfig("app");
-
             await requestService({
                 requestServiceName: process.env.SERVICE_MEDIA,
                 onRequestStart: () => logger.info("Generating Invoice"),
@@ -309,7 +310,9 @@ router.get("/:id", async (req, res) => {
     //remove all the payloads which are verified and processed
     removePaymentGateWayPayLoadsByIds({ ids: verifiedPaymentGatewayPayLoads?.map(({ transaction }) => transaction?.id) });
 
-    res.status(200).json({ ...verifiedPaymentGatewayPayLoads?.find(({ transaction }) => transaction?.id == req.params.id) });
+    const paymentGateWayPayLoad = { ...verifiedPaymentGatewayPayLoads?.find(({ transaction }) => transaction?.id == req.params.id) };
+
+    res.status(200).json({ transaction: { paid: paymentGateWayPayLoad?.transaction?.paid }, course: paymentGateWayPayLoad?.course });
 });
 
 module.exports = router;

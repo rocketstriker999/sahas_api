@@ -74,7 +74,7 @@ router.post("/", async (req, res) => {
             to: req.body.email,
             subject: "Verification OTP",
             template: "otp",
-            injects: { verification_code: otp, validity_duration: otp_validity, requested_email: user.email },
+            injects: { otp, otp_validity, user_email: user.email },
         },
         onResponseReceieved: (_, responseCode) => {
             if (responseCode === 201) {

@@ -153,10 +153,13 @@ router.get("/:id", async (req, res) => {
     // process those payloads which are paid succesfully
     await Promise.all(
         paidPaymentGatewayPayLoads?.map(async (paymentGateWayPayLoad) => {
+            //hold the date for different purpose
+            paymentGateWayPayLoad.transaction.date_time = libMoment();
+
             // add Enrollment
             const enrollmentId = await addEnrollment({
                 user_id: req?.user?.id,
-                start_date: getFormattedDate({ date: libMoment() }),
+                start_date: getFormattedDate({ date: paymentGateWayPayLoad.transaction.date_time }),
                 end_date: getFormattedDate({ date: paymentGateWayPayLoad?.course?.validity }),
                 amount: paymentGateWayPayLoad?.transaction?.amount,
                 on_site_access: false,
@@ -200,6 +203,35 @@ router.get("/:id", async (req, res) => {
                     note: `Coupon Distribution Benifit - ${paymentGateWayPayLoad.transaction.couponCode} - ${paymentGateWayPayLoad?.user?.email}`,
                     created_by: req?.user?.id,
                 });
+
+                await requestService({
+                    requestServiceName: process.env.SERVICE_MAILER,
+                    onRequestStart: () => logger.info("Sending Coupon Code Commision Email"),
+                    requestMethod: "POST",
+                    parseResponseBody: false,
+                    requestPostBody: {
+                        from: EMAIL_NO_REPLY,
+                        to: paymentGateWayPayLoad?.transaction.distributor_user?.email,
+                        subject: "Coupon Code Used",
+                        template: "commision",
+                        injects: {
+                            distributor_name: `${paymentGateWayPayLoad?.transaction.distributor_user?.firstName} ${paymentGateWayPayLoad?.transaction.distributor_user?.lastName}`,
+                            commision: paymentGateWayPayLoad?.transaction?.commision,
+                            coupon_code: paymentGateWayPayLoad?.transaction?.couponCode,
+                            user_name: `${paymentGateWayPayLoad?.user?.firstName} ${paymentGateWayPayLoad?.user?.lastName}`,
+                            user_email: paymentGateWayPayLoad?.user?.email,
+                            used_at: getFormattedDate({ date: paymentGateWayPayLoad.transaction.date_time, format: "DD-MM-YY HH:mm:ss" }),
+                            course_title: paymentGateWayPayLoad?.course?.title,
+                        },
+                    },
+                    onResponseReceieved: (_, responseCode) => {
+                        if (responseCode === 201) {
+                            logger.success(`Enrollment Email Sent`);
+                        } else {
+                            logger.error(`Failed To Send Enrollment Email`);
+                        }
+                    },
+                });
             }
 
             //add analytics for coupon code usage later
@@ -215,14 +247,14 @@ router.get("/:id", async (req, res) => {
                 requestPostBody: {
                     template: "invoice",
                     injects: {
-                        invoice_date: getFormattedDate({ date: libMoment(), format: "DD-MM-YY" }),
+                        invoice_date: getFormattedDate({ date: paymentGateWayPayLoad.transaction.date_time, format: "DD-MM-YY" }),
                         transaction_id: enrollmentTransactionId,
                         course_title: paymentGateWayPayLoad?.course?.title,
                         user_name: `${paymentGateWayPayLoad?.user?.firstName} ${paymentGateWayPayLoad?.user?.lastName}`,
                         user_email: paymentGateWayPayLoad?.user?.email,
                         user_phone: paymentGateWayPayLoad?.user?.phone,
                         validity: getFormattedDate({ date: paymentGateWayPayLoad?.course?.validity, format: "DD-MM-YY" }),
-                        payment_date: getFormattedDate({ date: libMoment(), format: "DD-MM-YY HH:mm:ss" }),
+                        payment_date: getFormattedDate({ date: paymentGateWayPayLoad.transaction.date_time, format: "DD-MM-YY HH:mm:ss" }),
                         cgst_percentage: cgst,
                         sgst_percentage: sgst,
                         price_original: paymentGateWayPayLoad?.course?.fees,

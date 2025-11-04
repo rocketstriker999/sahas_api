@@ -33,7 +33,7 @@ function getUserByAuthenticationToken(token) {
     return (
         token &&
         executeSQLQueryParameterized(
-            `SELECT USERS.* FROM USER_AUTHENTICATION_TOKENS INNER JOIN USERS ON USER_AUTHENTICATION_TOKENS.user_id=USERS.id  WHERE USER_AUTHENTICATION_TOKENS.token=?`,
+            `SELECT USERS.* FROM AUTHENTICATION_TOKENS INNER JOIN USERS ON AUTHENTICATION_TOKENS.user_id=USERS.id  WHERE AUTHENTICATION_TOKENS.token=?`,
             [token]
         )
             .then((user) => (user && user.length > 0 ? user[0] : false))

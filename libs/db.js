@@ -138,10 +138,12 @@ function generateDBTables() {
             cgst DECIMAL(8, 2) DEFAULT 0,
             sgst DECIMAL(8, 2) DEFAULT 0,
             original DECIMAL(8, 2) AS (amount - cgst - sgst) STORED,
-            created_by INT NOT NULL,
+            coupon_code_id INT NULL,
+            discount DECIMAL(8, 2) DEFAULT 0,
             note VARCHAR(256) NOT NULL,
             type VARCHAR(16) NOT NULL,
             invoice VARCHAR(64) NULL,
+            created_by INT NOT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP
         )`,
         `CREATE TABLE IF NOT EXISTS COURSE_CATEGORIES(

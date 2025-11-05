@@ -68,7 +68,6 @@ router.post("/", async (req, res) => {
         requestServiceName: process.env.SERVICE_MAILER,
         onRequestStart: () => logger.info("Generating OTP"),
         requestMethod: "POST",
-        requestPath: "",
         parseResponseBody: false,
         requestPostBody: {
             from: EMAIL_NO_REPLY,

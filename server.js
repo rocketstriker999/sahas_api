@@ -18,6 +18,9 @@ const sahasAPI = libExpress();
 // Use the CORS middleware to allow cross origin request in case of testing UI Localhost and Cookies as well
 sahasAPI.use(cors({ origin: process.env.ALLOWED_CORS_ORIGINS }));
 
+//If Media Request - Forward to Media Micro Service
+sahasAPI.use("/media", require("./routes/media"));
+
 //allow json request payloads and cookies only by express
 sahasAPI.use(libExpress.json());
 sahasAPI.use(libExpress.urlencoded({ extended: true }));
@@ -109,10 +112,6 @@ const routers = {
     "/role-authorities": {
         middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
         router: require("./routes/role_authorities"),
-    },
-    "/media": {
-        middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
-        router: require("./routes/media"),
     },
 };
 

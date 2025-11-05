@@ -14,13 +14,13 @@ router.post("/:type", async (req, res) => {
         requestPath: `bucketise/${req.params.type}`,
         requestMethod: "POST",
         requestPostBody: req.body,
+        parseResponseBody: false,
         onResponseReceieved: (response, responseCode) => {
             logger.info(responseCode);
             logger.info(JSON.stringify(response));
             res.status(responseCode).json(response);
         },
     });
-    [];
 });
 
 module.exports = router;

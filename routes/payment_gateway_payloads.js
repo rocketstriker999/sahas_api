@@ -184,7 +184,7 @@ router.get("/:id", async (req, res) => {
                 discount: paidPaymentGatewayPayLoads?.transaction?.discount,
                 note: "Self Purchased",
                 type: "PAYMENT_GATEWAY",
-            });
+            }).catch((e) => logger.error(JSON.stringify(e)));
 
             //deduct wallet if used
             if (paymentGateWayPayLoad?.transaction?.usedWalletBalance) {

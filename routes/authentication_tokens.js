@@ -80,7 +80,7 @@ router.post("/", async (req, res) => {
             if (responseCode === 201) {
                 res.status(201).json({ authentication_token });
             } else {
-                logger.error(`Failed To Generate OTP - Mailer Response Code ${responseCode}`);
+                logger.error(`Failed To Generate OTP - Mailer Responded With ${responseCode}`);
                 res.status(500).json({ error: "Something Seems to be Broken , Please Try Again Later" });
             }
         },

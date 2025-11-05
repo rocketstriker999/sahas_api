@@ -6,6 +6,8 @@ const router = libExpress.Router();
 
 //tested
 router.post("/:type", async (req, res) => {
+    logger.info(req.body);
+
     await requestService({
         requestServiceName: process.env.SERVICE_MEDIA,
         onRequestStart: () => logger.info(`Generating Media ${req.params.type}`),

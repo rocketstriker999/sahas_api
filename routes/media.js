@@ -9,7 +9,7 @@ router.post("/:type", async (req, res) => {
     await requestService({
         requestServiceName: process.env.SERVICE_MEDIA,
         onRequestStart: () => logger.info(`Generating Media ${req.params.type}`),
-        requestPath: req.params.type,
+        requestPath: `bucketise/${req.params.type}`,
         requestMethod: "POST",
         requestPostBody: req.body,
         onResponseReceieved: (response, responseCode) => {

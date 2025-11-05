@@ -57,9 +57,9 @@ router.post("/", async (req, res) => {
         //calculate coupon code first
 
         paymentGateWayPayLoad.transaction.discount = 0;
-        paymentGateWayPayLoad.transaction.couponCode = validatedRequestBody?.couponCode;
+        paymentGateWayPayLoad.transaction.couponCode = validatedRequestBody?.couponCode || null;
 
-        if (!!paymentGateWayPayLoad.transaction.couponCode) {
+        if (!!paymentGateWayPayLoad?.transaction?.couponCode) {
             if (
                 (couponCodeCourse = await getCouponCodeCourseByCouponCodeAndCourseId({
                     code: paymentGateWayPayLoad.transaction.couponCode,

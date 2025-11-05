@@ -18,6 +18,7 @@ router.post("/:type", async (req, res) => {
             res.status(responseCode).json(response);
         },
     });
+    [];
 });
 
 module.exports = router;

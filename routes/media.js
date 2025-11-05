@@ -8,11 +8,13 @@ const router = libExpress.Router();
 router.post("/:type", async (req, res) => {
     await requestService({
         requestServiceName: process.env.SERVICE_MEDIA,
-        onRequestStart: () => logger.info("Generating Media"),
+        onRequestStart: () => logger.info(`Generating Media ${req.params.type}`),
         requestPath: req.params.type,
         requestMethod: "POST",
         requestPostBody: req.body,
         onResponseReceieved: (response, responseCode) => {
+            logger.info(responseCode);
+            logger.info(JSON.stringify(response));
             res.status(responseCode).json(response);
         },
     });

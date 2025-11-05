@@ -180,8 +180,8 @@ router.get("/:id", async (req, res) => {
                 cgst: paymentGateWayPayLoad?.transaction?.cgst,
                 sgst: paymentGateWayPayLoad?.transaction?.sgst,
                 created_by: req?.user?.id,
-                coupon_code: paidPaymentGatewayPayLoads?.transaction?.couponCode,
-                discount: paidPaymentGatewayPayLoads?.transaction?.discount,
+                coupon_code: paymentGateWayPayLoad?.transaction?.couponCode,
+                discount: paymentGateWayPayLoad?.transaction?.discount,
                 note: "Self Purchased",
                 type: "PAYMENT_GATEWAY",
             });

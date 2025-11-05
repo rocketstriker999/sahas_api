@@ -8,6 +8,8 @@ const router = libExpress.Router();
 router.post("/:type", async (req, res) => {
     logger.info(req.body instanceof FormData);
 
+    logger.info(JSON.stringify(req.body));
+
     await requestService({
         requestServiceName: process.env.SERVICE_MEDIA,
         onRequestStart: () => logger.info(`Generating Media ${req.params.type}`),

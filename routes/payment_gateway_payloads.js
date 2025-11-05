@@ -134,6 +134,9 @@ router.post("/", async (req, res) => {
         //add transcation in to table
         addPaymentGateWayPayLoad(paymentGateWayPayLoad);
 
+        logger.info("ADDING");
+        logger.info(JSON.stringify(paymentGateWayPayLoad));
+
         res.status(201).json(paymentGateWayPayLoad);
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
@@ -172,6 +175,9 @@ router.get("/:id", async (req, res) => {
 
             //add course for it
             await addEnrollmentCourse({ created_by: req?.user?.id, enrollment_id: enrollmentId, course_id: paymentGateWayPayLoad?.course?.id });
+
+            logger.info("PROCESSING");
+            logger.info(JSON.stringify(paymentGateWayPayLoad));
 
             //add transaction for it
             const enrollmentTransactionId = await addEnrollmentTransaction({

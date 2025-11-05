@@ -55,10 +55,17 @@ router.post("/", async (req, res) => {
         };
 
         //calculate coupon code first
-        if (validatedRequestBody.couponCode) {
-            paymentGateWayPayLoad.transaction.couponCode = validatedRequestBody.couponCode;
 
-            if ((couponCodeCourse = await getCouponCodeCourseByCouponCodeAndCourseId({ code: validatedRequestBody.couponCode, course_id: course?.id }))) {
+        paymentGateWayPayLoad.transaction.discount = 0;
+        paymentGateWayPayLoad.transaction.couponCode = validatedRequestBody?.couponCode;
+
+        if (!!paymentGateWayPayLoad.transaction.couponCode) {
+            if (
+                (couponCodeCourse = await getCouponCodeCourseByCouponCodeAndCourseId({
+                    code: paymentGateWayPayLoad.transaction.couponCode,
+                    course_id: course?.id,
+                }))
+            ) {
                 //if having discount
                 if (couponCodeCourse?.discount > 0) {
                     paymentGateWayPayLoad.transaction.discount = Number(couponCodeCourse?.discount);
@@ -89,8 +96,6 @@ router.post("/", async (req, res) => {
                         paymentGateWayPayLoad.transaction.commision = (paymentGateWayPayLoad.course.fees * couponCodeCourse.discount) / 100;
                     }
                 }
-            } else {
-                paymentGateWayPayLoad.transaction.discount = 0;
             }
 
             paymentGateWayPayLoad.transaction.amount -= Number(paymentGateWayPayLoad.transaction.discount);

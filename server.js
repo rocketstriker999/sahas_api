@@ -110,10 +110,6 @@ const routers = {
         middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
         router: require("./routes/role_authorities"),
     },
-    "/media": {
-        middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
-        router: require("./routes/media"),
-    },
 };
 
 //apply all routes

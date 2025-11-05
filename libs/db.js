@@ -138,7 +138,7 @@ function generateDBTables() {
             cgst DECIMAL(8, 2) DEFAULT 0,
             sgst DECIMAL(8, 2) DEFAULT 0,
             original DECIMAL(8, 2) AS (amount - cgst - sgst) STORED,
-            coupon_code_id INT NULL,
+            coupon_code VARCHAR(16) NULL,
             discount DECIMAL(8, 2) DEFAULT 0,
             note VARCHAR(256) NOT NULL,
             type VARCHAR(16) NOT NULL,

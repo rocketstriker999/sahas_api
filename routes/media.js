@@ -6,7 +6,7 @@ const router = libExpress.Router();
 
 //tested
 router.post("/:type", async (req, res) => {
-    logger.info(req.body);
+    logger.info(req.body instanceof FormData);
 
     await requestService({
         requestServiceName: process.env.SERVICE_MEDIA,

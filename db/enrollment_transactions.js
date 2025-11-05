@@ -13,10 +13,10 @@ function getTransactionsByEnrollmentId({ enrollment_id }) {
 }
 
 //freeze
-function addEnrollmentTransaction({ enrollment_id, amount, cgst, sgst, created_by, coupon_code, note, type }) {
+function addEnrollmentTransaction({ enrollment_id, amount, cgst, sgst, created_by, coupon_code, discount, note, type }) {
     return executeSQLQueryParameterized(
-        `INSERT INTO ENROLLMENT_TRANSACTIONS(enrollment_id,amount,cgst,sgst,created_by,coupon_code,note,type) VALUES(?,?,?,?,?,?,?,?)`,
-        [enrollment_id, amount, cgst, sgst, created_by, coupon_code, note, type]
+        `INSERT INTO ENROLLMENT_TRANSACTIONS(enrollment_id,amount,cgst,sgst,created_by,coupon_code,discount,note,type) VALUES(?,?,?,?,?,?,?,?,?)`,
+        [enrollment_id, amount, cgst, sgst, created_by, coupon_code, discount, note, type]
     )
         .then((result) => result.insertId)
         .catch((error) => logger.error(`addEnrollmentTransaction: ${error}`));

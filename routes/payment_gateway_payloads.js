@@ -267,7 +267,7 @@ router.get("/:id", async (req, res) => {
                         price_pay_words: libNumbersToWords.toWords(paymentGateWayPayLoad?.transaction?.amount).toUpperCase(),
                     },
                 },
-                onResponseReceieved: async ({ cdn_url }, responseCode) => {
+                onResponseReceieved: ({ cdn_url }, responseCode) => {
                     if (cdn_url && responseCode === 201) {
                         logger.success(`Invoice For Transaction - ${enrollmentTransactionId} Generated !`);
                         paymentGateWayPayLoad.transaction.invoice = cdn_url;

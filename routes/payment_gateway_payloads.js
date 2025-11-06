@@ -277,11 +277,11 @@ router.get("/:id", async (req, res) => {
                         price_pay_words: libNumbersToWords.toWords(paymentGateWayPayLoad?.transaction?.amount).toUpperCase(),
                     },
                 },
-                onResponseReceieved: ({ cdn_url }, responseCode) => {
-                    if (cdn_url && responseCode === 201) {
+                onResponseReceieved: (generatedInvoice, responseCode) => {
+                    if (generatedInvoice?.cdn_url && responseCode === 201) {
                         logger.success(`Invoice For Transaction - ${enrollmentTransactionId} Generated !`);
-                        paymentGateWayPayLoad.transaction.invoice = cdn_url;
-                        updateEnrollmentTransactionInvoiceById({ id: enrollmentTransactionId, invoice: cdn_url });
+                        paymentGateWayPayLoad.transaction.invoice = generatedInvoice.cdn_url;
+                        updateEnrollmentTransactionInvoiceById({ id: enrollmentTransactionId, invoice: generatedInvoice.cdn_url });
                     } else {
                         logger.error(`Failed To Generate Invoice For Transaction - ${enrollmentTransactionId}`);
                     }

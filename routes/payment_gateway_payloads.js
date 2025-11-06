@@ -220,6 +220,8 @@ router.get("/:id", async (req, res) => {
                     created_by: req?.user?.id,
                 });
 
+                logger.info(JSON.stringify(paymentGateWayPayLoad?.transaction.distributor_user));
+
                 await requestService({
                     requestServiceName: process.env.SERVICE_MAILER,
                     onRequestStart: () => logger.info("Sending Coupon Code Commision Email"),
@@ -270,7 +272,9 @@ router.get("/:id", async (req, res) => {
                         cgst_percentage: cgst,
                         sgst_percentage: sgst,
                         price_original: paymentGateWayPayLoad?.course?.fees,
-                        price_discounted: paymentGateWayPayLoad?.transaction?.preTaxAmount,
+                        price_pre_tax: paymentGateWayPayLoad?.transaction?.preTaxAmount,
+                        discount: paymentGateWayPayLoad?.transaction?.discount,
+                        coupon_code: paymentGateWayPayLoad?.transaction?.couponCode || "No Coupon Code",
                         total_tax: (Number(paymentGateWayPayLoad?.transaction?.cgst) + Number(paymentGateWayPayLoad?.transaction?.sgst)).toFixed(2),
                         cgst: paymentGateWayPayLoad?.transaction?.cgst,
                         sgst: paymentGateWayPayLoad?.transaction?.sgst,

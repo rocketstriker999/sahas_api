@@ -1,6 +1,6 @@
 const libExpress = require("express");
 const { readConfig, writeConfig } = require("../libs/config");
-const logger = require("../libs/logger");
+const { logger } = require("sahas_utils");
 const { getAllBranches } = require("../db/branches");
 const { getAllCourses } = require("../db/courses");
 const { getAllRoles } = require("../db/roles");

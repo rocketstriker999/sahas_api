@@ -1,5 +1,5 @@
 const { KEY_DEVICE_FINGER_PRINT, ERROR_DEVICE_MISSING, REQUEST_DENIED } = require("../constants");
-const logger = require("../libs/logger");
+const { logger } = require("sahas_utils");
 
 const { getDeviceDescriptionByFingerPrint } = require("../utils");
 

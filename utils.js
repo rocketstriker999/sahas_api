@@ -1,7 +1,7 @@
 const libFs = require("fs");
 const libPath = require("path");
 const libCrypto = require("crypto");
-const logger = require("./libs/logger");
+const { logger } = require("sahas_utils");
 const { readConfig } = require("./libs/config");
 const libMoment = require("moment");
 

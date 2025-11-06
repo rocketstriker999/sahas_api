@@ -1,5 +1,5 @@
 const { executeSQLQueryParameterized, executeSQLQueryRaw } = require("../libs/db");
-const logger = require("../libs/logger");
+const { logger } = require("sahas_utils");
 
 //freeze
 function getEnrollmentCoursesByEnrollmentId({ enrollment_id }) {

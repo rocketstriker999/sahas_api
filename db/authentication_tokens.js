@@ -1,5 +1,5 @@
 const { executeSQLQueryParameterized } = require("../libs/db");
-const logger = require("../libs/logger");
+const { logger } = require("sahas_utils");
 
 async function getTokenByOTP(token, otp) {
     //Check if such token is there

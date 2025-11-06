@@ -8,7 +8,7 @@ const {
     getCouponCodeCourseById,
 } = require("../db/coupon_code_courses");
 const router = libExpress.Router();
-const logger = require("../libs/logger");
+const { logger } = require("sahas_utils");
 
 //tested
 router.post("/", async (req, res) => {

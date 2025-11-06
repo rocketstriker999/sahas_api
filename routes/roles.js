@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const logger = require("../libs/logger");
+const { logger } = require("sahas_utils");
 const { addRole, getRoleById, deleteRoleById, updateRoleById } = require("../db/roles");
 const { deleteUserRolesByRoleId } = require("../db/user_roles");
 const { getRoleAuthoritiesByRoleId, addRoleAuthority, getRoleAuthorityByRoleAuthorityId, deleteRoleAuthoritiesByRoleId } = require("../db/role_authorities");

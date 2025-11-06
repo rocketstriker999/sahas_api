@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const logger = require("./libs/logger");
+const { logger } = require("sahas_utils");
 const cors = require("cors");
 const { ROUTE_NOT_FOUND } = require("./constants");
 

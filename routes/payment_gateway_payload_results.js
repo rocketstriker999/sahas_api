@@ -1,8 +1,7 @@
 const libExpress = require("express");
-const { validateRequestBody, verifyPaymentGatewayPayLoadStatus } = require("../utils");
-const logger = require("../libs/logger");
+const { validateRequestBody } = require("../utils");
+const { logger } = require("sahas_utils");
 const { readConfig } = require("../libs/config");
-const { getPaymentGateWayPayLoadById } = require("../db/payment_gateway_payloads");
 
 const router = libExpress.Router();
 
@@ -18,7 +17,3 @@ router.post("/", async (req, res) => {
 });
 
 module.exports = router;
-
-//  &&
-//         (paymentGatewayPayLoad = getPaymentGateWayPayLoadById({ id: validatedRequestBody.txnid })) &&
-//         (await verifyPaymentGatewayPayLoadStatus(paymentGatewayPayLoad))

@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 const { allowTraffic } = require("./server");
-const logger = require("./libs/logger");
+const { logger } = require("sahas_utils");
 const { generateDBTables } = require("./libs/db");
 const { prepareDirectories } = require("./utils");
 const { generateCaches } = require("./libs/cacher");

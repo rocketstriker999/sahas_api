@@ -1,5 +1,5 @@
 const { executeSQLQueryParameterized } = require("../libs/db");
-const logger = require("../libs/logger");
+const { logger } = require("sahas_utils");
 
 function getAllCouponCodes() {
     return executeSQLQueryParameterized(`SELECT * FROM COUPON_CODES`).catch((error) => {

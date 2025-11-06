@@ -1,6 +1,6 @@
 const { REQUEST_DENIED, SERVER_UNDER_MAINTENANCE } = require("../constants");
 const { readConfig } = require("../libs/config");
-const logger = require("../libs/logger");
+const { logger } = require("sahas_utils");
 
 module.exports = async (req, res, next) => {
     const { general: { under_maintance } = {} } = await readConfig("app");

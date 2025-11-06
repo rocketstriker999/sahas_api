@@ -1,5 +1,5 @@
 const { executeSQLQueryParameterized } = require("../libs/db");
-const logger = require("../libs/logger");
+const { logger } = require("sahas_utils");
 
 function addActiveUserDevice(userId, fingerPrint) {
     return executeSQLQueryParameterized(`INSERT INTO  USER_DEVICES(user_id,finger_print,active)  VALUES (?,?,TRUE)`, [userId, fingerPrint]).catch((error) => {

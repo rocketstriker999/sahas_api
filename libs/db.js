@@ -1,6 +1,6 @@
 // config/database.js
 const mysql = require("mysql2");
-const logger = require("./logger");
+const { logger } = require("sahas_utils");
 
 // Create a connection pool
 const dbConnectionPool = mysql.createPool({

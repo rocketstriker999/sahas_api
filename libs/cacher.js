@@ -3,7 +3,7 @@ const { getAllCourseCategories } = require("../db/course_categories");
 const { getAllCourses } = require("../db/courses");
 const { getAllPaymentGateWayPayLoads } = require("../db/payment_gateway_payloads");
 const { getAllSubjects } = require("../db/subjects");
-const logger = require("./logger");
+const { logger } = require("sahas_utils");
 
 const cache = {};
 

@@ -1,5 +1,3 @@
-const logger = require("../libs/logger");
-
 let paymentGateWayPayLoads = [];
 
 //freeze

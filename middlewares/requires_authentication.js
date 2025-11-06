@@ -1,4 +1,4 @@
-const logger = require("../libs/logger");
+const { logger } = require("sahas_utils");
 
 module.exports = async (req, res, next) => {
     if (req.user) {

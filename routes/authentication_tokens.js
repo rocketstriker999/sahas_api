@@ -6,7 +6,7 @@ const libValidator = require("validator");
 const { generateToken } = require("../utils");
 const { addInactiveToken, getTokenByOTP, activateToken } = require("../db/authentication_tokens");
 const { readConfig } = require("../libs/config");
-const logger = require("../libs/logger");
+const { logger } = require("sahas_utils");
 const { getUserRolesByUserId } = require("../db/user_roles");
 const { EMAIL_NO_REPLY } = require("../constants");
 

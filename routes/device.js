@@ -1,5 +1,6 @@
 const libExpress = require("express");
 const { addDevice } = require("../db/devices");
+const { logger } = require("sahas_utils");
 
 const router = libExpress.Router();
 

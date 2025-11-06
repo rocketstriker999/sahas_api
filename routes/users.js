@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const logger = require("../libs/logger");
+const { logger } = require("sahas_utils");
 const { getAllUsersBySearchAndFilters, getCountUsersBySearchAndFilters, getUserById, updateUserById } = require("../db/users");
 const { getInquiriesByUserId } = require("../db/inquiries");
 const { validateRequestBody } = require("../utils");

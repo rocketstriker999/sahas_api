@@ -284,7 +284,7 @@ router.get("/:id", async (req, res) => {
                         updateEnrollmentTransactionInvoiceById({ id: enrollmentTransactionId, invoice: generatedInvoice.cdn_url });
                     } else {
                         logger.error(
-                            `Failed To Generate Invoice For Transaction - ${enrollmentTransactionId} - Media Responded ${JSON.stringify(generatedInvoice)}`
+                            `Failed To Generate Invoice For Transaction - ${enrollmentTransactionId} - Media Responded With ${JSON.stringify(generatedInvoice)}`
                         );
                     }
                 },

@@ -283,12 +283,12 @@ router.get("/:id", async (req, res) => {
                         paymentGateWayPayLoad.transaction.invoice = generatedInvoice.cdn_url;
                         updateEnrollmentTransactionInvoiceById({ id: enrollmentTransactionId, invoice: generatedInvoice.cdn_url });
                     } else {
-                        logger.error(`Failed To Generate Invoice For Transaction - ${enrollmentTransactionId}`);
+                        logger.error(
+                            `Failed To Generate Invoice For Transaction - ${enrollmentTransactionId} - Media Responded ${JSON.stringify(generatedInvoice)}`
+                        );
                     }
                 },
             });
-
-            logger.info(JSON.stringify(paymentGateWayPayLoad.transaction));
 
             //send notification emails
             await requestService({

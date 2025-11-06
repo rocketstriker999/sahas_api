@@ -139,9 +139,6 @@ router.post("/", async (req, res) => {
         //add transcation in to table
         addPaymentGateWayPayLoad(paymentGateWayPayLoad);
 
-        logger.info("ADDING");
-        logger.info(JSON.stringify(paymentGateWayPayLoad));
-
         res.status(201).json(paymentGateWayPayLoad);
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
@@ -220,8 +217,6 @@ router.get("/:id", async (req, res) => {
                     created_by: req?.user?.id,
                 });
 
-                logger.info(JSON.stringify(paymentGateWayPayLoad?.transaction.distributor_user));
-
                 await requestService({
                     requestServiceName: process.env.SERVICE_MAILER,
                     onRequestStart: () => logger.info("Sending Coupon Code Commision Email"),
@@ -233,7 +228,7 @@ router.get("/:id", async (req, res) => {
                         subject: "Coupon Code Used",
                         template: "commision",
                         injects: {
-                            distributor_name: `${paymentGateWayPayLoad?.transaction.distributor_user?.firstName} ${paymentGateWayPayLoad?.transaction.distributor_user?.lastName}`,
+                            distributor_name: paymentGateWayPayLoad?.transaction?.distributor_user?.full_name,
                             commision: paymentGateWayPayLoad?.transaction?.commision,
                             coupon_code: paymentGateWayPayLoad?.transaction?.couponCode,
                             user_name: `${paymentGateWayPayLoad?.user?.firstName} ${paymentGateWayPayLoad?.user?.lastName}`,
@@ -292,6 +287,8 @@ router.get("/:id", async (req, res) => {
                     }
                 },
             });
+
+            logger.info(JSON.stringify(paymentGateWayPayLoad.transaction));
 
             //send notification emails
             await requestService({

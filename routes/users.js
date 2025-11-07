@@ -10,6 +10,7 @@ const { getUserRolesByUserId } = require("../db/user_roles");
 
 const router = libExpress.Router();
 
+//tested
 router.get("/", async (req, res) => {
     const { search, offSet, limit, ...appliedFilters } = req.query;
     logger.info(`Searching Users - search : ${search} | filters : ${JSON.stringify(appliedFilters)} | offSet : ${offSet} | limit : ${limit}`);
@@ -34,7 +35,7 @@ router.get("/:id", async (req, res) => {
 
 //tested
 router.put("/", async (req, res) => {
-    const requiredBodyFields = ["id", "full_name", "phone", "image", "address", "branch_id", "active"];
+    const requiredBodyFields = ["id", "full_name", "phone", "address", "branch_id", "active"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 

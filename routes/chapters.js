@@ -28,13 +28,20 @@ const router = libExpress.Router();
 // });
 
 // //tested
-// router.get("/:id/chapters", async (req, res) => {
-//     if (!req.params.id) {
-//         return res.status(400).json({ error: "Missing Subject id" });
-//     }
-//     //provide all the subjects
-//     res.status(200).json(await getChaptersBySubjectId({ subject_id: req.params.id }));
-// });
+router.get("/:id/media", async (req, res) => {
+    if (!req.params.id) {
+        return res.status(400).json({ error: "Missing Chapter id" });
+    }
+
+    //check if chapter is required enrollment or not
+
+    //if it does not require enrollment fethc media
+
+    //if it requires enrollment and no enrollment access is there then let is pass
+
+    //provide all the subjects
+    res.status(200).json(await getChaptersBySubjectId({ subject_id: req.params.id }));
+});
 
 //tested
 router.delete("/:id", async (req, res) => {

@@ -110,7 +110,6 @@ function generateDBTables() {
             created_by INT NOT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP
         )`,
-
         `CREATE TABLE IF NOT EXISTS ENROLLMENTS (
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,

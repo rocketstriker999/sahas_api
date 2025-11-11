@@ -35,8 +35,6 @@ function addCourse({ category_id, title, description, image, fees, whatsapp_grou
 
 //freeze
 function getCourseById({ id }) {
-    d;
-
     return executeSQLQueryParameterized(`SELECT * FROM COURSES WHERE id=?`, [id])
         .then((result) => (result?.length ? result[0] : false))
         .catch((error) => {

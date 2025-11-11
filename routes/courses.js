@@ -66,7 +66,7 @@ router.get("/:id", async (req, res) => {
     if (course) {
         course.enrollment = await getEnrollmentByCourseIdAndUserId({ course_id: course?.id, user_id: req?.user?.id });
         course.subjects = await getCourseSubjectsByCourseId({ course_id: req.params.id });
-        res.status(200).json(course);
+        return res.status(200).json(course);
     }
 
     res.status(400).json({ error: "Course Not Exist" });

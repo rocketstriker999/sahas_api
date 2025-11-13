@@ -17,10 +17,10 @@ function updateChapterTypeViewIndexById({ id, view_index }) {
 }
 
 //freeze
-function updateChapterTypeById({ id, title, requires_class_access, requires_zoom_access, requires_recordings_access }) {
+function updateChapterTypeById({ id, title, requires_class_access, requires_zoom_access, requires_recordings_access, active }) {
     return executeSQLQueryParameterized(
-        "UPDATE CHAPTER_TYPES SET title=?,requires_class_access=?,requires_zoom_access=?,requires_recordings_access=? WHERE id=?",
-        [title, requires_class_access, requires_zoom_access, requires_recordings_access, id]
+        "UPDATE CHAPTER_TYPES SET title=?,requires_class_access=?,requires_zoom_access=?,requires_recordings_access=?,active=? WHERE id=?",
+        [title, requires_class_access, requires_zoom_access, requires_recordings_access, active, id]
     ).catch((error) => logger.error(`updateChapterTypeById: ${error}`));
 }
 

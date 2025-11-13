@@ -13,12 +13,12 @@ function getEnrollmentsByUserId({ user_id }) {
 }
 
 //freeze
-function updateEnrollmentById({ id, start_date, end_date, on_site_access, digital_access }) {
-    return executeSQLQueryParameterized("UPDATE ENROLLMENTS SET start_date=?,end_date=?,on_site_access=?,digital_access=? WHERE id=?", [
+function updateEnrollmentById({ id, start_date, end_date, class_access, zoom_access }) {
+    return executeSQLQueryParameterized("UPDATE ENROLLMENTS SET start_date=?,end_date=?,class_access=?,zoom_access=? WHERE id=?", [
         start_date,
         end_date,
-        on_site_access,
-        digital_access,
+        class_access,
+        zoom_access,
         id,
     ]).catch((error) => logger.error(`updateEnrollmentById: ${error}`));
 }
@@ -34,10 +34,10 @@ function getEnrollmentById({ id }) {
 }
 
 //freeze
-function addEnrollment({ user_id, start_date, end_date, amount, on_site_access, digital_access, created_by }) {
+function addEnrollment({ user_id, start_date, end_date, amount, class_access, zoom_access, created_by }) {
     return executeSQLQueryParameterized(
-        "INSERT INTO ENROLLMENTS(user_id,start_date,end_date,amount,on_site_access,digital_access,created_by) VALUES(?,?,?,?,?,?,?)",
-        [user_id, start_date, end_date, amount, on_site_access, digital_access, created_by]
+        "INSERT INTO ENROLLMENTS(user_id,start_date,end_date,amount,class_access,zoom_access,created_by) VALUES(?,?,?,?,?,?,?)",
+        [user_id, start_date, end_date, amount, class_access, zoom_access, created_by]
     )
         .then((result) => result.insertId)
         .catch((error) => logger.error(`addEnrollment: ${error}`));

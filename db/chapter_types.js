@@ -17,17 +17,21 @@ function updateChapterTypeViewIndexById({ id, view_index }) {
 }
 
 //freeze
-function updateChapterTypeById({ id, title, requires_enrollment }) {
-    return executeSQLQueryParameterized("UPDATE CHAPTER_TYPES SET title=?,requires_enrollment=? WHERE id=?", [title, requires_enrollment, id]).catch((error) =>
-        logger.error(`updateChapterTypeById: ${error}`)
-    );
+function updateChapterTypeById({ id, title, requires_class_access, requires_zoom_access, requires_recordings_access }) {
+    return executeSQLQueryParameterized(
+        "UPDATE CHAPTER_TYPES SET title=?,requires_class_access=?,requires_zoom_access=?,requires_recordings_access=? WHERE id=?",
+        [title, requires_class_access, requires_zoom_access, requires_recordings_access, id]
+    ).catch((error) => logger.error(`updateChapterTypeById: ${error}`));
 }
 
 //freeze
-function addChapterType({ title, requires_enrollment }) {
-    return executeSQLQueryParameterized("INSERT INTO CHAPTER_TYPES(title,requires_enrollment) VALUES(?,?)", [title, requires_enrollment])
+function addChapterType({ title, requires_class_access, requires_zoom_access, requires_recordings_access }) {
+    return executeSQLQueryParameterized(
+        "INSERT INTO CHAPTER_TYPES(title,requires_class_access, requires_zoom_access, requires_recordings_access) VALUES(?,?,?,?)",
+        [title, requires_class_access, requires_zoom_access, requires_recordings_access]
+    )
         .then((result) => result.insertId)
-        .catch((error) => logger.error(`addSubject: ${error}`));
+        .catch((error) => logger.error(`addChapterType: ${error}`));
 }
 
 //freeze

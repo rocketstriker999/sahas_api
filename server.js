@@ -3,7 +3,7 @@ const { logger } = require("sahas_utils");
 const cors = require("cors");
 const { ROUTE_NOT_FOUND } = require("./constants");
 
-//Required Middlewares #5
+//Required Middlewares #6
 const requiresDeviceFingerPrint = require("./middlewares/requires_device_finger_print");
 const requiresNoMaintenance = require("./middlewares/requires_no_maintenance");
 

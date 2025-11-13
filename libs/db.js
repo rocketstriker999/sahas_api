@@ -30,7 +30,7 @@ function generateDBTables() {
             active BOOLEAN NOT NULL DEFAULT TRUE,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-            created_by INT NULL,
+            created_by INT NULL
           )
         `,
         `CREATE TABLE IF NOT EXISTS WALLET_TRANSACTIONS(
@@ -45,7 +45,7 @@ function generateDBTables() {
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(36) UNIQUE NOT NULL,
             active BOOLEAN NOT NULL DEFAULT TRUE,
-            created_by INT NOT NULL,
+            created_by INT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP
            
         )`,
@@ -53,14 +53,14 @@ function generateDBTables() {
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(36) UNIQUE NOT NULL,
             description VARCHAR(128) NOT NULL,
-            created_by INT NOT NULL,
+            created_by INT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP
         )`,
         `CREATE TABLE IF NOT EXISTS ROLE_AUTHORITIES(
             id INT AUTO_INCREMENT PRIMARY KEY,
             role_id INT NOT NULL,
             authority_id INT NOT NULL,
-            created_by INT NOT NULL,
+            created_by INT  NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP
         )`,
         `CREATE TABLE IF NOT EXISTS USER_ROLES(
@@ -219,7 +219,7 @@ function generateDBTables() {
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
 
-        // INSERT INTO BRANCHES (id, title, address, description, active, created_on, updated_at) VALUES
+        // `INSERT INTO BRANCHES (id, title, address, description, active, created_on, updated_at) VALUES
         // (1, 'Head Office', '123 Main Street, Mumbai', 'Main corporate branch', 1, '2025-08-10 23:05:32', '2025-08-10 23:05:32'),
         // (2, 'Ahmedabad Branch', '45 Riverfront Road, Ahmedabad', 'Serves Gujarat region', 1, '2025-08-10 23:05:32', '2025-08-10 23:05:32'),
         // (3, 'Bangalore Branch', '88 MG Road, Bangalore', 'South India operations', 1, '2025-08-10 23:05:32', '2025-08-10 23:05:32'),
@@ -252,14 +252,12 @@ function generateDBTables() {
         // ('USE_PAGE_EXAM', 'allows to use exam page'),
         // ('USE_PAGE_INVOICES', 'allows user to use invoice page');
 
-        // INSERT INTO ROLES (title) VALUES
-        // ('DEVELOPER');
+        // INSERT INTO ROLES (title) VALUES ('DEVELOPER');
 
-        // INSERT INTO ROLE_AUTHORITIES (role_id, authority_id)
-        // SELECT 1, id FROM AUTHORITIES;
+        // INSERT INTO ROLE_AUTHORITIES (role_id, authority_id) SELECT 1, id FROM AUTHORITIES;
 
-        //INSERT INTO USERS (full_name, email ) VALUES ('Nisarg', 'hammerbyte.nisarg@gmail.com');
-        //INSERT INTO USER_ROLES (user_id, role_id,created_by) VALUES (1, 1,0);
+        // INSERT INTO USERS (full_name, email ) VALUES ('Nisarg', 'hammerbyte.nisarg@gmail.com');
+        // INSERT INTO USER_ROLES (user_id, role_id) VALUES (1, 1);`,
     ];
 
     return Promise.all(createUserTableQuery.map((query) => executeSQLQueryRaw(query)));

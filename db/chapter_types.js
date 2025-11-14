@@ -17,7 +17,7 @@ function updateChapterTypeViewIndexById({ id, view_index }) {
 }
 
 //freeze
-function updateChapterTypeById({ id, requires_enrollment_digital_access, active }) {
+function updateChapterTypeById({ id, requires_enrollment_digital_access = false, active = false }) {
     return executeSQLQueryParameterized("UPDATE CHAPTER_TYPES SET title=?,requires_enrollment_digital_access=?,active=? WHERE id=?", [
         title,
         requires_enrollment_digital_access,
@@ -27,7 +27,7 @@ function updateChapterTypeById({ id, requires_enrollment_digital_access, active 
 }
 
 //freeze
-function addChapterType({ title, requires_enrollment_digital_access }) {
+function addChapterType({ title, requires_enrollment_digital_access = false }) {
     return executeSQLQueryParameterized("INSERT INTO CHAPTER_TYPES(title,requires_enrollment_digital_access) VALUES(?,?)", [
         title,
         requires_enrollment_digital_access,

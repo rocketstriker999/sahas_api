@@ -30,6 +30,11 @@ router.post("/", async (req, res) => {
         const enrollmentTransaction = await getEnrollmentTransactionById({ id: enrollmentTransactionId });
         const enrollmentUser = await getUserById({ id: enrollment.user_id });
 
+        logger.info(JSON.stringify(enrollment));
+        logger.info(JSON.stringify(enrollmentCourses));
+        logger.info(JSON.stringify(enrollmentTransaction));
+        logger.info(JSON.stringify(enrollmentUser));
+
         //generate invoice
         await requestService({
             requestServiceName: process.env.SERVICE_MEDIA,

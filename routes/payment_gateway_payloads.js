@@ -178,9 +178,6 @@ router.get("/:id", async (req, res) => {
             //add course for it
             await addEnrollmentCourse({ created_by: req?.user?.id, enrollment_id: enrollmentId, course_id: paymentGateWayPayLoad?.course?.id });
 
-            logger.info("PROCESSING");
-            logger.info(JSON.stringify(paymentGateWayPayLoad));
-
             //add transaction for it
             const enrollmentTransactionId = await addEnrollmentTransaction({
                 enrollment_id: enrollmentId,

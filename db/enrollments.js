@@ -34,10 +34,10 @@ function getEnrollmentById({ id }) {
 }
 
 //freeze
-function addEnrollment({ user_id, start_date, end_date, amount, class_access, zoom_access, created_by }) {
+function addEnrollment({ user_id, start_date, end_date, amount, on_site_access, digital_access, created_by }) {
     return executeSQLQueryParameterized(
-        "INSERT INTO ENROLLMENTS(user_id,start_date,end_date,amount,class_access,zoom_access,created_by) VALUES(?,?,?,?,?,?,?)",
-        [user_id, start_date, end_date, amount, class_access, zoom_access, created_by]
+        "INSERT INTO ENROLLMENTS(user_id,start_date,end_date,amount,on_site_access,digital_access,created_by) VALUES(?,?,?,?,?,?,?)",
+        [user_id, start_date, end_date, amount, on_site_access, digital_access, created_by]
     )
         .then((result) => result.insertId)
         .catch((error) => logger.error(`addEnrollment: ${error}`));
@@ -52,14 +52,5 @@ function getEnrollmentByCourseIdAndUserId({ user_id, course_id }) {
         .then((results) => (results.length > 0 ? results[0] : null))
         .catch((error) => logger.error(`getEnrollmentByCourseIdAndUserId: ${error}`));
 }
-
-// res.status(200).json(
-//     await Promise.all(
-//         courses.map(async (course) => ({
-//             ...course,
-//             enrollment: await getEnrollmentByCourseIdAndUserId({ course_id: course?.id, user_id: req?.user?.id }),
-//         }))
-//     )
-// );
 
 module.exports = { getEnrollmentsByUserId, updateEnrollmentById, getEnrollmentById, addEnrollment, getEnrollmentByCourseIdAndUserId };

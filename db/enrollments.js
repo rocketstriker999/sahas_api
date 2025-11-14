@@ -14,7 +14,7 @@ function getEnrollmentsByUserId({ user_id }) {
 
 //freeze
 function updateEnrollmentById({ id, start_date, end_date, on_site_access = false, digital_access = false }) {
-    return executeSQLQueryParameterized("UPDATE ENROLLMENTS SET start_date=?,end_date=?,class_access=?,zoom_access=? WHERE id=?", [
+    return executeSQLQueryParameterized("UPDATE ENROLLMENTS SET start_date=?,end_date=?,on_site_access=?,digital_access=? WHERE id=?", [
         start_date,
         end_date,
         on_site_access,

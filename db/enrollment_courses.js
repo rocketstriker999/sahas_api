@@ -42,20 +42,9 @@ function deleteEnrollmentCourseById({ id }) {
     });
 }
 
-//freeze
-function getDigitalAccessEnrollmentCoursesByUserId({ user_id }) {
-    return executeSQLQueryParameterized(
-        `SELECT ENROLLMENT_COURSES.* FROM ENROLLMENTS LEFT JOIN ENROLLMENT_COURSES ON ENROLLMENTS.id=ENROLLMENT_COURSES.enrollment_id WHERE ENROLLMENTS.user_id=? AND ENROLLMENTS.digital_access=TRUE`,
-        [user_id]
-    ).catch((error) => {
-        logger.error(`getDigitalAccessEnrollmentCoursesByUserId: ${error}`);
-    });
-}
-
 module.exports = {
     addEnrollmentCourse,
     getEnrollmentCourseById,
     getEnrollmentCoursesByEnrollmentId,
     deleteEnrollmentCourseById,
-    getDigitalAccessEnrollmentCoursesByUserId,
 };

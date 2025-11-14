@@ -59,7 +59,7 @@ router.post("/", async (req, res) => {
                     cgst_percentage: cgst, //
                     sgst_percentage: sgst, //
                     price_original: enrollmentTransaction?.original, //
-                    price_pre_tax: enrollmentTransaction?.amount, //
+                    price_pre_tax: enrollmentTransaction?.original, //
                     discount: enrollmentTransaction?.discount, //
                     coupon_code: "No Coupon Code", //
                     total_tax: (Number(enrollmentTransaction?.cgst) + Number(enrollmentTransaction?.sgst)).toFixed(2), //
@@ -67,6 +67,7 @@ router.post("/", async (req, res) => {
                     sgst: enrollmentTransaction?.sgst, //
                     price_pay: validatedRequestBody?.amount, //
                     price_pay_words: libNumbersToWords.toWords(validatedRequestBody?.amount).toUpperCase(), //
+                    received_by: req.user?.name,
                 },
             },
             onResponseReceieved: (generatedInvoice, responseCode) => {

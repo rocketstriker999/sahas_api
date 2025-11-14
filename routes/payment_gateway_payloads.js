@@ -272,6 +272,7 @@ router.get("/:id", async (req, res) => {
                         sgst: paymentGateWayPayLoad?.transaction?.sgst,
                         price_pay: paymentGateWayPayLoad?.transaction?.amount,
                         price_pay_words: libNumbersToWords.toWords(paymentGateWayPayLoad?.transaction?.amount).toUpperCase(),
+                        received_by: "PayU",
                     },
                 },
                 onResponseReceieved: (generatedInvoice, responseCode) => {

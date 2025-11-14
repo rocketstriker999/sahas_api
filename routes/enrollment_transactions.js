@@ -50,7 +50,7 @@ router.post("/", async (req, res) => {
                     transaction_id: enrollmentTransactionId, //
                     course_title: enrollmentCourses.map(({ title }) => title).join(","), //
 
-                    user_name: `${enrollmentUser?.firstName} ${enrollmentUser?.lastName}`, //
+                    user_name: `${enrollmentUser?.full_name}`, //
                     user_email: enrollmentUser?.email, //
                     user_phone: enrollmentUser?.phone, //
                     validity: getFormattedDate({ date: enrollment?.end_date, format: "DD-MM-YY" }), //
@@ -67,7 +67,7 @@ router.post("/", async (req, res) => {
                     sgst: enrollmentTransaction?.sgst, //
                     price_pay: validatedRequestBody?.amount, //
                     price_pay_words: libNumbersToWords.toWords(validatedRequestBody?.amount).toUpperCase(), //
-                    received_by: req.user?.name,
+                    received_by: req.user?.full_name,
                     mode_payment: enrollmentTransaction.type,
                     note: enrollmentTransaction.note,
                 },

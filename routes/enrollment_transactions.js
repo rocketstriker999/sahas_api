@@ -68,6 +68,7 @@ router.post("/", async (req, res) => {
                     price_pay: validatedRequestBody?.amount, //
                     price_pay_words: libNumbersToWords.toWords(validatedRequestBody?.amount).toUpperCase(), //
                     received_by: req.user?.name,
+                    mode_payment: enrollmentTransaction.type,
                 },
             },
             onResponseReceieved: (generatedInvoice, responseCode) => {

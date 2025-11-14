@@ -170,8 +170,8 @@ router.get("/:id", async (req, res) => {
                 start_date: getFormattedDate({ date: paymentGateWayPayLoad.transaction.date_time }),
                 end_date: getFormattedDate({ date: paymentGateWayPayLoad?.course?.validity }),
                 amount: paymentGateWayPayLoad?.transaction?.amount,
-                class_access: false,
-                zoom_access: true,
+                on_site_access: false,
+                digital_access: true,
                 created_by: req?.user?.id,
             });
 

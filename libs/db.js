@@ -118,9 +118,8 @@ function generateDBTables() {
             start_date DATETIME DEFAULT CURRENT_TIMESTAMP,
             end_date DATETIME DEFAULT CURRENT_TIMESTAMP,
             amount DECIMAL(8, 2) DEFAULT 0,
-            class_access BOOLEAN NOT NULL DEFAULT TRUE,
-            zoom_access BOOLEAN NOT NULL DEFAULT TRUE,
-            recordings_access BOOLEAN NOT NULL DEFAULT TRUE,
+            on_site_access BOOLEAN NOT NULL DEFAULT TRUE,
+            digital_access BOOLEAN NOT NULL DEFAULT TRUE,
             created_by INT NOT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -195,9 +194,7 @@ function generateDBTables() {
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(128) NOT NULL UNIQUE,
             view_index INT NULL,
-            requires_class_access BOOLEAN NOT NULL DEFAULT FALSE,
-            requires_zoom_access BOOLEAN NOT NULL DEFAULT FALSE,
-            requires_recordings_access BOOLEAN NOT NULL DEFAULT FALSE,
+            requires_enrollment_digital_access BOOLEAN DEFAULT TRUE,
             active BOOLEAN NOT NULL DEFAULT TRUE,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,

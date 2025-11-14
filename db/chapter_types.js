@@ -17,19 +17,21 @@ function updateChapterTypeViewIndexById({ id, view_index }) {
 }
 
 //freeze
-function updateChapterTypeById({ id, title, requires_class_access, requires_zoom_access, requires_recordings_access, active }) {
-    return executeSQLQueryParameterized(
-        "UPDATE CHAPTER_TYPES SET title=?,requires_class_access=?,requires_zoom_access=?,requires_recordings_access=?,active=? WHERE id=?",
-        [title, requires_class_access, requires_zoom_access, requires_recordings_access, active, id]
-    ).catch((error) => logger.error(`updateChapterTypeById: ${error}`));
+function updateChapterTypeById({ id, requires_enrollment_digital_access, active }) {
+    return executeSQLQueryParameterized("UPDATE CHAPTER_TYPES SET title=?,requires_enrollment_digital_access=?,active=? WHERE id=?", [
+        title,
+        requires_enrollment_digital_access,
+        active,
+        id,
+    ]).catch((error) => logger.error(`updateChapterTypeById: ${error}`));
 }
 
 //freeze
-function addChapterType({ title, requires_class_access, requires_zoom_access, requires_recordings_access }) {
-    return executeSQLQueryParameterized(
-        "INSERT INTO CHAPTER_TYPES(title,requires_class_access, requires_zoom_access, requires_recordings_access) VALUES(?,?,?,?)",
-        [title, requires_class_access, requires_zoom_access, requires_recordings_access]
-    )
+function addChapterType({ title, requires_enrollment_digital_access }) {
+    return executeSQLQueryParameterized("INSERT INTO CHAPTER_TYPES(title,requires_enrollment_digital_access) VALUES(?,?)", [
+        title,
+        requires_enrollment_digital_access,
+    ])
         .then((result) => result.insertId)
         .catch((error) => logger.error(`addChapterType: ${error}`));
 }

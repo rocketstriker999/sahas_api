@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const { validateRequestBody } = require("../utils");
+const { validateRequestBody, getFormattedDate } = require("../utils");
 const { addEnrollmentTransaction, getEnrollmentTransactionById, updateEnrollmentTransactionInvoiceById } = require("../db/enrollment_transactions");
 const { readConfig } = require("../libs/config");
 const { requestService } = require("sahas_utils");
@@ -8,6 +8,7 @@ const libNumbersToWords = require("number-to-words");
 const { getEnrollmentCoursesByEnrollmentId } = require("../db/enrollment_courses");
 const { getEnrollmentById } = require("../db/enrollments");
 const { getUserById } = require("../db/users");
+
 //tested
 router.post("/", async (req, res) => {
     const requiredBodyFields = ["enrollment_id", "amount", "note", "type"];

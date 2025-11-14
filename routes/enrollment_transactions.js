@@ -47,7 +47,7 @@ router.post("/", async (req, res) => {
                 injects: {
                     invoice_date: getFormattedDate({ date: enrollmentTransaction.created_on, format: "DD-MM-YY" }), //
                     transaction_id: enrollmentTransactionId, //
-                    course_title: enrollmentCourses.map({ title }).join(","), //
+                    course_title: enrollmentCourses.map(({ title }) => title).join(","), //
 
                     user_name: `${enrollmentUser?.firstName} ${enrollmentUser?.lastName}`, //
                     user_email: enrollmentUser?.email, //

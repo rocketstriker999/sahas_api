@@ -143,6 +143,7 @@ function generateDBTables() {
             discount DECIMAL(8, 2) DEFAULT 0,
             note VARCHAR(256) NOT NULL,
             type VARCHAR(16) NOT NULL,
+            image VARCHAR(64) NULL UNIQUE,
             invoice VARCHAR(64) NULL,
             created_by INT NOT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP

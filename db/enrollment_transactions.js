@@ -15,7 +15,7 @@ function getTransactionsByEnrollmentId({ enrollment_id }) {
 //freeze
 function addEnrollmentTransaction({ enrollment_id, amount, cgst, sgst, created_by, coupon_code = null, discount = 0, note, type, image = null }) {
     return executeSQLQueryParameterized(
-        `INSERT INTO ENROLLMENT_TRANSACTIONS(enrollment_id,amount,cgst,sgst,created_by,coupon_code,discount,note,type) VALUES(?,?,?,?,?,?,?,?,?,?)`,
+        `INSERT INTO ENROLLMENT_TRANSACTIONS(enrollment_id,amount,cgst,sgst,created_by,coupon_code,discount,note,type,image) VALUES(?,?,?,?,?,?,?,?,?,?)`,
         [enrollment_id, amount, cgst, sgst, created_by, coupon_code, discount, note, type, image]
     )
         .then((result) => result.insertId)

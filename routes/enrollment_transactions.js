@@ -31,6 +31,7 @@ router.post("/", async (req, res) => {
         const enrollmentTransaction = await getEnrollmentTransactionById({ id: enrollmentTransactionId });
         const enrollmentUser = await getUserById({ id: enrollment.user_id });
 
+        //delete this
         logger.info(JSON.stringify(enrollment));
         logger.info(JSON.stringify(enrollmentCourses));
         logger.info(JSON.stringify(enrollmentTransaction));
@@ -72,6 +73,7 @@ router.post("/", async (req, res) => {
                 if (generatedInvoice?.cdn_url && responseCode === 201) {
                     logger.success(`Invoice For Transaction - ${enrollmentTransactionId} Generated !`);
                     updateEnrollmentTransactionInvoiceById({ id: enrollmentTransactionId, invoice: generatedInvoice.cdn_url });
+                    enrollmentTransaction.invoice = generatedInvoice.cdn_url;
                 } else {
                     logger.error(
                         `Failed To Generate Invoice For Transaction - ${enrollmentTransactionId} - Media Responded With ${JSON.stringify(generatedInvoice)}`

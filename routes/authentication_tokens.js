@@ -9,7 +9,7 @@ const { readConfig } = require("../libs/config");
 const { logger } = require("sahas_utils");
 const { getUserRolesByUserId } = require("../db/user_roles");
 const { EMAIL_NO_REPLY } = require("../constants");
-const { getEnrollmentCoursesByUserId } = require("../db/enrollment_courses");
+const { getDigitalAccessEnrollmentCoursesByUserId } = require("../db/enrollment_courses");
 
 const router = libExpress.Router();
 
@@ -24,7 +24,7 @@ async function populateRolesAndAuthorities(user) {
     const authorities = await getAuthoritiesByRoleIds(userRoles.map(({ role_id }) => role_id).join(","));
     user.roles = await userRoles?.map(({ title }) => title);
     user.authorities = await authorities?.map((authority) => authority.title);
-    user.digitallyEnrolledCourses = await getEnrollmentCoursesByUserId({ user_id: user.id });
+    user.digitallyEnrolledCourses = await getDigitalAccessEnrollmentCoursesByUserId({ user_id: user.id });
 }
 
 router.patch("/", async (req, res) => {

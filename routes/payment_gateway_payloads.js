@@ -274,6 +274,7 @@ router.get("/:id", async (req, res) => {
                         price_pay_words: libNumbersToWords.toWords(paymentGateWayPayLoad?.transaction?.amount).toUpperCase(),
                         received_by: "PayU",
                         mode_payment: "Online",
+                        note: "NA",
                     },
                 },
                 onResponseReceieved: (generatedInvoice, responseCode) => {

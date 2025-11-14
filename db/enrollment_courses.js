@@ -4,7 +4,7 @@ const { logger } = require("sahas_utils");
 //freeze
 function getEnrollmentCoursesByEnrollmentId({ enrollment_id }) {
     return executeSQLQueryParameterized(
-        `SELECT ENROLLMENT_COURSES.*,USERS.full_name AS created_by_full_name FROM ENROLLMENT_COURSES LEFT JOIN USERS ON ENROLLMENT_COURSES.created_by=USERS.id WHERE ENROLLMENT_COURSES.enrollment_id=? ORDER BY ENROLLMENT_COURSES.id DESC`,
+        `SELECT ENROLLMENT_COURSES.*,USERS.full_name AS created_by_full_name,COURSES.title FROM ENROLLMENT_COURSES LEFT JOIN USERS ON ENROLLMENT_COURSES.created_by=USERS.id LEFT JOIN COURSES ON ENROLLMENT_COURSES.course_id=COURSES.id  WHERE ENROLLMENT_COURSES.enrollment_id=? ORDER BY ENROLLMENT_COURSES.id DESC`,
         [enrollment_id]
     ).catch((error) => {
         logger.error(`getEnrollmentCoursesByEnrollmentId: ${error}`);

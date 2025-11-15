@@ -35,7 +35,7 @@ router.get("/:id", async (req, res) => {
 
 //tested
 router.put("/", async (req, res) => {
-    const requiredBodyFields = ["id", "full_name", "phone", "address", "active"];
+    const requiredBodyFields = ["id", "email", "full_name", "phone", "address", "active"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 

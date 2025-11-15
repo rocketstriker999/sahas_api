@@ -179,8 +179,9 @@ function getCountUsersBySearchAndFilters(search, appliedFilters) {
 }
 
 //freeze
-function updateUserById({ id, full_name, phone, image, address, branch_id, active }) {
-    return executeSQLQueryParameterized(`UPDATE USERS SET full_name=?,phone=?,image=?,address=?,branch_id=?,active=? WHERE id = ?`, [
+function updateUserById({ id, email, full_name, phone, image, address, branch_id, active }) {
+    return executeSQLQueryParameterized(`UPDATE USERS SET email=?, full_name=?,phone=?,image=?,address=?,branch_id=?,active=? WHERE id = ?`, [
+        email,
         full_name,
         phone,
         image || null,

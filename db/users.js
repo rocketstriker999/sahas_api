@@ -178,12 +178,12 @@ function getCountUsersBySearchAndFilters(search, appliedFilters) {
         });
 }
 
-//
+//freeze
 function updateUserById({ id, full_name, phone, image, address, branch_id, active }) {
-    return executeSQLQueryParameterized(`UPDATE USERS SET full_name = ?,phone=?,image=?,address=?,branch_id=?,active=? WHERE id = ?`, [
+    return executeSQLQueryParameterized(`UPDATE USERS SET full_name=?,phone=?,image=?,address=?,branch_id=?,active=? WHERE id = ?`, [
         full_name,
         phone,
-        image,
+        image || null,
         address,
         branch_id,
         active,

@@ -4,6 +4,7 @@ const { validateRequestBody } = require("../utils");
 const { updateSubjectById, addSubject, getAllSubjects } = require("../db/subjects");
 const { addCourseSubject, getCourseSubjectById } = require("../db/course_subjects");
 const { getChaptersBySubjectId, addChapter, getChapterById, updateChapterViewIndexById, deleteChapterById, updateChapterById } = require("../db/chapters");
+const { getMediaByChapterId } = require("../db/media");
 
 const router = libExpress.Router();
 
@@ -40,7 +41,7 @@ router.get("/:id/media", async (req, res) => {
     //if it requires enrollment and no enrollment access is there then let is pass
 
     //provide all the subjects
-    res.status(200).json(await getChaptersBySubjectId({ subject_id: req.params.id }));
+    res.status(200).json(await getMediaByChapterId({ chapter_id: req.params.id }));
 });
 
 //tested

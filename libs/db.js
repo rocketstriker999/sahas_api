@@ -218,6 +218,14 @@ function generateDBTables() {
             validity_type VARCHAR(12)  DEFAULT 'EXTEND',
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
+        `CREATE TABLE IF NOT EXISTS CHAPTER_MEDIA (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            chapter_id INT NOT NULL,
+            title VARCHAR(96) NOT NULL UNIQUE,
+            cdn_url VARCHAR(64) NULL UNIQUE,
+            type VARCHAR(16) NOT NULL,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        )`,
 
         // `INSERT INTO BRANCHES (id, title, address, description, active, created_on, updated_at) VALUES
         // (1, 'Head Office', '123 Main Street, Mumbai', 'Main corporate branch', 1, '2025-08-10 23:05:32', '2025-08-10 23:05:32'),

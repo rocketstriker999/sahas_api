@@ -1,6 +1,6 @@
 const libExpress = require("express");
 const { logger } = require("sahas_utils");
-const { getAllUsersBySearchAndFilters, getCountUsersBySearchAndFilters, getUserById, updateUserById } = require("../db/users");
+const { getAllUsersBySearchAndFilters, getCountUsersBySearchAndFilters, getUserById, updateUserById, addUserByEmail, addUser } = require("../db/users");
 const { getInquiriesByUserId } = require("../db/inquiries");
 const { validateRequestBody } = require("../utils");
 const { getEnrollmentsByUserId } = require("../db/enrollments");
@@ -83,6 +83,20 @@ router.get("/:id/roles", async (req, res) => {
     }
 
     res.status(200).json(await getUserRolesByUserId({ user_id: req.params.id }));
+});
+
+//tested
+router.post("/", async (req, res) => {
+    const requiredBodyFields = ["full_name", "phone", "branch_id", "address"];
+
+    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+
+    if (isRequestBodyValid) {
+        await addUser({ ...validatedRequestBody });
+        res.status(200).json(await getUserById({ ...validatedRequestBody }));
+    } else {
+        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+    }
 });
 
 module.exports = router;

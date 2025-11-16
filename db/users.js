@@ -11,6 +11,7 @@ function getUserByEmail({ email }) {
         });
 }
 
+//tested
 function addDefaultRoleToUser(userId) {
     return executeSQLQueryParameterized(`INSERT INTO USER_ROLES(user_id,role_id) VALUES(?,1)`, [userId]).catch((error) => {
         logger.error(`addDefaultRoleToUser: ${error}`);
@@ -18,6 +19,7 @@ function addDefaultRoleToUser(userId) {
     });
 }
 
+//tested
 function addUserByEmail(email) {
     return executeSQLQueryParameterized(`INSERT IGNORE INTO USERS(email) VALUES(?)`, [email])
         .then((result) => result?.affectedRows && addDefaultRoleToUser(result?.insertId))
@@ -26,8 +28,6 @@ function addUserByEmail(email) {
             return false;
         });
 }
-
-//affectedRows":1,"insertId":1
 
 function getUserByAuthenticationToken(token) {
     return (
@@ -192,6 +192,23 @@ function updateUserById({ id, email, full_name, phone, image, address, branch_id
     ]).catch((error) => logger.error(`updateUserById: ${error}`));
 }
 
+//tested
+function addUser({ email, full_name, phone, image, address, branch_id }) {
+    return executeSQLQueryParameterized(`INSERT INTO USERS(email,full_name, phone, image, address, branch_id) VALUES(?)`, [
+        email,
+        full_name,
+        phone,
+        image,
+        address,
+        branch_id,
+    ])
+        .then((result) => result?.affectedRows && addDefaultRoleToUser(result?.insertId))
+        .catch((error) => {
+            logger.error(`addUser: ${error}`);
+            return false;
+        });
+}
+
 module.exports = {
     getAllUsersBySearchAndFilters,
     getCountUsersBySearchAndFilters,
@@ -205,4 +222,5 @@ module.exports = {
     getUserById,
     getAuthoritiesByRoleIds,
     updateUserById,
+    addUser,
 };

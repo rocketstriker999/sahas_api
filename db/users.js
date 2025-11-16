@@ -194,7 +194,7 @@ function updateUserById({ id, email, full_name, phone, image, address, branch_id
 
 //tested
 function addUser({ email, full_name, phone, image, address, branch_id }) {
-    return executeSQLQueryParameterized(`INSERT IGNORE INTO USERS(email,full_name, phone, image, address, branch_id) VALUES(?,?,?,?,?,?)`, [
+    return executeSQLQueryParameterized(`INSERT  INTO USERS(email,full_name, phone, image, address, branch_id) VALUES(?,?,?,?,?,?)`, [
         email,
         full_name,
         phone,

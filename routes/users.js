@@ -93,7 +93,7 @@ router.post("/", async (req, res) => {
 
     if (isRequestBodyValid) {
         if ((userId = await addUser({ ...validatedRequestBody }))) {
-            return res.status(200).json(await getUserById({ id: userId }));
+            return res.status(201).json(await getUserById({ id: userId }));
         }
         res.status(400).json({ error: "Unable To Add User - User Might Already Exist" });
     } else {

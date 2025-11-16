@@ -92,8 +92,10 @@ router.post("/", async (req, res) => {
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
     if (isRequestBodyValid) {
-        await addUser({ ...validatedRequestBody });
-        res.status(200).json(await getUserById({ ...validatedRequestBody }));
+        if ((userId = await addUser({ ...validatedRequestBody }))) {
+            return res.status(200).json(await getUserById({ id: userId }));
+        }
+        res.status(400).json({ error: "Unable To Add User - User Might Already Exist" });
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

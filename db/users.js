@@ -194,7 +194,7 @@ function updateUserById({ id, email, full_name, phone, image, address, branch_id
 
 //tested
 function addUser({ email, full_name, phone, image, address, branch_id }) {
-    return executeSQLQueryParameterized(`INSERT INTO USERS(email,full_name, phone, image, address, branch_id) VALUES(?,?,?,?,?,?)`, [
+    return executeSQLQueryParameterized(`INSERT IGNORE INTO USERS(email,full_name, phone, image, address, branch_id) VALUES(?,?,?,?,?,?)`, [
         email,
         full_name,
         phone,
@@ -202,11 +202,11 @@ function addUser({ email, full_name, phone, image, address, branch_id }) {
         address,
         branch_id,
     ])
-        .then((result) => result?.affectedRows && addDefaultRoleToUser(result?.insertId))
-        .catch((error) => {
-            logger.error(`addUser: ${error}`);
-            return false;
-        });
+        .then((result) => {
+            result?.affectedRows && addDefaultRoleToUser(result?.insertId);
+            return result?.insertId;
+        })
+        .catch((error) => logger.error(`addUser: ${error}`));
 }
 
 module.exports = {

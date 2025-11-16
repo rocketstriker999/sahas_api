@@ -87,7 +87,7 @@ router.get("/:id/roles", async (req, res) => {
 
 //tested
 router.post("/", async (req, res) => {
-    const requiredBodyFields = ["full_name", "phone", "branch_id", "address"];
+    const requiredBodyFields = ["full_name", "email", "phone", "branch_id", "address"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 

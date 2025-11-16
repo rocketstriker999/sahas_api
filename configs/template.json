@@ -8,5 +8,7 @@
     "users": {
         "count": 5
     },
-    "media_types": ["VIDEO", "PDF"]
+    "chapter": {
+        "media_types": ["VIDEO", "PDF"]
+    }
 }

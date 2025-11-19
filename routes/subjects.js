@@ -33,8 +33,8 @@ router.get("/:id/chapters", async (req, res) => {
         return res.status(400).json({ error: "Missing Subject id" });
     }
 
-    subject: await getCourseSubjectById({ id: req.params.id });
-    subject.chapters=await getChaptersBySubjectId({ subject_id: req.params.id });
+    const subject = await getCourseSubjectById({ id: req.params.id });
+    subject.chapters = await getChaptersBySubjectId({ subject_id: req.params.id });
 
     //provide all the subjects
     res.status(200).json(subject);

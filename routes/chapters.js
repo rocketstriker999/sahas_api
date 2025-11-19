@@ -8,26 +8,6 @@ const { getMediaByChapterId } = require("../db/media");
 
 const router = libExpress.Router();
 
-//tested
-// router.patch("/", async (req, res) => {
-//     const requiredBodyFields = ["id", "title"];
-
-//     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
-
-//     if (isRequestBodyValid) {
-//         updateSubjectById(validatedRequestBody);
-//         res.status(200).json(validatedRequestBody);
-//     } else {
-//         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
-//     }
-// });
-
-// //tested
-// router.get("/", async (req, res) => {
-//     //provide all the subjects
-//     res.status(200).json(await getAllSubjects());
-// });
-
 // //tested
 router.get("/:id/media", async (req, res) => {
     if (!req.params.id) {

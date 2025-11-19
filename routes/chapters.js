@@ -29,7 +29,11 @@ router.get("/:id", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Chapter Id" });
     }
-    res.status(200).json({ ...(await getChapterById({ id: req.params.id })), subject: getCourseSubjectById({ id: chapter?.subject_id }) });
+
+    const chapter = await getChapterById({ id: req.params.id });
+    chapter.subject = await getCourseSubjectById({ id: chapter?.subject_id });
+
+    res.status(200).json(chapter);
 });
 
 //tested

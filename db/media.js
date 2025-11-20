@@ -14,7 +14,7 @@ function getMediaById({ id }) {
 }
 
 function addMedia({ chapter_id, title, cdn_url, type }) {
-    return executeSQLQueryParameterized(`INSERT INTO CHAPTER_MEDIA (chapter_id,title,cdn_url,type)`, [chapter_id, title, cdn_url, type])
+    return executeSQLQueryParameterized(`INSERT INTO CHAPTER_MEDIA (chapter_id,title,cdn_url,type) VALUES(?,?,?,?)`, [chapter_id, title, cdn_url, type])
         .then((result) => result.insertId)
         .catch((error) => logger.error(`addMedia: ${error}`));
 }

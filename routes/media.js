@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const { addInquiryNote, getInquiryNoteById, deleteInquiryNoteById } = require("../db/inquiry_notes");
+const { deleteInquiryNoteById } = require("../db/inquiry_notes");
 const { validateRequestBody } = require("../utils");
 const { addMedia, getMediaById } = require("../db/media");
 

@@ -224,6 +224,7 @@ function generateDBTables() {
             title VARCHAR(96) NOT NULL UNIQUE,
             cdn_url VARCHAR(64) NULL UNIQUE,
             type VARCHAR(16) NOT NULL,
+            external_url VARCHAR(128) NULL,
             view_index INT NOT NULL DEFAULT 0,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,

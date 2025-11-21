@@ -3,14 +3,14 @@ const { logger } = require("sahas_utils");
 
 //tested
 function getMediaByChapterId({ chapter_id }) {
-    return executeSQLQueryParameterized(`SELECT * FROM CHAPTER_MEDIA WHERE chapter_id=? `, [chapter_id]).catch((error) =>
+    return executeSQLQueryParameterized(`SELECT * FROM CHAPTER_MEDIA WHERE chapter_id=? ORDER BY view_index ASC`, [chapter_id]).catch((error) =>
         logger.error(`getMediaByChapterId: ${error}`)
     );
 }
 
 //tested
 function getMediaById({ id }) {
-    return executeSQLQueryParameterized(`SELECT * FROM CHAPTER_MEDIA WHERE id=? ORDER BY view_index ASC`, [id])
+    return executeSQLQueryParameterized(`SELECT * FROM CHAPTER_MEDIA WHERE id=? `, [id])
         .then((result) => (result.length > 0 ? result[0] : false))
         .catch((error) => logger.error(`getMediaById: ${error}`));
 }

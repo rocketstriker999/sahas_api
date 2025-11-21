@@ -19,4 +19,8 @@ function addMedia({ chapter_id, title, cdn_url, type }) {
         .catch((error) => logger.error(`addMedia: ${error}`));
 }
 
-module.exports = { getMediaByChapterId, addMedia, getMediaById };
+function deleteMediaById({ id }) {
+    return executeSQLQueryParameterized(`DELETE FROM CHAPTER_MEDIA WHERE id=? `, [id]).catch((error) => logger.error(`addMedia: ${error}`));
+}
+
+module.exports = { getMediaByChapterId, addMedia, getMediaById, deleteMediaById };

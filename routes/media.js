@@ -1,7 +1,7 @@
 const libExpress = require("express");
 const { deleteInquiryNoteById } = require("../db/inquiry_notes");
 const { validateRequestBody } = require("../utils");
-const { addMedia, getMediaById } = require("../db/media");
+const { addMedia, getMediaById, deleteMediaById } = require("../db/media");
 
 const router = libExpress.Router();
 
@@ -24,7 +24,8 @@ router.delete("/:id", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing inquiryNoteId" });
     }
-    deleteInquiryNoteById({ id: req.params.id });
+    deleteMediaById({ id: req.params.id });
+    //remove associated media from bucket as well
     res.sendStatus(204);
 });
 

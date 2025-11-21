@@ -1,13 +1,13 @@
 const libExpress = require("express");
 const { deleteInquiryNoteById } = require("../db/inquiry_notes");
 const { validateRequestBody } = require("../utils");
-const { addMedia, getMediaById, deleteMediaById, updateMediaViewIndexById } = require("../db/media");
+const { addMedia, getMediaById, deleteMediaById, updateMediaViewIndexById, updateMediaById } = require("../db/media");
 
 const router = libExpress.Router();
 
 //tested
 router.post("/", async (req, res) => {
-    const requiredBodyFields = ["chapter_id", "title", "cdn_url", "type"];
+    const requiredBodyFields = ["chapter_id", "title", "type"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
@@ -27,6 +27,20 @@ router.patch("/view_indexes", async (req, res) => {
     }
 
     return res.status(400).json({ error: "Missing Media" });
+});
+
+//tested
+router.patch("/", async (req, res) => {
+    const requiredBodyFields = ["id", "title", "type"];
+
+    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+
+    if (isRequestBodyValid) {
+        await updateMediaById(validatedRequestBody);
+        res.status(200).json(await getMediaById({ id: validatedRequestBody.id }));
+    } else {
+        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+    }
 });
 
 //tested

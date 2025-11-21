@@ -9,6 +9,6 @@
         "count": 5
     },
     "chapter": {
-        "media_types": ["VIDEO", "PDF"]
+        "media_types": ["VIDEO", "PDF", "ZOOM"]
     }
 }

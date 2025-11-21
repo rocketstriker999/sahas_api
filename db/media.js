@@ -41,14 +41,10 @@ function updateMediaViewIndexById({ id, view_index }) {
 }
 
 //freeze
-function updateMediaById({ id, title, cdn_url, type, external_url }) {
-    return executeSQLQueryParameterized("UPDATE CHAPTER_MEDIA SET title=?,cdn_url=?,type=?,external_url=? WHERE id=?", [
-        title,
-        cdn_url,
-        type,
-        external_url,
-        id,
-    ]).catch((error) => logger.error(`updateMediaById: ${error}`));
+function updateMediaById({ id, title, cdn_url, external_url }) {
+    return executeSQLQueryParameterized("UPDATE CHAPTER_MEDIA SET title=?,cdn_url=?,external_url=? WHERE id=?", [title, cdn_url, external_url, id]).catch(
+        (error) => logger.error(`updateMediaById: ${error}`)
+    );
 }
 
 module.exports = { getMediaByChapterId, addMedia, getMediaById, deleteMediaById, updateMediaViewIndexById, updateMediaById };

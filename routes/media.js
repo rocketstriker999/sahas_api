@@ -31,7 +31,7 @@ router.patch("/view_indexes", async (req, res) => {
 
 //tested
 router.patch("/", async (req, res) => {
-    const requiredBodyFields = ["id", "title", "type"];
+    const requiredBodyFields = ["id", "title"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 

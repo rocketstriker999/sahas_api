@@ -16,15 +16,21 @@ function getMediaById({ id }) {
 }
 
 //tested
-function addMedia({ chapter_id, title, cdn_url, type }) {
-    return executeSQLQueryParameterized(`INSERT INTO CHAPTER_MEDIA (chapter_id,title,cdn_url,type) VALUES(?,?,?,?)`, [chapter_id, title, cdn_url, type])
+function addMedia({ chapter_id, title, cdn_url, type, external_url }) {
+    return executeSQLQueryParameterized(`INSERT INTO CHAPTER_MEDIA (chapter_id,title,cdn_url,type,external_url) VALUES(?,?,?,?,?)`, [
+        chapter_id,
+        title,
+        cdn_url,
+        type,
+        external_url,
+    ])
         .then((result) => result.insertId)
         .catch((error) => logger.error(`addMedia: ${error}`));
 }
 
 //tested
 function deleteMediaById({ id }) {
-    return executeSQLQueryParameterized(`DELETE FROM CHAPTER_MEDIA WHERE id=? `, [id]).catch((error) => logger.error(`addMedia: ${error}`));
+    return executeSQLQueryParameterized(`DELETE FROM CHAPTER_MEDIA WHERE id=? `, [id]).catch((error) => logger.error(`deleteMediaById: ${error}`));
 }
 
 //tested

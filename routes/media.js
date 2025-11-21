@@ -1,7 +1,7 @@
 const libExpress = require("express");
 const { deleteInquiryNoteById } = require("../db/inquiry_notes");
 const { validateRequestBody } = require("../utils");
-const { addMedia, getMediaById, deleteMediaById } = require("../db/media");
+const { addMedia, getMediaById, deleteMediaById, updateMediaViewIndexById } = require("../db/media");
 
 const router = libExpress.Router();
 
@@ -17,6 +17,16 @@ router.post("/", async (req, res) => {
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }
+});
+
+//tested
+router.patch("/view_indexes", async (req, res) => {
+    if (req.body?.length) {
+        req.body.forEach(updateMediaViewIndexById);
+        return res.sendStatus(200);
+    }
+
+    return res.status(400).json({ error: "Missing Media" });
 });
 
 //tested

@@ -10,7 +10,7 @@ function getMediaByChapterId({ chapter_id }) {
 
 //tested
 function getMediaById({ id }) {
-    return executeSQLQueryParameterized(`SELECT * FROM CHAPTER_MEDIA WHERE id=? `, [id])
+    return executeSQLQueryParameterized(`SELECT * FROM CHAPTER_MEDIA WHERE id=? ORDER BY view_index ASC`, [id])
         .then((result) => (result.length > 0 ? result[0] : false))
         .catch((error) => logger.error(`getMediaById: ${error}`));
 }

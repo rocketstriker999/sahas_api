@@ -16,7 +16,7 @@ function getMediaById({ id }) {
 }
 
 //tested
-function addMedia({ chapter_id, title, cdn_url, type, external_url }) {
+function addMedia({ chapter_id, title, cdn_url = null, type, external_url = null }) {
     return executeSQLQueryParameterized(`INSERT INTO CHAPTER_MEDIA (chapter_id,title,cdn_url,type,external_url) VALUES(?,?,?,?,?)`, [
         chapter_id,
         title,

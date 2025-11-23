@@ -221,7 +221,7 @@ function generateDBTables() {
         `CREATE TABLE IF NOT EXISTS CHAPTER_MEDIA (
             id INT AUTO_INCREMENT PRIMARY KEY,
             chapter_id INT NOT NULL,
-            title VARCHAR(96) NOT NULL UNIQUE,
+            title VARCHAR(96) NOT NULL,
             cdn_url VARCHAR(64) NULL UNIQUE,
             type VARCHAR(16) NOT NULL,
             external_url VARCHAR(128) NULL,

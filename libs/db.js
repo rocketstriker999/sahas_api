@@ -173,16 +173,12 @@ function generateDBTables() {
             title VARCHAR(96) NOT NULL UNIQUE,
             background_color VARCHAR(32) NULL,
             active BOOLEAN NOT NULL DEFAULT TRUE,
-            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-        )`,
-        `CREATE TABLE IF NOT EXISTS QUIZ_CONFIGS(
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            subject_id INT NOT NULL,
-            batch_size INT NOT NULL DEFAULT 10,
+            quiz_batch_size INT NOT NULL DEFAULT 10,
             timer INT NOT NULL DEFAULT 5,
-            active BOOLEAN NOT NULL DEFAULT TRUE,
+            quiz_active BOOLEAN NOT NULL DEFAULT TRUE,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
+
         `CREATE TABLE IF NOT EXISTS QUIZ_MCQS(
             id INT AUTO_INCREMENT PRIMARY KEY,
             subject_id INT NOT NULL, 

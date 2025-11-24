@@ -65,7 +65,7 @@ router.get(
             return res.status(400).json({ error: "Missing Media Id" });
         }
 
-        res.status(201).json(await getMediaById({ id: req.params.id }));
+        res.status(200).json(await getMediaById({ id: req.params.id }));
     }
 );
 

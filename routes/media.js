@@ -53,4 +53,20 @@ router.delete("/:id", async (req, res) => {
     res.sendStatus(204);
 });
 
+//tested
+router.get(
+    "/:id",
+    (req, res, next) => {
+        //check if user has access to this media id - joining chapter , subject and course -> with subscription -> add middleware
+        next();
+    },
+    async (req, res) => {
+        if (!req.params.id) {
+            return res.status(400).json({ error: "Missing Media Id" });
+        }
+
+        res.status(201).json(await getMediaById({ id: mediaId }));
+    }
+);
+
 module.exports = router;

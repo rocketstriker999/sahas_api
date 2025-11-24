@@ -233,8 +233,6 @@ function generateDBTables() {
         // (1, 'Head Office', '123 Main Street, Mumbai', 'Main corporate branch', 1, '2025-08-10 23:05:32', '2025-08-10 23:05:32'),
         // (2, 'Ahmedabad Branch', '45 Riverfront Road, Ahmedabad', 'Serves Gujarat region', 1, '2025-08-10 23:05:32', '2025-08-10 23:05:32'),
         // (3, 'Bangalore Branch', '88 MG Road, Bangalore', 'South India operations', 1, '2025-08-10 23:05:32', '2025-08-10 23:05:32'),
-        // (4, 'Pune Branch', '21 Koregaon Park, Pune', 'West region service hub', 0, '2025-08-10 23:05:32', '2025-08-10 23:05:32'),
-        // (5, 'Delhi Branch', '10 Connaught Place, Delhi', 'North India operations', 1, '2025-08-10 23:05:32', '2025-08-10 23:05:32');
 
         // INSERT INTO AUTHORITIES (title, description) VALUES
         // ('USE_CONTAINER_APP', 'test'),
@@ -262,12 +260,13 @@ function generateDBTables() {
         // ('USE_PAGE_EXAM', 'allows to use exam page'),
         // ('USE_PAGE_INVOICES', 'allows user to use invoice page');
 
+        // INSERT INTO ROLES (title) VALUES ('STUDENT');
         // INSERT INTO ROLES (title) VALUES ('DEVELOPER');
 
-        // INSERT INTO ROLE_AUTHORITIES (role_id, authority_id) SELECT 1, id FROM AUTHORITIES;
+        // INSERT INTO ROLE_AUTHORITIES (role_id, authority_id) SELECT 2, id FROM AUTHORITIES;
 
         // INSERT INTO USERS (full_name, email ) VALUES ('Nisarg', 'hammerbyte.nisarg@gmail.com');
-        // INSERT INTO USER_ROLES (user_id, role_id) VALUES (1, 1);`,
+        // INSERT INTO USER_ROLES (user_id, role_id) VALUES (1, 2);`,
     ];
 
     return Promise.all(createUserTableQuery.map((query) => executeSQLQueryRaw(query)));

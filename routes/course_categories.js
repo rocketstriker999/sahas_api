@@ -13,18 +13,28 @@ router.get("/", async (req, res) => {
 });
 
 //tested
-router.post("/", async (req, res) => {
-    const requiredBodyFields = ["title", "image"];
-
-    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
-
-    if (isRequestBodyValid) {
-        const CourseCategoryId = await addCourseCategory(validatedRequestBody);
-        if (CourseCategoryId) res.status(201).json(await getCourseCategoryById({ id: CourseCategoryId }));
-    } else {
+router.post(
+    "/",
+    async (req, res, next) => {
+        const requiredBodyFields = ["title", "image"];
+        const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+        if (isRequestBodyValid) {
+            req.body = validatedRequestBody;
+            return next();
+        }
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+    },
+    async (req, res, next) => {
+        if (!!(await getCourseCategoryById({ id: req.body.title }))) {
+            return res.status(400).json({ error: "Course Category ALready Exist" });
+        }
+        next();
+    },
+    async (req, res) => {
+        const CourseCategoryId = await addCourseCategory(req.body);
+        res.status(201).json(await getCourseCategoryById({ id: CourseCategoryId }));
     }
-});
+);
 
 //tested
 router.delete("/:id", async (req, res) => {

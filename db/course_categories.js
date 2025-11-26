@@ -18,6 +18,13 @@ function getCourseCategoryById({ id }) {
 }
 
 //freeze
+function getCourseCategoryByTitle({ title }) {
+    return executeSQLQueryParameterized(`SELECT title from COURSE_CATEGORIES WHERE title=?`, [title])
+        .then((result) => (result.length > 0 ? result[0] : false))
+        .catch((error) => logger.error(`getCourseCategoryByTitle: ${error}`));
+}
+
+//freeze
 function addCourseCategory({ title, image }) {
     return executeSQLQueryParameterized(`INSERT INTO COURSE_CATEGORIES(title,image) VALUES(?,?)`, [title, image])
         .then((result) => result.insertId)
@@ -38,4 +45,11 @@ function updateCourseCategoryViewIndexById({ id, view_index }) {
     });
 }
 
-module.exports = { getAllCourseCategories, addCourseCategory, getCourseCategoryById, deleteCourseCategoryById, updateCourseCategoryViewIndexById };
+module.exports = {
+    getAllCourseCategories,
+    addCourseCategory,
+    getCourseCategoryByTitle,
+    getCourseCategoryById,
+    deleteCourseCategoryById,
+    updateCourseCategoryViewIndexById,
+};

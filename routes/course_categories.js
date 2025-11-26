@@ -9,7 +9,8 @@ const {
 const { validateRequestBody } = require("../utils");
 const { getAllCourseCategories } = require("../db/course_categories");
 const { getCoursesByCategoryId } = require("../db/courses");
-const { verifyEnrollmentByCourseIdAndUserId, getEnrollmentByCourseIdAndUserId } = require("../db/enrollments");
+const { logger } = require("sahas_utils");
+
 const router = libExpress.Router();
 
 //tested
@@ -24,13 +25,14 @@ router.post(
     async (req, res, next) => {
         const requiredBodyFields = ["title", "image"];
         const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
-        if (isRequestBodyValid) {
-            req.body = validatedRequestBody;
-            return next();
+        if (!isRequestBodyValid) {
+            res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
         }
-        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+        req.body = validatedRequestBody;
+        next();
     },
     async (req, res, next) => {
+        logger.info(JSON.stringify(req.body));
         if (!!(await getCourseCategoryByTitle({ id: req.body.title }))) {
             return res.status(400).json({ error: "Course Category ALready Exist" });
         }

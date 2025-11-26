@@ -3,7 +3,7 @@ const { logger } = require("sahas_utils");
 
 //freeze
 function getAllChapterTypes() {
-    return executeSQLQueryParameterized("SELECT * FROM CHAPTER_TYPES ORDER BY view_index ASC").catch((error) => {
+    return executeSQLQueryParameterized("SELECT * FROM CHAPTER_TYPES ORDER BY view_index ASC ,updated_at DESC").catch((error) => {
         logger.error(`getAllChapterTypes: ${error}`);
         return [];
     });

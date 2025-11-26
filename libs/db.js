@@ -179,7 +179,6 @@ function generateDBTables() {
             quiz_active BOOLEAN NOT NULL DEFAULT TRUE,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
-
         `CREATE TABLE IF NOT EXISTS QUIZ_MCQS(
             id INT AUTO_INCREMENT PRIMARY KEY,
             subject_id INT NOT NULL, 

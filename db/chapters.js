@@ -3,10 +3,12 @@ const { logger } = require("sahas_utils");
 
 //freeze
 function getChaptersBySubjectId({ subject_id }) {
-    return executeSQLQueryParameterized(`SELECT * FROM SUBJECT_CHAPTERS WHERE subject_id=? ORDER BY view_index ASC`, [subject_id]).catch((error) => {
-        logger.error(`getChaptersBySubjectId: ${error}`);
-        return [];
-    });
+    return executeSQLQueryParameterized(`SELECT * FROM SUBJECT_CHAPTERS WHERE subject_id=? ORDER BY view_index ASC ,updated_at DESC`, [subject_id]).catch(
+        (error) => {
+            logger.error(`getChaptersBySubjectId: ${error}`);
+            return [];
+        }
+    );
 }
 
 //freeze

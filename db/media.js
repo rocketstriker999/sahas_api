@@ -3,7 +3,7 @@ const { logger } = require("sahas_utils");
 
 //tested
 function getMediaByChapterId({ chapter_id }) {
-    return executeSQLQueryParameterized(`SELECT * FROM CHAPTER_MEDIA WHERE chapter_id=? ORDER BY view_index ASC`, [chapter_id]).catch((error) =>
+    return executeSQLQueryParameterized(`SELECT * FROM CHAPTER_MEDIA WHERE chapter_id=? ORDER BY view_index ASC,updated_at DESC`, [chapter_id]).catch((error) =>
         logger.error(`getMediaByChapterId: ${error}`)
     );
 }

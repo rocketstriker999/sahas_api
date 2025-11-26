@@ -3,7 +3,7 @@ const { logger } = require("sahas_utils");
 
 //freeze
 function getAllCourses() {
-    return executeSQLQueryParameterized(`SELECT * FROM COURSES ORDER BY view_index ASC`).catch((error) => {
+    return executeSQLQueryParameterized(`SELECT * FROM COURSES ORDER BY view_index ASC ,updated_at DESC`).catch((error) => {
         logger.error(`getAllCourses: ${error}`);
         return [];
     });
@@ -11,7 +11,7 @@ function getAllCourses() {
 
 //freeze
 function getCoursesByCategoryId({ category_id }) {
-    return executeSQLQueryParameterized(`SELECT * FROM COURSES WHERE category_id=? ORDER BY view_index ASC`, [category_id]).catch((error) => {
+    return executeSQLQueryParameterized(`SELECT * FROM COURSES WHERE category_id=? ORDER BY view_index ASC ,updated_at DESC`, [category_id]).catch((error) => {
         logger.error(`getCoursesByCategoryId: ${error}`);
         return [];
     });

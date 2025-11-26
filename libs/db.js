@@ -153,7 +153,8 @@ function generateDBTables() {
             title VARCHAR(96) NOT NULL UNIQUE,
             image VARCHAR(64) NULL,
             view_index INT NOT NULL DEFAULT 0,
-            active BOOLEAN NOT NULL DEFAULT TRUE
+            active BOOLEAN NOT NULL DEFAULT TRUE,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
         `CREATE TABLE IF NOT EXISTS COURSES(
             id INT AUTO_INCREMENT PRIMARY KEY,

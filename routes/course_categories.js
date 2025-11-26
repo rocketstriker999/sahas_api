@@ -33,7 +33,7 @@ router.post(
     },
     async (req, res, next) => {
         if (!!(await getCourseCategoryByTitle({ title: req.body.title }))) {
-            return res.status(400).json({ error: "Course Category ALready Exist" });
+            return res.status(400).json({ error: "Course Category Already Exist" });
         }
         next();
     },

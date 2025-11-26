@@ -1,5 +1,11 @@
 const libExpress = require("express");
-const { addCourseCategory, getCourseCategoryById, deleteCourseCategoryById, updateCourseCategoryViewIndexById } = require("../db/course_categories");
+const {
+    addCourseCategory,
+    getCourseCategoryById,
+    deleteCourseCategoryById,
+    updateCourseCategoryViewIndexById,
+    getCourseCategoryByTitle,
+} = require("../db/course_categories");
 const { validateRequestBody } = require("../utils");
 const { getAllCourseCategories } = require("../db/course_categories");
 const { getCoursesByCategoryId } = require("../db/courses");
@@ -25,7 +31,7 @@ router.post(
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     },
     async (req, res, next) => {
-        if (!!(await getCourseCategoryById({ id: req.body.title }))) {
+        if (!!(await getCourseCategoryByTitle({ id: req.body.title }))) {
             return res.status(400).json({ error: "Course Category ALready Exist" });
         }
         next();

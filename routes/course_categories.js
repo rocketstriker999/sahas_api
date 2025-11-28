@@ -23,7 +23,7 @@ router.get("/", async (req, res) => {
 router.post(
     "/",
     async (req, res, next) => {
-        const requiredBodyFields = ["title", "image"];
+        const requiredBodyFields = ["title", "image", "view_index"];
         const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
         if (!isRequestBodyValid) {
             res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });

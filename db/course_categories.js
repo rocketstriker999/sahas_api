@@ -25,14 +25,8 @@ function getCourseCategoryByTitle({ title }) {
 }
 
 //freeze
-function addCourseCategory({ title, image }) {
-    return executeSQLQueryParameterized(
-        `INSERT INTO COURSE_CATEGORIES(title,image,view_index) VALUES(?,?,(
-        SELECT COALESCE(MIN(view_index), 1) - 1
-        FROM COURSE_CATEGORIES
-    ))`,
-        [title, image]
-    )
+function addCourseCategory({ title, image, view_index }) {
+    return executeSQLQueryParameterized(`INSERT INTO COURSE_CATEGORIES(title,image,view_index) VALUES(?,?,?)`, [title, image, view_index])
         .then((result) => result.insertId)
         .catch((error) => logger.error(`addCourseCategory: ${error}`));
 }

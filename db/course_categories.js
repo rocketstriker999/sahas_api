@@ -26,7 +26,13 @@ function getCourseCategoryByTitle({ title }) {
 
 //freeze
 function addCourseCategory({ title, image }) {
-    return executeSQLQueryParameterized(`INSERT INTO COURSE_CATEGORIES(title,image) VALUES(?,?)`, [title, image])
+    return executeSQLQueryParameterized(
+        `INSERT INTO COURSE_CATEGORIES(title,image,view_index) VALUES(?,?,(
+        SELECT COALESCE(MIN(view_index), 1) - 1
+        FROM COURSE_CATEGORIES
+    ))`,
+        [title, image]
+    )
         .then((result) => result.insertId)
         .catch((error) => logger.error(`addCourseCategory: ${error}`));
 }

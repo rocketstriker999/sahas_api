@@ -26,13 +26,13 @@ router.post(
         const requiredBodyFields = ["title", "image", "view_index"];
         const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
         if (!isRequestBodyValid) {
-            res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+            return res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
         }
         req.body = validatedRequestBody;
         next();
     },
     async (req, res, next) => {
-        if (!!(await getCourseCategoryByTitle({ title: req.body.title }))) {
+        if (!!(await getCourseCategoryByTitle(req.body))) {
             return res.status(400).json({ error: "Course Category Already Exist" });
         }
         next();

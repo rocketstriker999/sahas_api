@@ -1,5 +1,13 @@
 const libExpress = require("express");
-const { addCourse, getCourseById, deleteCourseById, updateCourseViewIndexById, updateCourse, updateCourseById } = require("../db/courses");
+const {
+    addCourse,
+    getCourseById,
+    deleteCourseById,
+    updateCourseViewIndexById,
+    updateCourse,
+    updateCourseById,
+    getCourseByCategoryIdAndTitle,
+} = require("../db/courses");
 const { validateRequestBody } = require("../utils");
 const { getEnrollmentByCourseIdAndUserId } = require("../db/enrollments");
 const { getCourseSubjectsByCourseId } = require("../db/course_subjects");
@@ -9,18 +17,28 @@ const router = libExpress.Router();
 const paymentHashes = [];
 
 //tested
-router.post("/", async (req, res) => {
-    const requiredBodyFields = ["category_id", "title", "description", "image", "fees", "whatsapp_group"];
-
-    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
-
-    if (isRequestBodyValid) {
+router.post(
+    "/",
+    async (req, res, next) => {
+        const requiredBodyFields = ["category_id", "title", "description", "image", "fees", "whatsapp_group", "view_index"];
+        const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+        if (!isRequestBodyValid) {
+            return res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+        }
+        req.body = validatedRequestBody;
+        next();
+    },
+    async () => {
+        if (!!(await getCourseByCategoryIdAndTitle(req.body))) {
+            return res.status(400).json({ error: "Course Already Exist" });
+        }
+        next();
+    },
+    async (req, res) => {
         const courseId = await addCourse(validatedRequestBody);
-        courseId ? res.status(201).json(await getCourseById({ id: courseId })) : res.status(400).json({ error: "Failed To Create Course" });
-    } else {
-        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+        res.status(201).json(await getCourseById({ id: courseId }));
     }
-});
+);
 
 //tested
 router.delete("/:id", async (req, res) => {

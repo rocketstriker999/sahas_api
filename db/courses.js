@@ -34,6 +34,13 @@ function addCourse({ category_id, title, description, image, fees, whatsapp_grou
 }
 
 //freeze
+function getCourseByCategoryIdAndTitle({ category_id, title }) {
+    return executeSQLQueryParameterized(`SELECT title from COURSE_CATEGORIES WHERE title=? AND category_id=?`, [title, category_id])
+        .then((result) => (result.length > 0 ? result[0] : false))
+        .catch((error) => logger.error(`getCourseByCategoryIdAndTitle: ${error}`));
+}
+
+//freeze
 function getCourseById({ id }) {
     return executeSQLQueryParameterized(`SELECT * FROM COURSES WHERE id=?`, [id])
         .then((result) => (result?.length ? result[0] : false))
@@ -76,4 +83,5 @@ module.exports = {
     deleteCourseById,
     updateCourseViewIndexById,
     updateCourseById,
+    getCourseByCategoryIdAndTitle,
 };

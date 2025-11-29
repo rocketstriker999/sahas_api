@@ -157,9 +157,9 @@ function generateDBTables() {
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
         `CREATE TABLE IF NOT EXISTS COURSES(
-            id INT AUTO_INCREMENT PRIMARY KEY,
+           id INT AUTO_INCREMENT PRIMARY KEY,
             category_id INT NOT NULL,
-            title VARCHAR(96) NOT NULL UNIQUE,
+            title VARCHAR(96) NOT NULL,
             description VARCHAR(256) NOT NULL,
             image VARCHAR(64) NULL,
             fees DECIMAL(8, 2) DEFAULT 0,
@@ -167,7 +167,8 @@ function generateDBTables() {
             validity INT NOT NULL DEFAULT 365,
             view_index INT NOT NULL DEFAULT 0,
             active BOOLEAN NOT NULL DEFAULT TRUE,
-            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            UNIQUE KEY unique_category_title (category_id, title)
         )`,
         `CREATE TABLE IF NOT EXISTS SUBJECTS(
             id INT AUTO_INCREMENT PRIMARY KEY,

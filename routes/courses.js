@@ -28,7 +28,7 @@ router.post(
         req.body = validatedRequestBody;
         next();
     },
-    async () => {
+    async (req, res, next) => {
         if (!!(await getCourseByCategoryIdAndTitle(req.body))) {
             return res.status(400).json({ error: "Course Already Exist" });
         }

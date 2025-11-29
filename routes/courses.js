@@ -35,7 +35,7 @@ router.post(
         next();
     },
     async (req, res) => {
-        const courseId = await addCourse(validatedRequestBody);
+        const courseId = await addCourse(req.body);
         res.status(201).json(await getCourseById({ id: courseId }));
     }
 );

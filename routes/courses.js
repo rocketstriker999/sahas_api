@@ -1,20 +1,10 @@
 const libExpress = require("express");
-const {
-    addCourse,
-    getCourseById,
-    deleteCourseById,
-    updateCourseViewIndexById,
-    updateCourse,
-    updateCourseById,
-    getCourseByCategoryIdAndTitle,
-} = require("../db/courses");
+const { addCourse, getCourseById, deleteCourseById, updateCourseViewIndexById, updateCourseById, getCourseByCategoryIdAndTitle } = require("../db/courses");
 const { validateRequestBody } = require("../utils");
 const { getEnrollmentByCourseIdAndUserId } = require("../db/enrollments");
 const { getCourseSubjectsByCourseId } = require("../db/course_subjects");
 
 const router = libExpress.Router();
-
-const paymentHashes = [];
 
 //tested
 router.post(
@@ -30,6 +20,7 @@ router.post(
     },
     async (req, res, next) => {
         if (!!(await getCourseByCategoryIdAndTitle(req.body))) {
+            logger.info("Existi coruse");
             return res.status(400).json({ error: "Course Already Exist" });
         }
         next();

@@ -67,8 +67,6 @@ function validateRequestBody(body, requiredFields) {
     const missingRequestBodyFields = requiredFields.filter((key) => body[key] === undefined || body[key] === null);
 
     return {
-        isRequestBodyValid: missingRequestBodyFields.length === 0,
-        missingRequestBodyFields,
         validatedRequestBody: Object.keys(body).reduce((obj, key) => {
             let value = body[key];
             if (typeof value === "string") {
@@ -80,6 +78,8 @@ function validateRequestBody(body, requiredFields) {
             obj[key] = value;
             return obj;
         }, {}),
+        isRequestBodyValid: missingRequestBodyFields.length === 0,
+        missingRequestBodyFields,
     };
 }
 

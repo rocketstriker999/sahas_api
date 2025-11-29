@@ -35,7 +35,7 @@ function addCourse({ category_id, title, description, image, fees, whatsapp_grou
 
 //freeze
 function getCourseByCategoryIdAndTitle({ category_id, title }) {
-    return executeSQLQueryParameterized(`SELECT title from COURSE_CATEGORIES WHERE category_id=? AND title=?`, [title, category_id])
+    return executeSQLQueryParameterized(`SELECT title from COURSES WHERE category_id=? AND title=?`, [title, category_id])
         .then((result) => (result.length > 0 ? result[0] : false))
         .catch((error) => logger.error(`getCourseByCategoryIdAndTitle: ${error}`));
 }

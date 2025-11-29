@@ -46,18 +46,32 @@ router.get("/:id/chapters", async (req, res) => {
 });
 
 //tested
-router.post("/", async (req, res) => {
-    const requiredBodyFields = ["title", "course_id"];
-
-    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
-
-    if (isRequestBodyValid) {
+router.post(
+    "/",
+    async (req, res, next) => {
+        const requiredBodyFields = ["title", "course_id", "view_index"];
+        const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+        if (!isRequestBodyValid) {
+            return res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+        }
+        req.body = validatedRequestBody;
+        next();
+    },
+    async (req, res, next) => {
+        if (!!(await getCourseByCategoryIdAndTitle(req.body))) {
+            return res.status(400).json({ error: "Course Already Exist" });
+        }
+        next();
+    },
+    async (req, res) => {
         const subjectId = await addSubject(validatedRequestBody);
-        const courseSubjectId = await addCourseSubject({ course_id: validatedRequestBody.course_id, subject_id: subjectId });
+        const courseSubjectId = await addCourseSubject({
+            course_id: validatedRequestBody.course_id,
+            subject_id: subjectId,
+            view_index: validatedRequestBody.view_index,
+        });
         res.status(201).json(await getCourseSubjectById({ id: courseSubjectId }));
-    } else {
-        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }
-});
+);
 
 module.exports = router;

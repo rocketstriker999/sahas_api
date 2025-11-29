@@ -20,7 +20,6 @@ router.post(
     },
     async (req, res, next) => {
         if (!!(await getCourseByCategoryIdAndTitle(req.body))) {
-            logger.info("Existi coruse");
             return res.status(400).json({ error: "Course Already Exist" });
         }
         next();

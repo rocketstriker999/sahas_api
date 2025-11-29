@@ -73,6 +73,8 @@ function validateRequestBody(body, requiredFields) {
             let value = body[key];
             if (typeof value === "string") {
                 value = value.trim();
+
+                if (value?.length === 0) missingRequestBodyFields?.push(key);
             }
 
             obj[key] = value;

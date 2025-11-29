@@ -18,14 +18,15 @@ function getCoursesByCategoryId({ category_id }) {
 }
 
 //freeze
-function addCourse({ category_id, title, description, image, fees, whatsapp_group }) {
-    return executeSQLQueryParameterized(`INSERT INTO COURSES(category_id, title, description, image, fees, whatsapp_group) VALUES(?,?,?,?,?,?)`, [
+function addCourse({ category_id, title, description, image, fees, whatsapp_group, view_index }) {
+    return executeSQLQueryParameterized(`INSERT INTO COURSES(category_id, title, description, image, fees, whatsapp_group,view_index) VALUES(?,?,?,?,?,?,?)`, [
         category_id,
         title,
         description,
         image,
         fees,
         whatsapp_group,
+        view_index,
     ])
         .then((result) => result.insertId)
         .catch((error) => {

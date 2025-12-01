@@ -25,7 +25,7 @@ function deleteCourseSubjectById({ id }) {
 }
 
 //freeze
-function addCourseSubject({ course_id, subject_id, view_index }) {
+function addCourseSubject({ course_id, subject_id, view_index = 0 }) {
     return executeSQLQueryParameterized("INSERT INTO COURSE_SUBJECTS(course_id,subject_id,view_index) VALUES(?,?,?)", [course_id, subject_id, view_index])
         .then((result) => result.insertId)
         .catch((error) => logger.error(`addCourseSubject: ${error}`));

@@ -172,7 +172,7 @@ function generateDBTables() {
         )`,
         `CREATE TABLE IF NOT EXISTS SUBJECTS(
             id INT AUTO_INCREMENT PRIMARY KEY,
-            title VARCHAR(96) NOT NULL UNIQUE,
+            title VARCHAR(96) NOT NULL,
             background_color VARCHAR(32) NULL,
             active BOOLEAN NOT NULL DEFAULT TRUE,
             quiz_batch_size INT NOT NULL DEFAULT 10,

@@ -12,8 +12,8 @@ function getChaptersBySubjectId({ subject_id }) {
 }
 
 //freeze
-function addChapter({ title, subject_id, type }) {
-    return executeSQLQueryParameterized(`INSERT INTO SUBJECT_CHAPTERS(title,subject_id,type) VALUES(?,?,?)`, [title, subject_id, type])
+function addChapter({ title, subject_id, type, view_index = 0 }) {
+    return executeSQLQueryParameterized(`INSERT INTO SUBJECT_CHAPTERS(title,subject_id,type,view_index) VALUES(?,?,?,?)`, [title, subject_id, type, view_index])
         .then((result) => result.insertId)
         .catch((error) => logger.error(`addChapter: ${error}`));
 }
@@ -44,4 +44,19 @@ function updateChapterById({ id, title, type }) {
     );
 }
 
-module.exports = { getChaptersBySubjectId, addChapter, getChapterById, updateChapterViewIndexById, deleteChapterById, updateChapterById };
+//freeze
+function getChapterBySubjectIdAndTitle({ subject_id, title }) {
+    return executeSQLQueryParameterized(`SELECT title from SUBJECT_CHAPTERS WHERE subject_id=? AND title=?`, [subject_id, title])
+        .then((result) => (result.length > 0 ? result[0] : false))
+        .catch((error) => logger.error(`getChapterBySubjectIdAndTitle: ${error}`));
+}
+
+module.exports = {
+    getChaptersBySubjectId,
+    addChapter,
+    getChapterById,
+    updateChapterViewIndexById,
+    deleteChapterById,
+    updateChapterById,
+    getChapterBySubjectIdAndTitle,
+};

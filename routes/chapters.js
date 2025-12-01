@@ -3,7 +3,15 @@ const libExpress = require("express");
 const { validateRequestBody } = require("../utils");
 const { updateSubjectById, addSubject, getAllSubjects } = require("../db/subjects");
 const { addCourseSubject, getCourseSubjectById } = require("../db/course_subjects");
-const { getChaptersBySubjectId, addChapter, getChapterById, updateChapterViewIndexById, deleteChapterById, updateChapterById } = require("../db/chapters");
+const {
+    getChaptersBySubjectId,
+    addChapter,
+    getChapterById,
+    updateChapterViewIndexById,
+    deleteChapterById,
+    updateChapterById,
+    getChapterBySubjectIdAndTitle,
+} = require("../db/chapters");
 const { getMediaByChapterId } = require("../db/media");
 
 const router = libExpress.Router();
@@ -56,18 +64,29 @@ router.patch("/view_indexes", async (req, res) => {
 });
 
 //tested
-router.post("/", async (req, res) => {
-    const requiredBodyFields = ["title", "subject_id", "type"];
+router.post(
+    "/",
 
-    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
-
-    if (isRequestBodyValid) {
-        const chapterId = await addChapter(validatedRequestBody);
+    async (req, res, next) => {
+        const requiredBodyFields = ["title", "subject_id", "type", "view_index"];
+        const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+        if (!isRequestBodyValid) {
+            return res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+        }
+        req.body = validatedRequestBody;
+        next();
+    },
+    async (req, res, next) => {
+        if (!!(await getChapterBySubjectIdAndTitle(req.body))) {
+            return res.status(400).json({ error: "Chapter Already Exist" });
+        }
+        next();
+    },
+    async (req, res) => {
+        const chapterId = await addChapter(req.body);
         res.status(201).json(await getChapterById({ id: chapterId }));
-    } else {
-        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }
-});
+);
 
 //tested
 router.patch("/", async (req, res) => {

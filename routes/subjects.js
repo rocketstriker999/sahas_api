@@ -2,7 +2,7 @@ const libExpress = require("express");
 
 const { validateRequestBody } = require("../utils");
 const { updateSubjectById, addSubject, getAllSubjects } = require("../db/subjects");
-const { addCourseSubject, getCourseSubjectById } = require("../db/course_subjects");
+const { addCourseSubject, getCourseSubjectById, getCourseSubjectByCourseIdAndSubjectId, getSubjectByCourseIdAndTitle } = require("../db/course_subjects");
 const { getChaptersBySubjectId } = require("../db/chapters");
 
 const router = libExpress.Router();
@@ -58,17 +58,17 @@ router.post(
         next();
     },
     async (req, res, next) => {
-        if (!!(await getCourseByCategoryIdAndTitle(req.body))) {
-            return res.status(400).json({ error: "Course Already Exist" });
+        if (!!(await getSubjectByCourseIdAndTitle(req.body))) {
+            return res.status(400).json({ error: "Subject Already Exist" });
         }
         next();
     },
     async (req, res) => {
-        const subjectId = await addSubject(validatedRequestBody);
+        const subjectId = await addSubject(req.body);
         const courseSubjectId = await addCourseSubject({
-            course_id: validatedRequestBody.course_id,
+            course_id: req.body.course_id,
             subject_id: subjectId,
-            view_index: validatedRequestBody.view_index,
+            view_index: req.body.view_index,
         });
         res.status(201).json(await getCourseSubjectById({ id: courseSubjectId }));
     }

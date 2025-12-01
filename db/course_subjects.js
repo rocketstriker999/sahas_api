@@ -41,4 +41,18 @@ function getCourseSubjectById({ id }) {
         .catch((error) => logger.error(`getCourseSubjectById: ${error}`));
 }
 
-module.exports = { getCourseSubjectsByCourseId, updateCourseSubjectViewIndexById, deleteCourseSubjectById, addCourseSubject, getCourseSubjectById };
+//freeze
+function getSubjectByCourseIdAndTitle({ course_id, title }) {
+    return executeSQLQueryParameterized(`SELECT SUBJECTS.title from COURSE_SUBJECTS LEFT JOIN SUBJECTS WHERE course_id=? AND title=?`, [course_id, title])
+        .then((result) => (result.length > 0 ? result[0] : false))
+        .catch((error) => logger.error(`getSubjectByCourseIdAndTitle: ${error}`));
+}
+
+module.exports = {
+    getCourseSubjectsByCourseId,
+    updateCourseSubjectViewIndexById,
+    deleteCourseSubjectById,
+    addCourseSubject,
+    getCourseSubjectById,
+    getSubjectByCourseIdAndTitle,
+};

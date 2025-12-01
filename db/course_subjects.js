@@ -43,7 +43,10 @@ function getCourseSubjectById({ id }) {
 
 //freeze
 function getSubjectByCourseIdAndTitle({ course_id, title }) {
-    return executeSQLQueryParameterized(`SELECT SUBJECTS.title from COURSE_SUBJECTS LEFT JOIN SUBJECTS WHERE course_id=? AND title=?`, [course_id, title])
+    return executeSQLQueryParameterized(
+        `SELECT SUBJECTS.title from COURSE_SUBJECTS LEFT JOIN SUBJECTS ON COURSE_SUBJECTS.subject_id=SUBJECTS.id WHERE course_id=? AND title=?`,
+        [course_id, title]
+    )
         .then((result) => (result.length > 0 ? result[0] : false))
         .catch((error) => logger.error(`getSubjectByCourseIdAndTitle: ${error}`));
 }

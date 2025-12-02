@@ -243,7 +243,8 @@ function generateDBTables() {
             type VARCHAR(16) NOT NULL,
             external_url VARCHAR(128) NULL,
             view_index INT NOT NULL DEFAULT 0,
-            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            UNIQUE KEY unique_category_title (chapter_id,type, title)
         )`,
 
         // `INSERT INTO BRANCHES (id, title, address, description, active, created_on, updated_at) VALUES

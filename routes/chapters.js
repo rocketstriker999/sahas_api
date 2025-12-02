@@ -1,7 +1,7 @@
 const libExpress = require("express");
 
 const { validateRequestBody } = require("../utils");
-const { updateSubjectById, addSubject, getAllSubjects } = require("../db/subjects");
+const { updateSubjectById, addSubject, getAllSubjects, getSubjectById } = require("../db/subjects");
 const { addCourseSubject, getCourseSubjectById } = require("../db/course_subjects");
 const {
     getChaptersBySubjectId,
@@ -39,7 +39,7 @@ router.get("/:id", async (req, res) => {
     }
 
     const chapter = await getChapterById({ id: req.params.id });
-    chapter.subject = await getCourseSubjectById({ id: chapter?.subject_id });
+    chapter.subject = await getSubjectById({ id: chapter?.subject_id });
 
     res.status(200).json(chapter);
 });

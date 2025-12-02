@@ -17,7 +17,7 @@ function updateChapterTypeViewIndexById({ id, view_index }) {
 }
 
 //freeze
-function updateChapterTypeById({ id, requires_enrollment_digital_access = false, active = false }) {
+function updateChapterTypeById({ id, title, requires_enrollment_digital_access = false, active = false }) {
     return executeSQLQueryParameterized("UPDATE CHAPTER_TYPES SET title=?,requires_enrollment_digital_access=?,active=? WHERE id=?", [
         title,
         requires_enrollment_digital_access,

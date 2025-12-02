@@ -1,8 +1,14 @@
 const libExpress = require("express");
 
 const { validateRequestBody } = require("../utils");
-const { updateSubjectById, addSubject, getAllSubjects } = require("../db/subjects");
-const { addCourseSubject, getCourseSubjectById, getCourseSubjectByCourseIdAndSubjectId, getSubjectByCourseIdAndTitle } = require("../db/course_subjects");
+const { updateSubjectById, addSubject, getAllSubjects, getSubjectById } = require("../db/subjects");
+const {
+    addCourseSubject,
+    getCourseSubjectById,
+    getCourseSubjectByCourseIdAndSubjectId,
+    getSubjectByCourseIdAndTitle,
+    getCourseSubjectBySubjectId,
+} = require("../db/course_subjects");
 const { getChaptersBySubjectId } = require("../db/chapters");
 
 const router = libExpress.Router();
@@ -33,7 +39,7 @@ router.get("/:id", async (req, res) => {
         return res.status(400).json({ error: "Missing Subject id" });
     }
     //provide subject
-    res.status(200).json(await getCourseSubjectById({ id: req.params.id }));
+    res.status(200).json(await getSubjectById({ id: req.params.id }));
 });
 
 //tested

@@ -20,4 +20,11 @@ function getAllSubjects() {
     return executeSQLQueryParameterized(`SELECT * FROM SUBJECTS `).catch((error) => logger.error(`getAllSubjects: ${error}`));
 }
 
-module.exports = { addSubject, updateSubjectById, getAllSubjects };
+//freeze
+function getSubjectById({ id }) {
+    return executeSQLQueryParameterized(`SELECT * FROM SUBJECTS WHERE id=?`, [id])
+        .then((result) => (result.length > 0 ? result[0] : false))
+        .catch((error) => logger.error(`getSubjectById: ${error}`));
+}
+
+module.exports = { addSubject, updateSubjectById, getAllSubjects, getSubjectById };

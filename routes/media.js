@@ -1,23 +1,58 @@
 const libExpress = require("express");
 const { deleteInquiryNoteById } = require("../db/inquiry_notes");
 const { validateRequestBody } = require("../utils");
-const { addMedia, getMediaById, deleteMediaById, updateMediaViewIndexById, updateMediaById } = require("../db/media");
+const { addMedia, getMediaById, deleteMediaById, updateMediaViewIndexById, updateMediaById, getMediaByChapterIdTypeAndTitle } = require("../db/media");
 
 const router = libExpress.Router();
 
+//  async (req, res, next) => {
+//      const requiredBodyFields = ["title", "course_id", "view_index"];
+//      const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+//      if (!isRequestBodyValid) {
+//          return res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+//      }
+//      req.body = validatedRequestBody;
+//      next();
+//  },
+//      async (req, res, next) => {
+//          if (!!(await getSubjectByCourseIdAndTitle(req.body))) {
+//              return res.status(400).json({ error: "Subject Already Exist" });
+//          }
+//          next();
+//      },
+//      async (req, res) => {
+//          const subjectId = await addSubject(req.body);
+//          const courseSubjectId = await addCourseSubject({
+//              course_id: req.body.course_id,
+//              subject_id: subjectId,
+//              view_index: req.body.view_index,
+//          });
+//          res.status(201).json(await getCourseSubjectById({ id: courseSubjectId }));
+//      };
+
 //tested
-router.post("/", async (req, res) => {
-    const requiredBodyFields = ["chapter_id", "title", "type"];
-
-    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
-
-    if (isRequestBodyValid) {
-        const mediaId = await addMedia({ ...validatedRequestBody, created_by: req.user.id });
+router.post(
+    "/",
+    async (req, res, next) => {
+        const requiredBodyFields = ["chapter_id", "title", "type", "view_index"];
+        const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+        if (!isRequestBodyValid) {
+            return res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+        }
+        req.body = validatedRequestBody;
+        next();
+    },
+    async (req, res, next) => {
+        if (!!(await getMediaByChapterIdTypeAndTitle(req.body))) {
+            return res.status(400).json({ error: "Media Already Exist" });
+        }
+        next();
+    },
+    async (req, res) => {
+        const mediaId = await addMedia({ ...req.body, created_by: req.user.id });
         res.status(201).json(await getMediaById({ id: mediaId }));
-    } else {
-        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }
-});
+);
 
 //tested
 router.patch("/view_indexes", async (req, res) => {

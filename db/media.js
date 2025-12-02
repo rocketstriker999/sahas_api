@@ -47,4 +47,11 @@ function updateMediaById({ id, title, cdn_url, external_url }) {
     );
 }
 
-module.exports = { getMediaByChapterId, addMedia, getMediaById, deleteMediaById, updateMediaViewIndexById, updateMediaById };
+//freeze
+function getMediaByChapterIdTypeAndTitle({ chapter_id, type, title }) {
+    return executeSQLQueryParameterized(`SELECT id FROM CHAPTER_MEDIA WHERE chapter_id=? AND type=? AND title=?`, [chapter_id, type, title])
+        .then((result) => (result.length > 0 ? result[0] : false))
+        .catch((error) => logger.error(`getMediaByChapterIdTypeAndTitle: ${error}`));
+}
+
+module.exports = { getMediaByChapterId, addMedia, getMediaById, deleteMediaById, updateMediaViewIndexById, updateMediaById, getMediaByChapterIdTypeAndTitle };

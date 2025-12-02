@@ -5,31 +5,6 @@ const { addMedia, getMediaById, deleteMediaById, updateMediaViewIndexById, updat
 
 const router = libExpress.Router();
 
-//  async (req, res, next) => {
-//      const requiredBodyFields = ["title", "course_id", "view_index"];
-//      const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
-//      if (!isRequestBodyValid) {
-//          return res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
-//      }
-//      req.body = validatedRequestBody;
-//      next();
-//  },
-//      async (req, res, next) => {
-//          if (!!(await getSubjectByCourseIdAndTitle(req.body))) {
-//              return res.status(400).json({ error: "Subject Already Exist" });
-//          }
-//          next();
-//      },
-//      async (req, res) => {
-//          const subjectId = await addSubject(req.body);
-//          const courseSubjectId = await addCourseSubject({
-//              course_id: req.body.course_id,
-//              subject_id: subjectId,
-//              view_index: req.body.view_index,
-//          });
-//          res.status(201).json(await getCourseSubjectById({ id: courseSubjectId }));
-//      };
-
 //tested
 router.post(
     "/",

@@ -34,7 +34,7 @@ function addCourseSubject({ course_id, subject_id, view_index = 0 }) {
 //freeze
 function getCourseSubjectById({ id }) {
     return executeSQLQueryParameterized(
-        `SELECT COURSE_SUBJECTS.id,SUBJECTS.id AS subject_id,SUBJECTS.title,SUBJECTS.background_color,SUBJECTS.active,SUBJECTS.quiz_batch_size, SUBJECTS.timer, SUBJECTS.quiz_active,SUBJECTS.updated_at FROM COURSE_SUBJECTS LEFT JOIN SUBJECTS ON COURSE_SUBJECTS.subject_id=SUBJECTS.id WHERE COURSE_SUBJECTS.id=? ORDER BY COURSE_SUBJECTS.view_index ASC`,
+        `SELECT COURSE_SUBJECTS.id,SUBJECTS.id AS subject_id,SUBJECTS.title,SUBJECTS.background_color,SUBJECTS.active,SUBJECTS.quiz_batch_size, SUBJECTS.timer, SUBJECTS.quiz_active,SUBJECTS.updated_at,COURSE_SUBJECTS.view_index FROM COURSE_SUBJECTS LEFT JOIN SUBJECTS ON COURSE_SUBJECTS.subject_id=SUBJECTS.id WHERE COURSE_SUBJECTS.id=? ORDER BY COURSE_SUBJECTS.view_index ASC`,
         [id]
     )
         .then((result) => (result.length > 0 ? result[0] : false))

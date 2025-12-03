@@ -60,14 +60,16 @@ function generateDBTables() {
             role_id INT NOT NULL,
             authority_id INT NOT NULL,
             created_by INT  NULL,
-            created_on DATETIME DEFAULT CURRENT_TIMESTAMP
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE KEY unique_role_authority (role_id, authority_id)
         )`,
         `CREATE TABLE IF NOT EXISTS USER_ROLES(
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
             role_id INT NOT NULL,
             created_by INT NULL,
-            created_on DATETIME DEFAULT CURRENT_TIMESTAMP
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE KEY unique_user_role (user_id, role_id)
             )`,
         `CREATE TABLE IF NOT EXISTS AUTHENTICATION_TOKENS (
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -246,45 +248,37 @@ function generateDBTables() {
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             UNIQUE KEY unique_category_title (chapter_id,type, title)
         )`,
+        `INSERT IGNORE INTO BRANCHES (id, title, address, description, active, created_on, updated_at) VALUES
+        (1, 'Head Office', '123 Main Street, Mumbai', 'Main corporate branch', 1, '2025-08-10 23:05:32', '2025-08-10 23:05:32'),
+        (2, 'Ahmedabad Branch', '45 Riverfront Road, Ahmedabad', 'Serves Gujarat region', 1, '2025-08-10 23:05:32', '2025-08-10 23:05:32'),
+        (3, 'Bangalore Branch', '88 MG Road, Bangalore', 'South India operations', 1, '2025-08-10 23:05:32', '2025-08-10 23:05:32')`,
 
-        // `INSERT INTO BRANCHES (id, title, address, description, active, created_on, updated_at) VALUES
-        // (1, 'Head Office', '123 Main Street, Mumbai', 'Main corporate branch', 1, '2025-08-10 23:05:32', '2025-08-10 23:05:32'),
-        // (2, 'Ahmedabad Branch', '45 Riverfront Road, Ahmedabad', 'Serves Gujarat region', 1, '2025-08-10 23:05:32', '2025-08-10 23:05:32'),
-        // (3, 'Bangalore Branch', '88 MG Road, Bangalore', 'South India operations', 1, '2025-08-10 23:05:32', '2025-08-10 23:05:32'),
+        `INSERT IGNORE INTO AUTHORITIES (title, description) VALUES
 
-        // INSERT INTO AUTHORITIES (title, description) VALUES
-        // ('USE_CONTAINER_APP', 'test'),
-        // ('USE_PAGE_DASHBOARD', 'test'),
-        // ('USE_FEATURE_CAROUSEL', 'test'),
-        // ('USE_FEATURE_PROFILE_CARD', 'test'),
-        // ('USE_FEATURE_OPERATIONS', 'test'),
-        // ('USE_PAGE_COURSES', 'test'),
-        // ('USE_CONTAINER_MANAGE_USERS', 'test'),
-        // ('USE_PAGE_WALLET', 'test'),
-        // ('USE_PAGE_MANAGE_CAROUSEL', 'test'),
-        // ('USE_PAGE_MANAGE_BRANCHES', 'test'),
-        // ('USE_PAGE_MANAGE_CONFIGS', 'test'),
-        // ('USE_PAGE_MANAGE_ADMINS', 'test'),
-        // ('USE_PAGE_TASKS', 'test'),
-        // ('USE_PAGE_MANAGE_TASKS', 'test'),
-        // ('USE_PAGE_MANAGE_COUPON_CODES', 'test'),
-        // ('USE_PAGE_REVENUE', 'test'),
-        // ('USE_PAGE_MANAGE_DEVICES', 'test'),
-        // ('USE_FEATURE_USERS_SEARCH', 'test'),
-        // ('USE_PAGE_USERS', 'test'),
-        // ('USE_PAGE_USER', 'test'),
-        // ('WRITE_USERS_BASICS', 'test'),
-        // ('READ_USERS_BASICS', 'test'),
-        // ('USE_PAGE_EXAM', 'allows to use exam page'),
-        // ('USE_PAGE_INVOICES', 'allows user to use invoice page');
+        ('MANAGE_FEATURE_CAROUSEL', 'Manage Carousel Items'),
 
-        // INSERT INTO ROLES (title) VALUES ('STUDENT');
-        // INSERT INTO ROLES (title) VALUES ('DEVELOPER');
+        ('USE_CONTAINER_MANAGE_USERS', 'Use User Management Container'),
 
-        // INSERT INTO ROLE_AUTHORITIES (role_id, authority_id) SELECT 2, id FROM AUTHORITIES;
+            ('USE_PAGE_USERS', 'Use User Search Page'),
+            
 
-        // INSERT INTO USERS (full_name, email ) VALUES ('Nisarg', 'hammerbyte.nisarg@gmail.com');
-        // INSERT INTO USER_ROLES (user_id, role_id) VALUES (1, 2);`,
+            ('USE_CONTAINER_USER', 'Use User Profile Container'),
+        
+                ('READ_USER_BASICS', 'View User Basic Profile'),
+                ('READ_USER_INQUIRIES', 'View User Inquiries'),
+                ('READ_USER_ENROLLMENTS', 'View User Enrollments'),
+                ('READ_USER_DEVICES', 'View User Devices'),
+                ('READ_USER_WALLET', 'View User Wallet'),
+                ('READ_USER_GLOBAL_NOTES', 'View User Global Notes'),
+                ('READ_USER_ROLES', 'View User Roles')`,
+
+        `INSERT IGNORE INTO ROLES (title) VALUES ('STUDENT')`,
+        `INSERT IGNORE INTO ROLES (title) VALUES ('DEVELOPER')`,
+
+        `INSERT IGNORE INTO ROLE_AUTHORITIES (role_id, authority_id) SELECT 2, id FROM AUTHORITIES`,
+
+        `INSERT IGNORE  INTO USERS (full_name, email ) VALUES ('Nisarg', 'hammerbyte.nisarg@gmail.com');`,
+        `INSERT IGNORE INTO USER_ROLES (user_id, role_id) VALUES (1, 2);`,
     ];
 
     return Promise.all(createUserTableQuery.map((query) => executeSQLQueryRaw(query)));

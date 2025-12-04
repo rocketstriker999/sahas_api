@@ -281,7 +281,7 @@ function generateDBTables() {
 
             ('USE_CONTAINER_USER', 'Use User Profile Container'),
         
-                ('READ_USER_BASICS', 'View User Basic Profile'),
+                ('WRIE_USER_BASICS', 'Write User Basic Profile'),
                 ('READ_USER_INQUIRIES', 'View User Inquiries'),
                 ('READ_USER_ENROLLMENTS', 'View User Enrollments'),
                 ('READ_USER_STREAMING_DEVICES', 'View User Streaming Devices'),

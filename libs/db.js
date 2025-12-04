@@ -272,9 +272,8 @@ function generateDBTables() {
 
 
         ('USE_DEVELOPER_CORNER', 'Developer Corner Visibility'),
-        
 
-
+        ('USE_PAGE_COURSES', 'Explore Courses Catelogue'),
 
         ('USE_CONTAINER_MANAGE_USERS', 'Use User Management Container'),
 

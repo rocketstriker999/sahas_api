@@ -191,6 +191,11 @@ function updateUserById({ id, email, full_name, phone, image, address, branch_id
     ]).catch((error) => logger.error(`updateUserById: ${error}`));
 }
 
+//freeze
+function patchUserById({ id, key, value }) {
+    return executeSQLQueryParameterized(`UPDATE USERS SET ${key}=? WHERE id = ?`, [key, value, id]).catch((error) => logger.error(`patchUserById: ${error}`));
+}
+
 //tested
 function addUser({ email, full_name, phone, image, address, branch_id }) {
     return executeSQLQueryParameterized(`INSERT  INTO USERS(email,full_name, phone, image, address, branch_id) VALUES(?,?,?,?,?,?)`, [
@@ -222,4 +227,5 @@ module.exports = {
     getAuthoritiesByRoleIds,
     updateUserById,
     addUser,
+    patchUserById,
 };

@@ -1,6 +1,14 @@
 const libExpress = require("express");
 const { logger } = require("sahas_utils");
-const { getAllUsersBySearchAndFilters, getCountUsersBySearchAndFilters, getUserById, updateUserById, addUserByEmail, addUser } = require("../db/users");
+const {
+    getAllUsersBySearchAndFilters,
+    getCountUsersBySearchAndFilters,
+    getUserById,
+    updateUserById,
+    addUserByEmail,
+    addUser,
+    patchUserById,
+} = require("../db/users");
 const { getInquiriesByUserId } = require("../db/inquiries");
 const { validateRequestBody } = require("../utils");
 const { getEnrollmentsByUserId } = require("../db/enrollments");
@@ -42,6 +50,20 @@ router.put("/", async (req, res) => {
     if (isRequestBodyValid) {
         await updateUserById({ ...validatedRequestBody });
         res.status(200).json(await getUserById({ ...validatedRequestBody }));
+    } else {
+        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+    }
+});
+
+//tested
+router.patch("/", async (req, res) => {
+    const requiredBodyFields = ["id", "key", "value"];
+
+    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+
+    if (isRequestBodyValid) {
+        await patchUserById({ ...validatedRequestBody });
+        res.sendStatus(200);
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

@@ -255,6 +255,8 @@ function generateDBTables() {
 
         `INSERT IGNORE INTO AUTHORITIES (title, description) VALUES
 
+        ('MANAGE_USER_INQUIRIES', 'Manage User Inquiries'),
+
         ('MANAGE_FEATURE_CAROUSEL', 'Manage Carousel Items'),
         ('USE_EMPLOYEE_CORNER', 'Employee Corner Visibility'),
             ('USE_CONTAINER_MANAGE_USERS', 'Use User Management Container'),
@@ -274,6 +276,8 @@ function generateDBTables() {
         ('USE_DEVELOPER_CORNER', 'Developer Corner Visibility'),
 
         ('MANAGE_COURSES', 'Manage Course Content'),
+
+        
 
         ('USE_CONTAINER_MANAGE_USERS', 'Use User Management Container'),
 

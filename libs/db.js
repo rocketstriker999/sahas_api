@@ -278,6 +278,8 @@ function generateDBTables() {
         ('USE_CONTAINER_MANAGE_USERS', 'Use User Management Container'),
 
             ('USE_PAGE_USERS', 'Use User Search Page'),
+            ('MANAGE_OTHER_USERS', 'Manage Other User's Profile'),
+
 
             ('USE_CONTAINER_USER', 'Use User Profile Container'),
         

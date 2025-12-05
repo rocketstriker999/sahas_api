@@ -21,8 +21,8 @@ const router = libExpress.Router();
 async function populateRolesAndAuthorities(user) {
     const userRoles = await getUserRolesByUserId({ user_id: user.id });
     const authorities = await getAuthoritiesByRoleIds(userRoles.map(({ role_id }) => role_id).join(","));
-    user.roles = await userRoles?.map(({ title }) => title);
-    user.authorities = await authorities?.map((authority) => authority.title);
+    user.roles = userRoles?.map(({ title }) => title);
+    user.authorities = authorities?.map((authority) => authority.title);
 }
 
 router.patch("/", async (req, res) => {

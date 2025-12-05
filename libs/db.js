@@ -254,46 +254,33 @@ function generateDBTables() {
         (3, 'Bangalore Branch', '88 MG Road, Bangalore', 'South India operations', 1, '2025-08-10 23:05:32', '2025-08-10 23:05:32')`,
 
         `INSERT IGNORE INTO AUTHORITIES (title, description) VALUES
-        ('MANAGE_OTHER_USERS', 'Manage Other User's Profile'),
+        ('MANAGE_OTHER_USERS', 'Manage Other User Profile'),
         ('MANAGE_USER_INQUIRIES', 'Manage User Inquiries'),
-
         ('MANAGE_FEATURE_CAROUSEL', 'Manage Carousel Items'),
         ('USE_EMPLOYEE_CORNER', 'Employee Corner Visibility'),
-            ('USE_CONTAINER_MANAGE_USERS', 'Use User Management Container'),
-            ('USE_PAGE_MY_EXPENSES', 'Page For Expense Submission'),
-            ('USE_PAGE_MANAGE_EXAMS', 'Page For Exam Paper'),
-
-        ('USE_ADMIN_CORNER', 'Admin Corner Visibility'),
-            ('USE_PAGE_MANAGE_EXAMS', 'Page For Exam Paper'),
-            ('USE_PAGE_MANAGE_BRANCHES', 'Page For Managing Branches'),
-            ('USE_PAGE_MANAGE_STREAMING_DEVICES_REQUESTS', 'Page For Managing Streaming Device Requests'),
-            ('USE_PAGE_FINANCIALS', 'Page For Managing Financials'),
-            ('USE_PAGE_ANALYTICS', 'Page For Analytics'),
-            ('USE_PAGE_CHAPTERIZATION', 'Page For Managing Chapter Types'),
-            ('USE_PAGE_COUPON_CODES', 'Page For Managing Coupon Codes'),
-
-
-        ('USE_DEVELOPER_CORNER', 'Developer Corner Visibility'),
-
-        ('MANAGE_COURSES', 'Manage Course Content'),
-
-        
-
         ('USE_CONTAINER_MANAGE_USERS', 'Use User Management Container'),
-
-            ('USE_PAGE_USERS', 'Use User Search Page'),
-            
-
-
-            ('USE_CONTAINER_USER', 'Use User Profile Container'),
-        
-                ('WRIE_USER_BASICS', 'Write User Basic Profile'),
-                ('READ_USER_INQUIRIES', 'View User Inquiries'),
-                ('READ_USER_ENROLLMENTS', 'View User Enrollments'),
-                ('READ_USER_STREAMING_DEVICES', 'View User Streaming Devices'),
-                ('READ_USER_WALLET', 'View User Wallet'),
-                ('READ_USER_GLOBAL_NOTES', 'View User Global Notes'),
-                ('READ_USER_ROLES', 'View User Roles')`,
+        ('USE_PAGE_MY_EXPENSES', 'Page For Expense Submission'),
+        ('USE_PAGE_MANAGE_EXAMS', 'Page For Exam Paper'),
+        ('USE_ADMIN_CORNER', 'Admin Corner Visibility'),
+        ('USE_PAGE_MANAGE_EXAMS', 'Page For Exam Paper'),
+        ('USE_PAGE_MANAGE_BRANCHES', 'Page For Managing Branches'),
+        ('USE_PAGE_MANAGE_STREAMING_DEVICES_REQUESTS', 'Page For Managing Streaming Device Requests'),
+        ('USE_PAGE_FINANCIALS', 'Page For Managing Financials'),
+        ('USE_PAGE_ANALYTICS', 'Page For Analytics'),
+        ('USE_PAGE_CHAPTERIZATION', 'Page For Managing Chapter Types'),
+        ('USE_PAGE_COUPON_CODES', 'Page For Managing Coupon Codes'),
+        ('USE_DEVELOPER_CORNER', 'Developer Corner Visibility'),
+        ('MANAGE_COURSES', 'Manage Course Content'),
+        ('USE_CONTAINER_MANAGE_USERS', 'Use User Management Container'),
+        ('USE_PAGE_USERS', 'Use User Search Page'),
+        ('USE_CONTAINER_USER', 'Use User Profile Container'),
+        ('WRIE_USER_BASICS', 'Write User Basic Profile'),
+        ('READ_USER_INQUIRIES', 'View User Inquiries'),
+        ('READ_USER_ENROLLMENTS', 'View User Enrollments'),
+        ('READ_USER_STREAMING_DEVICES', 'View User Streaming Devices'),
+        ('READ_USER_WALLET', 'View User Wallet'),
+        ('READ_USER_GLOBAL_NOTES', 'View User Global Notes'),
+        ('READ_USER_ROLES', 'View User Roles')`,
 
         `INSERT IGNORE INTO ROLES (title) VALUES ('STUDENT')`,
         `INSERT IGNORE INTO ROLES (title) VALUES ('DEVELOPER')`,

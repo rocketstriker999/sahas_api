@@ -97,7 +97,7 @@ function getUserById({ id }) {
         .catch((error) => logger.error(`getUserById: ${error}`));
 }
 
-function getAuthoritiesByRoleIds() {
+function getAuthoritiesByRoleIds(roleIds) {
     return executeSQLQueryParameterized(
         `SELECT AUTHORITIES.title FROM ROLE_AUTHORITIES LEFT JOIN AUTHORITIES ON ROLE_AUTHORITIES.authority_id=AUTHORITIES.id WHERE ROLE_AUTHORITIES.role_id in (${roleIds})`
     ).catch((error) => {

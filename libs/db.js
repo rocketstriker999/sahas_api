@@ -254,7 +254,7 @@ function generateDBTables() {
         (3, 'Bangalore Branch', '88 MG Road, Bangalore', 'South India operations', 1, '2025-08-10 23:05:32', '2025-08-10 23:05:32')`,
 
         `INSERT IGNORE INTO AUTHORITIES (title, description) VALUES
-
+        ('MANAGE_OTHER_USERS', 'Manage Other User's Profile'),
         ('MANAGE_USER_INQUIRIES', 'Manage User Inquiries'),
 
         ('MANAGE_FEATURE_CAROUSEL', 'Manage Carousel Items'),
@@ -282,7 +282,7 @@ function generateDBTables() {
         ('USE_CONTAINER_MANAGE_USERS', 'Use User Management Container'),
 
             ('USE_PAGE_USERS', 'Use User Search Page'),
-            ('MANAGE_OTHER_USERS', 'Manage Other User's Profile'),
+            
 
 
             ('USE_CONTAINER_USER', 'Use User Profile Container'),

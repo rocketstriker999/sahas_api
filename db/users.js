@@ -198,6 +198,11 @@ function patchUserFullNameById({ id, full_name }) {
     );
 }
 
+//freeze
+function patchUserPhoneById({ id, phone }) {
+    return executeSQLQueryParameterized(`UPDATE USERS SET phone=? WHERE id = ?`, [phone, id]).catch((error) => logger.error(`patchUserPhoneById: ${error}`));
+}
+
 //tested
 function addUser({ email, full_name, phone, image, address, branch_id }) {
     return executeSQLQueryParameterized(`INSERT  INTO USERS(email,full_name, phone, image, address, branch_id) VALUES(?,?,?,?,?,?)`, [
@@ -230,4 +235,5 @@ module.exports = {
     updateUserById,
     addUser,
     patchUserFullNameById,
+    patchUserPhoneById,
 };

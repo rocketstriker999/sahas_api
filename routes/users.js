@@ -69,7 +69,7 @@ router.patch(
     },
     async (req, res) => {
         await patchUserFullNameById({ ...req.body });
-        res.sendStatus(200);
+        res.status(200).json(await getUserById({ id: req.body.id }));
     }
 );
 

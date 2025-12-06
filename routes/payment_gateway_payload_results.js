@@ -8,20 +8,13 @@ const router = libExpress.Router();
 router.post("/", async (req, res) => {
     const requiredBodyFields = ["txnid"];
 
-    logger.info("CALEED");
-
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
-
-    logger.info("CALEED1");
 
     if (isRequestBodyValid) {
         const { paymentGateWay: { redirectionHost, postPaymentRoute } = {} } = await readConfig("app");
-        logger.info("CALEED2");
-
-        res.redirect(redirectionHost.concat(postPaymentRoute.concat(validatedRequestBody.txnid)));
-        logger.info("CALEED3");
+        return res.redirect(redirectionHost.concat(postPaymentRoute.concat(validatedRequestBody.txnid)));
     }
-    logger.info("CALEED4");
+    res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
 });
 
 module.exports = router;

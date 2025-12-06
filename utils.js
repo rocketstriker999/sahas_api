@@ -66,7 +66,7 @@ async function requestPayUVerification(transaction, command = process.env.TRANSA
 function validateRequestBody(body, requiredFields) {
     let missingRequestBodyFields = new Set(...Object.keys(body), ...requiredFields);
 
-    logger.info(missingRequestBodyFields);
+    logger.info(JSON.stringify(missingRequestBodyFields));
 
     return {
         validatedRequestBody: Object.keys(body).reduce((obj, key) => {

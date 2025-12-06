@@ -85,7 +85,7 @@ function validateRequestBody(body, requiredFields) {
             return obj;
         }, {}),
         isRequestBodyValid: missingRequestBodyFields.length === 0,
-        missingRequestBodyFields,
+        missingRequestBodyFields: Array.from(missingRequestBodyFields),
     };
 }
 

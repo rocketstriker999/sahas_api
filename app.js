@@ -6,7 +6,7 @@ const { generateDBTables } = require("./libs/db");
 const { prepareDirectories } = require("./utils");
 const { generateCaches } = require("./libs/cacher");
 
-//prepare logs directories at first
+//prepare logs directories at first #9
 prepareDirectories([process.env.DIRECTORY_LOGS, process.env.DIR_CONFIGS]);
 
 // Test and Prepare Required Tables

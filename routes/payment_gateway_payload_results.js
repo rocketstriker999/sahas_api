@@ -10,8 +10,12 @@ router.post("/", async (req, res) => {
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
-    const { paymentGateWay: { redirectionHost, postPaymentRoute } = {} } = await readConfig("app");
-    return res.redirect(redirectionHost.concat(postPaymentRoute.concat(validatedRequestBody.txnid)));
+    if (isRequestBodyValid) {
+        const { paymentGateWay: { redirectionHost, postPaymentRoute } = {} } = await readConfig("app");
+
+        return res.redirect(redirectionHost.concat(postPaymentRoute.concat(validatedRequestBody.txnid)));
+    }
+    res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
 });
 
 module.exports = router;

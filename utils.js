@@ -93,7 +93,7 @@ function validateRequestBody(body, requiredFields) {
 
             return obj;
         }, {}),
-        isRequestBodyValid: missingRequestBodyFields.length === 0,
+        isRequestBodyValid: missingRequestBodyFields?.size === 0,
         missingRequestBodyFields: Array.from(missingRequestBodyFields),
     };
 }

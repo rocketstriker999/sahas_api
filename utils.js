@@ -73,6 +73,8 @@ function validateRequestBody(body, requiredFields) {
             let value = body[key];
             missingRequestBodyFields.delete(key);
 
+            logger.info(key);
+
             if (typeof value === "string") {
                 value = value.trim();
             }

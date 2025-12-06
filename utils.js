@@ -66,26 +66,31 @@ async function requestPayUVerification(transaction, command = process.env.TRANSA
 function validateRequestBody(body, requiredFields) {
     let missingRequestBodyFields = new Set([...Object.keys(body), ...requiredFields]);
 
-    logger.info(JSON.stringify(missingRequestBodyFields));
-
     return {
         validatedRequestBody: Object.keys(body).reduce((obj, key) => {
             let value = body[key];
             missingRequestBodyFields.delete(key);
 
+            logger.info("Processing");
             logger.info(key);
+            logger.info(value);
 
             if (typeof value === "string") {
                 value = value.trim();
             }
 
             if (typeof value === "string" || Array.isArray(value)) {
+                logger.info("is String or Array");
                 if ((value?.length == 0 || body[key] === undefined || body[key] === null) && requiredFields?.includes(key)) {
+                    logger.info("is empty or Null or Undefinded and is Required");
                     missingRequestBodyFields?.push(key);
                 }
             }
 
             obj[key] = value;
+            logger.info("current");
+            logger.info(JSON.stringify(obj));
+
             return obj;
         }, {}),
         isRequestBodyValid: missingRequestBodyFields.length === 0,

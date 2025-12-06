@@ -8,6 +8,8 @@ const router = libExpress.Router();
 router.post("/", async (req, res) => {
     const requiredBodyFields = ["txnid"];
 
+    logger.info("CALEED");
+
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
     if (isRequestBodyValid) {

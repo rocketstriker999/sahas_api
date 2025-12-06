@@ -192,8 +192,10 @@ function updateUserById({ id, email, full_name, phone, image, address, branch_id
 }
 
 //freeze
-function patchUserById({ id, key, value }) {
-    return executeSQLQueryParameterized(`UPDATE USERS SET ${key}=? WHERE id = ?`, [key, value, id]).catch((error) => logger.error(`patchUserById: ${error}`));
+function patchUserFullNameById({ id, full_name }) {
+    return executeSQLQueryParameterized(`UPDATE USERS SET full_name=? WHERE id = ?`, [full_name, id]).catch((error) =>
+        logger.error(`patchUserFullNameById: ${error}`)
+    );
 }
 
 //tested
@@ -227,5 +229,5 @@ module.exports = {
     getAuthoritiesByRoleIds,
     updateUserById,
     addUser,
-    patchUserById,
+    patchUserFullNameById,
 };

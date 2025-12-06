@@ -10,13 +10,11 @@ const { generateCaches } = require("./libs/cacher");
 prepareDirectories([process.env.DIRECTORY_LOGS, process.env.DIR_CONFIGS]);
 
 // Test and Prepare Required Tables
-const prepareAppDependacies = async () => {
+(async () => {
     await generateDBTables()
         .then(() => logger.success("Database Ready"))
         .then(generateCaches)
         .catch((error) => logger.error(`Failed To Prepare Cache ${error}`))
         .then(allowTraffic)
         .catch((error) => logger.error(`Failed To Prepare Database ${error}`));
-};
-
-prepareAppDependacies();
+})();

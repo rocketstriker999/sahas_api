@@ -1,7 +1,6 @@
 const { CACHE_KEY_COURSE_CATEGORIES, CACHE_KEY_COURSES, CACHE_KEY_SUBJECTS, CACHE_KEY_PAYMENT_GATEWAY_PAYLOADS } = require("../constants");
 const { getAllCourseCategories } = require("../db/course_categories");
 const { getAllCourses } = require("../db/courses");
-const { getAllPaymentGateWayPayLoads } = require("../db/payment_gateway_payloads");
 const { getAllSubjects } = require("../db/subjects");
 const { logger } = require("sahas_utils");
 

@@ -11,7 +11,7 @@ prepareDirectories([process.env.DIRECTORY_LOGS, process.env.DIR_CONFIGS]);
 
 // Test and Prepare Required Tables
 
-generateDBTables()
+await generateDBTables()
     .then(() => logger.success("Database Ready"))
     .then(generateCaches)
     .catch((error) => logger.error(`Failed To Prepare Cache ${error}`))

@@ -255,6 +255,8 @@ async function generateDBTables() {
 
         `INSERT IGNORE INTO AUTHORITIES (title, description) VALUES
         ('MANAGE_OTHER_USERS', 'Manage Other User Profile'),
+        ('MANAGE_COURSES', 'Manage Course Content'),
+
         ('MANAGE_USER_INQUIRIES', 'Manage User Inquiries'),
         ('MANAGE_FEATURE_CAROUSEL', 'Manage Carousel Items'),
         ('USE_EMPLOYEE_CORNER', 'Employee Corner Visibility'),
@@ -270,7 +272,6 @@ async function generateDBTables() {
         ('USE_PAGE_CHAPTERIZATION', 'Page For Managing Chapter Types'),
         ('USE_PAGE_COUPON_CODES', 'Page For Managing Coupon Codes'),
         ('USE_DEVELOPER_CORNER', 'Developer Corner Visibility'),
-        ('MANAGE_COURSES', 'Manage Course Content'),
         ('USE_CONTAINER_MANAGE_USERS', 'Use User Management Container'),
         ('USE_PAGE_USERS', 'Use User Search Page'),
         ('USE_CONTAINER_USER', 'Use User Profile Container'),

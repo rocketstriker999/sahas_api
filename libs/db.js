@@ -253,6 +253,10 @@ async function generateDBTables() {
         (2, 'Ahmedabad Branch', '45 Riverfront Road, Ahmedabad', 'Serves Gujarat region', 1, '2025-08-10 23:05:32', '2025-08-10 23:05:32'),
         (3, 'Bangalore Branch', '88 MG Road, Bangalore', 'South India operations', 1, '2025-08-10 23:05:32', '2025-08-10 23:05:32')`,
 
+        `INSERT IGNORE INTO CHAPTER_TYPES (title, view_index,requires_enrollment_digital_access) VALUES
+        ('Demo', 0,FALSE),
+        ('Topics', 1,TRUE)`,
+
         `INSERT IGNORE INTO AUTHORITIES (title, description) VALUES
         ('MANAGE_OTHER_USERS', 'Manage Other User Profile'),
         ('MANAGE_COURSES', 'Manage Course Content'),

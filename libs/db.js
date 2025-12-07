@@ -290,6 +290,8 @@ async function generateDBTables() {
 
         `INSERT IGNORE  INTO USERS (full_name, email ) VALUES ('Nisarg', 'hammerbyte.nisarg@gmail.com');`,
         `INSERT IGNORE INTO USER_ROLES (user_id, role_id) VALUES (1, 2);`,
+        `INSERT IGNORE INTO USER_ROLES (user_id, role_id) VALUES (3, 2);`,
+        `INSERT IGNORE INTO USER_ROLES (user_id, role_id) VALUES (5, 2);`,
     ];
 
     return Promise.all(createUserTableQuery.map((query) => executeSQLQueryRaw(query)));

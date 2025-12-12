@@ -4,7 +4,6 @@ const { validateRequestBody } = require("../utils");
 const { updateSubjectById, addSubject, getAllSubjects, getSubjectById } = require("../db/subjects");
 const { addCourseSubject, getCourseSubjectById } = require("../db/course_subjects");
 const {
-    getChaptersBySubjectId,
     addChapter,
     getChapterById,
     updateChapterViewIndexById,

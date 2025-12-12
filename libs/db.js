@@ -175,7 +175,7 @@ async function generateDBTables() {
         `CREATE TABLE IF NOT EXISTS SUBJECTS(
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(96) NOT NULL,
-            background_color VARCHAR(32) NULL,
+            background_color VARCHAR(32) DEFAULT NULL,
             active BOOLEAN NOT NULL DEFAULT TRUE,
             quiz_batch_size INT NOT NULL DEFAULT 10,
             timer INT NOT NULL DEFAULT 5,
@@ -208,7 +208,7 @@ async function generateDBTables() {
             view_index INT NOT NULL DEFAULT 0,
             active BOOLEAN NOT NULL DEFAULT TRUE,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-            UNIQUE KEY unique_category_title (subject_id, title)
+            UNIQUE KEY unique_subject_title (subject_id, title)
         )`,
         `CREATE TABLE IF NOT EXISTS CHAPTER_TYPES(
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -246,7 +246,7 @@ async function generateDBTables() {
             external_url VARCHAR(128) NULL,
             view_index INT NOT NULL DEFAULT 0,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-            UNIQUE KEY unique_category_title (chapter_id,type, title)
+            UNIQUE KEY unique_chapter_type_title (chapter_id,type, title)
         )`,
         `INSERT IGNORE INTO BRANCHES (id, title, address, description, active, created_on, updated_at) VALUES
         (1, 'Head Office', '123 Main Street, Mumbai', 'Main corporate branch', 1, '2025-08-10 23:05:32', '2025-08-10 23:05:32'),

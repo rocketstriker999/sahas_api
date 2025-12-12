@@ -179,7 +179,7 @@ async function generateDBTables() {
             active BOOLEAN NOT NULL DEFAULT TRUE,
             quiz_batch_size INT NOT NULL DEFAULT 10,
             timer INT NOT NULL DEFAULT 5,
-            quiz_active BOOLEAN NOT NULL DEFAULT TRUE,
+            
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
         `CREATE TABLE IF NOT EXISTS QUIZ_MCQS(
@@ -205,6 +205,7 @@ async function generateDBTables() {
             subject_id INT NOT NULL,
             title VARCHAR(128) NOT NULL,
             type INT NOT NULL,
+            quiz_attainable BOOLEAN NOT NULL DEFAULT TRUE,
             view_index INT NOT NULL DEFAULT 0,
             active BOOLEAN NOT NULL DEFAULT TRUE,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

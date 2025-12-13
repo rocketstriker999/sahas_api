@@ -1,8 +1,7 @@
 const libExpress = require("express");
 
 const { validateRequestBody } = require("../utils");
-const { updateSubjectById, addSubject, getAllSubjects, getSubjectById } = require("../db/subjects");
-const { addCourseSubject, getCourseSubjectById } = require("../db/course_subjects");
+const { getSubjectById } = require("../db/subjects");
 const {
     addChapter,
     getChapterById,

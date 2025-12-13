@@ -13,6 +13,17 @@ function getEnrollmentCoursesByEnrollmentId({ enrollment_id }) {
 }
 
 //freeze
+function getEnrollmentCoursesByUserId({ user_id }) {
+    return executeSQLQueryParameterized(
+        `SELECT COURSES.* FROM ENROLLMENTS INNER JOIN ENROLLMENT_COURSES ON ENROLLMENTS.id = ENROLLMENT_COURSES.enrollment_id INNER JOIN COURSES ON ENROLLMENT_COURSES.course_id = COURSES.id WHERE ENROLLMENTS.user_id = ? AND ENROLLMENTS.end_date >= NOW() ORDER BY ENROLLMENTS.id DESC`,
+        [user_id]
+    ).catch((error) => {
+        logger.error(`getEnrollmentCoursesByUserId: ${error}`);
+        return [];
+    });
+}
+
+//freeze
 function addEnrollmentCourse({ created_by, enrollment_id, course_id }) {
     return executeSQLQueryParameterized(`INSERT INTO ENROLLMENT_COURSES(enrollment_id,course_id,created_by) VALUES(?,?,?)`, [
         enrollment_id,
@@ -47,4 +58,5 @@ module.exports = {
     getEnrollmentCourseById,
     getEnrollmentCoursesByEnrollmentId,
     deleteEnrollmentCourseById,
+    getEnrollmentCoursesByUserId,
 };

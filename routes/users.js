@@ -6,7 +6,6 @@ const {
     getUserById,
     updateUserById,
     addUser,
-    patchUserById,
     patchUserFullNameById,
     patchUserPhoneById,
 } = require("../db/users");
@@ -16,6 +15,7 @@ const { getEnrollmentsByUserId } = require("../db/enrollments");
 
 const { getWalletTransactionsByUserId } = require("../db/wallet_transactions");
 const { getUserRolesByUserId } = require("../db/user_roles");
+const { getEnrollmentCoursesByUserId } = require("../db/enrollment_courses");
 
 const router = libExpress.Router();
 
@@ -35,6 +35,15 @@ router.get("/", async (req, res) => {
 
 //tested
 router.get("/:id", async (req, res) => {
+    if (!req.params.id) {
+        return res.status(400).json({ error: "Missing User Id" });
+    }
+
+    return res.status(200).json(await getEnrollmentCoursesByUserId({ ...req.params }));
+});
+
+//tested
+router.get("/:id/courses", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing User Id" });
     }

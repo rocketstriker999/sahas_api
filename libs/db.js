@@ -177,9 +177,6 @@ async function generateDBTables() {
             title VARCHAR(96) NOT NULL,
             background_color VARCHAR(32) DEFAULT NULL,
             active BOOLEAN NOT NULL DEFAULT TRUE,
-            quiz_batch_size INT NOT NULL DEFAULT 10,
-            timer INT NOT NULL DEFAULT 5,
-            
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
         `CREATE TABLE IF NOT EXISTS QUIZ_MCQS(
@@ -206,6 +203,9 @@ async function generateDBTables() {
             title VARCHAR(128) NOT NULL,
             type INT NOT NULL,
             quiz_attainable BOOLEAN NOT NULL DEFAULT TRUE,
+            quiz_time INT DEFAULT NULL,
+            quiz_questions INT DEFAULT NULL,
+            quiz_pool VARCHAR(64) NULL UNIQUE, 
             view_index INT NOT NULL DEFAULT 0,
             active BOOLEAN NOT NULL DEFAULT TRUE,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -242,7 +242,7 @@ async function generateDBTables() {
             id INT AUTO_INCREMENT PRIMARY KEY,
             chapter_id INT NOT NULL,
             title VARCHAR(96) NOT NULL,
-            cdn_url VARCHAR(64) NULL UNIQUE,
+            cdn_url VARCHAR(96) NULL UNIQUE,
             type VARCHAR(16) NOT NULL,
             external_url VARCHAR(128) NULL,
             view_index INT NOT NULL DEFAULT 0,

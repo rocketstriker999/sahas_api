@@ -41,10 +41,16 @@ function deleteChapterById({ id }) {
 }
 
 //freeze
-function updateChapterById({ id, title, type, quiz_attainable = false }) {
-    return executeSQLQueryParameterized("UPDATE SUBJECT_CHAPTERS SET title=?,type=?,quiz_attainable=? WHERE id=?", [title, type, quiz_attainable, id]).catch(
-        (error) => logger.error(`updateChapterById: ${error}`)
-    );
+function updateChapterById({ id, title, type, quiz_attainable = false, quiz_time = null, quiz_questions = null, quiz_pool = null }) {
+    return executeSQLQueryParameterized("UPDATE SUBJECT_CHAPTERS SET title=?,type=?,quiz_attainable=?,quiz_time=?,quiz_questions=?,quiz_pool=? WHERE id=?", [
+        title,
+        type,
+        quiz_attainable,
+        quiz_time,
+        quiz_questions,
+        quiz_pool,
+        id,
+    ]).catch((error) => logger.error(`updateChapterById: ${error}`));
 }
 
 //freeze

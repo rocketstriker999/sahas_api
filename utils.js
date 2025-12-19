@@ -29,6 +29,10 @@ function getFormattedDate({ date, format = "YYYY-MM-DD" }) {
     return libMoment(date).format(format);
 }
 
+function getDifferenceOfDates({ start_date, end_date }) {
+    return libMoment(end_date).diff(libMoment(start_date), "days");
+}
+
 function generateSHA512(targetString) {
     return libCrypto.createHash("sha512").update(targetString).digest("hex");
 }
@@ -128,4 +132,5 @@ module.exports = {
     verifyPaymentGatewayPayLoadStatus,
     getDateByInterval,
     getFormattedDate,
+    getDifferenceOfDates,
 };

@@ -1,6 +1,11 @@
 const libExpress = require("express");
-const { validateRequestBody, getFormattedDate } = require("../utils");
-const { addEnrollmentTransaction, getEnrollmentTransactionById, updateEnrollmentTransactionInvoiceById } = require("../db/enrollment_transactions");
+const { validateRequestBody, getFormattedDate, getDateByInterval, getDifferenceOfDates } = require("../utils");
+const {
+    addEnrollmentTransaction,
+    getEnrollmentTransactionById,
+    updateEnrollmentTransactionInvoiceById,
+    getEnrollmentTransactionsForInterval,
+} = require("../db/enrollment_transactions");
 const { readConfig } = require("../libs/config");
 const { requestService } = require("sahas_utils");
 const router = libExpress.Router();
@@ -10,9 +15,34 @@ const { getEnrollmentById } = require("../db/enrollments");
 const { getUserById } = require("../db/users");
 const { logger } = require("sahas_utils");
 
-router.get("/", () => {
-    res.status(200).json([]);
-});
+router.get(
+    "/",
+    (req, res, next) => {
+        if (!req.query.start_date || !req.query.end_date) {
+            return res.status(400).json("Missing Start Date or End Date Range");
+        }
+
+        const transactionsPeriod = getDifferenceOfDates({ start_date: req.query.start_date, end_date: req.query.end_date });
+
+        if (transactionsPeriod > 180 || transactionsPeriod < 0) {
+            return res.status(400).json("Date Range is Either Negative or Too Big");
+        }
+        next();
+    },
+    async (req, res) => {
+        const enrollmentTranscations = await getEnrollmentTransactionsForInterval({
+            start_date: req.query.start_date,
+            end_date: req.query.start_date,
+            order_by: req.query?.order_by,
+        });
+
+        for (const enrollmentTranscation of enrollmentTranscations) {
+            enrollmentTranscation.courses = await getEnrollmentCoursesByEnrollmentId({ enrollment_id: enrollmentTranscation?.enrollment_id });
+        }
+
+        res.status(200).json(enrollmentTranscations);
+    }
+);
 
 //tested
 router.post("/", async (req, res) => {

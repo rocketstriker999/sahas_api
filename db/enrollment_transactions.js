@@ -39,4 +39,18 @@ function getEnrollmentTransactionById({ id }) {
         .catch((error) => logger.error(`getEnrollmentTransactionById: ${error}`));
 }
 
-module.exports = { addEnrollmentTransaction, getTransactionsByEnrollmentId, getEnrollmentTransactionById, updateEnrollmentTransactionInvoiceById };
+//freeze
+function getEnrollmentTransactionsForInterval({ start_date, end_date, order_by = "DESC" }) {
+    return executeSQLQueryParameterized(
+        "SELECT ENROLLMENT_TRANSACTIONS.id,ENROLLMENT_TRANSACTIONS.enrollment_id ENROLLMENT_TRANSACTIONS.amount, ENROLLMENT_TRANSACTIONS.created_on, USERS.full_name FROM ENROLLMENT_TRANSACTIONS INNER JOIN ENROLLMENTS ON ENROLLMENT_TRANSACTIONS.enrollment_id = ENROLLMENTS.id INNER JOIN USERS ON ENROLLMENTS.user_id = USERS.id WHERE ENROLLMENT_TRANSACTIONS.created_on BETWEEN ? AND ? ORDER BY ENROLLMENT_TRANSACTIONS.created_on ?",
+        [start_date, end_date, order_by]
+    ).catch((error) => logger.error(`getEnrollmentTransactionsForInterval: ${error}`));
+}
+
+module.exports = {
+    addEnrollmentTransaction,
+    getTransactionsByEnrollmentId,
+    getEnrollmentTransactionById,
+    updateEnrollmentTransactionInvoiceById,
+    getEnrollmentTransactionsForInterval,
+};

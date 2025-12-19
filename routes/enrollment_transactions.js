@@ -19,13 +19,13 @@ router.get(
     "/",
     (req, res, next) => {
         if (!req.query.start_date || !req.query.end_date) {
-            return res.status(400).json("Missing Start Date or End Date Range");
+            return res.status(400).json({ error: "Missing Start Date or End Date Range" });
         }
 
         const transactionsPeriod = getDifferenceOfDates({ start_date: req.query.start_date, end_date: req.query.end_date });
 
         if (transactionsPeriod > 180 || transactionsPeriod < 0) {
-            return res.status(400).json("Date Range is Either Negative or Too Big");
+            return res.status(400).json({ error: "Date Range is Either Negative or Too Big" });
         }
         next();
     },

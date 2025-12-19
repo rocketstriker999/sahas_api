@@ -10,6 +10,10 @@ const { getEnrollmentById } = require("../db/enrollments");
 const { getUserById } = require("../db/users");
 const { logger } = require("sahas_utils");
 
+router.get("/", () => {
+    res.status(200).json([]);
+});
+
 //tested
 router.post("/", async (req, res) => {
     const requiredBodyFields = ["enrollment_id", "amount", "note", "type"];

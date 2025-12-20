@@ -11,10 +11,11 @@ const { requestService } = require("sahas_utils");
 const router = libExpress.Router();
 const libNumbersToWords = require("number-to-words");
 const { getEnrollmentCoursesByEnrollmentId } = require("../db/enrollment_courses");
-const { getEnrollmentById } = require("../db/enrollments");
+const { getEnrollmentById, getEnrollmentsAmountByEnrollmentIds } = require("../db/enrollments");
 const { getUserById } = require("../db/users");
 const { logger } = require("sahas_utils");
 
+//tested
 router.get(
     "/",
     (req, res, next) => {
@@ -41,6 +42,48 @@ router.get(
         }
 
         res.status(200).json(enrollmentTranscations);
+    }
+);
+
+router.get(
+    "/summary",
+    (req, res, next) => {
+        if (!req.query.start_date || !req.query.end_date) {
+            return res.status(400).json({ error: "Missing Start Date or End Date Range" });
+        }
+
+        const transactionsPeriod = getDifferenceOfDates({ start_date: req.query.start_date, end_date: req.query.end_date });
+
+        if (transactionsPeriod > 180 || transactionsPeriod < 0) {
+            return res.status(400).json({ error: "Date Range is Either Negative or Too Big" });
+        }
+        next();
+    },
+    async (req, res) => {
+        const enrollmentTranscations = await getEnrollmentTransactionsForInterval({
+            start_date: getFormattedDate({ date: req.query.start_date, format: "YYYY-MM-DD HH:mm:ss" }),
+            end_date: getFormattedDate({ date: req.query.end_date, format: "YYYY-MM-DD HH:mm:ss" }),
+            order_by: req.query?.order_by,
+        });
+
+        const enrollmentIds = [];
+
+        let collection = 0;
+
+        for (const enrollmentTranscation of enrollmentTranscations) {
+            enrollmentIds.push(enrollmentTranscation?.enrollment_id);
+            collection = collection + enrollmentTranscation?.amount;
+        }
+
+        const total = Number(await getEnrollmentsAmountByEnrollmentIds({ enrollment_ids: enrollmentIds }));
+
+        res.status(200).json({
+            count_enrollments: new Set(enrollmentIds),
+            count_transactions: enrollmentTranscations?.length,
+            total,
+            collection,
+            due: total - collection,
+        });
     }
 );
 

@@ -13,6 +13,16 @@ function getEnrollmentsByUserId({ user_id }) {
 }
 
 //freeze
+function getEnrollmentsAmountByEnrollmentIds({ enrollment_ids }) {
+    return executeSQLQueryParameterized(`SELECT SUM(amount) as total FROM ENROLLMENTS where id in (${enrollment_ids.join(",")})`)
+        .then((results) => (results.length > 0 ? Number(results[0]?.total) : 0))
+        .catch((error) => {
+            logger.error(`getEnrollmentsByUserId: ${error}`);
+            return [];
+        });
+}
+
+//freeze
 function updateEnrollmentById({ id, start_date, end_date, on_site_access = false, digital_access = false }) {
     return executeSQLQueryParameterized("UPDATE ENROLLMENTS SET start_date=?,end_date=?,on_site_access=?,digital_access=? WHERE id=?", [
         start_date,
@@ -62,4 +72,11 @@ function getEnrollmentByCourseIdAndUserId({ user_id, course_id }) {
         .catch((error) => logger.error(`getEnrollmentByCourseIdAndUserId: ${error}`));
 }
 
-module.exports = { getEnrollmentsByUserId, updateEnrollmentById, getEnrollmentById, addEnrollment, getEnrollmentByCourseIdAndUserId };
+module.exports = {
+    getEnrollmentsByUserId,
+    getEnrollmentsAmountByEnrollmentIds,
+    updateEnrollmentById,
+    getEnrollmentById,
+    addEnrollment,
+    getEnrollmentByCourseIdAndUserId,
+};

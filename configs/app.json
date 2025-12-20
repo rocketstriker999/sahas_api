@@ -7,7 +7,6 @@
         "otp_validity": 5,
         "token_validity": 30
     },
-
     "payment": {
         "cgst": 9,
         "sgst": 9

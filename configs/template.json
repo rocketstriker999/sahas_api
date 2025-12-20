@@ -1,6 +1,7 @@
 {
     "global": {
-        "paymentTypes": ["CASH", "NET_BANKING", "UPI", "CHEQUE"]
+        "paymentTypes": ["CASH", "NET_BANKING", "UPI", "CHEQUE"],
+        "enrollmentHandlers": ["SAHAS INSTITUTE", "SAHAS INSTITUTE PVT LTD", "DEEP INSTITUTE"]
     },
     "dash_board": {
         "carousel_images": []

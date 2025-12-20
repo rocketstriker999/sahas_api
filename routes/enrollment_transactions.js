@@ -72,13 +72,13 @@ router.get(
 
         for (const enrollmentTranscation of enrollmentTranscations) {
             enrollmentIds.push(enrollmentTranscation?.enrollment_id);
-            collection = collection + enrollmentTranscation?.amount;
+            collection += Number(enrollmentTranscation?.amount);
         }
 
         const total = Number(await getEnrollmentsAmountByEnrollmentIds({ enrollment_ids: enrollmentIds }));
 
         res.status(200).json({
-            count_enrollments: new Set(enrollmentIds),
+            count_enrollments: new Set(enrollmentIds)?.length,
             count_transactions: enrollmentTranscations?.length,
             total,
             collection,

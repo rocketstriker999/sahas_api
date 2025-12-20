@@ -78,8 +78,8 @@ router.get(
         const total = Number(await getEnrollmentsAmountByEnrollmentIds({ enrollment_ids: enrollmentIds }));
 
         res.status(200).json({
-            count_enrollments: new Set(enrollmentIds)?.length,
-            count_transactions: enrollmentTranscations?.length,
+            enrollments: new Set(enrollmentIds)?.size,
+            transactions: enrollmentTranscations?.length,
             total,
             collection,
             due: total - collection,

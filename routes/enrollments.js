@@ -21,7 +21,7 @@ router.patch("/", async (req, res) => {
 
 //tested
 router.post("/", async (req, res) => {
-    const requiredBodyFields = ["courses", "end_date", "start_date", "user_id", "amount"];
+    const requiredBodyFields = ["courses", "handler", "end_date", "start_date", "user_id", "amount"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 

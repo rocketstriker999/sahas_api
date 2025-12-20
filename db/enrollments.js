@@ -34,10 +34,19 @@ function getEnrollmentById({ id }) {
 }
 
 //freeze
-function addEnrollment({ user_id, start_date, end_date, amount, on_site_access = false, digital_access = false, created_by }) {
+function addEnrollment({
+    user_id,
+    start_date,
+    end_date,
+    amount,
+    on_site_access = false,
+    digital_access = false,
+    created_by,
+    handler = "SAHAS INSTITUTE PVT LTD",
+}) {
     return executeSQLQueryParameterized(
-        "INSERT INTO ENROLLMENTS(user_id,start_date,end_date,amount,on_site_access,digital_access,created_by) VALUES(?,?,?,?,?,?,?)",
-        [user_id, start_date, end_date, amount, on_site_access, digital_access, created_by]
+        "INSERT INTO ENROLLMENTS(user_id,start_date,end_date,amount,on_site_access,digital_access,created_by,handler) VALUES(?,?,?,?,?,?,?,?)",
+        [user_id, start_date, end_date, amount, on_site_access, digital_access, created_by, handler]
     )
         .then((result) => result.insertId)
         .catch((error) => logger.error(`addEnrollment: ${error}`));

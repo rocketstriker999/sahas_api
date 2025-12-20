@@ -42,7 +42,7 @@ function getEnrollmentTransactionById({ id }) {
 //freeze
 function getEnrollmentTransactionsForInterval({ start_date, end_date, order_by = "DESC" }) {
     return executeSQLQueryParameterized(
-        `SELECT ENROLLMENT_TRANSACTIONS.id,ENROLLMENT_TRANSACTIONS.enrollment_id,ENROLLMENTS.user_id,ENROLLMENTS.handler, ENROLLMENT_TRANSACTIONS.amount, ENROLLMENT_TRANSACTIONS.created_on, USERS.full_name FROM ENROLLMENT_TRANSACTIONS LEFT JOIN ENROLLMENTS ON ENROLLMENT_TRANSACTIONS.enrollment_id = ENROLLMENTS.id LEFT JOIN USERS ON ENROLLMENTS.user_id = USERS.id WHERE ENROLLMENT_TRANSACTIONS.created_on BETWEEN '?' AND '?' ORDER BY ENROLLMENT_TRANSACTIONS.created_on ${order_by}`,
+        `SELECT ENROLLMENT_TRANSACTIONS.id,ENROLLMENT_TRANSACTIONS.enrollment_id,ENROLLMENTS.user_id,ENROLLMENTS.handler, ENROLLMENT_TRANSACTIONS.amount, ENROLLMENT_TRANSACTIONS.created_on, USERS.full_name FROM ENROLLMENT_TRANSACTIONS LEFT JOIN ENROLLMENTS ON ENROLLMENT_TRANSACTIONS.enrollment_id = ENROLLMENTS.id LEFT JOIN USERS ON ENROLLMENTS.user_id = USERS.id WHERE ENROLLMENT_TRANSACTIONS.created_on BETWEEN ? AND ? ORDER BY ENROLLMENT_TRANSACTIONS.created_on ${order_by}`,
         [start_date, end_date]
     ).catch((error) => logger.error(`getEnrollmentTransactionsForInterval: ${error}`));
 }

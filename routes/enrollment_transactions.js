@@ -31,8 +31,8 @@ router.get(
     },
     async (req, res) => {
         const enrollmentTranscations = await getEnrollmentTransactionsForInterval({
-            start_date: getFormattedDate({ date: req.query.start_date }),
-            end_date: getFormattedDate({ date: req.query.end_date }),
+            start_date: getFormattedDate({ date: req.query.start_date, format: "YYYY-MM-DD HH:mm:ss" }),
+            end_date: getFormattedDate({ date: req.query.end_date, format: "YYYY-MM-DD HH:mm:ss" }),
             order_by: req.query?.order_by,
         });
 

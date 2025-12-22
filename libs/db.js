@@ -14,9 +14,6 @@ const dbConnectionPool = mysql.createPool({
     dateStrings: true,
 });
 
-//Users table modification -  added updated_at column
-//is_allowed_to_login
-
 async function generateDBTables() {
     const createUserTableQuery = [
         `CREATE TABLE IF NOT EXISTS USERS (

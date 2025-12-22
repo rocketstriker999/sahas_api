@@ -123,7 +123,7 @@ async function generateDBTables() {
             on_site_access BOOLEAN NOT NULL DEFAULT TRUE,
             digital_access BOOLEAN NOT NULL DEFAULT TRUE,
             handler  VARCHAR(256) NOT NULL,
-            created_by INT NOT NULL,
+            created_by INT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
           )
@@ -132,7 +132,7 @@ async function generateDBTables() {
             id INT AUTO_INCREMENT PRIMARY KEY,
             enrollment_id INT NOT NULL,
             course_id INT NOT NULL,
-            created_by INT NOT NULL,
+            created_by INT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP
           )`,
         `CREATE TABLE IF NOT EXISTS ENROLLMENT_TRANSACTIONS (
@@ -148,7 +148,7 @@ async function generateDBTables() {
             type VARCHAR(16) NOT NULL,
             image VARCHAR(64) NULL UNIQUE,
             invoice VARCHAR(64) NULL,
-            created_by INT NOT NULL,
+            created_by INT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP
         )`,
         `CREATE TABLE IF NOT EXISTS COURSE_CATEGORIES(
@@ -246,6 +246,7 @@ async function generateDBTables() {
             cdn_url VARCHAR(96) NULL UNIQUE,
             type VARCHAR(16) NOT NULL,
             external_url VARCHAR(128) NULL,
+            downloadable BOOLEAN NOT NULL DEFAULT FALSE,
             view_index INT NOT NULL DEFAULT 0,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             UNIQUE KEY unique_chapter_type_title (chapter_id,type, title)

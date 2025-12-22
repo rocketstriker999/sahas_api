@@ -133,7 +133,8 @@ async function generateDBTables() {
             enrollment_id INT NOT NULL,
             course_id INT NOT NULL,
             created_by INT NULL,
-            created_on DATETIME DEFAULT CURRENT_TIMESTAMP
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE KEY unique_user_course (enrollment_id, course_id)
           )`,
         `CREATE TABLE IF NOT EXISTS ENROLLMENT_TRANSACTIONS (
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -146,15 +147,15 @@ async function generateDBTables() {
             discount DECIMAL(8, 2) DEFAULT 0,
             note VARCHAR(256) NOT NULL,
             type VARCHAR(16) NOT NULL,
-            image VARCHAR(64) NULL UNIQUE,
-            invoice VARCHAR(64) NULL,
+            image VARCHAR(128) NULL UNIQUE,
+            invoice VARCHAR(128) NULL,
             created_by INT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP
         )`,
         `CREATE TABLE IF NOT EXISTS COURSE_CATEGORIES(
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(96) NOT NULL UNIQUE,
-            image VARCHAR(64) NULL,
+            image VARCHAR(128) NULL,
             view_index INT NOT NULL DEFAULT 0,
             active BOOLEAN NOT NULL DEFAULT TRUE,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -164,9 +165,9 @@ async function generateDBTables() {
             category_id INT NOT NULL,
             title VARCHAR(96) NOT NULL,
             description VARCHAR(256) NOT NULL,
-            image VARCHAR(64) NULL,
+            image VARCHAR(128) NULL,
             fees DECIMAL(8, 2) DEFAULT 0,
-            whatsapp_group VARCHAR(64) NULL,
+            whatsapp_group VARCHAR(128) NULL,
             validity INT NOT NULL DEFAULT 365,
             view_index INT NOT NULL DEFAULT 0,
             active BOOLEAN NOT NULL DEFAULT TRUE,
@@ -206,7 +207,7 @@ async function generateDBTables() {
             quiz_attainable BOOLEAN NOT NULL DEFAULT TRUE,
             quiz_time INT DEFAULT NULL,
             quiz_questions INT DEFAULT NULL,
-            quiz_pool VARCHAR(64) NULL UNIQUE, 
+            quiz_pool VARCHAR(128) NULL UNIQUE, 
             view_index INT NOT NULL DEFAULT 0,
             active BOOLEAN NOT NULL DEFAULT TRUE,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

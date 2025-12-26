@@ -112,7 +112,7 @@ const routers = {
     },
     "/data-dump": {
         middlewares: [logRequest],
-        router: require("./routes/role_authorities"),
+        router: require("./routes/data_dump"),
     },
 };
 

@@ -111,7 +111,7 @@ const routers = {
         router: require("./routes/role_authorities"),
     },
     "/data-dump": {
-        middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
+        middlewares: [logRequest],
         router: require("./routes/role_authorities"),
     },
 };

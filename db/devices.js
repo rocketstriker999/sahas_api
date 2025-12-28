@@ -23,6 +23,12 @@ function getActiveDevicesByUserId(userId) {
         .catch((error) => logger.error(`getActiveDevicesByUserId: ${error}`));
 }
 
+function getDevicesByUserId(userId) {
+    return executeSQLQueryParameterized(`SELECT * FROM USER_DEVICES WHERE user_id=?`, [userId])
+        .then((result) => (result.length ? result : false))
+        .catch((error) => logger.error(`getDevicesByUserId: ${error}`));
+}
+
 function addInActiveUserDevice(userId, fingerPrint) {
     return executeSQLQueryParameterized(`INSERT  INTO USER_DEVICES(user_id,finger_print,active)  VALUES (?,?,FALSE)`, [userId, fingerPrint]).catch((error) => {
         logger.error(`addInActiveUserDevice: ${error}`);
@@ -35,4 +41,5 @@ module.exports = {
     userDeviceExist,
     addInActiveUserDevice,
     getActiveDevicesByUserId,
+    getDevicesByUserId,
 };

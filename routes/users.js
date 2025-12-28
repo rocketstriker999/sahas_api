@@ -16,6 +16,7 @@ const { getEnrollmentsByUserId } = require("../db/enrollments");
 const { getWalletTransactionsByUserId } = require("../db/wallet_transactions");
 const { getUserRolesByUserId } = require("../db/user_roles");
 const { getEnrollmentCoursesByUserId } = require("../db/enrollment_courses");
+const { getActiveDevicesByUserId, getDevicesByUserId } = require("../db/devices");
 
 const router = libExpress.Router();
 
@@ -116,9 +117,16 @@ router.get("/:id/enrollments", async (req, res) => {
         return res.status(400).json({ error: "Missing User Id" });
     }
 
-    const enrollments = await getEnrollmentsByUserId({ user_id: req.params.id });
+    return res.status(200).json(await getEnrollmentsByUserId({ user_id: req.params.id }));
+});
 
-    return res.status(200).json(enrollments);
+//tested
+router.get("/:id/devices", async (req, res) => {
+    if (!req.params.id) {
+        return res.status(400).json({ error: "Missing User Id" });
+    }
+
+    return res.status(200).json(await getDevicesByUserId({ user_id: req.params.id }));
 });
 
 //tested

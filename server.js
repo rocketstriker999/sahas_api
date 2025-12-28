@@ -6,6 +6,7 @@ const { ROUTE_NOT_FOUND } = require("./constants");
 //Required Middlewares #3
 const requiresDeviceFingerPrint = require("./middlewares/requires_device_finger_print");
 const requiresNoMaintenance = require("./middlewares/requires_no_maintenance");
+const requiresActiveDevice = require("./middlewares/requires_active_device");
 
 //Common Middlewares
 const parseAuthenticationToken = require("./middlewares/parse_authentication_token");
@@ -51,7 +52,10 @@ const routers = {
     },
     "/chapters": { middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest], router: require("./routes/chapters") },
 
-    "/media": { middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest], router: require("./routes/media") },
+    "/media": {
+        middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, requiresActiveDevice, logRequest],
+        router: require("./routes/media"),
+    },
 
     "/filters": { middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest], router: require("./routes/filters") },
 
@@ -109,10 +113,6 @@ const routers = {
     "/role-authorities": {
         middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
         router: require("./routes/role_authorities"),
-    },
-    "/data-dump": {
-        middlewares: [logRequest],
-        router: require("./routes/data_dump"),
     },
 };
 

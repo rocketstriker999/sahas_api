@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const { validateRequestBody, getFormattedDate, getDateByInterval, getDifferenceOfDates } = require("../utils");
+const { getFormattedDate, getDateByInterval, getDifferenceOfDates } = require("../utils");
 const {
     addEnrollmentTransaction,
     getEnrollmentTransactionById,
@@ -14,6 +14,7 @@ const { getEnrollmentCoursesByEnrollmentId } = require("../db/enrollment_courses
 const { getEnrollmentById, getEnrollmentsAmountByEnrollmentIds } = require("../db/enrollments");
 const { getUserById } = require("../db/users");
 const { logger } = require("sahas_utils");
+const { validateRequestBody } = require("sahas_utils");
 
 //tested
 router.get(

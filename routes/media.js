@@ -2,6 +2,7 @@ const libExpress = require("express");
 const { deleteInquiryNoteById } = require("../db/inquiry_notes");
 const { validateRequestBody } = require("sahas_utils");
 const { addMedia, getMediaById, deleteMediaById, updateMediaViewIndexById, updateMediaById, getMediaByChapterIdTypeAndTitle } = require("../db/media");
+const requires_active_device = require("../middlewares/requires_active_device");
 
 const router = libExpress.Router();
 
@@ -64,19 +65,12 @@ router.delete("/:id", async (req, res) => {
 });
 
 //tested
-router.get(
-    "/:id",
-    (req, res, next) => {
-        //check if user has access to this media id - joining chapter , subject and course -> with subscription -> add middleware
-        next();
-    },
-    async (req, res) => {
-        if (!req.params.id) {
-            return res.status(400).json({ error: "Missing Media Id" });
-        }
-
-        res.status(200).json(await getMediaById({ id: req.params.id }));
+router.get("/:id", requires_active_device, async (req, res) => {
+    if (!req.params.id) {
+        return res.status(400).json({ error: "Missing Media Id" });
     }
-);
+
+    res.status(200).json(await getMediaById({ id: req.params.id }));
+});
 
 module.exports = router;

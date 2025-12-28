@@ -53,7 +53,7 @@ const routers = {
     "/chapters": { middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest], router: require("./routes/chapters") },
 
     "/media": {
-        middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, requiresActiveDevice, logRequest],
+        middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
         router: require("./routes/media"),
     },
 

@@ -6,7 +6,7 @@ const libPath = require("path");
 function writeConfig(configName, configuration) {
     return new Promise((resolve, reject) => {
         libFs.writeFile(
-            libPath.join(process.cwd(), process.env.DIR_CONFIGS, configName.concat(".json")),
+            libPath.join(process.cwd(), process.env.DIRECTORY_CONFIGS, configName.concat(".json")),
             JSON.stringify(configuration, null, 2),
             "utf8",
             (error) => {
@@ -23,7 +23,7 @@ function writeConfig(configName, configuration) {
 //read a perticular configuration
 function readConfig(configName) {
     return new Promise((resolve, reject) => {
-        libFs.readFile(libPath.join(process.cwd(), process.env.DIR_CONFIGS, configName.concat(".json")), "utf8", (error, jsonData) => {
+        libFs.readFile(libPath.join(process.cwd(), process.env.DIRECTORY_CONFIGS, configName.concat(".json")), "utf8", (error, jsonData) => {
             if (error) {
                 reject(error); // Reject the promise if there's an error reading the file
             } else {

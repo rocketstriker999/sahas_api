@@ -1,6 +1,6 @@
 const libExpress = require("express");
 const { updateChapterTypeViewIndexById, deleteChapterTypeById, addChapterType, getChapterTypeById, updateChapterTypeById } = require("../db/chapter_types");
-const { validateRequestBody } = require("../utils");
+const { validateRequestBody } = require("sahas_utils");
 
 const router = libExpress.Router();
 

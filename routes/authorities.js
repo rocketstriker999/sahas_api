@@ -1,7 +1,7 @@
 const libExpress = require("express");
 const { deleteAuthorityById, addAuthority, getAuthorityById } = require("../db/authorities");
 const { deleteRoleAuthoritiesByAuthorityId } = require("../db/role_authorities");
-const { validateRequestBody } = require("../utils");
+const { validateRequestBody } = require("sahas_utils");
 
 const router = libExpress.Router();
 

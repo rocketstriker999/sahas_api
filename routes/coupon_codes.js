@@ -1,6 +1,6 @@
 const libExpress = require("express");
 const { getAllCouponCodes, deleteCouponCodeById, addCouponCode, getCouponCodeById, updateCouponCodeById } = require("../db/coupon_codes");
-const { validateRequestBody } = require("../utils");
+const { validateRequestBody } = require("sahas_utils");
 const { getCouponCodeCoursesByCouponCodeId } = require("../db/coupon_code_courses");
 const router = libExpress.Router();
 

@@ -1,7 +1,7 @@
 const libExpress = require("express");
 
 const { deleteUserRoleById, addUserRole, getUserRoleById } = require("../db/user_roles");
-const { validateRequestBody } = require("../utils");
+const { validateRequestBody } = require("sahas_utils");
 
 const router = libExpress.Router();
 

@@ -1,6 +1,6 @@
 const libExpress = require("express");
 const { deleteInquiryNoteById } = require("../db/inquiry_notes");
-const { validateRequestBody } = require("../utils");
+const { validateRequestBody } = require("sahas_utils");
 const { addMedia, getMediaById, deleteMediaById, updateMediaViewIndexById, updateMediaById, getMediaByChapterIdTypeAndTitle } = require("../db/media");
 
 const router = libExpress.Router();

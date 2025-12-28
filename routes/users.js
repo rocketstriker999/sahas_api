@@ -10,7 +10,7 @@ const {
     patchUserPhoneById,
 } = require("../db/users");
 const { getInquiriesByUserId } = require("../db/inquiries");
-const { validateRequestBody } = require("../utils");
+const { validateRequestBody } = require("sahas_utils");
 const { getEnrollmentsByUserId } = require("../db/enrollments");
 
 const { getWalletTransactionsByUserId } = require("../db/wallet_transactions");

@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const { validateRequestBody } = require("../utils");
+const { validateRequestBody } = require("sahas_utils");
 const { logger } = require("sahas_utils");
 const { readConfig } = require("../libs/config");
 

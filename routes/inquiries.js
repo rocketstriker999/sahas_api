@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const { validateRequestBody } = require("../utils");
+const { validateRequestBody } = require("sahas_utils");
 const { deleteInquiryById, updateInquiryStatusById, addInquiry, getInquiryById, updateInquiryById } = require("../db/inquiries");
 const { deleteInquiryNotesByInquiryId, getInquiryNotesByInquiryId, addInquiryNote, deleteInquiryNoteByInquiryNoteId } = require("../db/inquiry_notes");
 

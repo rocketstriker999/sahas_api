@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const { validateRequestBody } = require("../utils");
+const { validateRequestBody } = require("sahas_utils");
 const { addWalletTransaction, getWalletTransactionById } = require("../db/wallet_transactions");
 
 const router = libExpress.Router();

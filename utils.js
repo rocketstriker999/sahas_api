@@ -67,33 +67,6 @@ async function requestPayUVerification(transaction, command = process.env.TRANSA
     return true;
 }
 
-function validateRequestBody(body, requiredFields) {
-    let missingRequestBodyFields = new Set([...Object.keys(body), ...requiredFields]);
-
-    return {
-        validatedRequestBody: Object.keys(body).reduce((obj, key) => {
-            let value = body[key];
-            missingRequestBodyFields.delete(key);
-
-            if (typeof value === "string") {
-                value = value.trim();
-            }
-
-            if (typeof value === "string" || Array.isArray(value)) {
-                if ((value?.length == 0 || body[key] === undefined || body[key] === null) && requiredFields?.includes(key)) {
-                    missingRequestBodyFields?.push(key);
-                }
-            }
-
-            obj[key] = value;
-
-            return obj;
-        }, {}),
-        isRequestBodyValid: missingRequestBodyFields?.size === 0,
-        missingRequestBodyFields: Array.from(missingRequestBodyFields),
-    };
-}
-
 async function verifyPaymentGatewayPayLoadStatus(paymentGateWayPayLoad) {
     const { paymentGateWay: { verificationAPI, merchantKey, merchantSalt } = {} } = await readConfig("app");
 
@@ -128,7 +101,6 @@ module.exports = {
     requestPayUVerification,
     generateSHA512,
     getDeviceDescriptionByFingerPrint,
-    validateRequestBody,
     verifyPaymentGatewayPayLoadStatus,
     getDateByInterval,
     getFormattedDate,

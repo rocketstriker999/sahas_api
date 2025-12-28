@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const { validateRequestBody } = require("../utils");
+const { validateRequestBody } = require("sahas_utils");
 const {
     addCouponCodeCourse,
     getCouponCodeCoursesByIds,

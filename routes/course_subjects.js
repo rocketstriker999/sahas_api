@@ -1,6 +1,6 @@
 const libExpress = require("express");
 const { updateCourseSubjectViewIndexById, deleteCourseSubjectById, addCourseSubject, getCourseSubjectsByCourseId } = require("../db/course_subjects");
-const { validateRequestBody } = require("../utils");
+const { validateRequestBody } = require("sahas_utils");
 
 const router = libExpress.Router();
 

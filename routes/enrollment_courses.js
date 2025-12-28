@@ -5,7 +5,7 @@ const {
     getEnrollmentCourseById,
     deleteEnrollmentCourseById,
 } = require("../db/enrollment_courses");
-const { validateRequestBody } = require("../utils");
+const { validateRequestBody } = require("sahas_utils");
 const router = libExpress.Router();
 
 //tested

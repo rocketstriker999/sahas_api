@@ -1,6 +1,6 @@
 const libExpress = require("express");
 const { updateEnrollmentById, getEnrollmentById, addEnrollment } = require("../db/enrollments");
-const { validateRequestBody } = require("../utils");
+const { validateRequestBody } = require("sahas_utils");
 const { addEnrollmentCourse, getEnrollmentCoursesByEnrollmentId } = require("../db/enrollment_courses");
 const { getTransactionsByEnrollmentId } = require("../db/enrollment_transactions");
 const router = libExpress.Router();

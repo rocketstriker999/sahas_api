@@ -23,8 +23,8 @@ function getActiveDevicesByUserId(userId) {
         .catch((error) => logger.error(`getActiveDevicesByUserId: ${error}`));
 }
 
-function getDevicesByUserId(userId) {
-    return executeSQLQueryParameterized(`SELECT * FROM USER_DEVICES WHERE user_id=?`, [userId])
+function getDevicesByUserId({ user_id }) {
+    return executeSQLQueryParameterized(`SELECT * FROM USER_DEVICES WHERE user_id=?`, [user_id])
         .then((result) => (result.length ? result : false))
         .catch((error) => logger.error(`getDevicesByUserId: ${error}`));
 }

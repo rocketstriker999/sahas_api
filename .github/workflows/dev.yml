@@ -4,7 +4,6 @@ on:
     push:
         branches:
             - dev
-            - dev_new_layout
 
 jobs:
     deploy:

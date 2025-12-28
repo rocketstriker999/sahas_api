@@ -4,17 +4,17 @@ on:
     push:
         branches:
             - main
-    schedule:
-        - cron: "30 11 * * *"
-env:
-    DEPLOYMENT_DIRECTORY: "/var/www/sites/prod.sahasinstitute.com/"
-    REPO: "sahas_api"
-    BRANCH: "main"
-    ENTRY: "app.js"
 
 jobs:
     deploy:
         runs-on: ubuntu-latest
+
+        env:
+            DEPLOYMENT_DIRECTORY: "/var/www/sites/prod.sahasinstitute.com/"
+            REPO: "sahas_api"
+            BRANCH: ${{ github.ref_name }}
+            ENTRY: "app.js"
+
         steps:
             - name: Preparing SSH
               run: sudo apt-get install -y sshpass
@@ -31,9 +31,10 @@ jobs:
                         echo "Terminating ${{ env.REPO }} - pid $pid"
                         kill -9 $pid
                       fi
+                      echo "Fetching Changes..."
                       git stash
-                      git checkout "${{env.BRANCH}}"
                       git fetch origin "${{env.BRANCH}}"
+                      git checkout "${{env.BRANCH}}"
                       git pull origin "${{env.BRANCH}}" --rebase
                     else
                       echo "Fetching Source - ${{ env.REPO }}"

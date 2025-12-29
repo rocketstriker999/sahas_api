@@ -12,5 +12,5 @@ module.exports = {
     CACHE_KEY_SUBJECTS: "CACHE_KEY_SUBJECTS",
     CACHE_KEY_PAYMENT_GATEWAY_PAYLOADS: "CACHE_KEY_PAYMENT_GATEWAY_PAYLOADS",
 
-    EMAIL_NO_REPLY: "no-reply@sahasinstitute.com",
+    EMAIL_NO_REPLY: "otp-mailer-1@sahasinstitute.com",
 };

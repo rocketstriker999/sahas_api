@@ -3,12 +3,11 @@ const { requestService } = require("sahas_utils");
 
 const { getUserByEmail, addUserByEmail, getUserById, getAuthoritiesByRoleIds } = require("../db/users");
 const libValidator = require("validator");
-const { generateToken } = require("../utils");
+const { generateToken, getRandomSMTPEmail } = require("../utils");
 const { addInactiveToken, getTokenByOTP, activateToken } = require("../db/authentication_tokens");
 const { readConfig } = require("../libs/config");
 const { logger } = require("sahas_utils");
 const { getUserRolesByUserId } = require("../db/user_roles");
-const { EMAIL_NO_REPLY } = require("../constants");
 
 const router = libExpress.Router();
 
@@ -70,7 +69,7 @@ router.post("/", async (req, res) => {
         requestMethod: "POST",
         parseResponseBody: false,
         requestPostBody: {
-            from: EMAIL_NO_REPLY,
+            from: getRandomSMTPEmail(),
             to: req.body.email,
             subject: "Verification OTP",
             template: "otp",

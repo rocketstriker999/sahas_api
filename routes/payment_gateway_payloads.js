@@ -1,6 +1,6 @@
 const libExpress = require("express");
 const { getCourseById } = require("../db/courses");
-const { verifyPaymentGatewayPayLoadStatus, getDateByInterval, getFormattedDate } = require("../utils");
+const { verifyPaymentGatewayPayLoadStatus, getDateByInterval, getFormattedDate, getRandomSMTPEmail } = require("../utils");
 const { requestService } = require("sahas_utils");
 const { validateRequestBody } = require("sahas_utils");
 
@@ -16,7 +16,6 @@ const { addEnrollmentTransaction, updateEnrollmentTransactionInvoiceById } = req
 const { addWalletTransaction, getWalletBalanceByUserId } = require("../db/wallet_transactions");
 const { getUserByEmail } = require("../db/users");
 const libNumbersToWords = require("number-to-words");
-const { EMAIL_NO_REPLY } = require("../constants");
 
 const router = libExpress.Router();
 
@@ -221,7 +220,7 @@ router.get("/:id", async (req, res) => {
                     requestMethod: "POST",
                     parseResponseBody: false,
                     requestPostBody: {
-                        from: EMAIL_NO_REPLY,
+                        from: getRandomSMTPEmail(),
                         to: paymentGateWayPayLoad?.transaction.distributor_user?.email,
                         subject: "Coupon Code Used",
                         template: "commision",
@@ -298,7 +297,7 @@ router.get("/:id", async (req, res) => {
                 requestMethod: "POST",
                 parseResponseBody: false,
                 requestPostBody: {
-                    from: EMAIL_NO_REPLY,
+                    from: getRandomSMTPEmail(),
                     to: paymentGateWayPayLoad?.user?.email,
                     subject: "Course Enrollment Transaction",
                     template: "enrollment",

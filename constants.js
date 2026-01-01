@@ -22,5 +22,9 @@ module.exports = {
         "otp-master-4@sahasinstitute.com",
         "otp-master-5@sahasinstitute.com",
         "otp-master-6@sahasinstitute.com",
+        "otp-master-7@sahasinstitute.com",
+        "otp-master-8@sahasinstitute.com",
+        "otp-master-9@sahasinstitute.com",
+        "otp-master-10@sahasinstitute.com",
     ],
 };

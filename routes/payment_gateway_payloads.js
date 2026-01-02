@@ -1,6 +1,6 @@
 const libExpress = require("express");
 const { getCourseById } = require("../db/courses");
-const { verifyPaymentGatewayPayLoadStatus, getDateByInterval, getFormattedDate, getRandomSMTPEmail } = require("../utils");
+const { verifyPaymentGatewayPayLoadStatus, getDateByInterval, getFormattedDate } = require("../utils");
 const { requestService } = require("sahas_utils");
 const { validateRequestBody } = require("sahas_utils");
 

@@ -3,7 +3,7 @@ const { requestService } = require("sahas_utils");
 
 const { getUserByEmail, addUserByEmail, getUserById, getAuthoritiesByRoleIds } = require("../db/users");
 const libValidator = require("validator");
-const { generateToken, getRandomSMTPEmail } = require("../utils");
+const { generateToken } = require("../utils");
 const { addInactiveToken, getTokenByOTP, activateToken } = require("../db/authentication_tokens");
 const { readConfig } = require("../libs/config");
 const { logger } = require("sahas_utils");

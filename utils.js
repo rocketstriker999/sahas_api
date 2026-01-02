@@ -105,5 +105,4 @@ module.exports = {
     getDateByInterval,
     getFormattedDate,
     getDifferenceOfDates,
-    getRandomSMTPEmail,
 };

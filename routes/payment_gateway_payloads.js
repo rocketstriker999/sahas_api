@@ -43,6 +43,8 @@ router.post("/", async (req, res) => {
                 successURL: redirectionHost.concat(resultAPI),
                 failureURL: redirectionHost.concat(resultAPI),
                 amount: Number(course.fees),
+                discount: 0,
+                couponCode: validatedRequestBody?.couponCode || null,
             },
             user: {
                 email: req.user.email,
@@ -53,11 +55,6 @@ router.post("/", async (req, res) => {
             },
             product: course.title,
         };
-
-        //calculate coupon code first
-
-        paymentGateWayPayLoad.transaction.discount = 0;
-        paymentGateWayPayLoad.transaction.couponCode = validatedRequestBody?.couponCode || null;
 
         if (!!paymentGateWayPayLoad?.transaction?.couponCode) {
             if (
@@ -114,12 +111,13 @@ router.post("/", async (req, res) => {
             );
         }
 
-        //pre tax amount
-        paymentGateWayPayLoad.transaction.preTaxAmount = paymentGateWayPayLoad.transaction.amount.toFixed(2);
-
         //add cgst and sgst
         paymentGateWayPayLoad.transaction.cgst = ((paymentGateWayPayLoad.transaction.amount * cgst) / 100).toFixed(2);
         paymentGateWayPayLoad.transaction.sgst = ((paymentGateWayPayLoad.transaction.amount * sgst) / 100).toFixed(2);
+
+        //pre tax amount
+        paymentGateWayPayLoad.transaction.preTaxAmount =
+            paymentGateWayPayLoad.transaction.amount.toFixed(2) - paymentGateWayPayLoad.transaction.cgst + paymentGateWayPayLoad.transaction.sgst;
 
         //final amount
         paymentGateWayPayLoad.transaction.amount = (

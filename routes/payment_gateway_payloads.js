@@ -1,6 +1,6 @@
 const libExpress = require("express");
 const { getCourseById } = require("../db/courses");
-const { verifyPaymentGatewayPayLoadStatus, getDateByInterval, getFormattedDate, getRandomSMTPEmail } = require("../utils");
+const { verifyPaymentGatewayPayLoadStatus, getDateByInterval, getFormattedDate } = require("../utils");
 const { requestService } = require("sahas_utils");
 const { validateRequestBody } = require("sahas_utils");
 
@@ -114,16 +114,18 @@ router.post("/", async (req, res) => {
             );
         }
 
-        //pre tax amount
-        paymentGateWayPayLoad.transaction.preTaxAmount = paymentGateWayPayLoad.transaction.amount.toFixed(2);
-
         //add cgst and sgst
         paymentGateWayPayLoad.transaction.cgst = ((paymentGateWayPayLoad.transaction.amount * cgst) / 100).toFixed(2);
         paymentGateWayPayLoad.transaction.sgst = ((paymentGateWayPayLoad.transaction.amount * sgst) / 100).toFixed(2);
 
+        //pre tax amount
+        paymentGateWayPayLoad.transaction.preTaxAmount =
+            Number(paymentGateWayPayLoad.transaction.amount.toFixed(2)) -
+            (Number(paymentGateWayPayLoad.transaction.cgst) + Number(paymentGateWayPayLoad.transaction.sgst));
+
         //final amount
         paymentGateWayPayLoad.transaction.amount = (
-            Number(paymentGateWayPayLoad.transaction.amount) +
+            Number(paymentGateWayPayLoad.transaction.preTaxAmount) +
             Number(paymentGateWayPayLoad.transaction.sgst) +
             Number(paymentGateWayPayLoad.transaction.cgst)
         ).toFixed(2);
@@ -220,7 +222,6 @@ router.get("/:id", async (req, res) => {
                     requestMethod: "POST",
                     parseResponseBody: false,
                     requestPostBody: {
-                        from: getRandomSMTPEmail(),
                         to: paymentGateWayPayLoad?.transaction.distributor_user?.email,
                         subject: "Coupon Code Used",
                         template: "commision",
@@ -297,7 +298,6 @@ router.get("/:id", async (req, res) => {
                 requestMethod: "POST",
                 parseResponseBody: false,
                 requestPostBody: {
-                    from: getRandomSMTPEmail(),
                     to: paymentGateWayPayLoad?.user?.email,
                     subject: "Course Enrollment Transaction",
                     template: "enrollment",

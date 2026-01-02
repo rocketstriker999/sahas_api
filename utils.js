@@ -4,7 +4,6 @@ const libCrypto = require("crypto");
 const { logger } = require("sahas_utils");
 const { readConfig } = require("./libs/config");
 const libMoment = require("moment");
-const { SMTP_EMAILS } = require("./constants");
 
 const prepareDirectories = (directories) => {
     directories.forEach((directory) => {
@@ -14,10 +13,6 @@ const prepareDirectories = (directories) => {
         }
     });
 };
-
-function getRandomSMTPEmail() {
-    return SMTP_EMAILS[Math.floor(Math.random() * SMTP_EMAILS.length)];
-}
 
 function generateToken() {
     const timestamp = Date.now().toString(); // Current timestamp in milliseconds - 1
@@ -110,5 +105,4 @@ module.exports = {
     getDateByInterval,
     getFormattedDate,
     getDifferenceOfDates,
-    getRandomSMTPEmail,
 };

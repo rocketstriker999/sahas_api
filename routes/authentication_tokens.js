@@ -69,7 +69,6 @@ router.post("/", async (req, res) => {
         requestMethod: "POST",
         parseResponseBody: false,
         requestPostBody: {
-            from: getRandomSMTPEmail(),
             to: req.body.email,
             subject: "Verification OTP",
             template: "otp",

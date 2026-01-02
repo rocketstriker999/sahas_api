@@ -220,7 +220,6 @@ router.get("/:id", async (req, res) => {
                     requestMethod: "POST",
                     parseResponseBody: false,
                     requestPostBody: {
-                        from: getRandomSMTPEmail(),
                         to: paymentGateWayPayLoad?.transaction.distributor_user?.email,
                         subject: "Coupon Code Used",
                         template: "commision",
@@ -297,7 +296,6 @@ router.get("/:id", async (req, res) => {
                 requestMethod: "POST",
                 parseResponseBody: false,
                 requestPostBody: {
-                    from: getRandomSMTPEmail(),
                     to: paymentGateWayPayLoad?.user?.email,
                     subject: "Course Enrollment Transaction",
                     template: "enrollment",

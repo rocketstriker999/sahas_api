@@ -11,13 +11,4 @@ module.exports = {
     CACHE_KEY_COURSES: "CACHE_KEY_COURSES",
     CACHE_KEY_SUBJECTS: "CACHE_KEY_SUBJECTS",
     CACHE_KEY_PAYMENT_GATEWAY_PAYLOADS: "CACHE_KEY_PAYMENT_GATEWAY_PAYLOADS",
-
-    SMTP_EMAILS: [
-        "info@sahasinstitute.com",
-        "otp-mailer@sahasinstitute.com",
-        "otp-mailer-1@sahasinstitute.com",
-        "otp-mailer-2@sahasinstitute.com",
-        "otp-mailer-3@sahasinstitute.com",
-        "no-reply@sahasinstitute.com",
-    ],
 };

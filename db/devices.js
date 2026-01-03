@@ -24,7 +24,7 @@ function getActiveDevicesByUserId(userId) {
 }
 
 function getDevicesByUserId({ user_id }) {
-    return executeSQLQueryParameterized(`SELECT * FROM USER_DEVICES WHERE user_id=?`, [user_id])
+    return executeSQLQueryParameterized(`SELECT * FROM USER_DEVICES WHERE user_id=? ORDER BY created_on DESC`, [user_id])
         .then((result) => (result.length ? result : false))
         .catch((error) => logger.error(`getDevicesByUserId: ${error}`));
 }
@@ -36,10 +36,24 @@ function addInActiveUserDevice(userId, fingerPrint) {
     });
 }
 
+function updateUserDeviceStatusById({ id, active }) {
+    return executeSQLQueryParameterized(`UPDATE USER_DEVICES SET active=? WHERE id=?`, [active, id]).catch((error) =>
+        logger.error(`updateUserDeviceStatusById: ${error}`)
+    );
+}
+
+function getUserDeviceById({ id }) {
+    return executeSQLQueryParameterized(`SELECT * FROM USER_DEVICES  WHERE id=?`, [id])
+        .then((result) => (result.length ? result[0] : false))
+        .catch((error) => logger.error(`updateUserDeviceStatusById: ${error}`));
+}
+
 module.exports = {
     addActiveUserDevice,
     userDeviceExist,
     addInActiveUserDevice,
     getActiveDevicesByUserId,
     getDevicesByUserId,
+    updateUserDeviceStatusById,
+    getUserDeviceById,
 };

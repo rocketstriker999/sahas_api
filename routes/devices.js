@@ -1,0 +1,22 @@
+const libExpress = require("express");
+const { addDevice, updateUserDeviceStatusById, getUserDeviceById } = require("../db/devices");
+const { logger } = require("sahas_utils");
+const { validateRequestBody } = require("sahas_utils");
+
+const router = libExpress.Router();
+
+//create a new device into datbase
+router.patch("/", async (req, res) => {
+    const requiredBodyFields = ["id", "active"];
+
+    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+
+    if (isRequestBodyValid) {
+        await updateUserDeviceStatusById(validatedRequestBody);
+        res.status(200).json(await getUserDeviceById(validatedRequestBody));
+    } else {
+        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+    }
+});
+
+module.exports = router;

@@ -16,7 +16,7 @@ const { getEnrollmentsByUserId } = require("../db/enrollments");
 const { getWalletTransactionsByUserId } = require("../db/wallet_transactions");
 const { getUserRolesByUserId } = require("../db/user_roles");
 const { getEnrollmentCoursesByUserId } = require("../db/enrollment_courses");
-const { getActiveDevicesByUserId, getDevicesByUserId } = require("../db/devices");
+const { getDevicesByUserId } = require("../db/devices");
 
 const router = libExpress.Router();
 

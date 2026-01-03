@@ -42,6 +42,12 @@ function updateUserDeviceStatusById({ id, active }) {
     );
 }
 
+function getUserDeviceById({ id }) {
+    return executeSQLQueryParameterized(`SELECT * FROM USER_DEVICES  WHERE id=?`, [id])
+        .then((result) => (result.length ? result[0] : false))
+        .catch((error) => logger.error(`updateUserDeviceStatusById: ${error}`));
+}
+
 module.exports = {
     addActiveUserDevice,
     userDeviceExist,
@@ -49,4 +55,5 @@ module.exports = {
     getActiveDevicesByUserId,
     getDevicesByUserId,
     updateUserDeviceStatusById,
+    getUserDeviceById,
 };

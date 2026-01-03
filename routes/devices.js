@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const { addDevice, updateUserDeviceStatusById } = require("../db/devices");
+const { addDevice, updateUserDeviceStatusById, getUserDeviceById } = require("../db/devices");
 const { logger } = require("sahas_utils");
 
 const router = libExpress.Router();
@@ -12,7 +12,7 @@ router.patch("/", async (req, res) => {
 
     if (isRequestBodyValid) {
         await updateUserDeviceStatusById(validatedRequestBody);
-        res.sendStatus(400);
+        res.status(200).json(await getUserDeviceById(validatedRequestBody));
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

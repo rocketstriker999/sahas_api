@@ -203,13 +203,6 @@ function patchUserPhoneById({ id, phone }) {
     return executeSQLQueryParameterized(`UPDATE USERS SET phone=? WHERE id = ?`, [phone, id]).catch((error) => logger.error(`patchUserPhoneById: ${error}`));
 }
 
-//freeze
-function patchUserRecentDeviceById({ id, device_id }) {
-    return executeSQLQueryParameterized(`UPDATE USERS SET recent_device=? WHERE id = ?`, [device_id, id]).catch((error) =>
-        logger.error(`patchUserRecentDeviceById: ${error}`)
-    );
-}
-
 //tested
 function addUser({ email, full_name, phone, image, address, branch_id }) {
     return executeSQLQueryParameterized(`INSERT  INTO USERS(email,full_name, phone, image, address, branch_id) VALUES(?,?,?,?,?,?)`, [

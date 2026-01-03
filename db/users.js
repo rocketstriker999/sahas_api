@@ -236,5 +236,4 @@ module.exports = {
     addUser,
     patchUserFullNameById,
     patchUserPhoneById,
-    patchUserRecentDeviceById,
 };

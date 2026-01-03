@@ -9,7 +9,7 @@ const router = libExpress.Router();
 router.patch("/", async (req, res) => {
     const requiredBodyFields = ["id", "active"];
 
-    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validatedRequestBody(req.body, requiredBodyFields);
+    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
     if (isRequestBodyValid) {
         await updateUserDeviceStatusById(validatedRequestBody);

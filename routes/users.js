@@ -125,6 +125,9 @@ router.get("/:id/devices", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing User Id" });
     }
+
+    logger.info(req.user);
+
     return res.status(200).json(await getDevicesByUserId({ user_id: req.params.id }));
 });
 

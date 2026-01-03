@@ -17,8 +17,7 @@ module.exports = async (req, res, next) => {
         }
     }
 
-    logger.info(req.user);
-
+    logger.info(JSON.stringify(req?.device));
     patchUserRecentDeviceById({ id: req.user.id, device_id: req.device.id });
 
     next();

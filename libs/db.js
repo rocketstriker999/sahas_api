@@ -25,6 +25,7 @@ async function generateDBTables() {
             address VARCHAR(256) NULL,
             branch_id INT NULL,
             active BOOLEAN NOT NULL DEFAULT TRUE,
+            recent_device INT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             created_by INT NULL

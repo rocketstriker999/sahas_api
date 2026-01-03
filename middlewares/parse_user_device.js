@@ -1,4 +1,5 @@
 const { addActiveUserDevice, getActiveDevicesByUserId, userDeviceExist, addInActiveUserDevice } = require("../db/devices");
+const { patchUserRecentDeviceById } = require("../db/users");
 
 module.exports = async (req, res, next) => {
     if (req?.user && req?.device) {
@@ -15,6 +16,8 @@ module.exports = async (req, res, next) => {
             }
         }
     }
+
+    patchUserRecentDeviceById({ id: req.user.id, device_id: req.device.id });
 
     next();
 };

@@ -1,5 +1,6 @@
 const { addActiveUserDevice, getActiveDevicesByUserId, userDeviceExist, addInActiveUserDevice } = require("../db/devices");
 const { patchUserRecentDeviceById } = require("../db/users");
+const { logger } = require("sahas_utils");
 
 module.exports = async (req, res, next) => {
     if (req?.user && req?.device) {

@@ -39,15 +39,17 @@ function generateSHA512(targetString) {
 
 const getDeviceDescriptionByFingerPrint = (fingerPrint) => Buffer.from(fingerPrint, "base64").toString("utf8");
 
-async function requestPayUVerification(transaction, command = process.env.TRANSACTION_VERIFICATION_COMMAND) {
+async function requestPayUVerification(transaction) {
+    const { paymentGateWay: { verificationAPI, merchantKey, merchantSalt, verificationAPICommand } = {} } = await readConfig("app");
+
     if (transaction.pay > 0) {
         const headers = new Headers();
         headers.append("Content-Type", "application/x-www-form-urlencoded");
         const urlencoded = new URLSearchParams();
-        urlencoded.append("key", process.env.MERCHANT_KEY);
+        urlencoded.append("key", merchantKey);
         urlencoded.append("command", command);
         urlencoded.append("var1", transaction.id);
-        urlencoded.append("hash", generateSHA512(`${process.env.MERCHANT_KEY}|${command}|${transaction.id}|${process.env.MERCHANT_SALT}`));
+        urlencoded.append("hash", generateSHA512(`${merchantKey}|${verificationAPICommand}|${transaction.id}|${merchantSalt}`));
 
         const fetchOptions = {
             method: "POST",
@@ -56,7 +58,7 @@ async function requestPayUVerification(transaction, command = process.env.TRANSA
             redirect: "follow",
         };
         try {
-            const response = await fetch(process.env.TRANSACTION_VERIFICATION_URL, fetchOptions);
+            const response = await fetch(verificationAPI, fetchOptions);
             const payuVerification = await response.json();
             return payuVerification?.transaction_details[transaction.id]?.status === "success";
         } catch {

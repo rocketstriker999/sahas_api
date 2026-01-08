@@ -20,7 +20,7 @@ function addDefaultRoleToUser(userId) {
 }
 
 //tested
-function addUserByEmail(email) {
+function addUserByEmail({ email }) {
     return executeSQLQueryParameterized(`INSERT IGNORE INTO USERS(email) VALUES(?)`, [email])
         .then((result) => result?.affectedRows && addDefaultRoleToUser(result?.insertId))
         .catch((error) => {
@@ -180,7 +180,7 @@ function getCountUsersBySearchAndFilters(search, appliedFilters) {
 //freeze
 function updateUserById({ id, email, full_name, phone, image, address, branch_id, active }) {
     return executeSQLQueryParameterized(`UPDATE USERS SET email=?, full_name=?,phone=?,image=?,address=?,branch_id=?,active=? WHERE id = ?`, [
-        email,
+        email?.toLowerCase(),
         full_name,
         phone,
         image || null,
@@ -206,7 +206,7 @@ function patchUserPhoneById({ id, phone }) {
 //tested
 function addUser({ email, full_name, phone, image, address, branch_id }) {
     return executeSQLQueryParameterized(`INSERT  INTO USERS(email,full_name, phone, image, address, branch_id) VALUES(?,?,?,?,?,?)`, [
-        email,
+        email?.toLowerCase(),
         full_name,
         phone,
         image,

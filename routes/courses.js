@@ -10,7 +10,7 @@ const router = libExpress.Router();
 router.post(
     "/",
     async (req, res, next) => {
-        const requiredBodyFields = ["category_id", "title", "description", "image", "fees", "whatsapp_group", "view_index"];
+        const requiredBodyFields = ["category_id", "title", "description", "image", "fees", "view_index"];
         const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
         if (!isRequestBodyValid) {
             return res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
@@ -26,6 +26,7 @@ router.post(
     },
     async (req, res) => {
         const courseId = await addCourse(req.body);
+
         res.status(201).json(await getCourseById({ id: courseId }));
     }
 );
@@ -51,7 +52,7 @@ router.patch("/view_indexes", async (req, res) => {
 
 //tested
 router.patch("/", async (req, res) => {
-    const requiredBodyFields = ["id", "title", "description", "image", "fees", "whatsapp_group"];
+    const requiredBodyFields = ["id", "title", "description", "image", "fees"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 

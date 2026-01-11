@@ -10,6 +10,7 @@ const { validateRequestBody } = require("sahas_utils");
 const { getAllCourseCategories } = require("../db/course_categories");
 const { getCoursesByCategoryId, getCoursesByContainerId } = require("../db/courses");
 const { logger } = require("sahas_utils");
+const { getCoursesContainersByCategoryId } = require("../db/courses_containers");
 
 const router = libExpress.Router();
 
@@ -70,7 +71,7 @@ router.get("/:id/courses-containers", async (req, res) => {
         return res.status(400).json({ error: "Missing Course Category Id" });
     }
 
-    const coursesContainers = await getCoursesByCategoryId({ category_id: req.params.id });
+    const coursesContainers = await getCoursesContainersByCategoryId({ category_id: req.params.id });
 
     for (const coursesContainer of coursesContainers) {
         coursesContainer.courses = await getCoursesByContainerId({ container_id: coursesContainer.id });

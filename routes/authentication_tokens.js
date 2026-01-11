@@ -54,15 +54,8 @@ router.post("/", async (req, res) => {
             return res.status(400).json({ error: "Missing or Invalid Email" });
         }
 
-        // res.status(200).json(await getUserById({ ...validatedRequestBody }));
-
-        logger.info("CALLED1");
-        logger.info(JSON.stringify(validatedRequestBody));
-
         //Get The user
         await addUserByEmail({ email: validatedRequestBody.email.toLowerCase() });
-
-        logger.info("CALLED2");
 
         const user = await getUserByEmail({ email: validatedRequestBody.email.toLowerCase() });
 

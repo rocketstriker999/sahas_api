@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const { addCourse, getCourseById, deleteCourseById, updateCourseViewIndexById, updateCourseById, getCourseByCategoryIdAndTitle } = require("../db/courses");
+const { addCourse, getCourseById, deleteCourseById, updateCourseViewIndexById, updateCourseById } = require("../db/courses");
 const { validateRequestBody } = require("sahas_utils");
 const { getEnrollmentByCourseIdAndUserId } = require("../db/enrollments");
 const { getCourseSubjectsByCourseId } = require("../db/course_subjects");
@@ -16,12 +16,6 @@ router.post(
             return res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
         }
         req.body = validatedRequestBody;
-        next();
-    },
-    async (req, res, next) => {
-        if (!!(await getCourseByCategoryIdAndTitle(req.body))) {
-            return res.status(400).json({ error: "Course Already Exist" });
-        }
         next();
     },
     async (req, res) => {

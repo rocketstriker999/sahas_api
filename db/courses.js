@@ -10,9 +10,9 @@ function getAllCourses() {
 }
 
 //freeze
-function addCourse({ container_id, title, description, whatsapp_group, view_index }) {
+function addCourse({ courses_container_id, title, description, whatsapp_group, view_index }) {
     return executeSQLQueryParameterized(`INSERT INTO COURSES(container_id, title, description, whatsapp_group,view_index) VALUES(?,?,?,?,?)`, [
-        container_id,
+        courses_container_id,
         title,
         description,
         whatsapp_group,

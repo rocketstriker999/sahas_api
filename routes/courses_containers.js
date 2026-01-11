@@ -3,7 +3,14 @@ const { getCourseById, deleteCourseById, updateCourseViewIndexById, updateCourse
 const { validateRequestBody } = require("sahas_utils");
 const { getEnrollmentByCourseIdAndUserId } = require("../db/enrollments");
 const { getCourseSubjectsByCourseId } = require("../db/course_subjects");
-const { getCoursesContainerByCategoryIdAndTitle, addCoursesContainer, getCoursesContainerById } = require("../db/courses_containers");
+const {
+    getCoursesContainerByCategoryIdAndTitle,
+    addCoursesContainer,
+    getCoursesContainerById,
+    updateCoursesContainerViewIndexById,
+    updateCoursesContainerById,
+    deleteCoursesContanerById,
+} = require("../db/courses_containers");
 
 const router = libExpress.Router();
 
@@ -36,14 +43,14 @@ router.delete("/:id", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Courses Container Id" });
     }
-    deleteCourseById({ id: req.params.id });
+    deleteCoursesContanerById({ id: req.params.id });
     res.sendStatus(204);
 });
 
 //tested
 router.patch("/view_indexes", async (req, res) => {
     if (req.body?.length) {
-        req.body.forEach(updateCourseViewIndexById);
+        req.body.forEach(updateCoursesContainerViewIndexById);
         return res.sendStatus(200);
     }
 
@@ -52,12 +59,12 @@ router.patch("/view_indexes", async (req, res) => {
 
 //tested
 router.patch("/", async (req, res) => {
-    const requiredBodyFields = ["id", "title", "description", "image", "fees", "whatsapp_group"];
+    const requiredBodyFields = ["id", "title", "image", "fees"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
     if (isRequestBodyValid) {
-        updateCourseById(validatedRequestBody);
+        updateCoursesContainerById(validatedRequestBody);
         res.status(200).json(validatedRequestBody);
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });

@@ -39,4 +39,33 @@ function getCoursesContainerById({ id }) {
         });
 }
 
-module.exports = { getCoursesContainersByCategoryId, getCoursesContainerByCategoryIdAndTitle, addCoursesContainer, getCoursesContainerById };
+//freeze
+function updateCoursesContainerViewIndexById({ id, view_index }) {
+    return executeSQLQueryParameterized("UPDATE COURSES_CONTAINERS SET view_index=? WHERE id=?", [view_index, id]).catch((error) =>
+        logger.error(`updateCourseViewIndexById: ${error}`)
+    );
+}
+
+//freeze
+function updateCoursesContainerById({ id, title, image, fees }) {
+    return executeSQLQueryParameterized("UPDATE COURSES_CONTAINERS SET title=?,image=?,fees=? WHERE id=?", [title, image, fees, id]).catch((error) =>
+        logger.error(`updateCourseById: ${error}`)
+    );
+}
+
+//freeze
+function deleteCoursesContanerById({ id }) {
+    return executeSQLQueryParameterized(`DELETE FROM COURSES_CONTAINERS WHERE id=?`, [id]).catch((error) => {
+        logger.error(`deleteCourseById: ${error}`);
+    });
+}
+
+module.exports = {
+    getCoursesContainersByCategoryId,
+    getCoursesContainerByCategoryIdAndTitle,
+    addCoursesContainer,
+    getCoursesContainerById,
+    updateCoursesContainerViewIndexById,
+    updateCoursesContainerById,
+    deleteCoursesContanerById,
+};

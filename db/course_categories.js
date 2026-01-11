@@ -3,7 +3,7 @@ const { logger } = require("sahas_utils");
 
 //freeze
 function getAllCourseCategories() {
-    return executeSQLQueryParameterized(`SELECT COURSE_CATEGORIES.*, COUNT(COURSES.id) AS courses_count FROM COURSE_CATEGORIES LEFT JOIN COURSES ON COURSES.category_id = COURSE_CATEGORIES.id GROUP BY COURSE_CATEGORIES.id ORDER BY COURSE_CATEGORIES.view_index;
+    return executeSQLQueryParameterized(`SELECT COURSE_CATEGORIES.*, COUNT(COURSES_CONTAINERS.id) AS courses_containers_count FROM COURSE_CATEGORIES LEFT JOIN COURSES_CONTAINERS ON COURSE_CATEGORIES.id=COURSES_CONTAINERS.category_id  GROUP BY COURSE_CATEGORIES.id ORDER BY COURSE_CATEGORIES.view_index;
 `).catch((error) => logger.error(`getAllCourseCategories: ${error}`));
 }
 

@@ -6,7 +6,7 @@ const libValidator = require("validator");
 const { generateToken } = require("../utils");
 const { addInactiveToken, getTokenByOTP, activateToken } = require("../db/authentication_tokens");
 const { readConfig } = require("../libs/config");
-const { logger } = require("sahas_utils");
+const { logger, validateRequestBody } = require("sahas_utils");
 const { getUserRolesByUserId } = require("../db/user_roles");
 
 const router = libExpress.Router();
@@ -47,7 +47,7 @@ router.post("/", async (req, res) => {
     }
 
     const requiredBodyFields = ["email"];
-    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validatedRequestBody(req.body, requiredBodyFields);
+    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
     if (isRequestBodyValid) {
         if (!libValidator.isEmail(validatedRequestBody.email)) {

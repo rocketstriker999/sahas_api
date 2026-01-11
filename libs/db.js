@@ -149,6 +149,7 @@ async function generateDBTables() {
             created_by INT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP
         )`,
+
         `CREATE TABLE IF NOT EXISTS COURSE_CATEGORIES(
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(96) NOT NULL UNIQUE,
@@ -157,15 +158,24 @@ async function generateDBTables() {
             active BOOLEAN NOT NULL DEFAULT TRUE,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
-        `CREATE TABLE IF NOT EXISTS COURSES(
-           id INT AUTO_INCREMENT PRIMARY KEY,
+        `CREATE TABLE IF NOT EXISTS COURSES_CONTAINERS(
+            id INT AUTO_INCREMENT PRIMARY KEY,
             category_id INT NOT NULL,
-            title VARCHAR(96) NOT NULL,
-            description VARCHAR(256) NOT NULL,
+            title VARCHAR(96) NOT NULL UNIQUE,
             image VARCHAR(128) NULL,
             fees DECIMAL(8, 2) DEFAULT 0,
-            whatsapp_group VARCHAR(128) NULL,
             validity INT NOT NULL DEFAULT 365,
+            view_index INT NOT NULL DEFAULT 0,
+            active BOOLEAN NOT NULL DEFAULT TRUE,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        )`,
+
+        `CREATE TABLE IF NOT EXISTS COURSES(
+           id INT AUTO_INCREMENT PRIMARY KEY,
+            container_id INT NOT NULL,
+            title VARCHAR(96) NOT NULL,
+            description VARCHAR(256) NOT NULL,
+            whatsapp_group VARCHAR(128) NULL,
             view_index INT NOT NULL DEFAULT 0,
             active BOOLEAN NOT NULL DEFAULT TRUE,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

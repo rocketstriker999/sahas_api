@@ -6,7 +6,7 @@ const { getCourseSubjectsByCourseId } = require("../db/course_subjects");
 
 const router = libExpress.Router();
 
-//tested
+//revisit
 router.post(
     "/",
     async (req, res, next) => {

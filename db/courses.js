@@ -10,14 +10,6 @@ function getAllCourses() {
 }
 
 //freeze
-function getCoursesByCategoryId({ category_id }) {
-    return executeSQLQueryParameterized(`SELECT * FROM COURSES WHERE category_id=? ORDER BY view_index ASC ,updated_at DESC`, [category_id]).catch((error) => {
-        logger.error(`getCoursesByCategoryId: ${error}`);
-        return [];
-    });
-}
-
-//freeze
 function addCourse({ category_id, title, description, image, fees, whatsapp_group, view_index }) {
     return executeSQLQueryParameterized(`INSERT INTO COURSES(category_id, title, description, image, fees, whatsapp_group,view_index) VALUES(?,?,?,?,?,?,?)`, [
         category_id,
@@ -39,6 +31,13 @@ function getCourseByCategoryIdAndTitle({ category_id, title }) {
     return executeSQLQueryParameterized(`SELECT title from COURSES WHERE category_id=? AND title=?`, [category_id, title])
         .then((result) => (result.length > 0 ? result[0] : false))
         .catch((error) => logger.error(`getCourseByCategoryIdAndTitle: ${error}`));
+}
+
+//freeze
+function getCoursesByContainerId({ container_id }) {
+    return executeSQLQueryParameterized(`SELECT * from COURSES WHERE container_id=?`, [container_id]).catch((error) =>
+        logger.error(`getCoursesByContainerId: ${error}`)
+    );
 }
 
 //freeze
@@ -78,11 +77,11 @@ function updateCourseById({ id, title, description, image, fees, whatsapp_group 
 
 module.exports = {
     getAllCourses,
-    getCoursesByCategoryId,
     addCourse,
     getCourseById,
     deleteCourseById,
     updateCourseViewIndexById,
     updateCourseById,
     getCourseByCategoryIdAndTitle,
+    getCoursesByContainerId,
 };

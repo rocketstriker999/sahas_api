@@ -17,7 +17,7 @@ function getCoursesContainerByCategoryIdAndTitle({ category_id, title }) {
 
 //freeze
 function addCoursesContainer({ category_id, title, image, fees, view_index }) {
-    return executeSQLQueryParameterized(`INSERT INTO COURSES(category_id, title,  image, fees, view_index) VALUES(?,?,?,?,?)`, [
+    return executeSQLQueryParameterized(`INSERT INTO COURSES_CONTAINERS(category_id, title,  image, fees, view_index) VALUES(?,?,?,?,?)`, [
         category_id,
         title,
         image,

@@ -24,9 +24,9 @@ function getActiveDevicesByUserId(userId) {
 }
 
 function getDevicesByUserId({ user_id }) {
-    return executeSQLQueryParameterized(`SELECT * FROM USER_DEVICES WHERE user_id=? ORDER BY created_on DESC`, [user_id])
-        .then((result) => (result.length ? result : false))
-        .catch((error) => logger.error(`getDevicesByUserId: ${error}`));
+    return executeSQLQueryParameterized(`SELECT * FROM USER_DEVICES WHERE user_id=? ORDER BY created_on DESC`, [user_id]).catch((error) =>
+        logger.error(`getDevicesByUserId: ${error}`)
+    );
 }
 
 function addInActiveUserDevice(userId, fingerPrint) {

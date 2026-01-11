@@ -2,7 +2,7 @@ const { executeSQLQueryParameterized } = require("../libs/db");
 const { logger } = require("sahas_utils");
 
 function getCoursesContainersByCategoryId({ category_id }) {
-    return executeSQLQueryParameterized(`SELECT * FROM COURSES_CONTAINERS WHERE category_id=?`, [category_id]).catch((error) => {
+    return executeSQLQueryParameterized(`SELECT * FROM COURSES_CONTAINERS WHERE category_id=? ORDER BY view_index ASC`, [category_id]).catch((error) => {
         logger.error(`getAllBranches: ${error}`);
         return [];
     });

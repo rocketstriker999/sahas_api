@@ -27,13 +27,6 @@ function addCourse({ category_id, title, description, image, fees, whatsapp_grou
 }
 
 //freeze
-function getCourseByCategoryIdAndTitle({ category_id, title }) {
-    return executeSQLQueryParameterized(`SELECT title from COURSES WHERE category_id=? AND title=?`, [category_id, title])
-        .then((result) => (result.length > 0 ? result[0] : false))
-        .catch((error) => logger.error(`getCourseByCategoryIdAndTitle: ${error}`));
-}
-
-//freeze
 function getCoursesByContainerId({ container_id }) {
     return executeSQLQueryParameterized(`SELECT * from COURSES WHERE container_id=?`, [container_id]).catch((error) =>
         logger.error(`getCoursesByContainerId: ${error}`)

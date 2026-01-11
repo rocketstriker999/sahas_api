@@ -56,6 +56,8 @@ router.post("/", async (req, res) => {
 
         res.status(200).json(await getUserById({ ...validatedRequestBody }));
 
+        logger.info(JSON.stringify(validatedRequestBody));
+
         //Get The user
         await addUserByEmail({ email: validatedRequestBody.email.toLowerCase() });
 

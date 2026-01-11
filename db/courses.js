@@ -75,6 +75,5 @@ module.exports = {
     deleteCourseById,
     updateCourseViewIndexById,
     updateCourseById,
-    getCourseByCategoryIdAndTitle,
     getCoursesByContainerId,
 };

@@ -40,7 +40,7 @@ const routers = {
         middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
         router: require("./routes/course_categories"),
     },
-    "/course-containers": {
+    "/courses-containers": {
         middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
         router: require("./routes/courses_containers"),
     },

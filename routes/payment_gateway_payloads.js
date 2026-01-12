@@ -32,6 +32,10 @@ router.post("/", async (req, res) => {
     if (isRequestBodyValid) {
         const course = await getCourseById({ id: validatedRequestBody.courseId });
 
+        if (course?.is_bundle) {
+            course.bundledCourses = await getBundledCoursesByCourseId({ course_id: course?.id });
+        }
+
         const paymentGateWayPayLoad = {
             course: { ...course, validity: getDateByInterval({ days: course?.validity }) },
             paymentGateWay: {

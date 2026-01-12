@@ -3,6 +3,7 @@ const { addCourse, getCourseById, deleteCourseById, updateCourseViewIndexById, u
 const { validateRequestBody } = require("sahas_utils");
 const { getEnrollmentByCourseIdAndUserId } = require("../db/enrollments");
 const { getCourseSubjectsByCourseId } = require("../db/course_subjects");
+const { removeBundledCoursesByCourseId, addBundledCourse } = require("../db/bundled_courses");
 
 const router = libExpress.Router();
 
@@ -26,6 +27,14 @@ router.post(
     },
     async (req, res) => {
         const courseId = await addCourse(req.body);
+
+        //if it is a bundled course
+        if (!!req.body.is_bundle) {
+            removeBundledCoursesByCourseId({ course_id: courseId }).then(() => {
+                if (req.body?.bundledCourses?.length > 0)
+                    req.body?.bundledCourses?.forEach((bundledCourse) => addBundledCourse({ course_id: courseId, bundled_course_id: bundledCourse?.id }));
+            });
+        }
 
         res.status(201).json(await getCourseById({ id: courseId }));
     }

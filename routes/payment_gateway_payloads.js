@@ -182,7 +182,7 @@ router.get("/:id", async (req, res) => {
 
             //add course for it
             if (!!paymentGateWayPayLoad?.course?.is_bundle) {
-                enrollmentCourses = await getBundledCoursesByCourseId({ course_id: course?.id });
+                enrollmentCourses = await getBundledCoursesByCourseId({ course_id: paymentGateWayPayLoad?.course?.id });
             }
 
             for (const enrollmentCourse of enrollmentCourses)

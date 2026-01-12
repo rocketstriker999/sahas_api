@@ -70,7 +70,11 @@ router.get("/:id/courses", async (req, res) => {
         return res.status(400).json({ error: "Missing Course Category Id" });
     }
 
-    res.status(200).json(await getCoursesByCategoryId({ category_id: req.params.id }));
+    const courses = await getCoursesByCategoryId({ category_id: req.params.id });
+
+    for (const course of courses) if (course?.is_bundle) course.bundledCourse = await getBundledCoursesByCourseId({ course_id: course.id });
+
+    res.status(200).json();
 });
 
 module.exports = router;

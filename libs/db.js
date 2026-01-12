@@ -175,7 +175,7 @@ async function generateDBTables() {
         `CREATE TABLE IF NOT EXISTS BUNDLED_COURSES(
             id INT AUTO_INCREMENT PRIMARY KEY,
             course_id INT NOT NULL,
-            bundled_course_id INT NO
+            bundled_course_id INT NO,
             UNIQUE KEY unique_course_bundled_course (course_id, bundled_course_id)
         )`,
         `CREATE TABLE IF NOT EXISTS SUBJECTS(

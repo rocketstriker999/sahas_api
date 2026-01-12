@@ -18,7 +18,7 @@ function removeBundledCoursesByCourseId({ course_id }) {
 
 function getBundledCoursesByCourseId({ course_id }) {
     return executeSQLQueryParameterized(
-        "SELECT COURSES.* FROM BUNDLED_COURSES LEFT JOIN COURSES ON BUNDLED_COURSES.course_id=COURSES.id  WHERE BUNDLED_COURSES.course_id=?",
+        "SELECT COURSES.* FROM BUNDLED_COURSES LEFT JOIN COURSES ON BUNDLED_COURSES.bundled_course_id=COURSES.id  WHERE BUNDLED_COURSES.course_id=?",
         [course_id]
     ).catch((error) => {
         logger.error(`getBundledCoursesByCourseId: ${error}`);

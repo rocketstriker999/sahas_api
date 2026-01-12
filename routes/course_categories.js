@@ -74,7 +74,7 @@ router.get("/:id/courses", async (req, res) => {
 
     for (const course of courses) if (course?.is_bundle) course.bundledCourse = await getBundledCoursesByCourseId({ course_id: course.id });
 
-    res.status(200).json();
+    res.status(200).json(courses);
 });
 
 module.exports = router;

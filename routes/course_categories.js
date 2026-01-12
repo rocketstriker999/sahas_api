@@ -73,7 +73,7 @@ router.get("/:id/courses", async (req, res) => {
 
     const courses = await getCoursesByCategoryId({ category_id: req.params.id });
 
-    for (const course of courses) if (course?.is_bundle) course.bundledCourse = await getBundledCoursesByCourseId({ course_id: course.id });
+    for (const course of courses) if (course?.is_bundle) course.bundledCourses = await getBundledCoursesByCourseId({ course_id: course.id });
 
     res.status(200).json(courses);
 });

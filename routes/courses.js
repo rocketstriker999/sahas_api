@@ -40,7 +40,7 @@ router.post(
                 }
             }
 
-            course.bundledCourse = await getBundledCoursesByCourseId({ course_id: courseId });
+            course.bundledCourses = await getBundledCoursesByCourseId({ course_id: courseId });
         }
 
         res.status(201).json(course);
@@ -92,7 +92,7 @@ router.get("/:id", async (req, res) => {
         course.enrollment = await getEnrollmentByCourseIdAndUserId({ course_id: course?.id, user_id: req?.user?.id });
         course.subjects = await getCourseSubjectsByCourseId({ course_id: req.params.id });
 
-        if (course?.is_bundle) course.bundledCourse = await getBundledCoursesByCourseId({ course_id: course.id });
+        if (course?.is_bundle) course.bundledCourses = await getBundledCoursesByCourseId({ course_id: course.id });
 
         return res.status(200).json(course);
     }

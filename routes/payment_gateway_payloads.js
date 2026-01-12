@@ -16,6 +16,7 @@ const { addEnrollmentTransaction, updateEnrollmentTransactionInvoiceById } = req
 const { addWalletTransaction, getWalletBalanceByUserId } = require("../db/wallet_transactions");
 const { getUserByEmail } = require("../db/users");
 const libNumbersToWords = require("number-to-words");
+const { getBundledCoursesByCourseId } = require("../db/bundled_courses");
 
 const router = libExpress.Router();
 
@@ -177,8 +178,15 @@ router.get("/:id", async (req, res) => {
                 created_by: req?.user?.id,
             });
 
+            let enrollmentCourses = [paymentGateWayPayLoad?.course];
+
             //add course for it
-            await addEnrollmentCourse({ created_by: req?.user?.id, enrollment_id: enrollmentId, course_id: paymentGateWayPayLoad?.course?.id });
+            if (!!paymentGateWayPayLoad?.course?.is_bundle) {
+                enrollmentCourses = await getBundledCoursesByCourseId({ course_id: paymentGateWayPayLoad?.course?.id });
+            }
+
+            for (const enrollmentCourse of enrollmentCourses)
+                await addEnrollmentCourse({ created_by: req?.user?.id, enrollment_id: enrollmentId, course_id: enrollmentCourse?.id });
 
             //add transaction for it
             const enrollmentTransactionId = await addEnrollmentTransaction({

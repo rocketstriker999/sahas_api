@@ -158,7 +158,7 @@ async function generateDBTables() {
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
         `CREATE TABLE IF NOT EXISTS COURSES(
-           id INT AUTO_INCREMENT PRIMARY KEY,
+            id INT AUTO_INCREMENT PRIMARY KEY,
             category_id INT NOT NULL,
             title VARCHAR(96) NOT NULL,
             description VARCHAR(256) NOT NULL,
@@ -167,9 +167,16 @@ async function generateDBTables() {
             whatsapp_group VARCHAR(128) NULL,
             validity INT NOT NULL DEFAULT 365,
             view_index INT NOT NULL DEFAULT 0,
+            is_bundle BOOLEAN NOT NULL DEFAULT FALSE,
             active BOOLEAN NOT NULL DEFAULT TRUE,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             UNIQUE KEY unique_category_title (category_id, title)
+        )`,
+        `CREATE TABLE IF NOT EXISTS BUNDLED_COURSES(
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            course_id INT NOT NULL,
+            bundled_course_id INT NOT NULL,
+            UNIQUE KEY unique_course_bundled_course (course_id, bundled_course_id)
         )`,
         `CREATE TABLE IF NOT EXISTS SUBJECTS(
             id INT AUTO_INCREMENT PRIMARY KEY,

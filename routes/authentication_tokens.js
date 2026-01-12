@@ -6,7 +6,7 @@ const libValidator = require("validator");
 const { generateToken } = require("../utils");
 const { addInactiveToken, getTokenByOTP, activateToken } = require("../db/authentication_tokens");
 const { readConfig } = require("../libs/config");
-const { logger } = require("sahas_utils");
+const { logger, validateRequestBody } = require("sahas_utils");
 const { getUserRolesByUserId } = require("../db/user_roles");
 
 const router = libExpress.Router();
@@ -46,43 +46,50 @@ router.post("/", async (req, res) => {
         return res.status(500).json({ error: "Missing Configuration token_validity or otp_validity" });
     }
 
-    if (!req.body.email || !libValidator.isEmail(req.body.email)) {
-        return res.status(400).json({ error: "Missing or Invalid Email" });
+    const requiredBodyFields = ["email"];
+    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+
+    if (isRequestBodyValid) {
+        if (!libValidator.isEmail(validatedRequestBody.email)) {
+            return res.status(400).json({ error: "Missing or Invalid Email" });
+        }
+
+        //Get The user
+        await addUserByEmail({ email: validatedRequestBody.email.toLowerCase() });
+
+        const user = await getUserByEmail({ email: validatedRequestBody.email.toLowerCase() });
+
+        //generate an otp and token
+        const otp = Math.floor(1000 + Math.random() * 9000);
+        const authentication_token = generateToken();
+        //add token into table
+        logger.info("Generated Inactive Token");
+        await addInactiveToken(user.id, otp, authentication_token, new Date(Date.now() + token_validity * 24 * 60 * 60 * 1000));
+
+        //send otp through the mailed
+        requestService({
+            requestServiceName: process.env.SERVICE_MAILER,
+            onRequestStart: () => logger.info("Generating OTP"),
+            requestMethod: "POST",
+            parseResponseBody: false,
+            requestPostBody: {
+                to: req.body.email,
+                subject: "Verification OTP",
+                template: "otp",
+                injects: { otp, otp_validity, user_email: user.email },
+            },
+            onResponseReceieved: (_, responseCode) => {
+                if (responseCode === 201) {
+                    res.status(201).json({ authentication_token });
+                } else {
+                    logger.error(`Failed To Generate OTP - Mailer Responded With ${responseCode}`);
+                    res.status(500).json({ error: "Something Seems to be Broken , Please Try Again Later" });
+                }
+            },
+        });
+    } else {
+        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }
-
-    //Get The user
-    await addUserByEmail(req.body.email);
-
-    const user = await getUserByEmail({ email: req.body.email });
-
-    //generate an otp and token
-    const otp = Math.floor(1000 + Math.random() * 9000);
-    const authentication_token = generateToken();
-    //add token into table
-    logger.info("Generated Inactive Token");
-    await addInactiveToken(user.id, otp, authentication_token, new Date(Date.now() + token_validity * 24 * 60 * 60 * 1000));
-
-    //send otp through the mailed
-    requestService({
-        requestServiceName: process.env.SERVICE_MAILER,
-        onRequestStart: () => logger.info("Generating OTP"),
-        requestMethod: "POST",
-        parseResponseBody: false,
-        requestPostBody: {
-            to: req.body.email,
-            subject: "Verification OTP",
-            template: "otp",
-            injects: { otp, otp_validity, user_email: user.email },
-        },
-        onResponseReceieved: (_, responseCode) => {
-            if (responseCode === 201) {
-                res.status(201).json({ authentication_token });
-            } else {
-                logger.error(`Failed To Generate OTP - Mailer Responded With ${responseCode}`);
-                res.status(500).json({ error: "Something Seems to be Broken , Please Try Again Later" });
-            }
-        },
-    });
 });
 
 router.get("/", async (req, res) => {

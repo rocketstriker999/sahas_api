@@ -3,6 +3,7 @@ const { addCourse, getCourseById, deleteCourseById, updateCourseViewIndexById, u
 const { validateRequestBody } = require("sahas_utils");
 const { getEnrollmentByCourseIdAndUserId } = require("../db/enrollments");
 const { getCourseSubjectsByCourseId } = require("../db/course_subjects");
+const { removeBundledCoursesByCourseId, addBundledCourse, getBundledCoursesByCourseId } = require("../db/bundled_courses");
 
 const router = libExpress.Router();
 
@@ -10,7 +11,7 @@ const router = libExpress.Router();
 router.post(
     "/",
     async (req, res, next) => {
-        const requiredBodyFields = ["category_id", "title", "description", "image", "fees", "whatsapp_group", "view_index"];
+        const requiredBodyFields = ["category_id", "title", "description", "image", "fees", "view_index"];
         const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
         if (!isRequestBodyValid) {
             return res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
@@ -26,7 +27,20 @@ router.post(
     },
     async (req, res) => {
         const courseId = await addCourse(req.body);
-        res.status(201).json(await getCourseById({ id: courseId }));
+
+        const course = await getCourseById({ id: courseId });
+
+        //if it is a bundled course
+        await removeBundledCoursesByCourseId({ course_id: courseId });
+        if (!!req.body.is_bundle && req.body?.bundledCourses?.length > 0) {
+            for (const bundledCourse of req.body?.bundledCourses) {
+                await addBundledCourse({ course_id: courseId, bundled_course_id: bundledCourse?.id });
+            }
+
+            course.bundledCourses = await getBundledCoursesByCourseId({ course_id: courseId });
+        }
+
+        res.status(201).json(course);
     }
 );
 
@@ -50,18 +64,34 @@ router.patch("/view_indexes", async (req, res) => {
 });
 
 //tested
-router.patch("/", async (req, res) => {
-    const requiredBodyFields = ["id", "title", "description", "image", "fees", "whatsapp_group"];
+router.patch(
+    "/",
+    async (req, res, next) => {
+        const requiredBodyFields = ["id", "title", "description", "image", "fees"];
+        const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+        if (!isRequestBodyValid) {
+            return res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+        }
+        req.body = validatedRequestBody;
+        next();
+    },
+    async (req, res) => {
+        const course = req.body;
 
-    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+        updateCourseById(course);
 
-    if (isRequestBodyValid) {
-        updateCourseById(validatedRequestBody);
-        res.status(200).json(validatedRequestBody);
-    } else {
-        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+        await removeBundledCoursesByCourseId({ course_id: course.id });
+        if (!!course.is_bundle && course?.bundledCourses?.length > 0) {
+            for (const bundledCourse of course?.bundledCourses) {
+                await addBundledCourse({ course_id: course?.id, bundled_course_id: bundledCourse?.id });
+            }
+
+            course.bundledCourses = await getBundledCoursesByCourseId({ course_id: course?.id });
+        }
+
+        res.status(200).json(course);
     }
-});
+);
 
 //tested
 router.get("/:id", async (req, res) => {
@@ -74,6 +104,9 @@ router.get("/:id", async (req, res) => {
     if (course) {
         course.enrollment = await getEnrollmentByCourseIdAndUserId({ course_id: course?.id, user_id: req?.user?.id });
         course.subjects = await getCourseSubjectsByCourseId({ course_id: req.params.id });
+
+        if (course?.is_bundle) course.bundledCourses = await getBundledCoursesByCourseId({ course_id: course.id });
+
         return res.status(200).json(course);
     }
 

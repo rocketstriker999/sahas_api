@@ -10,6 +10,7 @@ const { validateRequestBody } = require("sahas_utils");
 const { getAllCourseCategories } = require("../db/course_categories");
 const { getCoursesByCategoryId } = require("../db/courses");
 const { logger } = require("sahas_utils");
+const { getBundledCoursesByCourseId } = require("../db/bundled_courses");
 
 const router = libExpress.Router();
 
@@ -70,7 +71,11 @@ router.get("/:id/courses", async (req, res) => {
         return res.status(400).json({ error: "Missing Course Category Id" });
     }
 
-    res.status(200).json(await getCoursesByCategoryId({ category_id: req.params.id }));
+    const courses = await getCoursesByCategoryId({ category_id: req.params.id });
+
+    for (const course of courses) if (course?.is_bundle) course.bundledCourses = await getBundledCoursesByCourseId({ course_id: course.id });
+
+    res.status(200).json(courses);
 });
 
 module.exports = router;

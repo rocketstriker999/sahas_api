@@ -4,6 +4,7 @@ on:
     push:
         branches:
             - dev
+            - course_container_new
 
 jobs:
     deploy:

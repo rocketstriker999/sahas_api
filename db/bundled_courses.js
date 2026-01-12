@@ -16,4 +16,13 @@ function removeBundledCoursesByCourseId({ course_id }) {
     });
 }
 
-module.exports = { addBundledCourse, removeBundledCoursesByCourseId };
+function getBundledCoursesByCourseId({ course_id }) {
+    return executeSQLQueryParameterized(
+        "SELECT COURSES.* FROM BUNDLED_COURSES LEFT JOIN COURSES ON BUNDLED_COURSES.course_id=COURSES.id  WHERE BUNDLED_COURSES.course_id=?",
+        [course_id]
+    ).catch((error) => {
+        logger.error(`getBundledCoursesByCourseId: ${error}`);
+    });
+}
+
+module.exports = { addBundledCourse, removeBundledCoursesByCourseId, getBundledCoursesByCourseId };

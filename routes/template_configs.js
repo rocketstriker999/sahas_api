@@ -40,7 +40,7 @@ router.post("/dashboard/carousel-images", async (req, res) => {
             writeConfig("template", config);
             res.status(201).json(validatedRequestBody);
         } else {
-            throw new Error(`Missing ${missingRequestBodyFields?.join(",")}`);
+            res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
         }
     } catch (error) {
         logger.error(error);
@@ -59,7 +59,7 @@ router.put("/dashboard/dialog", async (req, res) => {
             writeConfig("template", config);
             res.status(200).json(validatedRequestBody);
         } else {
-            throw new Error(`Missing ${missingRequestBodyFields?.join(",")}`);
+            res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
         }
     } catch (error) {
         logger.error(error);

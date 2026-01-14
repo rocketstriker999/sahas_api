@@ -48,6 +48,25 @@ router.post("/dashboard/carousel-images", async (req, res) => {
     }
 });
 
+router.put("/dashboard/dialog", async (req, res) => {
+    const requiredBodyFields = ["description", "heading", "media_url", "note", "title", "active"];
+
+    try {
+        const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+        if (isRequestBodyValid) {
+            const config = await readConfig("template");
+            config.dash_board.dialog = validatedRequestBody;
+            writeConfig("template", config);
+            res.status(200).json(validatedRequestBody);
+        } else {
+            throw new Error(`Missing ${missingRequestBodyFields?.join(",")}`);
+        }
+    } catch (error) {
+        logger.error(error);
+        res.status(400).json({ error });
+    }
+});
+
 router.delete("/dashboard/carousel-images/:id", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Carousel Image Id" });

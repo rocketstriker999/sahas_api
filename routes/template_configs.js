@@ -49,7 +49,7 @@ router.post("/dashboard/carousel-images", async (req, res) => {
 });
 
 router.put("/dashboard/dialog", async (req, res) => {
-    const requiredBodyFields = ["description", "heading", "media_url", "note", "title", "active"];
+    const requiredBodyFields = ["description", "heading", "media_url", "note", "title"];
 
     try {
         const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);

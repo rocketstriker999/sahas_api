@@ -81,8 +81,9 @@ router.post(
     },
     async (req, res) => {
         const chapterId = await addChapter(req.body);
+
         res.status(201).json(await getChapterById({ id: chapterId }));
-    }
+    },
 );
 
 //tested

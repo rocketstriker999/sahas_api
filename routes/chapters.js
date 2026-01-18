@@ -55,7 +55,7 @@ router.get("/:id/quiz", async (req, res) => {
         return res.status(400).json({ error: "Chapter not found" });
     }
 
-    if (!chapter?.quiz_attainable) {
+    if (!chapter?.quiz_attainable && !chapter?.quiz_pool) {
         return res.status(400).json({ error: "Quiz Not Allowed !" });
     }
 

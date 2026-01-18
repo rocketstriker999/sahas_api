@@ -1,5 +1,6 @@
 const libExpress = require("express");
-
+const axios = require("axios");
+const { parse } = require("csv-parse/sync");
 const { validateRequestBody } = require("sahas_utils");
 const { getSubjectById } = require("../db/subjects");
 const {
@@ -43,6 +44,42 @@ router.get("/:id", async (req, res) => {
 });
 
 //tested
+router.get("/:id/quiz", async (req, res) => {
+    if (!req.params.id) {
+        return res.status(400).json({ error: "Missing Chapter Id" });
+    }
+
+    const chapter = await getChapterById({ id: req.params.id });
+
+    if (!chapter) {
+        return res.status(400).json({ error: "Chapter not found" });
+    }
+
+    if (!chapter?.quiz_attainable) {
+        return res.status(400).json({ error: "Quiz Not Allowed !" });
+    }
+
+    const response = await axios.get(chapter.quiz_pool);
+
+    const records = parse(response.data, {
+        columns: true,
+        skip_empty_lines: true,
+        trim: true,
+    });
+
+    const shuffled = records.sort(() => 0.5 - Math.random());
+    const limit = chapter?.quiz_questions || 5;
+    const selectedQuestions = shuffled.slice(0, limit);
+
+    const quizResponse = {
+        quiz_time: chapter?.quiz_time || 10,
+        quiz_pool: selectedQuestions,
+    };
+
+    res.status(200).json(quizResponse);
+});
+
+//tested
 router.delete("/:id", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Chapter Id" });
@@ -81,8 +118,9 @@ router.post(
     },
     async (req, res) => {
         const chapterId = await addChapter(req.body);
+
         res.status(201).json(await getChapterById({ id: chapterId }));
-    }
+    },
 );
 
 //tested

@@ -185,16 +185,7 @@ async function generateDBTables() {
             active BOOLEAN NOT NULL DEFAULT TRUE,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
-        `CREATE TABLE IF NOT EXISTS QUIZ_MCQS(
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            subject_id INT NOT NULL, 
-            question VARCHAR(256) NULL,
-            choice_one VARCHAR(98) NULL,
-            choice_two VARCHAR(98) NULL,
-            choice_three VARCHAR(98) NULL,
-            choice_four VARCHAR(98) NULL,
-            correct_choice VARCHAR(98) NULL
-        )`,
+
         `CREATE TABLE IF NOT EXISTS COURSE_SUBJECTS(
             id INT AUTO_INCREMENT PRIMARY KEY,
             course_id INT NOT NULL,

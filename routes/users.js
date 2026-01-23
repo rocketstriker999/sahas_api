@@ -18,6 +18,7 @@ const { getUserRolesByUserId } = require("../db/user_roles");
 const { getEnrollmentCoursesByUserId } = require("../db/enrollment_courses");
 const { getDevicesByUserId } = require("../db/devices");
 const { getCourseSubjectsByCourseId } = require("../db/course_subjects");
+const { getChaptersBySubjectId } = require("../db/chapters");
 
 const router = libExpress.Router();
 
@@ -63,6 +64,10 @@ router.get("/:id/self-assesment-catalogue", async (req, res) => {
 
     for (const course of courses) {
         course.subjects = await getCourseSubjectsByCourseId({ course_id: course?.id });
+
+        for (const subject of course.subjects) {
+            subject.chapters = await getChaptersBySubjectId({ subject_id: subject.id });
+        }
     }
 
     return res.status(200).json(courses);

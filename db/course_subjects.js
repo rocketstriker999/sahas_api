@@ -4,7 +4,7 @@ const { logger } = require("sahas_utils");
 //freeze
 function getCourseSubjectsByCourseId({ course_id }) {
     return executeSQLQueryParameterized(
-        `SELECT COURSE_SUBJECTS.id,SUBJECTS.id AS subject_id,SUBJECTS.title,SUBJECTS.background_color,SUBJECTS.active,SUBJECTS.updated_at,COURSE_SUBJECTS.view_index FROM COURSE_SUBJECTS LEFT JOIN SUBJECTS ON COURSE_SUBJECTS.subject_id=SUBJECTS.id WHERE COURSE_SUBJECTS.course_id=? ORDER BY COURSE_SUBJECTS.view_index ASC`,
+        `SELECT COURSE_SUBJECTS.id,SUBJECTS.id AS subject_id,SUBJECTS.title,SUBJECTS.background_color,SUBJECTS.test_timer_minutes,SUBJECTS.test_size,SUBJECTS.active,SUBJECTS.updated_at,COURSE_SUBJECTS.view_index FROM COURSE_SUBJECTS LEFT JOIN SUBJECTS ON COURSE_SUBJECTS.subject_id=SUBJECTS.id WHERE COURSE_SUBJECTS.course_id=? ORDER BY COURSE_SUBJECTS.view_index ASC`,
         [course_id],
     ).catch((error) => {
         logger.error(`getCourseSubjectsByCourseId: ${error}`);

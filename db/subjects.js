@@ -3,7 +3,7 @@ const { logger } = require("sahas_utils");
 
 //freeze
 function addSubject({ title, background_color = null, test_timer_minutes = null, test_size = null }) {
-    return executeSQLQueryParameterized(`INSERT INTO SUBJECTS(title,background_color,test_timer_minutes,test_size) VALUES(?,?)`, [
+    return executeSQLQueryParameterized(`INSERT INTO SUBJECTS(title,background_color,test_timer_minutes,test_size) VALUES(?,?,?,?)`, [
         title,
         background_color,
         test_timer_minutes,

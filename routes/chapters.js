@@ -12,7 +12,7 @@ const {
     getChapterBySubjectIdAndTitle,
 } = require("../db/chapters");
 const { getMediaByChapterId } = require("../db/media");
-const { addChapterTest, getChapterTestByChapterId, deleteChapterTest } = require("../db/chapter_test");
+const { addChapterTest, getChapterTestByChapterId, deleteChapterTest, addTestConfiguration, getTestConfigurationById } = require("../db/test_configurations");
 
 const router = libExpress.Router();
 
@@ -118,11 +118,13 @@ router.post(
         next();
     },
     async (req, res) => {
-        if (req.body?.test) {
-            req.body.test_configuration_id = await addChapterTest(req.body?.test);
+        if (req.body?.testConfiguration) {
+            req.body.testConfiguration.id = await addTestConfiguration(req.body?.testConfiguration);
         }
         const chapterId = await addChapter(req.body);
-        res.status(201).json(await getChapterById({ id: chapterId }));
+        const chapter = await getChapterById({ id: chapterId });
+        chapter.testConfiguration = await getTestConfigurationById({ id: req.body.testConfiguration.id });
+        res.status(201).json(chapter);
     },
 );
 

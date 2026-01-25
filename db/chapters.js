@@ -7,15 +7,25 @@ function getChaptersBySubjectId({ subject_id }) {
         (error) => {
             logger.error(`getChaptersBySubjectId: ${error}`);
             return [];
-        }
+        },
     );
 }
 
 //freeze
-function addChapter({ title, subject_id, type, view_index = 0, quiz_attainable = false, quiz_time = null, quiz_questions = null, quiz_pool = null }) {
+function getTestAttainableChaptersBySubjectId({ subject_id }) {
+    return executeSQLQueryParameterized(`SELECT * FROM SUBJECT_CHAPTERS WHERE subject_id=? AND test_attainable=TRUE ORDER BY view_index ASC `, [
+        subject_id,
+    ]).catch((error) => {
+        logger.error(`getTestAttainableChaptersBySubjectId: ${error}`);
+        return [];
+    });
+}
+
+//freeze
+function addChapter({ title, subject_id, type, test_attainable = false, test_questions_pool = null, view_index = 0 }) {
     return executeSQLQueryParameterized(
-        `INSERT INTO SUBJECT_CHAPTERS(title,subject_id,type,view_index,quiz_attainable,quiz_time,quiz_questions,quiz_pool) VALUES(?,?,?,?,?,?,?,?)`,
-        [title, subject_id, type, view_index, quiz_attainable, quiz_time, quiz_questions, quiz_pool]
+        `INSERT INTO SUBJECT_CHAPTERS(title,subject_id,type,test_attainable,test_questions_pool,view_index) VALUES(?,?,?,?,?,?)`,
+        [title, subject_id, type, test_attainable, test_questions_pool, view_index],
     )
         .then((result) => result.insertId)
         .catch((error) => logger.error(`addChapter: ${error}`));
@@ -31,7 +41,7 @@ function getChapterById({ id }) {
 //freeze
 function updateChapterViewIndexById({ id, view_index }) {
     return executeSQLQueryParameterized("UPDATE SUBJECT_CHAPTERS SET view_index=? WHERE id=?", [view_index, id]).catch((error) =>
-        logger.error(`updateChapterViewIndexById: ${error}`)
+        logger.error(`updateChapterViewIndexById: ${error}`),
     );
 }
 
@@ -41,14 +51,12 @@ function deleteChapterById({ id }) {
 }
 
 //freeze
-function updateChapterById({ id, title, type, quiz_attainable = false, quiz_time = null, quiz_questions = null, quiz_pool = null }) {
-    return executeSQLQueryParameterized("UPDATE SUBJECT_CHAPTERS SET title=?,type=?,quiz_attainable=?,quiz_time=?,quiz_questions=?,quiz_pool=? WHERE id=?", [
+function updateChapterById({ id, title, type, test_attainable = false, test_questions_pool = null }) {
+    return executeSQLQueryParameterized("UPDATE SUBJECT_CHAPTERS SET title=?,type=?,test_attainable=?,test_questions_pool=? WHERE id=?", [
         title,
         type,
-        quiz_attainable,
-        quiz_time,
-        quiz_questions,
-        quiz_pool,
+        test_attainable,
+        test_questions_pool,
         id,
     ]).catch((error) => logger.error(`updateChapterById: ${error}`));
 }
@@ -68,4 +76,5 @@ module.exports = {
     deleteChapterById,
     updateChapterById,
     getChapterBySubjectIdAndTitle,
+    getTestAttainableChaptersBySubjectId,
 };

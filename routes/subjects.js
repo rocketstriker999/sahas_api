@@ -10,6 +10,7 @@ const {
     getCourseSubjectBySubjectId,
 } = require("../db/course_subjects");
 const { getChaptersBySubjectId } = require("../db/chapters");
+const { getTestConfigurationByChapterId } = require("../db/test_configurations");
 
 const router = libExpress.Router();
 
@@ -48,7 +49,13 @@ router.get("/:id/chapters", async (req, res) => {
         return res.status(400).json({ error: "Missing Subject id" });
     }
     //provide all the subjects
-    res.status(200).json(await getChaptersBySubjectId({ subject_id: req.params.id }));
+    const chapters = await getChaptersBySubjectId({ subject_id: req.params.id });
+
+    for (const chapter of chapters) {
+        if (chapter?.test_configuration_id) chapter.testConfiguration = await getTestConfigurationByChapterId({ chapter_id: chapter?.id });
+    }
+
+    res.status(200).json(chapters);
 });
 
 //tested
@@ -77,7 +84,7 @@ router.post(
             view_index: req.body.view_index,
         });
         res.status(201).json(await getCourseSubjectById({ id: courseSubjectId }));
-    }
+    },
 );
 
 module.exports = router;

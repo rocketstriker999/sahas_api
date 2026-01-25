@@ -12,12 +12,11 @@ function getChaptersBySubjectId({ subject_id }) {
 }
 
 //freeze
-function getQuizAttainableChaptersBySubjectId({ subject_id }) {
-    return executeSQLQueryParameterized(
-        `SELECT * FROM SUBJECT_CHAPTERS WHERE subject_id=? WHERE quiz_attainable=TRUE ORDER BY view_index ASC ,updated_at DESC`,
-        [subject_id],
-    ).catch((error) => {
-        logger.error(`getQuizAttainableChaptersBySubjectId: ${error}`);
+function getTestAttainableChaptersBySubjectId({ subject_id }) {
+    return executeSQLQueryParameterized(`SELECT * FROM SUBJECT_CHAPTERS WHERE subject_id=? WHERE test_attainable=TRUE ORDER BY view_index ASC `, [
+        subject_id,
+    ]).catch((error) => {
+        logger.error(`getTestAttainableChaptersBySubjectId: ${error}`);
         return [];
     });
 }
@@ -77,5 +76,5 @@ module.exports = {
     deleteChapterById,
     updateChapterById,
     getChapterBySubjectIdAndTitle,
-    getQuizAttainableChaptersBySubjectId,
+    getTestAttainableChaptersBySubjectId,
 };

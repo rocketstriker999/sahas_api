@@ -22,10 +22,10 @@ function getTestAttainableChaptersBySubjectId({ subject_id }) {
 }
 
 //freeze
-function addChapter({ title, subject_id, type, test_attainable = false, test_configuration_id = null, view_index = 0 }) {
+function addChapter({ title, subject_id, type, test_attainable = false, test_questions_pool = null, view_index = 0 }) {
     return executeSQLQueryParameterized(
-        `INSERT INTO SUBJECT_CHAPTERS(title,subject_id,type,test_attainable,test_configuration_id,view_index) VALUES(?,?,?,?,?,?)`,
-        [title, subject_id, type, test_attainable, test_configuration_id, view_index],
+        `INSERT INTO SUBJECT_CHAPTERS(title,subject_id,type,test_attainable,test_questions_pool,view_index) VALUES(?,?,?,?,?,?)`,
+        [title, subject_id, type, test_attainable, test_questions_pool, view_index],
     )
         .then((result) => result.insertId)
         .catch((error) => logger.error(`addChapter: ${error}`));
@@ -51,12 +51,12 @@ function deleteChapterById({ id }) {
 }
 
 //freeze
-function updateChapterById({ id, title, type, test_attainable = false, test_configuration_id = null }) {
-    return executeSQLQueryParameterized("UPDATE SUBJECT_CHAPTERS SET title=?,type=?,test_attainable=?,test_configuration_id=? WHERE id=?", [
+function updateChapterById({ id, title, type, test_attainable = false, test_questions_pool = null }) {
+    return executeSQLQueryParameterized("UPDATE SUBJECT_CHAPTERS SET title=?,type=?,test_attainable=?,test_questions_pool=? WHERE id=?", [
         title,
         type,
         test_attainable,
-        test_configuration_id,
+        test_questions_pool,
         id,
     ]).catch((error) => logger.error(`updateChapterById: ${error}`));
 }

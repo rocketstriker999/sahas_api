@@ -182,6 +182,8 @@ async function generateDBTables() {
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(96) NOT NULL,
             background_color VARCHAR(32) DEFAULT NULL,
+            test_timer_minutes INT DEFAULT NULL,
+            test_size INT DEFAULT NULL,
             active BOOLEAN NOT NULL DEFAULT TRUE,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
@@ -200,18 +202,13 @@ async function generateDBTables() {
             title VARCHAR(128) NOT NULL,
             type INT NOT NULL,
             test_attainable BOOL DEFAULT FALSE,
-            test_configuration_id INT NULL,
+            test_questions_pool VARCHAR(128) NULL UNIQUE,
             view_index INT NOT NULL DEFAULT 0,
             active BOOLEAN NOT NULL DEFAULT TRUE,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             UNIQUE KEY unique_subject_title (subject_id, title)
         )`,
-        `CREATE TABLE IF NOT EXISTS TEST_CONFIGURATIONS(
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            timer_minutes INT DEFAULT NULL,
-            size INT DEFAULT NULL,
-            questions_pool VARCHAR(128) NULL UNIQUE
-        )`,
+
         `CREATE TABLE IF NOT EXISTS CHAPTER_TYPES(
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(128) NOT NULL UNIQUE,

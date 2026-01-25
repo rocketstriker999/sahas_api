@@ -2,17 +2,26 @@ const { executeSQLQueryParameterized } = require("../libs/db");
 const { logger } = require("sahas_utils");
 
 //freeze
-function addSubject({ title, background_color = null }) {
-    return executeSQLQueryParameterized(`INSERT INTO SUBJECTS(title,background_color) VALUES(?,?)`, [title, background_color])
+function addSubject({ title, background_color = null, test_timer_minutes = null, test_size = null }) {
+    return executeSQLQueryParameterized(`INSERT INTO SUBJECTS(title,background_color,test_timer_minutes,test_size) VALUES(?,?)`, [
+        title,
+        background_color,
+        test_timer_minutes,
+        test_size,
+    ])
         .then((result) => result.insertId)
         .catch((error) => logger.error(`addSubject: ${error}`));
 }
 
 //freeze
-function updateSubjectById({ id, title, background_color = null }) {
-    return executeSQLQueryParameterized(`UPDATE SUBJECTS SET title=?,background_color=? WHERE id=?`, [title, background_color, id]).catch((error) =>
-        logger.error(`updateSubjectById: ${error}`)
-    );
+function updateSubjectById({ id, title, background_color = null, test_timer_minutes = null, test_size = null }) {
+    return executeSQLQueryParameterized(`UPDATE SUBJECTS SET title=?,background_color=?,test_timer_minutes=?,test_size=? WHERE id=?`, [
+        title,
+        background_color,
+        test_timer_minutes,
+        test_size,
+        id,
+    ]).catch((error) => logger.error(`updateSubjectById: ${error}`));
 }
 
 //freeze

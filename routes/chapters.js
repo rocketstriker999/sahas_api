@@ -53,6 +53,42 @@ router.get("/:id", async (req, res) => {
 });
 
 //tested
+router.get("/questions-pool", async (req, res) => {
+    if (!req.query?.chapters?.length) {
+        return res.status(400).json({ error: "Missing Chapter Ids" });
+    }
+
+    const chapter = await getChapterById({ id: req.params.id });
+
+    if (!chapter) {
+        return res.status(400).json({ error: "Chapter not found" });
+    }
+
+    if (!chapter?.quiz_attainable && !chapter?.quiz_pool) {
+        return res.status(400).json({ error: "Quiz Not Allowed !" });
+    }
+
+    const response = await axios.get(chapter.quiz_pool);
+
+    const records = parse(response.data, {
+        columns: true,
+        skip_empty_lines: true,
+        trim: true,
+    });
+
+    const shuffled = records.sort(() => 0.5 - Math.random());
+    const limit = chapter?.quiz_questions || 5;
+    const selectedQuestions = shuffled.slice(0, limit);
+
+    const quizResponse = {
+        quiz_time: chapter?.quiz_time || 10,
+        quiz_pool: selectedQuestions,
+    };
+
+    res.status(200).json(quizResponse);
+});
+
+//tested
 router.delete("/:id", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Chapter Id" });
@@ -90,13 +126,8 @@ router.post(
         next();
     },
     async (req, res) => {
-        if (req.body?.test_attainable && req.body?.testConfiguration) {
-            req.body.test_configuration_id = await addTestConfiguration(req.body?.testConfiguration);
-        }
         const chapterId = await addChapter(req.body);
-        const chapter = await getChapterById({ id: chapterId });
-        chapter.testConfiguration = await getTestConfigurationByChapterId({ chapter_id: chapterId });
-        res.status(201).json(chapter);
+        res.status(201).json(await getChapterById({ id: chapterId }));
     },
 );
 
@@ -113,18 +144,8 @@ router.patch(
         next();
     },
     async (req, res) => {
-        if (req.body?.testConfiguration) {
-            if (req.body?.test_configuration_id) {
-                await updateTestConfigurationById({ ...req.body?.testConfiguration, id: req.body.test_configuration_id });
-            } else {
-                req.body.test_configuration_id = await addTestConfiguration(req.body?.testConfiguration);
-            }
-        }
         await updateChapterById(req.body);
-        const chapter = await getChapterById({ id: req.body.id });
-        chapter.testConfiguration = await getTestConfigurationByChapterId({ chapter_id: req.body.id });
-
-        res.status(200).json(chapter);
+        res.status(200).json(await getChapterById({ id: req.body.id }));
     },
 );
 

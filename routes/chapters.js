@@ -160,9 +160,7 @@ router.patch(
         }
         await updateChapterById(req.body);
         const chapter = await getChapterById({ id: req.body.id });
-        if (chapter?.test_attainable) {
-            chapter.testConfiguration = await getTestConfigurationByChapterId({ chapter_id: req.body.id });
-        }
+        chapter.testConfiguration = await getTestConfigurationByChapterId({ chapter_id: req.body.id });
 
         res.status(200).json(chapter);
     },

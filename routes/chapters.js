@@ -12,6 +12,7 @@ const {
     getChapterBySubjectIdAndTitle,
 } = require("../db/chapters");
 const { getMediaByChapterId } = require("../db/media");
+const { addChapterTest, getChapterTestByChapterId, deleteChapterTest } = require("../db/chapter_test");
 
 const router = libExpress.Router();
 
@@ -118,8 +119,14 @@ router.post(
     },
     async (req, res) => {
         const chapterId = await addChapter(req.body);
+        if (req.body?.test) {
+            await addChapterTest(req.body?.test);
+        }
 
-        res.status(201).json(await getChapterById({ id: chapterId }));
+        const chapter = await getChapterById({ id: chapterId });
+        chapter.test = await getChapterTestByChapterId({ chapter_id: chapterId });
+
+        res.status(201).json(chapter);
     },
 );
 
@@ -131,7 +138,16 @@ router.patch("/", async (req, res) => {
 
     if (isRequestBodyValid) {
         await updateChapterById(validatedRequestBody);
-        res.status(200).json(await getChapterById({ id: validatedRequestBody.id }));
+
+        if (req.body?.test) {
+            await deleteChapterTest({ chapter_id: validatedRequestBody.id });
+            await addChapterTest(req.body?.test);
+        }
+
+        const chapter = await getChapterById({ id: validatedRequestBody.id });
+        chapter.test = await getChapterTestByChapterId({ chapter_id: validatedRequestBody.id });
+
+        res.status(200).json(chapter);
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

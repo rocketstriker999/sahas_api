@@ -199,14 +199,20 @@ async function generateDBTables() {
             subject_id INT NOT NULL,
             title VARCHAR(128) NOT NULL,
             type INT NOT NULL,
-            quiz_attainable BOOLEAN NOT NULL DEFAULT TRUE,
-            quiz_time INT DEFAULT NULL,
-            quiz_questions INT DEFAULT NULL,
-            quiz_pool VARCHAR(128) NULL UNIQUE, 
             view_index INT NOT NULL DEFAULT 0,
             active BOOLEAN NOT NULL DEFAULT TRUE,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             UNIQUE KEY unique_subject_title (subject_id, title)
+        )`,
+        `CREATE TABLE IF NOT EXISTS CHAPTER_TEST(
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            chapter_id INT NOT NULL,
+            timer_minutes INT DEFAULT NULL,
+            size INT DEFAULT NULL,
+            questions_pool VARCHAR(128) NULL UNIQUE, 
+            active BOOLEAN NOT NULL DEFAULT TRUE,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            UNIQUE KEY unique_subject_title (chapter_id, questions_pool)
         )`,
         `CREATE TABLE IF NOT EXISTS CHAPTER_TYPES(
             id INT AUTO_INCREMENT PRIMARY KEY,

@@ -199,10 +199,11 @@ async function generateDBTables() {
             subject_id INT NOT NULL,
             title VARCHAR(128) NOT NULL,
             type INT NOT NULL,
+            test_attainable BOOL DEFAULT FALSE,
+            test_configuration_id INT NULL,
             view_index INT NOT NULL DEFAULT 0,
             active BOOLEAN NOT NULL DEFAULT TRUE,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-            test_configuration_id INT NULL,
             UNIQUE KEY unique_subject_title (subject_id, title)
         )`,
         `CREATE TABLE IF NOT EXISTS TEST_CONFIGURATIONS(

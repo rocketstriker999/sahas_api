@@ -125,7 +125,7 @@ router.post(
         next();
     },
     async (req, res) => {
-        if (req.body?.testConfiguration) {
+        if (req.body?.test_attainable && req.body?.testConfiguration) {
             req.body.testConfiguration.id = await addTestConfiguration(req.body?.testConfiguration);
         }
         const chapterId = await addChapter(req.body);

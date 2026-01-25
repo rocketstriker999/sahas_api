@@ -23,14 +23,11 @@ function getQuizAttainableChaptersBySubjectId({ subject_id }) {
 }
 
 //freeze
-function addChapter({ title, subject_id, type, test_configuration_id = null, view_index = 0 }) {
-    return executeSQLQueryParameterized(`INSERT INTO SUBJECT_CHAPTERS(title,subject_id,type,test_configuration_id,view_index) VALUES(?,?,?,?,?)`, [
-        title,
-        subject_id,
-        type,
-        test_configuration_id,
-        view_index,
-    ])
+function addChapter({ title, subject_id, type, test_attainable = false, test_configuration_id = null, view_index = 0 }) {
+    return executeSQLQueryParameterized(
+        `INSERT INTO SUBJECT_CHAPTERS(title,subject_id,type,test_attainable,test_configuration_id,view_index) VALUES(?,?,?,?,?,?)`,
+        [title, subject_id, type, test_attainable, test_configuration_id, view_index],
+    )
         .then((result) => result.insertId)
         .catch((error) => logger.error(`addChapter: ${error}`));
 }

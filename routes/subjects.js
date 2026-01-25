@@ -52,7 +52,7 @@ router.get("/:id/chapters", async (req, res) => {
     const chapters = await getChaptersBySubjectId({ subject_id: req.params.id });
 
     for (const chapter of chapters) {
-        chapter.testConfiguration = await getTestConfigurationByChapterId({ chapter_id: chapter?.id });
+        if (chapter?.test_configuration_id) chapter.testConfiguration = await getTestConfigurationByChapterId({ chapter_id: chapter?.id });
     }
 
     res.status(200).json(chapters);

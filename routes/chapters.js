@@ -32,18 +32,6 @@ router.get("/:id/media", async (req, res) => {
 });
 
 //tested
-router.get("/:id", async (req, res) => {
-    if (!req.params.id) {
-        return res.status(400).json({ error: "Missing Chapter Id" });
-    }
-
-    const chapter = await getChapterById({ id: req.params.id });
-    chapter.subject = await getSubjectById({ id: chapter?.subject_id });
-
-    res.status(200).json(chapter);
-});
-
-//tested
 router.get("/test", async (req, res) => {
     if (!req.query?.chapters?.length || !req.query.subject) {
         return res.status(400).json({ error: "Missing Chapters or Subject" });
@@ -79,6 +67,18 @@ router.get("/test", async (req, res) => {
         testTimerMinute,
         testQuestions,
     });
+});
+
+//tested
+router.get("/:id", async (req, res) => {
+    if (!req.params.id) {
+        return res.status(400).json({ error: "Missing Chapter Id" });
+    }
+
+    const chapter = await getChapterById({ id: req.params.id });
+    chapter.subject = await getSubjectById({ id: chapter?.subject_id });
+
+    res.status(200).json(chapter);
 });
 
 //tested

@@ -41,7 +41,8 @@ router.get("/test", async (req, res) => {
 
     const testQuestions = [];
 
-    const chapters = req.query?.chapters?.length > 1 ? req.query?.chapters : [req.query?.chapters];
+    const chapters = [].concat(req.query.chapters || []);
+
     logger.info(chapters);
 
     for (const chapterId of chapters) {

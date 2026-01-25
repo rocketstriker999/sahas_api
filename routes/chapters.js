@@ -53,8 +53,8 @@ router.get("/test", async (req, res) => {
     }
 
     res.status(200).json({
-        testTimerMinute: test_timer_minutes,
-        testQuestions: testQuestions?.sort(() => 0.5 - Math.random())?.slice(0, test_size),
+        timerMinute: test_timer_minutes,
+        questions: testQuestions?.sort(() => 0.5 - Math.random())?.slice(0, test_size),
     });
 });
 

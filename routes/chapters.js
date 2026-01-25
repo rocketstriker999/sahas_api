@@ -33,7 +33,7 @@ router.get("/:id/media", async (req, res) => {
 
 //tested
 router.get("/test", async (req, res) => {
-    if (!req.query?.chapters?.length || !req.query.subject) {
+    if (!req.query?.chapters?.length || !req.query?.subject) {
         return res.status(400).json({ error: "Missing Chapters or Subject" });
     }
 
@@ -43,7 +43,7 @@ router.get("/test", async (req, res) => {
 
     //
 
-    logger.info(JSON.stringify(subject));
+    logger.info(JSON.stringify(req.query));
 
     for (const chapterId of req.query?.chapters) {
         logger.info(chapterId);

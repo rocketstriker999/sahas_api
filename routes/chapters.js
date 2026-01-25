@@ -120,7 +120,7 @@ router.post(
     async (req, res) => {
         const chapterId = await addChapter(req.body);
         if (req.body?.test) {
-            await addChapterTest(req.body?.test);
+            await addChapterTest({ ...req.body?.test, chapter_id: chapterId });
         }
 
         const chapter = await getChapterById({ id: chapterId });

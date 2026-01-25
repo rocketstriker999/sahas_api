@@ -37,7 +37,7 @@ router.get("/test", async (req, res) => {
         return res.status(400).json({ error: "Missing Chapters or Subject" });
     }
 
-    const subject = await getSubjectById({ id: req.query.subject });
+    const { test_timer_minutes, test_size } = await getSubjectById({ id: req.query.subject });
 
     const testQuestions = [];
 
@@ -58,8 +58,8 @@ router.get("/test", async (req, res) => {
     }
 
     res.status(200).json({
-        testTimerMinute: subject?.test_timer_minutes,
-        testQuestions: testQuestions?.sort(() => 0.5 - Math.random())?.slice(0, subject?.test_size),
+        testTimerMinute: test_timer_minutes,
+        testQuestions: testQuestions?.sort(() => 0.5 - Math.random())?.slice(0, test_size),
     });
 });
 

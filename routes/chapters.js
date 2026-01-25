@@ -41,9 +41,7 @@ router.get("/test", async (req, res) => {
 
     const testQuestions = [];
 
-    logger.info(JSON.stringify(req.query));
-
-    for (const chapterId of req.query?.chapters) {
+    for (const chapterId of req.query?.chapters?.length > 0 ? req.query?.chapters : [req.query?.chapters]) {
         const chapter = await getChapterById({ id: chapterId });
         logger.info(JSON.stringify(chapter));
         const response = await axios.get(chapter.test_questions_pool);

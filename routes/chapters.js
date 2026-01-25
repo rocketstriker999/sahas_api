@@ -12,15 +12,6 @@ const {
     getChapterBySubjectIdAndTitle,
 } = require("../db/chapters");
 const { getMediaByChapterId } = require("../db/media");
-const {
-    addChapterTest,
-    getChapterTestByChapterId,
-    deleteChapterTest,
-    addTestConfiguration,
-    getTestConfigurationById,
-    updateTestConfigurationById,
-    getTestConfigurationByChapterId,
-} = require("../db/test_configurations");
 
 const router = libExpress.Router();
 
@@ -53,39 +44,37 @@ router.get("/:id", async (req, res) => {
 });
 
 //tested
-router.get("/questions-pool", async (req, res) => {
-    if (!req.query?.chapters?.length) {
-        return res.status(400).json({ error: "Missing Chapter Ids" });
+router.get("/test", async (req, res) => {
+    if (!req.query?.chapters?.length || !req.query.subject) {
+        return res.status(400).json({ error: "Missing Chapters or Subject" });
     }
 
-    const chapter = await getChapterById({ id: req.params.id });
+    const subject = await getSubjectById({ id: req.query.subject });
 
-    if (!chapter) {
-        return res.status(400).json({ error: "Chapter not found" });
+    const testTimerMinute = 0;
+    const testQuestions = [];
+
+    for (const chapterId of req.query?.chapters) {
+        const chapter = await getChapterById({ id: chapterId });
+        const response = await axios.get(chapter.test_questions_pool);
+        const records = parse(response.data, {
+            columns: true,
+            skip_empty_lines: true,
+            trim: true,
+        });
+        const shuffled = records.sort(() => 0.5 - Math.random());
+        testQuestions.push(...shuffled.slice(0, subject?.test_size));
     }
 
-    if (!chapter?.quiz_attainable && !chapter?.quiz_pool) {
-        return res.status(400).json({ error: "Quiz Not Allowed !" });
-    }
+    // const quizResponse = {
+    //     quiz_time: chapter?.quiz_time || 10,
+    //     quiz_pool: selectedQuestions,
+    // };
 
-    const response = await axios.get(chapter.quiz_pool);
-
-    const records = parse(response.data, {
-        columns: true,
-        skip_empty_lines: true,
-        trim: true,
+    res.status(200).json({
+        testTimerMinute,
+        testQuestions,
     });
-
-    const shuffled = records.sort(() => 0.5 - Math.random());
-    const limit = chapter?.quiz_questions || 5;
-    const selectedQuestions = shuffled.slice(0, limit);
-
-    const quizResponse = {
-        quiz_time: chapter?.quiz_time || 10,
-        quiz_pool: selectedQuestions,
-    };
-
-    res.status(200).json(quizResponse);
 });
 
 //tested

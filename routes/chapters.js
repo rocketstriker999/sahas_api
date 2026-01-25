@@ -39,7 +39,6 @@ router.get("/test", async (req, res) => {
 
     const subject = await getSubjectById({ id: req.query.subject });
 
-    const testTimerMinute = 0;
     const testQuestions = [];
 
     logger.info("CALLLLLLLLL");
@@ -54,18 +53,12 @@ router.get("/test", async (req, res) => {
             skip_empty_lines: true,
             trim: true,
         });
-        const shuffled = records.sort(() => 0.5 - Math.random());
-        testQuestions.push(...shuffled.slice(0, subject?.test_size));
+        testQuestions.push(...records);
     }
 
-    // const quizResponse = {
-    //     quiz_time: chapter?.quiz_time || 10,
-    //     quiz_pool: selectedQuestions,
-    // };
-
     res.status(200).json({
-        testTimerMinute,
-        testQuestions,
+        testTimerMinute: subject?.test_timer_minutes,
+        testQuestions: testQuestions?.sort(() => 0.5 - Math.random())?.slice(0, subject?.test_size),
     });
 });
 

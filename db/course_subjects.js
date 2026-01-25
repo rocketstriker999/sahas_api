@@ -5,7 +5,7 @@ const { logger } = require("sahas_utils");
 function getCourseSubjectsByCourseId({ course_id }) {
     return executeSQLQueryParameterized(
         `SELECT COURSE_SUBJECTS.id,SUBJECTS.id AS subject_id,SUBJECTS.title,SUBJECTS.background_color,SUBJECTS.active,SUBJECTS.updated_at,COURSE_SUBJECTS.view_index FROM COURSE_SUBJECTS LEFT JOIN SUBJECTS ON COURSE_SUBJECTS.subject_id=SUBJECTS.id WHERE COURSE_SUBJECTS.course_id=? ORDER BY COURSE_SUBJECTS.view_index ASC`,
-        [course_id]
+        [course_id],
     ).catch((error) => {
         logger.error(`getCourseSubjectsByCourseId: ${error}`);
         return [];
@@ -15,7 +15,7 @@ function getCourseSubjectsByCourseId({ course_id }) {
 //freeze
 function updateCourseSubjectViewIndexById({ id, view_index }) {
     return executeSQLQueryParameterized("UPDATE COURSE_SUBJECTS SET view_index=? WHERE id=?", [view_index, id]).catch((error) =>
-        logger.error(`updateCourseSubjectViewIndexById: ${error}`)
+        logger.error(`updateCourseSubjectViewIndexById: ${error}`),
     );
 }
 
@@ -34,8 +34,8 @@ function addCourseSubject({ course_id, subject_id, view_index = 0 }) {
 //freeze
 function getCourseSubjectById({ id }) {
     return executeSQLQueryParameterized(
-        `SELECT COURSE_SUBJECTS.id,SUBJECTS.id AS subject_id,SUBJECTS.title,SUBJECTS.background_color,SUBJECTS.active,SUBJECTS.quiz_batch_size, SUBJECTS.timer, SUBJECTS.quiz_active,SUBJECTS.updated_at,COURSE_SUBJECTS.view_index FROM COURSE_SUBJECTS LEFT JOIN SUBJECTS ON COURSE_SUBJECTS.subject_id=SUBJECTS.id WHERE COURSE_SUBJECTS.id=?`,
-        [id]
+        `SELECT COURSE_SUBJECTS.id,SUBJECTS.id AS subject_id,SUBJECTS.title,SUBJECTS.background_color,SUBJECTS.active, SUBJECTS.test_timer_minutes, SUBJECTS.test_size,SUBJECTS.updated_at,COURSE_SUBJECTS.view_index FROM COURSE_SUBJECTS LEFT JOIN SUBJECTS ON COURSE_SUBJECTS.subject_id=SUBJECTS.id WHERE COURSE_SUBJECTS.id=?`,
+        [id],
     )
         .then((result) => (result.length > 0 ? result[0] : false))
         .catch((error) => logger.error(`getCourseSubjectById: ${error}`));
@@ -45,7 +45,7 @@ function getCourseSubjectById({ id }) {
 function getSubjectByCourseIdAndTitle({ course_id, title }) {
     return executeSQLQueryParameterized(
         `SELECT SUBJECTS.title from COURSE_SUBJECTS LEFT JOIN SUBJECTS ON COURSE_SUBJECTS.subject_id=SUBJECTS.id WHERE course_id=? AND title=?`,
-        [course_id, title]
+        [course_id, title],
     )
         .then((result) => (result.length > 0 ? result[0] : false))
         .catch((error) => logger.error(`getSubjectByCourseIdAndTitle: ${error}`));

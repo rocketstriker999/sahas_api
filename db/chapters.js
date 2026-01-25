@@ -13,7 +13,7 @@ function getChaptersBySubjectId({ subject_id }) {
 
 //freeze
 function getTestAttainableChaptersBySubjectId({ subject_id }) {
-    return executeSQLQueryParameterized(`SELECT * FROM SUBJECT_CHAPTERS WHERE subject_id=? WHERE test_attainable=TRUE ORDER BY view_index ASC `, [
+    return executeSQLQueryParameterized(`SELECT * FROM SUBJECT_CHAPTERS WHERE subject_id=? AND test_attainable=TRUE ORDER BY view_index ASC `, [
         subject_id,
     ]).catch((error) => {
         logger.error(`getTestAttainableChaptersBySubjectId: ${error}`);

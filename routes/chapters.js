@@ -19,6 +19,7 @@ const {
     addTestConfiguration,
     getTestConfigurationById,
     updateTestConfigurationById,
+    getTestConfigurationByChapterId,
 } = require("../db/test_configurations");
 
 const router = libExpress.Router();
@@ -126,12 +127,12 @@ router.post(
     },
     async (req, res) => {
         if (req.body?.test_attainable && req.body?.testConfiguration) {
-            req.body.testConfiguration.id = await addTestConfiguration(req.body?.testConfiguration);
+            await addTestConfiguration(req.body?.testConfiguration);
         }
         const chapterId = await addChapter(req.body);
         const chapter = await getChapterById({ id: chapterId });
         if (chapter?.test_attainable) {
-            chapter.testConfiguration = await getTestConfigurationById({ id: req.body.testConfiguration.id });
+            chapter.testConfiguration = await getTestConfigurationByChapterId({ chapter_id: chapterId });
         }
         res.status(201).json(chapter);
     },

@@ -20,6 +20,16 @@ function getTestConfigurationById({ id }) {
 }
 
 //freeze
+function getTestConfigurationByChapterId({ chapter_id }) {
+    return executeSQLQueryParameterized(
+        `SELECT TEST_CONFIGURATIONS.* FROM SUBJECT_CHAPTERS LEFT JOIN TEST_CONFIGURATIONS ON SUBJECT_CHAPTERS.test_configuration_id=TEST_CONFIGURATIONS.id  WHERE SUBJECT_CHAPTERS.id=?`,
+        [chapter_id],
+    )
+        .then((result) => (result.length > 0 ? result[0] : false))
+        .catch((error) => logger.error(`getTestConfigurationById: ${error}`));
+}
+
+//freeze
 function updateTestConfigurationById({ timer_minutes, size, questions_pool, id }) {
     return executeSQLQueryParameterized(`UPDATE TEST_CONFIGURATIONS SET timer_minutes=?,size=?,questions_pool=?  WHERE id=?`, [
         timer_minutes,
@@ -31,4 +41,4 @@ function updateTestConfigurationById({ timer_minutes, size, questions_pool, id }
         .catch((error) => logger.error(`updateTestConfigurationById: ${error}`));
 }
 
-module.exports = { addTestConfiguration, getTestConfigurationById, updateTestConfigurationById };
+module.exports = { addTestConfiguration, getTestConfigurationById, getTestConfigurationByChapterId, updateTestConfigurationById };

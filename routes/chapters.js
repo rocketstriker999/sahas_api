@@ -55,6 +55,7 @@ router.get("/test", async (req, res) => {
     const testQuestions = [];
 
     for (const chapterId of req.query?.chapters) {
+        logger.info(chapterId);
         const chapter = await getChapterById({ id: chapterId });
         const response = await axios.get(chapter.test_questions_pool);
         const records = parse(response.data, {

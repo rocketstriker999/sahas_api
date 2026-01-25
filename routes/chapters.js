@@ -150,8 +150,8 @@ router.patch(
     },
     async (req, res) => {
         if (req.body?.testConfiguration) {
-            if (req.body?.testConfiguration?.id) {
-                await updateTestConfigurationById(req.body?.testConfiguration);
+            if (req.body?.test_configuration_id) {
+                await updateTestConfigurationById({ ...req.body?.testConfiguration, id: req.body.test_configuration_id });
             } else {
                 req.body.test_configuration_id = await addTestConfiguration(req.body?.testConfiguration);
             }

@@ -52,12 +52,13 @@ function deleteChapterById({ id }) {
 }
 
 //freeze
-function updateChapterById({ id, title, type, test_configuration_id = null }) {
-    return executeSQLQueryParameterized("UPDATE SUBJECT_CHAPTERS SET title=?,type=?,test_configuration_id=? WHERE id=?", [
+function updateChapterById({ id, title, type, test_attainable = false, test_configuration_id = null }) {
+    return executeSQLQueryParameterized("UPDATE SUBJECT_CHAPTERS SET title=?,type=?,test_attainable=?,test_configuration_id=? WHERE id=?", [
         title,
         type,
-        id,
+        test_attainable,
         test_configuration_id,
+        id,
     ]).catch((error) => logger.error(`updateChapterById: ${error}`));
 }
 

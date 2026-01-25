@@ -152,11 +152,19 @@ router.patch(
     },
     async (req, res) => {
         if (req.body?.testConfiguration) {
-            await updateTestConfigurationById(req.body?.testConfiguration);
+            if (req.body?.testConfiguration?.id) {
+                await updateTestConfigurationById(req.body?.testConfiguration);
+            } else {
+                req.body.test_configuration_id = await addTestConfiguration(req.body?.testConfiguration);
+            }
         }
-        await updateChapterById(validatedRequestBody);
+        await updateChapterById(req.body);
+        const chapter = await getChapterById({ id: chapterId });
+        if (chapter?.test_attainable) {
+            chapter.testConfiguration = await getTestConfigurationByChapterId({ chapter_id: chapterId });
+        }
 
-        res.status(201).json(req.body);
+        res.status(200).json(chapter);
     },
 );
 

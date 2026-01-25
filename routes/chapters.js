@@ -54,6 +54,8 @@ router.get("/test", async (req, res) => {
     const testTimerMinute = 0;
     const testQuestions = [];
 
+    logger.info(req.query?.chapters);
+
     for (const chapterId of req.query?.chapters) {
         logger.info(chapterId);
         const chapter = await getChapterById({ id: chapterId });

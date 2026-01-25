@@ -12,7 +12,14 @@ const {
     getChapterBySubjectIdAndTitle,
 } = require("../db/chapters");
 const { getMediaByChapterId } = require("../db/media");
-const { addChapterTest, getChapterTestByChapterId, deleteChapterTest, addTestConfiguration, getTestConfigurationById } = require("../db/test_configurations");
+const {
+    addChapterTest,
+    getChapterTestByChapterId,
+    deleteChapterTest,
+    addTestConfiguration,
+    getTestConfigurationById,
+    updateTestConfigurationById,
+} = require("../db/test_configurations");
 
 const router = libExpress.Router();
 
@@ -129,22 +136,25 @@ router.post(
 );
 
 //tested
-router.patch("/", async (req, res) => {
-    const requiredBodyFields = ["id", "title", "type"];
-
-    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
-
-    if (isRequestBodyValid) {
-        if (req.body?.test) {
-            validatedRequestBody.test_configuration_id = await addChapterTest(req.body?.test);
+router.patch(
+    "/",
+    async (req, res, next) => {
+        const requiredBodyFields = ["id", "title", "type"];
+        const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+        if (!isRequestBodyValid) {
+            return res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
         }
-
+        req.body = validatedRequestBody;
+        next();
+    },
+    async (req, res) => {
+        if (req.body?.testConfiguration) {
+            await updateTestConfigurationById(req.body?.testConfiguration);
+        }
         await updateChapterById(validatedRequestBody);
 
-        res.status(200).json(await getChapterById({ id: validatedRequestBody.id }));
-    } else {
-        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
-    }
-});
+        res.status(201).json(req.body);
+    },
+);
 
 module.exports = router;

@@ -14,9 +14,21 @@ function addTestConfiguration({ timer_minutes, size, questions_pool }) {
 
 //freeze
 function getTestConfigurationById({ id }) {
-    return executeSQLQueryParameterized(`SELECT * FROM TEST_CONFIGURATIONS WHERE id=?`, [id]).catch((error) =>
-        logger.error(`getTestConfigurationById: ${error}`),
-    );
+    return executeSQLQueryParameterized(`SELECT * FROM TEST_CONFIGURATIONS WHERE id=?`, [id])
+        .then((result) => (result.length > 0 ? result[0] : false))
+        .catch((error) => logger.error(`getTestConfigurationById: ${error}`));
 }
 
-module.exports = { addTestConfiguration, getTestConfigurationById };
+//freeze
+function updateTestConfigurationById({ timer_minutes, size, questions_pool, id }) {
+    return executeSQLQueryParameterized(`UPDATE TEST_CONFIGURATIONS SET timer_minutes=?,size=?,questions_pool=?  WHERE id=?`, [
+        timer_minutes,
+        size,
+        questions_pool,
+        id,
+    ])
+        .then((result) => (result.length > 0 ? result[0] : false))
+        .catch((error) => logger.error(`updateTestConfigurationById: ${error}`));
+}
+
+module.exports = { addTestConfiguration, getTestConfigurationById, updateTestConfigurationById };

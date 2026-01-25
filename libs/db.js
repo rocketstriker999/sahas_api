@@ -202,17 +202,14 @@ async function generateDBTables() {
             view_index INT NOT NULL DEFAULT 0,
             active BOOLEAN NOT NULL DEFAULT TRUE,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            test_configuration_id INT NULL,
             UNIQUE KEY unique_subject_title (subject_id, title)
         )`,
-        `CREATE TABLE IF NOT EXISTS CHAPTER_TEST(
+        `CREATE TABLE IF NOT EXISTS TEST_CONFIGURATIONS(
             id INT AUTO_INCREMENT PRIMARY KEY,
-            chapter_id INT NOT NULL,
             timer_minutes INT DEFAULT NULL,
             size INT DEFAULT NULL,
-            questions_pool VARCHAR(128) NULL UNIQUE, 
-            active BOOLEAN NOT NULL DEFAULT TRUE,
-            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-            UNIQUE KEY unique_subject_title (chapter_id, questions_pool)
+            questions_pool VARCHAR(128) NULL UNIQUE
         )`,
         `CREATE TABLE IF NOT EXISTS CHAPTER_TYPES(
             id INT AUTO_INCREMENT PRIMARY KEY,

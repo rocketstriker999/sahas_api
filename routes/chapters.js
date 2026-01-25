@@ -118,15 +118,11 @@ router.post(
         next();
     },
     async (req, res) => {
-        const chapterId = await addChapter(req.body);
         if (req.body?.test) {
-            await addChapterTest({ ...req.body?.test, chapter_id: chapterId });
+            req.body.test_configuration_id = await addChapterTest(req.body?.test);
         }
-
-        const chapter = await getChapterById({ id: chapterId });
-        chapter.test = await getChapterTestByChapterId({ chapter_id: chapterId });
-
-        res.status(201).json(chapter);
+        const chapterId = await addChapter(req.body);
+        res.status(201).json(await getChapterById({ id: chapterId }));
     },
 );
 
@@ -137,17 +133,13 @@ router.patch("/", async (req, res) => {
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
     if (isRequestBodyValid) {
-        await updateChapterById(validatedRequestBody);
-
         if (req.body?.test) {
-            await deleteChapterTest({ chapter_id: validatedRequestBody.id });
-            await addChapterTest(req.body?.test);
+            validatedRequestBody.test_configuration_id = await addChapterTest(req.body?.test);
         }
 
-        const chapter = await getChapterById({ id: validatedRequestBody.id });
-        chapter.test = await getChapterTestByChapterId({ chapter_id: validatedRequestBody.id });
+        await updateChapterById(validatedRequestBody);
 
-        res.status(200).json(chapter);
+        res.status(200).json(await getChapterById({ id: validatedRequestBody.id }));
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

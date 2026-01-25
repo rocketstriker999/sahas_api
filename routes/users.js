@@ -66,6 +66,7 @@ router.get("/:id/chapters-test-catalogue", async (req, res) => {
         course.subjects = await getCourseSubjectsByCourseId({ course_id: course?.id });
 
         for (const subject of course.subjects) {
+            logger.info(subject?.id);
             subject.chapters = await getTestAttainableChaptersBySubjectId({ subject_id: subject.id });
         }
     }

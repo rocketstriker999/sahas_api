@@ -130,7 +130,9 @@ router.post(
         }
         const chapterId = await addChapter(req.body);
         const chapter = await getChapterById({ id: chapterId });
-        chapter.testConfiguration = await getTestConfigurationById({ id: req.body.testConfiguration.id });
+        if (chapter?.test_attainable) {
+            chapter.testConfiguration = await getTestConfigurationById({ id: req.body.testConfiguration.id });
+        }
         res.status(201).json(chapter);
     },
 );

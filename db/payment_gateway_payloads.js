@@ -6,8 +6,10 @@ function addPaymentGateWayPayLoad(paymentGateWayPayLoad) {
 }
 
 //freeze
-function getAllPaymentGateWayPayLoads() {
-    return paymentGateWayPayLoads;
+function getAllNonVerifiedPaymentGateWayPayLoads() {
+    const nonVerifiedPaymentGateWayPayLoads = [...paymentGateWayPayLoads];
+    paymentGateWayPayLoads = [];
+    return nonVerifiedPaymentGateWayPayLoads;
 }
 
 //freeze
@@ -15,9 +17,4 @@ function getPaymentGateWayPayLoadById({ id }) {
     return paymentGateWayPayLoads?.find(({ transaction }) => transaction?.id == id);
 }
 
-//freeze
-function removePaymentGateWayPayLoadsByIds({ ids }) {
-    paymentGateWayPayLoads = paymentGateWayPayLoads?.filter(({ transaction }) => !ids.includes(transaction?.id));
-}
-
-module.exports = { addPaymentGateWayPayLoad, getAllPaymentGateWayPayLoads, getPaymentGateWayPayLoadById, removePaymentGateWayPayLoadsByIds };
+module.exports = { addPaymentGateWayPayLoad, getAllNonVerifiedPaymentGateWayPayLoads, getPaymentGateWayPayLoadById };

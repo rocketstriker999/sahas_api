@@ -62,7 +62,7 @@ async function requestPayUVerification(transaction) {
             const payuVerification = await response.json();
             return payuVerification?.transaction_details[transaction.id]?.status === "success";
         } catch {
-            logger.error(`Failed to Check Status For Transaction - ${transaction.id}`);
+            logger.error(`Failed to Check Status For Transaction With PayU - ${transaction.id}`);
             return false;
         }
     }

@@ -3,10 +3,9 @@ const { getCourseById } = require("../db/courses");
 const { verifyPaymentGatewayPayLoadStatus, getDateByInterval, getFormattedDate } = require("../utils");
 const { requestService } = require("sahas_utils");
 const { validateRequestBody } = require("sahas_utils");
-
 const libCrypto = require("crypto");
 const { readConfig } = require("../libs/config");
-const { addPaymentGateWayPayLoad, getAllPaymentGateWayPayLoads, removePaymentGateWayPayLoadsByIds } = require("../db/payment_gateway_payloads");
+const { addPaymentGateWayPayLoad, removePaymentGateWayPayLoadsByIds, getAllNonVerifiedPaymentGateWayPayLoads } = require("../db/payment_gateway_payloads");
 const { logger } = require("sahas_utils");
 const { getCouponCodeCourseByCouponCodeAndCourseId } = require("../db/coupon_code_courses");
 const { addEnrollment } = require("../db/enrollments");
@@ -106,12 +105,12 @@ router.post("/", async (req, res) => {
         if (validatedRequestBody?.useWalletBalance && paymentGateWayPayLoad?.user?.wallet > 0 && paymentGateWayPayLoad.transaction.amount > 0) {
             paymentGateWayPayLoad.transaction.usedWalletBalance = Math.min(
                 paymentGateWayPayLoad?.user?.wallet,
-                paymentGateWayPayLoad.transaction.amount
+                paymentGateWayPayLoad.transaction.amount,
             ).toFixed(2);
 
             paymentGateWayPayLoad.transaction.amount = Math.max(
                 paymentGateWayPayLoad.transaction.amount - paymentGateWayPayLoad.transaction.usedWalletBalance,
-                0
+                0,
             );
         }
 
@@ -135,7 +134,7 @@ router.post("/", async (req, res) => {
         paymentGateWayPayLoad.transaction.hash = libCrypto
             .createHash("sha512")
             .update(
-                `${merchantKey}|${paymentGateWayPayLoad.transaction.id}|${paymentGateWayPayLoad.transaction.amount}|${paymentGateWayPayLoad.product}|${paymentGateWayPayLoad.user.firstName}|${paymentGateWayPayLoad.user.email}|||||||||||${merchantSalt}`
+                `${merchantKey}|${paymentGateWayPayLoad.transaction.id}|${paymentGateWayPayLoad.transaction.amount}|${paymentGateWayPayLoad.product}|${paymentGateWayPayLoad.user.firstName}|${paymentGateWayPayLoad.user.email}|||||||||||${merchantSalt}`,
             )
             .digest("hex");
 
@@ -157,7 +156,7 @@ router.get("/:id", async (req, res) => {
     const { payment: { cgst, sgst } = {} } = await readConfig("app");
 
     //verify status with payment gateway
-    const verifiedPaymentGatewayPayLoads = await Promise.all(getAllPaymentGateWayPayLoads()?.map(verifyPaymentGatewayPayLoadStatus));
+    const verifiedPaymentGatewayPayLoads = await Promise.all(getAllNonVerifiedPaymentGateWayPayLoads()?.map(verifyPaymentGatewayPayLoadStatus));
     //find those payment gateway payloads with success status
     const paidPaymentGatewayPayLoads = verifiedPaymentGatewayPayLoads?.filter(({ transaction }) => transaction?.paid);
 
@@ -293,7 +292,7 @@ router.get("/:id", async (req, res) => {
                         updateEnrollmentTransactionInvoiceById({ id: enrollmentTransactionId, invoice: generatedInvoice.cdn_url });
                     } else {
                         logger.error(
-                            `Failed To Generate Invoice For Transaction - ${enrollmentTransactionId} - Media Responded With ${JSON.stringify(generatedInvoice)}`
+                            `Failed To Generate Invoice For Transaction - ${enrollmentTransactionId} - Media Responded With ${JSON.stringify(generatedInvoice)}`,
                         );
                     }
                 },
@@ -324,11 +323,8 @@ router.get("/:id", async (req, res) => {
                     }
                 },
             });
-        })
+        }),
     );
-
-    //remove all the payloads which are verified and processed
-    removePaymentGateWayPayLoadsByIds({ ids: verifiedPaymentGatewayPayLoads?.map(({ transaction }) => transaction?.id) });
 
     const paymentGateWayPayLoad = { ...verifiedPaymentGatewayPayLoads?.find(({ transaction }) => transaction?.id == req.params.id) };
 

@@ -97,7 +97,9 @@ async function verifyPaymentGatewayPayLoadStatus(paymentGateWayPayLoad) {
     }
 }
 
-export const hasRequiredAuthority = (authorities, requiredAuthority) => authorities.includes(requiredAuthority);
+function hasRequiredAuthority(authorities, requiredAuthority) {
+    return authorities.includes(requiredAuthority);
+}
 
 module.exports = {
     prepareDirectories,

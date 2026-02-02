@@ -34,7 +34,7 @@ function getUserByAuthenticationToken(token) {
         token &&
         executeSQLQueryParameterized(
             `SELECT USERS.* FROM AUTHENTICATION_TOKENS INNER JOIN USERS ON AUTHENTICATION_TOKENS.user_id=USERS.id  WHERE AUTHENTICATION_TOKENS.token=?`,
-            [token]
+            [token],
         )
             .then((user) => (user && user.length > 0 ? user[0] : false))
             .catch((error) => {
@@ -49,29 +49,6 @@ function getGroupsById(id) {
         .then((groups) => (groups && groups.length > 0 ? groups.map((row) => row.title) : []))
         .catch((error) => {
             logger.error(`getGroupsById: ${error}`);
-            return false;
-        });
-}
-
-function getAuthoritiesById(id) {
-    return executeSQLQueryParameterized(`SELECT DISTINCT(title) FROM USER_AUTHORITIES WHERE user_id=?`, [id])
-        .then((authorities) => (authorities && authorities.length > 0 ? authorities.map((row) => row.title) : []))
-        .catch((error) => {
-            logger.error(`getAuthoritiesById: ${error}`);
-            return false;
-        });
-}
-
-function validateUserOTP(email, otp) {
-    return executeSQLQueryParameterized(`SELECT COUNT(*) AS count FROM USERS WHERE email = ? AND otp = ?`, [email, otp])
-        .then(([result]) => {
-            if (result.count > 0) {
-                return true; // OTP is valid
-            }
-            return false; // OTP is invalid
-        })
-        .catch((error) => {
-            logger.error(`validateUserOTP: ${error}`);
             return false;
         });
 }
@@ -99,7 +76,7 @@ function getUserById({ id }) {
 
 function getAuthoritiesByRoleIds(roleIds) {
     return executeSQLQueryParameterized(
-        `SELECT AUTHORITIES.title FROM ROLE_AUTHORITIES LEFT JOIN AUTHORITIES ON ROLE_AUTHORITIES.authority_id=AUTHORITIES.id WHERE ROLE_AUTHORITIES.role_id in (${roleIds})`
+        `SELECT AUTHORITIES.title FROM ROLE_AUTHORITIES LEFT JOIN AUTHORITIES ON ROLE_AUTHORITIES.authority_id=AUTHORITIES.id WHERE ROLE_AUTHORITIES.role_id in (${roleIds})`,
     ).catch((error) => {
         logger.error(`getAuthoritiesByRoleIds: ${error}`);
         return [];
@@ -194,7 +171,7 @@ function updateUserById({ id, email, full_name, phone, image, address, branch_id
 //freeze
 function patchUserFullNameById({ id, full_name }) {
     return executeSQLQueryParameterized(`UPDATE USERS SET full_name=? WHERE id = ?`, [full_name, id]).catch((error) =>
-        logger.error(`patchUserFullNameById: ${error}`)
+        logger.error(`patchUserFullNameById: ${error}`),
     );
 }
 
@@ -223,11 +200,9 @@ function addUser({ email, full_name, phone, image, address, branch_id }) {
 module.exports = {
     getAllUsersBySearchAndFilters,
     getCountUsersBySearchAndFilters,
-    validateUserOTP,
     getUserByEmail,
     getUserByAuthenticationToken,
     getGroupsById,
-    getAuthoritiesById,
     getUserByTransactionId,
     addUserByEmail,
     getUserById,

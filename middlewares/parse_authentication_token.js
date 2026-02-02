@@ -9,10 +9,12 @@ module.exports = async (req, res, next) => {
         req.user = user;
 
         //get roles & authorities of user
-        const userRoles = await getUserRolesByUserId({ user_id: user.id });
-        const authorities = await getAuthoritiesByRoleIds(userRoles.map(({ role_id }) => role_id).join(","));
-        req.user.roles = userRoles?.map(({ title }) => title);
-        req.user.authorities = authorities?.map((authority) => authority.title);
+        if (req.user) {
+            const userRoles = await getUserRolesByUserId({ user_id: user.id });
+            const authorities = await getAuthoritiesByRoleIds(userRoles.map(({ role_id }) => role_id).join(","));
+            req.user.roles = userRoles?.map(({ title }) => title);
+            req.user.authorities = authorities?.map((authority) => authority.title);
+        }
     }
     next();
 };

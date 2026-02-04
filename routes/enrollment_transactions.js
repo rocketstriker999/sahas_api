@@ -43,7 +43,36 @@ router.get(
         }
 
         res.status(200).json(enrollmentTranscations);
-    }
+    },
+);
+
+router.get(
+    "/report",
+    (req, res, next) => {
+        if (!req.query.start_date || !req.query.end_date) {
+            return res.status(400).json({ error: "Missing Start Date or End Date Range" });
+        }
+
+        const transactionsPeriod = getDifferenceOfDates({ start_date: req.query.start_date, end_date: req.query.end_date });
+
+        if (transactionsPeriod > 180 || transactionsPeriod < 0) {
+            return res.status(400).json({ error: "Date Range is Either Negative or Too Big" });
+        }
+        next();
+    },
+    async (req, res) => {
+        const enrollmentTranscations = await getEnrollmentTransactionsForInterval({
+            start_date: getFormattedDate({ date: req.query.start_date, format: "YYYY-MM-DD HH:mm:ss" }),
+            end_date: getFormattedDate({ date: req.query.end_date, format: "YYYY-MM-DD HH:mm:ss" }),
+            order_by: req.query?.order_by,
+        });
+
+        for (const enrollmentTranscation of enrollmentTranscations) {
+            enrollmentTranscation.courses = await getEnrollmentCoursesByEnrollmentId({ enrollment_id: enrollmentTranscation?.enrollment_id });
+        }
+
+        res.status(200).json(enrollmentTranscations);
+    },
 );
 
 router.get(
@@ -85,7 +114,7 @@ router.get(
             collection,
             due: total - collection,
         });
-    }
+    },
 );
 
 //tested
@@ -151,7 +180,7 @@ router.post("/", async (req, res) => {
                     enrollmentTransaction.invoice = generatedInvoice.cdn_url;
                 } else {
                     logger.error(
-                        `Failed To Generate Invoice For Transaction - ${enrollmentTransactionId} - Media Responded With ${JSON.stringify(generatedInvoice)}`
+                        `Failed To Generate Invoice For Transaction - ${enrollmentTransactionId} - Media Responded With ${JSON.stringify(generatedInvoice)}`,
                     );
                 }
             },

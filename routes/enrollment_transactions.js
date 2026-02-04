@@ -15,10 +15,13 @@ const { getEnrollmentById, getEnrollmentsAmountByEnrollmentIds } = require("../d
 const { getUserById } = require("../db/users");
 const { logger } = require("sahas_utils");
 const { validateRequestBody } = require("sahas_utils");
+const requires_authority = require("../middlewares/requires_authority");
+const { AUTHORITIES } = require("../constants");
 
 //tested
 router.get(
     "/",
+    requires_authority(AUTHORITIES.READ_ENROLLMENT_TRANSACTION),
     (req, res, next) => {
         if (!req.query.start_date || !req.query.end_date) {
             return res.status(400).json({ error: "Missing Start Date or End Date Range" });
@@ -48,6 +51,7 @@ router.get(
 
 router.get(
     "/summary",
+    requires_authority(AUTHORITIES.READ_ENROLLMENT_SUMMARY),
     (req, res, next) => {
         if (!req.query.start_date || !req.query.end_date) {
             return res.status(400).json({ error: "Missing Start Date or End Date Range" });
@@ -89,7 +93,7 @@ router.get(
 );
 
 //tested
-router.post("/", async (req, res) => {
+router.post("/", requires_authority(AUTHORITIES.CREATE_ENROLLMENT_TRANSACTION), async (req, res) => {
     const requiredBodyFields = ["enrollment_id", "amount", "note", "type"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);

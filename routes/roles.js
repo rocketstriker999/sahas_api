@@ -4,11 +4,13 @@ const { addRole, getRoleById, deleteRoleById, updateRoleById } = require("../db/
 const { deleteUserRolesByRoleId } = require("../db/user_roles");
 const { getRoleAuthoritiesByRoleId, addRoleAuthority, getRoleAuthorityByRoleAuthorityId, deleteRoleAuthoritiesByRoleId } = require("../db/role_authorities");
 const { validateRequestBody } = require("sahas_utils");
+const requires_authority = require("../middlewares/requires_authority");
+const { AUTHORITIES } = require("../constants");
 
 const router = libExpress.Router();
 
 //tested
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", requires_authority(AUTHORITIES.DELETE_ROLES), async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing roleId" });
     }
@@ -22,7 +24,7 @@ router.delete("/:id", async (req, res) => {
 });
 
 //tested
-router.get("/:id/authorities", async (req, res) => {
+router.get("/:id/authorities", requires_authority(AUTHORITIES.READ_ROLES_AUTHORITIES), async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing roleId" });
     }
@@ -30,7 +32,7 @@ router.get("/:id/authorities", async (req, res) => {
 });
 
 //tested
-router.patch("/", async (req, res) => {
+router.patch("/", requires_authority(AUTHORITIES.UPDATE_ROLES), async (req, res) => {
     const requiredBodyFields = ["id", "title", "active"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
@@ -44,7 +46,7 @@ router.patch("/", async (req, res) => {
 });
 
 //tested
-router.post("/", async (req, res) => {
+router.post("/", requires_authority(AUTHORITIES.CREATE_ROLES), async (req, res) => {
     const requiredBodyFields = ["title"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);

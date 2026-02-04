@@ -3,12 +3,15 @@ const { deleteInquiryNoteById } = require("../db/inquiry_notes");
 const { validateRequestBody } = require("sahas_utils");
 const { addMedia, getMediaById, deleteMediaById, updateMediaViewIndexById, updateMediaById, getMediaByChapterIdTypeAndTitle } = require("../db/media");
 const requires_active_device = require("../middlewares/requires_active_device");
+const requires_authority = require("../middlewares/requires_authority");
+const { AUTHORITIES } = require("../constants");
 
 const router = libExpress.Router();
 
 //tested
 router.post(
     "/",
+    requires_authority(AUTHORITIES.CREATE_MEDIA),
     async (req, res, next) => {
         const requiredBodyFields = ["chapter_id", "title", "type", "view_index"];
         const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
@@ -31,7 +34,7 @@ router.post(
 );
 
 //tested
-router.patch("/view_indexes", async (req, res) => {
+router.patch("/view_indexes", requires_authority(AUTHORITIES.UPDATE_MEDIA), async (req, res) => {
     if (req.body?.length) {
         req.body.forEach(updateMediaViewIndexById);
         return res.sendStatus(200);
@@ -41,7 +44,7 @@ router.patch("/view_indexes", async (req, res) => {
 });
 
 //tested
-router.patch("/", async (req, res) => {
+router.patch("/", requires_authority(AUTHORITIES.UPDATE_MEDIA), async (req, res) => {
     const requiredBodyFields = ["id", "title"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
@@ -55,7 +58,7 @@ router.patch("/", async (req, res) => {
 });
 
 //tested
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", requires_authority(AUTHORITIES.DELETE_MEDIA), async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing inquiryNoteId" });
     }
@@ -65,7 +68,7 @@ router.delete("/:id", async (req, res) => {
 });
 
 //tested
-router.get("/:id", requires_active_device, async (req, res) => {
+router.get("/:id", requires_authority(AUTHORITIES.READ_MEDIA), requires_active_device, async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Media Id" });
     }

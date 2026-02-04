@@ -3,10 +3,13 @@ const { updateEnrollmentById, getEnrollmentById, addEnrollment } = require("../d
 const { validateRequestBody } = require("sahas_utils");
 const { addEnrollmentCourse, getEnrollmentCoursesByEnrollmentId } = require("../db/enrollment_courses");
 const { getTransactionsByEnrollmentId } = require("../db/enrollment_transactions");
+const requires_authority = require("../middlewares/requires_authority");
+const { AUTHORITIES } = require("../constants");
+
 const router = libExpress.Router();
 
 //tested
-router.patch("/", async (req, res) => {
+router.patch("/", requires_authority(AUTHORITIES.UPDATE_ENROLLMENT), async (req, res) => {
     const requiredBodyFields = ["id", "start_date", "end_date"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
@@ -20,7 +23,7 @@ router.patch("/", async (req, res) => {
 });
 
 //tested
-router.post("/", async (req, res) => {
+router.post("/", requires_authority(AUTHORITIES.CREATE_ENROLLMENT), async (req, res) => {
     const requiredBodyFields = ["courses", "handler", "end_date", "start_date", "user_id", "amount"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
@@ -38,7 +41,7 @@ router.post("/", async (req, res) => {
 });
 
 //tested
-router.get("/:id/transactions", async (req, res) => {
+router.get("/:id/transactions", requires_authority(AUTHORITIES.READ_ENROLLMENT_TRANSACTION), async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Enrollment Id" });
     }
@@ -46,7 +49,7 @@ router.get("/:id/transactions", async (req, res) => {
 });
 
 //tested
-router.get("/:id/courses", async (req, res) => {
+router.get("/:id/courses", requires_authority(AUTHORITIES.READ_ENROLLMENT_COURSE), async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Enrollment Id" });
     }

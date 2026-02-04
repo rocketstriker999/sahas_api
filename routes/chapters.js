@@ -19,8 +19,7 @@ const router = libExpress.Router();
 
 // //tested
 
-//READ_CHAPTERS_MEDIA
-router.get("/:id/media", async (req, res) => {
+router.get("/:id/media", requires_authority(AUTHORITIES.READ_CHAPTERS_MEDIA), async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Chapter id" });
     }
@@ -36,8 +35,7 @@ router.get("/:id/media", async (req, res) => {
 });
 
 //tested
-//READ_CHAPTERS_TEST
-router.get("/test", async (req, res) => {
+router.get("/test", requires_authority(AUTHORITIES.READ_CHAPTERS_TEST), async (req, res) => {
     if (!req.query?.chapters?.length || !req.query?.subject) {
         return res.status(400).json({ error: "Missing Chapters or Subject" });
     }
@@ -69,8 +67,7 @@ router.get("/test", async (req, res) => {
 });
 
 //tested
-//READ_CHAPTERS
-router.get("/:id", async (req, res) => {
+router.get("/:id", requires_authority(AUTHORITIES.READ_CHAPTERS), async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Chapter Id" });
     }
@@ -82,8 +79,7 @@ router.get("/:id", async (req, res) => {
 });
 
 //tested
-//DELETE_CHAPTERS
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", requires_authority(AUTHORITIES.DELETE_CHAPTERS), async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Chapter Id" });
     }
@@ -92,8 +88,7 @@ router.delete("/:id", async (req, res) => {
 });
 
 //tested
-//UPDATE_CHAPTERS_VIEW_INDEXES
-router.patch("/view_indexes", async (req, res) => {
+router.patch("/view_indexes", requires_authority(AUTHORITIES.UPDATE_CHAPTERS_VIEW_INDEXES), async (req, res) => {
     if (req.body?.length) {
         req.body.forEach(updateChapterViewIndexById);
         return res.sendStatus(200);

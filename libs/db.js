@@ -286,7 +286,104 @@ async function generateDBTables() {
         ('READ_USER_WALLET', 'View User Wallet'),
         ('READ_USER_GLOBAL_NOTES', 'View User Global Notes'),
         ('READ_USER_ROLES', 'View User Roles'),
-        ('UPDATE_CHAPTERS', 'Update Chapters')`,
+        ('UPDATE_CHAPTERS', 'Update Chapters'),
+
+        ('READ_CHAPTERS_TEST','View Chapter Tests'),
+        ('READ_CHAPTERS','View Chapters'),
+        ('DELETE_CHAPTERS','Delete Chapters'),
+        ('UPDATE_CHAPTERS_VIEW_INDEXES','Update Chapters View Indexes'),
+        ('READ_CHAPTERS_MEDIA','View Chapters Media'),
+        ('UPDATE_CHAPTERS','Update Chapters'),
+        ('CREATE_CHAPTERS','Create Chapters'),
+
+        ('UPDATE_USER','Update User'),
+        ('CREATE_USER','Create User'),
+        ('READ_USER','View User'),
+        ('READ_USER_ENROLLMENT_COURSES','View User Enrollment Courses'),
+        ('READ_USER_CHAPTERS_TEST_CATALOGUE','View User Enrollment Course Subjects'),
+        ('READ_USER_INQUIRIES','View User Inquiries'),
+        ('READ_USER_ENROLLMENTS','View User Enrollments'),
+        ('READ_USER_DEVICES','View User Devices'),
+        ('READ_USER_WALLET_TRANSACTIONS','View User Wallet Transactions'),
+        ('READ_USER_ROLES','View User Roles'),
+        ('CREATE_USER_ROLES','Create User Roles'),
+        ('DELETE_USER_ROLES','Delete User Roles'),
+
+        ('UPDATE_SUBJECTS','Update Subjects'),
+        ('READ_SUBJECTS','View Subjects'),
+        ('READ_SUBJECTS_CHAPTERS','View Subjects and its Chapters'),
+        ('CREATE_COURSE_SUBJECTS','Create Course Subjects'),
+
+        ('DELETE_ROLES','Delete Roles User Roles and Role Authorities'),
+        ('READ_ROLES_AUTHORITIES','View Roles Authorities'),
+        ('UPDATE_ROLES','Update Roles'),
+        ('CREATE_ROLES','Create Roles'),
+
+        ('CREATE_ROLES_AUTHORITIES','Create Roles Authorities'),
+        ('DELETE_ROLES_AUTHORITIES','Delete Roles Authorities'),
+
+        ('CREATE_MEDIA','Create Media'),
+        ('UPDATE_MEDIA','Update Media'),
+        ('DELETE_MEDIA','Delete Media'),
+        ('READ_MEDIA','View Media'),
+
+        ('CREATE_WALLET_TRANSACTION','Create Wallet Transaction'),
+        
+        ('CREATE_INQUIRY_NOTE','Create Inquiry Note'),
+        ('DELETE_INQUIRY_NOTE','Delete Inquiry Note'),
+
+        ('CREATE_INQUIRY','Create Inquiry and Inquiry Note'),
+        ('UPDATE_INQUIRY','Update Inquiry'),
+        ('DELETE_INQUIRY','Delete Inquiry and Inquiry Note'),
+        ('READ_INQUIRY_NOTE','View Inquiry Note'),
+
+        ('UPDATE_ENROLLMENT','Update Enrollment'),
+        ('CREATE_ENROLLMENT','Create Enrollment'),
+        ('READ_ENROLLMENT_TRANSACTION','View Enrollment Transaction'),
+        ('READ_ENROLLMENT_COURSE','View Enrollment Courses'),
+        
+        ('READ_ENROLLMENT_TRANSACTION','View Enrollment Transaction and Enrollment Courses'),
+        ('READ_ENROLLMENT_SUMMARY','View Enrollment Summary'),
+        ('CREATE_ENROLLMENT_TRANSACTION','Create Enrollment Transaction and Generate Invoice'),
+        
+        ('CREATE_ENROLLMENT_COURSE','Create Enrollment Course'),
+        ('DELETE_ENROLLMENT_COURSE','Delete Enrollment Course'),
+        
+        ('UPDATE_USER_DEVICE','Update User Device'),
+        
+        ('CREATE_COURSE','Create Course'),
+        ('DELETE_COURSE','Delete Course'),
+        ('UPDATE_COURSE_VIEW_INDEX','Update Course View Index'),
+        ('UPDATE_COURSE','Update Course'),
+        ('READ_COURSE','View Course and enrollment & subjects '),
+
+        ('UPDATE_COURSE_SUBJECT_VIEW_INDEX','Update Course Subject View Index'),
+        ('CREATE_COURSE_SUBJECT','Create Course Subject'),
+        ('DELETE_COURSE_SUBJECT','Delete Course Subject'),
+        
+        ('READ_COURSE_CATEGORY','View Course Category'),
+        ('CREATE_COURSE_CATEGORY','Create Course Category'),
+        ('DELETE_COURSE_CATEGORY','Delete Course Category'),
+        ('UPDATE_COURSE_CATEGORY_VIEW_INDEX','Update Course Category View Index'),
+        ('READ_COURSE_BY_CATEGORY','View Course By Category'),
+        
+        ('READ_COUPON_CODE','View Coupon Code'),
+        ('DELETE_COUPON_CODE','Delete Coupon Code'),
+        ('UPDATE_COUPON_CODE','Update Coupon Code'),
+        ('CREATE_COUPON_CODE','Create Coupon Code'),
+        
+        ('CREATE_COUPON_CODE_COURSES','Create Coupon Code Courses'),
+        ('DELETE_COUPON_CODE_COURSES','Delete Coupon Code Courses'),
+        ('UPDATE_COUPON_CODE_COURSES','Update Coupon Code Courses'),
+        
+        ('CREATE_CHAPTER_TYPES','Create Chapter Types'),
+        ('UPDATE_CHAPTER_TYPES_VIEW_INDEXES','Update Chapter Types View Indexes'),
+        ('UPDATE_CHAPTER_TYPES','Update Chapter Types'),
+        ('DELETE_CHAPTER_TYPES','Delete Chapter Types'),
+
+        ('CREATE_AUTHORITIES','Create Authorities'),
+        ('DELETE_AUTHORITIES','Delete Authorities and Role Authority')`,
+
 
         `INSERT IGNORE INTO ROLES (title) VALUES ('STUDENT')`,
         `INSERT IGNORE INTO ROLES (title) VALUES ('DEVELOPER')`,

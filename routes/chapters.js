@@ -12,10 +12,14 @@ const {
     getChapterBySubjectIdAndTitle,
 } = require("../db/chapters");
 const { getMediaByChapterId } = require("../db/media");
+const requires_authority = require("../middlewares/requires_authority");
+const { AUTHORITIES } = require("../constants");
 
 const router = libExpress.Router();
 
 // //tested
+
+//READ_CHAPTERS_MEDIA
 router.get("/:id/media", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Chapter id" });
@@ -32,6 +36,7 @@ router.get("/:id/media", async (req, res) => {
 });
 
 //tested
+//READ_CHAPTERS_TEST
 router.get("/test", async (req, res) => {
     if (!req.query?.chapters?.length || !req.query?.subject) {
         return res.status(400).json({ error: "Missing Chapters or Subject" });
@@ -64,6 +69,7 @@ router.get("/test", async (req, res) => {
 });
 
 //tested
+//READ_CHAPTERS
 router.get("/:id", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Chapter Id" });
@@ -76,6 +82,7 @@ router.get("/:id", async (req, res) => {
 });
 
 //tested
+//DELETE_CHAPTERS
 router.delete("/:id", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Chapter Id" });
@@ -85,6 +92,7 @@ router.delete("/:id", async (req, res) => {
 });
 
 //tested
+//UPDATE_CHAPTERS_VIEW_INDEXES
 router.patch("/view_indexes", async (req, res) => {
     if (req.body?.length) {
         req.body.forEach(updateChapterViewIndexById);
@@ -97,6 +105,7 @@ router.patch("/view_indexes", async (req, res) => {
 //tested
 router.post(
     "/",
+    requires_authority(AUTHORITIES.CREATE_CHAPTERS),
     async (req, res, next) => {
         const requiredBodyFields = ["title", "subject_id", "type", "view_index"];
         const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
@@ -121,6 +130,7 @@ router.post(
 //tested
 router.patch(
     "/",
+    requires_authority(AUTHORITIES.UPDATE_CHAPTERS),
     async (req, res, next) => {
         const requiredBodyFields = ["id", "title", "type"];
         const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);

@@ -285,7 +285,8 @@ async function generateDBTables() {
         ('READ_USER_STREAMING_DEVICES', 'View User Streaming Devices'),
         ('READ_USER_WALLET', 'View User Wallet'),
         ('READ_USER_GLOBAL_NOTES', 'View User Global Notes'),
-        ('READ_USER_ROLES', 'View User Roles')`,
+        ('READ_USER_ROLES', 'View User Roles'),
+        ('UPDATE_CHAPTERS', 'Update Chapters')`,
 
         `INSERT IGNORE INTO ROLES (title) VALUES ('STUDENT')`,
         `INSERT IGNORE INTO ROLES (title) VALUES ('DEVELOPER')`,

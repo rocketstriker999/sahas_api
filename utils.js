@@ -97,6 +97,10 @@ async function verifyPaymentGatewayPayLoadStatus(paymentGateWayPayLoad) {
     }
 }
 
+function hasRequiredAuthority(authorities, requiredAuthority) {
+    return authorities?.includes(requiredAuthority);
+}
+
 module.exports = {
     prepareDirectories,
     generateToken,
@@ -107,4 +111,5 @@ module.exports = {
     getDateByInterval,
     getFormattedDate,
     getDifferenceOfDates,
+    hasRequiredAuthority,
 };

@@ -4,7 +4,7 @@ const { validateRequestBody } = require("sahas_utils");
 const { getEnrollmentByCourseIdAndUserId } = require("../db/enrollments");
 const { getCourseSubjectsByCourseId } = require("../db/course_subjects");
 const { removeBundledCoursesByCourseId, addBundledCourse, getBundledCoursesByCourseId } = require("../db/bundled_courses");
-const { deleteCourseDialogByCourseId, addCourseDialog } = require("../db/course_dialog");
+const { deleteCourseDialogByCourseId, addCourseDialog, getCourseDialogByCourseId } = require("../db/course_dialog");
 
 const router = libExpress.Router();
 

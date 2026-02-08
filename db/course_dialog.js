@@ -3,9 +3,9 @@ const { logger } = require("sahas_utils");
 
 //freeze
 function getCourseDialogByCourseId({ course_id }) {
-    return executeSQLQueryParameterized(`SELECT * FROM COURSE_DIALOG WHERE course_id=?`, [course_id]).catch((error) =>
-        logger.error(`getCourseDialogByCourseId: ${error}`),
-    );
+    return executeSQLQueryParameterized(`SELECT * FROM COURSE_DIALOG WHERE course_id=?`, [course_id])
+        .then((result) => (result.length > 0 ? result[0] : false))
+        .catch((error) => logger.error(`getCourseDialogByCourseId: ${error}`));
 }
 
 //freeze

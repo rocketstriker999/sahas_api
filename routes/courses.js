@@ -4,6 +4,7 @@ const { validateRequestBody } = require("sahas_utils");
 const { getEnrollmentByCourseIdAndUserId } = require("../db/enrollments");
 const { getCourseSubjectsByCourseId } = require("../db/course_subjects");
 const { removeBundledCoursesByCourseId, addBundledCourse, getBundledCoursesByCourseId } = require("../db/bundled_courses");
+const { deleteCourseDialogByCourseId, addCourseDialog, getCourseDialogByCourseId } = require("../db/course_dialog");
 
 const router = libExpress.Router();
 
@@ -41,7 +42,7 @@ router.post(
         }
 
         res.status(201).json(course);
-    }
+    },
 );
 
 //tested
@@ -61,6 +62,25 @@ router.patch("/view_indexes", async (req, res) => {
     }
 
     return res.status(400).json({ error: "Missing Courses" });
+});
+
+//tested
+router.put("/dialog", async (req, res) => {
+    const requiredBodyFields = ["course_id", "description", "heading", "media_url", "note", "title"];
+
+    try {
+        const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+        if (isRequestBodyValid) {
+            await deleteCourseDialogByCourseId(validatedRequestBody);
+            addCourseDialog(validatedRequestBody);
+            res.status(200).json(validatedRequestBody);
+        } else {
+            res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+        }
+    } catch (error) {
+        logger.error(error);
+        res.status(400).json({ error });
+    }
 });
 
 //tested
@@ -90,7 +110,7 @@ router.patch(
         }
 
         res.status(200).json(course);
-    }
+    },
 );
 
 //tested
@@ -106,6 +126,8 @@ router.get("/:id", async (req, res) => {
         course.subjects = await getCourseSubjectsByCourseId({ course_id: req.params.id });
 
         if (course?.is_bundle) course.bundledCourses = await getBundledCoursesByCourseId({ course_id: course.id });
+
+        course.dialog = await getCourseDialogByCourseId({ course_id: course?.id });
 
         return res.status(200).json(course);
     }

@@ -11,6 +11,7 @@ const { getAllCourseCategories } = require("../db/course_categories");
 const { getCoursesByCategoryId } = require("../db/courses");
 const { logger } = require("sahas_utils");
 const { getBundledCoursesByCourseId } = require("../db/bundled_courses");
+const { getCourseDialogByCourseId } = require("../db/course_dialog");
 
 const router = libExpress.Router();
 
@@ -41,7 +42,7 @@ router.post(
     async (req, res) => {
         const CourseCategoryId = await addCourseCategory(req.body);
         res.status(201).json(await getCourseCategoryById({ id: CourseCategoryId }));
-    }
+    },
 );
 
 //tested
@@ -73,7 +74,9 @@ router.get("/:id/courses", async (req, res) => {
 
     const courses = await getCoursesByCategoryId({ category_id: req.params.id });
 
-    for (const course of courses) if (course?.is_bundle) course.bundledCourses = await getBundledCoursesByCourseId({ course_id: course.id });
+    for (const course of courses) {
+        if (course?.is_bundle) course.bundledCourses = await getBundledCoursesByCourseId({ course_id: course.id });
+    }
 
     res.status(200).json(courses);
 });

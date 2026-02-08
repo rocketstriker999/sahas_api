@@ -178,6 +178,19 @@ async function generateDBTables() {
             bundled_course_id INT NOT NULL,
             UNIQUE KEY unique_course_bundled_course (course_id, bundled_course_id)
         )`,
+        `
+        CREATE TABLE IF NOT EXISTS COURSE_DIALOG(
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            course_id INT NOT NULL,
+            title VARCHAR(96) NOT NULL,
+            heading VARCHAR(96) NOT NULL,
+            description VARCHAR(256) NOT NULL,
+            active BOOLEAN NOT NULL DEFAULT TRUE,
+            media_url VARCHAR(128) NULL UNIQUE,
+            note VARCHAR(128) NOT NULL,
+            redirect_url VARCHAR(256) DEFAULT NULL
+        )
+        `,
         `CREATE TABLE IF NOT EXISTS SUBJECTS(
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(96) NOT NULL,
@@ -187,7 +200,6 @@ async function generateDBTables() {
             active BOOLEAN NOT NULL DEFAULT TRUE,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
-
         `CREATE TABLE IF NOT EXISTS COURSE_SUBJECTS(
             id INT AUTO_INCREMENT PRIMARY KEY,
             course_id INT NOT NULL,
@@ -208,7 +220,6 @@ async function generateDBTables() {
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             UNIQUE KEY unique_subject_title (subject_id, title)
         )`,
-
         `CREATE TABLE IF NOT EXISTS CHAPTER_TYPES(
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(128) NOT NULL UNIQUE,

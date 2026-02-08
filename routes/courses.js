@@ -4,6 +4,7 @@ const { validateRequestBody } = require("sahas_utils");
 const { getEnrollmentByCourseIdAndUserId } = require("../db/enrollments");
 const { getCourseSubjectsByCourseId } = require("../db/course_subjects");
 const { removeBundledCoursesByCourseId, addBundledCourse, getBundledCoursesByCourseId } = require("../db/bundled_courses");
+const { deleteCourseDialogByCourseId, addCourseDialog } = require("../db/course_dialog");
 
 const router = libExpress.Router();
 
@@ -65,11 +66,13 @@ router.patch("/view_indexes", async (req, res) => {
 
 //tested
 router.put("/dialog", async (req, res) => {
-    const requiredBodyFields = ["chapter_id", "description", "heading", "media_url", "note", "title"];
+    const requiredBodyFields = ["course_id", "description", "heading", "media_url", "note", "title"];
 
     try {
         const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
         if (isRequestBodyValid) {
+            await deleteCourseDialogByCourseId(validatedRequestBody);
+            addCourseDialog(validatedRequestBody);
             res.status(200).json(validatedRequestBody);
         } else {
             res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });

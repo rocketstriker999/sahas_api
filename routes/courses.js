@@ -127,6 +127,8 @@ router.get("/:id", async (req, res) => {
 
         if (course?.is_bundle) course.bundledCourses = await getBundledCoursesByCourseId({ course_id: course.id });
 
+        course.dialog = await getCourseDialogByCourseId({ course_id: course?.id });
+
         return res.status(200).json(course);
     }
 

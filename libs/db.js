@@ -186,7 +186,8 @@ async function generateDBTables() {
             heading VARCHAR(96) NOT NULL,
             description VARCHAR(256) NOT NULL,
             active BOOLEAN NOT NULL DEFAULT TRUE,
-            media_url VARCHAR(128) NULL UNIQUE
+            media_url VARCHAR(128) NULL UNIQUE,
+            redirect_url VARCHAR(256) NOT NULL
         )
         `,
         `CREATE TABLE IF NOT EXISTS SUBJECTS(

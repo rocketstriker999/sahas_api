@@ -41,7 +41,7 @@ router.post(
         }
 
         res.status(201).json(course);
-    }
+    },
 );
 
 //tested
@@ -61,6 +61,23 @@ router.patch("/view_indexes", async (req, res) => {
     }
 
     return res.status(400).json({ error: "Missing Courses" });
+});
+
+//tested
+router.put("/dialog", async (req, res) => {
+    const requiredBodyFields = ["chapter_id", "description", "heading", "media_url", "note", "title"];
+
+    try {
+        const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+        if (isRequestBodyValid) {
+            res.status(200).json(validatedRequestBody);
+        } else {
+            res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+        }
+    } catch (error) {
+        logger.error(error);
+        res.status(400).json({ error });
+    }
 });
 
 //tested
@@ -90,7 +107,7 @@ router.patch(
         }
 
         res.status(200).json(course);
-    }
+    },
 );
 
 //tested

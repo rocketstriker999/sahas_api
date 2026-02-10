@@ -14,6 +14,7 @@ module.exports = async (req, res, next) => {
                 addInActiveUserDevice(req.user.id, req.device.fingerPrint);
             }
         }
+        req.device.active = true;
     }
 
     next();

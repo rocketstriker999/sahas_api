@@ -66,7 +66,7 @@ router.patch("/view_indexes", async (req, res) => {
 
 //tested
 router.put("/dialog", async (req, res) => {
-    const requiredBodyFields = ["course_id", "description", "heading", "media_url", "note", "title"];
+    const requiredBodyFields = ["course_id", "media_url"];
 
     try {
         const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);

@@ -9,7 +9,7 @@ function getCourseDialogByCourseId({ course_id }) {
 }
 
 //freeze
-function addCourseDialog({ title, heading, description, active = false, media_url, redirect_url = null, course_id, note }) {
+function addCourseDialog({ title, heading = null, description = null, active = false, media_url, redirect_url = null, course_id, note = null }) {
     return executeSQLQueryParameterized(
         `INSERT INTO COURSE_DIALOG(course_id,title,heading,description,active,media_url,redirect_url,note) VALUES(?,?,?,?,?,?,?,?)`,
         [course_id, title, heading, description, active, media_url, redirect_url, note],

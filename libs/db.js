@@ -243,8 +243,11 @@ async function generateDBTables() {
             distributor_email VARCHAR(48)  NULL,
             commision DECIMAL(8, 2) NOT NULL DEFAULT 0,
             commision_type VARCHAR(12)  DEFAULT '₹',
-            validity INT  NOT NULL DEFAULT 0,
-            validity_type VARCHAR(12)  DEFAULT 'EXTEND',
+
+            validity_days INT  NOT NULL DEFAULT 365,
+            validity_date DATETIME  NULL,
+
+            validity_type VARCHAR(12)  DEFAULT 'DAYS',
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
         `CREATE TABLE IF NOT EXISTS CHAPTER_MEDIA (

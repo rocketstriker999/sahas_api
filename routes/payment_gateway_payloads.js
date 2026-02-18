@@ -55,7 +55,6 @@ router.post("/", async (req, res) => {
         };
 
         //calculate coupon code first
-
         paymentGateWayPayLoad.transaction.discount = 0;
         paymentGateWayPayLoad.transaction.couponCode = validatedRequestBody?.couponCode || null;
 
@@ -75,13 +74,9 @@ router.post("/", async (req, res) => {
                     paymentGateWayPayLoad.transaction.discount = paymentGateWayPayLoad.transaction.discount.toFixed(2);
                 }
 
-                //if we have coupon code having validity as well
-                if (!!couponCodeCourse.validity) {
-                    paymentGateWayPayLoad.course.validity =
-                        couponCodeCourse.validity_type === "EXTEND"
-                            ? getDateByInterval({ baseDate: paymentGateWayPayLoad.course.validity, days: couponCodeCourse.validity })
-                            : getDateByInterval({ days: couponCodeCourse.validity });
-                }
+                //if coupon code is there that means we will pick validity from there - default 365
+                paymentGateWayPayLoad.course.validity =
+                    couponCodeCourse.validity_type === "DAYS" ? getDateByInterval({ days: couponCodeCourse.validity_days }) : couponCodeCourse.validity_date;
                 //if we have coupon code distributor commision is there
                 //it will also check if given email is correct or not
                 if (

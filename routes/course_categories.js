@@ -9,9 +9,7 @@ const {
 const { validateRequestBody } = require("sahas_utils");
 const { getAllCourseCategories } = require("../db/course_categories");
 const { getCoursesByCategoryId } = require("../db/courses");
-const { logger } = require("sahas_utils");
 const { getBundledCoursesByCourseId } = require("../db/bundled_courses");
-const { getCourseDialogByCourseId } = require("../db/course_dialog");
 
 const router = libExpress.Router();
 

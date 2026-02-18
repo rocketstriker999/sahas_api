@@ -14,7 +14,9 @@ module.exports = async (req, res, next) => {
                 addInActiveUserDevice(req.user.id, req.device.fingerPrint);
             }
         }
-        req.device.active = true;
+
+        //comment below to activate device lock
+        //req.device.active = true;
     }
 
     next();

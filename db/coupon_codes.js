@@ -4,7 +4,6 @@ const { logger } = require("sahas_utils");
 function getAllCouponCodes() {
     return executeSQLQueryParameterized(`SELECT * FROM COUPON_CODES`).catch((error) => {
         logger.error(`getAllCouponCodes: ${error}`);
-        return false;
     });
 }
 
@@ -22,7 +21,7 @@ function addCouponCode({ code }) {
 //freeze
 function updateCouponCodeById({ id, code, active }) {
     return executeSQLQueryParameterized(`UPDATE COUPON_CODES SET code=?,active=? WHERE id=?`, [code, active, id]).catch((error) =>
-        logger.error(`updateCouponCodeById: ${error}`)
+        logger.error(`updateCouponCodeById: ${error}`),
     );
 }
 

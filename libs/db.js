@@ -245,7 +245,7 @@ async function generateDBTables() {
             commision_type VARCHAR(12)  DEFAULT '₹',
 
             validity_days INT  NOT NULL DEFAULT 365,
-            validity_date DATETIME  NULL,
+            validity_date DATETIME  NOT NULL DEAFULT CURRENT_TIMESTAMP,
 
             validity_type VARCHAR(12)  DEFAULT 'DAYS',
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

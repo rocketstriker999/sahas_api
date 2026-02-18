@@ -64,7 +64,7 @@ function addCouponCodeCourse({
     validity_type,
 }) {
     return executeSQLQueryParameterized(
-        `INSERT INTO COUPON_CODE_COURSES(coupon_code_id, course_id, discount, discount_type, distributor_email, commision, commision_type,validity_days, validity_date,validity_type) VALUES(?,?,?,?,?,?,?,?,?)`,
+        `INSERT INTO COUPON_CODE_COURSES(coupon_code_id, course_id, discount, discount_type, distributor_email, commision, commision_type,validity_days, validity_date,validity_type) VALUES(?,?,?,?,?,?,?,?,?,?)`,
         [coupon_code_id, course_id, discount, discount_type, distributor_email, commision, commision_type, validity_days, validity_date, validity_type],
     )
         .then((result) => result.insertId)
@@ -74,16 +74,7 @@ function addCouponCodeCourse({
 //freeze - need to optimizae as well
 function getCouponCodeCoursesByIds({ couponCodeCourseIds }) {
     return executeSQLQueryParameterized(
-        `SELECT 
-    COUPON_CODE_COURSES.*, 
-    COURSES.title, 
-    USERS.full_name AS distributor_name
-FROM COUPON_CODE_COURSES
-LEFT JOIN COURSES 
-    ON COUPON_CODE_COURSES.course_id = COURSES.id
-LEFT JOIN USERS 
-    ON COUPON_CODE_COURSES.distributor_email = USERS.email
-WHERE  COUPON_CODE_COURSES.id in (${couponCodeCourseIds})`,
+        `SELECT COUPON_CODE_COURSES.*,COURSES.title, USERS.full_name AS distributor_name FROM COUPON_CODE_COURSES LEFT JOIN COURSES ON COUPON_CODE_COURSES.course_id = COURSES.id LEFT JOIN USERS ON COUPON_CODE_COURSES.distributor_email = USERS.email WHERE  COUPON_CODE_COURSES.id in (${couponCodeCourseIds})`,
     ).catch((error) => {
         logger.error(`getCouponCodeCoursesByIds: ${error}`);
         return [];

@@ -70,31 +70,37 @@ async function requestPayUVerification(transaction) {
 }
 
 async function verifyPaymentGatewayPayLoadStatus(paymentGateWayPayLoad) {
-    const { paymentGateWay: { verificationAPI, merchantKey, merchantSalt } = {} } = await readConfig("app");
+    if (paymentGateWayPayLoad?.transaction?.amount > 0) {
+        const { paymentGateWay: { verificationAPI, merchantKey, merchantSalt } = {} } = await readConfig("app");
 
-    const headers = new Headers();
-    headers.append("Content-Type", "application/x-www-form-urlencoded");
-    const urlencoded = new URLSearchParams();
-    urlencoded.append("key", merchantKey);
-    urlencoded.append("command", "verify_payment");
-    urlencoded.append("var1", paymentGateWayPayLoad?.transaction?.id);
-    urlencoded.append("hash", generateSHA512(`${merchantKey}|verify_payment|${paymentGateWayPayLoad?.transaction?.id}|${merchantSalt}`));
+        const headers = new Headers();
+        headers.append("Content-Type", "application/x-www-form-urlencoded");
+        const urlencoded = new URLSearchParams();
+        urlencoded.append("key", merchantKey);
+        urlencoded.append("command", "verify_payment");
+        urlencoded.append("var1", paymentGateWayPayLoad?.transaction?.id);
+        urlencoded.append("hash", generateSHA512(`${merchantKey}|verify_payment|${paymentGateWayPayLoad?.transaction?.id}|${merchantSalt}`));
 
-    const fetchOptions = {
-        method: "POST",
-        headers: headers,
-        body: urlencoded,
-        redirect: "follow",
-    };
-    try {
-        const response = await fetch(verificationAPI, fetchOptions);
-        const verificationResponse = await response.json();
-        paymentGateWayPayLoad.transaction.paid = verificationResponse?.transaction_details[paymentGateWayPayLoad?.transaction?.id]?.status === "success";
-    } catch (error) {
-        logger.error(`Failed to Check Status For Transaction - ${paymentGateWayPayLoad.transaction.id} - error ${error}`);
-    } finally {
-        return paymentGateWayPayLoad;
+        const fetchOptions = {
+            method: "POST",
+            headers: headers,
+            body: urlencoded,
+            redirect: "follow",
+        };
+        try {
+            const response = await fetch(verificationAPI, fetchOptions);
+            const verificationResponse = await response.json();
+            paymentGateWayPayLoad.transaction.paid = verificationResponse?.transaction_details[paymentGateWayPayLoad?.transaction?.id]?.status === "success";
+        } catch (error) {
+            logger.error(`Failed to Check Status For Transaction - ${paymentGateWayPayLoad.transaction.id} - error ${error}`);
+        } finally {
+            return paymentGateWayPayLoad;
+        }
     }
+
+    //must be free course
+    paymentGateWayPayLoad.transaction.paid = true;
+    return paymentGateWayPayLoad;
 }
 
 function hasRequiredAuthority(authorities, requiredAuthority) {

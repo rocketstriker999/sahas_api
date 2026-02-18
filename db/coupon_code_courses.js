@@ -89,10 +89,20 @@ function deleteCouponCodeCourseById({ id }) {
 }
 
 //freeze
-function updateCouponCodeCourseById({ id, discount, discount_type, distributor_email, commision, commision_type, validity, validity_type }) {
+function updateCouponCodeCourseById({
+    id,
+    discount,
+    discount_type,
+    distributor_email,
+    commision,
+    commision_type,
+    validity_days,
+    validity_date,
+    validity_type,
+}) {
     return executeSQLQueryParameterized(
-        `UPDATE COUPON_CODE_COURSES SET discount=?,discount_type=?,distributor_email=?,commision=?,commision_type=?,validity=?,validity_type=? WHERE id=?`,
-        [discount, discount_type, distributor_email, commision, commision_type, validity, validity_type, id],
+        `UPDATE COUPON_CODE_COURSES SET discount=?,discount_type=?,distributor_email=?,commision=?,commision_type=?,validity_days=?,validity_date=?,validity_type=? WHERE id=?`,
+        [discount, discount_type, distributor_email, commision, commision_type, validity_days, validity_date, validity_type, id],
     ).catch((error) => logger.error(`updateCouponCodeCourseById: ${error}`));
 }
 

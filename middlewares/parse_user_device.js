@@ -16,7 +16,7 @@ module.exports = async (req, res, next) => {
         }
 
         //comment below to activate device lock
-        //req.device.active = true;
+        req.device.active = true;
     }
 
     next();

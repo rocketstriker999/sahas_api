@@ -91,11 +91,11 @@ function prepareSearchLikeQuery(search, query) {
 }
 
 function prepareFiltersWhereQuery(appliedFilters, search, query) {
-    if (Object.keys(appliedFilters).length) {
+    const { roles, branches, active } = appliedFilters;
+
+    if (roles || branches || active) {
         //if priviously search is applied then we need to add AND
         query.push(!!search ? "AND" : "WHERE");
-
-        const { roles, branches, active } = appliedFilters;
 
         const filterQueries = [];
 
@@ -116,10 +116,10 @@ function prepareFiltersWhereQuery(appliedFilters, search, query) {
 }
 
 function prepareOrderByQuery(appliedFilters, query) {
-    if (Object.keys(appliedFilters).length) {
-        query.push("ORDER BY");
+    const { id } = appliedFilters;
 
-        const { id } = appliedFilters;
+    if (id) {
+        query.push("ORDER BY");
 
         const orderByQueries = [];
 

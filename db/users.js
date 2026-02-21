@@ -181,7 +181,7 @@ function patchUserPhoneById({ id, phone }) {
 }
 
 //tested
-function addUser({ email, full_name, phone, image, address, branch_id }) {
+function addUser({ email, full_name, phone, image = null, address, branch_id }) {
     return executeSQLQueryParameterized(`INSERT  INTO USERS(email,full_name, phone, image, address, branch_id) VALUES(?,?,?,?,?,?)`, [
         email?.toLowerCase(),
         full_name,

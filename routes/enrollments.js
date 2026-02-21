@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const { updateEnrollmentById, getEnrollmentById, addEnrollment } = require("../db/enrollments");
+const { updateEnrollmentById, getEnrollmentById, addEnrollment, deleteEnrollmentById } = require("../db/enrollments");
 const { validateRequestBody } = require("sahas_utils");
 const { addEnrollmentCourse, getEnrollmentCoursesByEnrollmentId } = require("../db/enrollment_courses");
 const { getTransactionsByEnrollmentId } = require("../db/enrollment_transactions");
@@ -58,6 +58,7 @@ router.delete("/:id", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Enrollment Id" });
     }
+    deleteEnrollmentById(req.params);
     res.sendStatus(204);
 });
 

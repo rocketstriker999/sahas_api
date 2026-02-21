@@ -1,7 +1,4 @@
 const libExpress = require("express");
-const { logger } = require("sahas_utils");
-const { getRoles } = require("../db/roles");
-const { getAllBranches } = require("../db/branches");
 
 const router = libExpress.Router();
 

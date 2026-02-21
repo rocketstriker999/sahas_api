@@ -124,14 +124,14 @@ function prepareOrderByQuery(appliedFilters, query) {
         const orderByQueries = [];
 
         if (!!id) {
-            orderByQueries.push(`id ${id}`);
+            orderByQueries.push(`USERS.id ${id}`);
         }
 
         query.push(orderByQueries.join(" , "));
+    } else {
+        //default sorting order if no sorting is given
+        query.push("ORDER BY USERS.id DESC");
     }
-
-    //default sorting order if no sorting is given
-    query.push("ORDER BY ID DESC");
 }
 
 function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {

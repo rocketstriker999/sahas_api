@@ -13,6 +13,7 @@ router.get("/users", async (req, res) => {
     res.status(200).json({
         active: booleanFilters,
         dues: booleanFilters,
+        latestFirst: booleanFilters,
     });
 });
 

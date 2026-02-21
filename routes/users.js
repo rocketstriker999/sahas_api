@@ -18,7 +18,7 @@ const { getUserRolesByUserId } = require("../db/user_roles");
 const { getEnrollmentCoursesByUserId } = require("../db/enrollment_courses");
 const { getDevicesByUserId } = require("../db/devices");
 const { getCourseSubjectsByCourseId } = require("../db/course_subjects");
-const { getChaptersBySubjectId, getQuizAttainableChaptersBySubjectId, getTestAttainableChaptersBySubjectId } = require("../db/chapters");
+const { getTestAttainableChaptersBySubjectId } = require("../db/chapters");
 
 const router = libExpress.Router();
 

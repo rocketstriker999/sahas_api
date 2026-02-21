@@ -239,15 +239,13 @@ async function generateDBTables() {
             coupon_code_id INT NOT NULL,
             course_id INT NOT NULL,
             discount DECIMAL(8, 2) NOT NULL DEFAULT 0,
-            discount_type VARCHAR(12)  DEFAULT '₹',
+            discount_type VARCHAR(12) DEFAULT '₹',
             distributor_email VARCHAR(48)  NULL,
             commision DECIMAL(8, 2) NOT NULL DEFAULT 0,
             commision_type VARCHAR(12)  DEFAULT '₹',
-
             validity_days INT  NOT NULL DEFAULT 365,
-            validity_date DATETIME  NOT NULL DEAFULT CURRENT_TIMESTAMP,
-
-            validity_type VARCHAR(12)  DEFAULT 'DAYS',
+            validity_date DATETIME  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            validity_type VARCHAR(12) DEFAULT 'DAYS',
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
         `CREATE TABLE IF NOT EXISTS CHAPTER_MEDIA (

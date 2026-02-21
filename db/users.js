@@ -167,6 +167,8 @@ function getCountUsersBySearchAndFilters(search, appliedFilters) {
 
     prepareFiltersWhereQuery(appliedFilters, search, query, parameters);
 
+    logger.info(JSON.stringify(query));
+
     return executeSQLQueryParameterized(query.join(" "), parameters)
         .then(([result]) => result.count)
         .catch((error) => {

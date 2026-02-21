@@ -5,7 +5,7 @@ const { logger } = require("sahas_utils");
 function getEnrollmentsByUserId({ user_id }) {
     return executeSQLQueryParameterized(
         "SELECT ENROLLMENTS.*,USERS.full_name AS created_by_full_name FROM ENROLLMENTS LEFT JOIN USERS ON ENROLLMENTS.created_by=USERS.id WHERE ENROLLMENTS.user_id=? ORDER BY id DESC",
-        [user_id]
+        [user_id],
     ).catch((error) => {
         logger.error(`getEnrollmentsByUserId: ${error}`);
         return [];
@@ -37,10 +37,15 @@ function updateEnrollmentById({ id, start_date, end_date, on_site_access = false
 function getEnrollmentById({ id }) {
     return executeSQLQueryParameterized(
         "SELECT ENROLLMENTS.*,USERS.full_name AS created_by_full_name FROM ENROLLMENTS LEFT JOIN USERS ON ENROLLMENTS.created_by=USERS.id WHERE ENROLLMENTS.id=?",
-        [id]
+        [id],
     )
         .then((results) => (results.length > 0 ? results[0] : null))
         .catch((error) => logger.error(`getEnrollmentById: ${error}`));
+}
+
+//freeze
+function deleteEnrollmentById({ id }) {
+    return executeSQLQueryParameterized("DELETE FROM ENROLLMENTS WHERE id=?", [id]).catch((error) => logger.error(`deleteEnrollmentById: ${error}`));
 }
 
 //freeze
@@ -56,7 +61,7 @@ function addEnrollment({
 }) {
     return executeSQLQueryParameterized(
         "INSERT INTO ENROLLMENTS(user_id,start_date,end_date,amount,on_site_access,digital_access,created_by,handler) VALUES(?,?,?,?,?,?,?,?)",
-        [user_id, start_date, end_date, amount, on_site_access, digital_access, created_by, handler]
+        [user_id, start_date, end_date, amount, on_site_access, digital_access, created_by, handler],
     )
         .then((result) => result.insertId)
         .catch((error) => logger.error(`addEnrollment: ${error}`));
@@ -66,7 +71,7 @@ function addEnrollment({
 function getEnrollmentByCourseIdAndUserId({ user_id, course_id }) {
     return executeSQLQueryParameterized(
         "SELECT ENROLLMENTS.* FROM ENROLLMENTS LEFT JOIN ENROLLMENT_COURSES ON ENROLLMENTS.id=ENROLLMENT_COURSES.enrollment_id WHERE ENROLLMENTS.user_id=? AND ENROLLMENT_COURSES.course_id=?  AND ENROLLMENTS.end_date >= NOW()",
-        [user_id, course_id]
+        [user_id, course_id],
     )
         .then((results) => (results.length > 0 ? results[0] : null))
         .catch((error) => logger.error(`getEnrollmentByCourseIdAndUserId: ${error}`));
@@ -79,4 +84,5 @@ module.exports = {
     getEnrollmentById,
     addEnrollment,
     getEnrollmentByCourseIdAndUserId,
+    deleteEnrollmentById,
 };

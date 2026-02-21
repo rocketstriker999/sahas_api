@@ -91,11 +91,11 @@ function prepareSearchLikeQuery(search, query) {
 }
 
 function prepareFiltersWhereQuery(appliedFilters, search, query) {
-    if (Object.keys(appliedFilters).length) {
+    const { roles, branches, active } = appliedFilters;
+
+    if (roles || branches || active) {
         //if priviously search is applied then we need to add AND
         query.push(!!search ? "AND" : "WHERE");
-
-        const { roles, branches, active } = appliedFilters;
 
         const filterQueries = [];
 
@@ -115,6 +115,25 @@ function prepareFiltersWhereQuery(appliedFilters, search, query) {
     }
 }
 
+function prepareOrderByQuery(appliedFilters, query) {
+    const { id } = appliedFilters;
+
+    if (id) {
+        query.push("ORDER BY");
+
+        const orderByQueries = [];
+
+        if (!!id) {
+            orderByQueries.push(`USERS.id ${id}`);
+        }
+
+        query.push(orderByQueries.join(" , "));
+    } else {
+        //default sorting order if no sorting is given
+        query.push("ORDER BY USERS.id DESC");
+    }
+}
+
 function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
     const query = [`SELECT DISTINCT USERS.* FROM USERS LEFT JOIN USER_ROLES ON USERS.id=USER_ROLES.user_id`];
     const parameters = [];
@@ -123,7 +142,7 @@ function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
 
     prepareFiltersWhereQuery(appliedFilters, search, query);
 
-    query.push("ORDER BY id");
+    prepareOrderByQuery(appliedFilters, query);
 
     if (offSet && limit) {
         query.push(`LIMIT ?`);
@@ -131,6 +150,8 @@ function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
         query.push(`OFFSET ?`);
         parameters.push(offSet);
     }
+
+    logger.info(JSON.stringify(query));
 
     return executeSQLQueryParameterized(query.join(" "), parameters).catch((error) => {
         logger.error(`getAllUsersBySearchAndFilters: ${error}`);
@@ -145,6 +166,8 @@ function getCountUsersBySearchAndFilters(search, appliedFilters) {
     prepareSearchLikeQuery(search, query);
 
     prepareFiltersWhereQuery(appliedFilters, search, query, parameters);
+
+    logger.info(`query - ${JSON.stringify(query)}`);
 
     return executeSQLQueryParameterized(query.join(" "), parameters)
         .then(([result]) => result.count)

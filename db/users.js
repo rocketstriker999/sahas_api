@@ -144,8 +144,6 @@ function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
 
     prepareOrderByQuery(appliedFilters, query);
 
-    query.push("ORDER BY id");
-
     if (offSet && limit) {
         query.push(`LIMIT ?`);
         parameters.push(limit);

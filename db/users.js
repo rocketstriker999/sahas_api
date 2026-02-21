@@ -115,6 +115,25 @@ function prepareFiltersWhereQuery(appliedFilters, search, query) {
     }
 }
 
+function prepareOrderByQuery(appliedFilters, query) {
+    if (Object.keys(appliedFilters).length) {
+        query.push("ORDER BY");
+
+        const { id } = appliedFilters;
+
+        const orderByQueries = [];
+
+        if (!!id) {
+            orderByQueries.push(`id ${id}`);
+        }
+
+        query.push(orderByQueries.join(" , "));
+    }
+
+    //default sorting order if no sorting is given
+    query.push("ORDER BY ID DESC");
+}
+
 function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
     const query = [`SELECT DISTINCT USERS.* FROM USERS LEFT JOIN USER_ROLES ON USERS.id=USER_ROLES.user_id`];
     const parameters = [];
@@ -122,6 +141,8 @@ function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
     prepareSearchLikeQuery(search, query);
 
     prepareFiltersWhereQuery(appliedFilters, search, query);
+
+    prepareOrderByQuery(appliedFilters, query);
 
     query.push("ORDER BY id");
 

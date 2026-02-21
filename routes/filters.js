@@ -6,11 +6,17 @@ const booleanFilters = [
     { title: "Yes", id: "TRUE" },
     { title: "No", id: "FALSE" },
 ];
+
+const sortFilters = [
+    { title: "Latest First", id: "DESC" },
+    { title: "Oldest First", id: "ASC" },
+];
+
 router.get("/users", async (req, res) => {
     res.status(200).json({
         active: booleanFilters,
         dues: booleanFilters,
-        latestFirst: booleanFilters,
+        id: sortFilters,
     });
 });
 

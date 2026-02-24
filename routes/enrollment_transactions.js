@@ -5,6 +5,7 @@ const {
     getEnrollmentTransactionById,
     updateEnrollmentTransactionInvoiceById,
     getEnrollmentTransactionsForInterval,
+    updateEnrollmentTransactionVerificationById,
 } = require("../db/enrollment_transactions");
 const { readConfig } = require("../libs/config");
 const { requestService } = require("sahas_utils");
@@ -187,6 +188,20 @@ router.post("/", async (req, res) => {
         });
 
         res.status(201).json(enrollmentTransaction);
+    } else {
+        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+    }
+});
+
+//tested
+router.patch("/manual-verification", async (req, res) => {
+    const requiredBodyFields = ["id", "manually_verified"];
+
+    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+
+    if (isRequestBodyValid) {
+        updateEnrollmentTransactionVerificationById(validatedRequestBody);
+        res.sendStatus(200);
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

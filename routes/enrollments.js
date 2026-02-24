@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const { updateEnrollmentById, getEnrollmentById, addEnrollment } = require("../db/enrollments");
+const { updateEnrollmentById, getEnrollmentById, addEnrollment, deleteEnrollmentById } = require("../db/enrollments");
 const { validateRequestBody } = require("sahas_utils");
 const { addEnrollmentCourse, getEnrollmentCoursesByEnrollmentId } = require("../db/enrollment_courses");
 const { getTransactionsByEnrollmentId } = require("../db/enrollment_transactions");
@@ -28,7 +28,7 @@ router.post("/", async (req, res) => {
     if (isRequestBodyValid) {
         const enrollmentId = await addEnrollment({ created_by: req.user.id, ...validatedRequestBody });
         validatedRequestBody?.courses?.forEach((course) =>
-            addEnrollmentCourse({ created_by: req.user.id, enrollment_id: enrollmentId, course_id: course?.id })
+            addEnrollmentCourse({ created_by: req.user.id, enrollment_id: enrollmentId, course_id: course?.id }),
         );
 
         res.status(201).json(await getEnrollmentById({ id: enrollmentId }));
@@ -51,6 +51,15 @@ router.get("/:id/courses", async (req, res) => {
         return res.status(400).json({ error: "Missing Enrollment Id" });
     }
     res.status(200).json(await getEnrollmentCoursesByEnrollmentId({ enrollment_id: req.params.id }));
+});
+
+//tested
+router.delete("/:id", async (req, res) => {
+    if (!req.params.id) {
+        return res.status(400).json({ error: "Missing Enrollment Id" });
+    }
+    deleteEnrollmentById(req.params);
+    res.sendStatus(204);
 });
 
 module.exports = router;

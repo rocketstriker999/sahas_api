@@ -146,6 +146,7 @@ async function generateDBTables() {
             type VARCHAR(16) NOT NULL,
             image VARCHAR(128) NULL UNIQUE,
             invoice VARCHAR(128) NULL,
+            manually_verified BOOLEAN NOT NULL DEFAULT FALSE,
             created_by INT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP
         )`,

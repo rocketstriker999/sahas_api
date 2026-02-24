@@ -50,7 +50,7 @@ function getEnrollmentTransactionsForInterval({ start_date, end_date, order_by =
 //freeze
 function updateEnrollmentTransactionVerificationById({ manually_verified, id }) {
     return executeSQLQueryParameterized(`UPDATE ENROLLMENT_TRANSACTIONS SET manually_verified=? WHERE id=?`, [manually_verified, id]).catch((error) =>
-        logger.error(`getEnrollmentTransactionsForInterval: ${error}`),
+        logger.error(`updateEnrollmentTransactionVerificationById: ${error}`),
     );
 }
 

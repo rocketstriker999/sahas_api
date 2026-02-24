@@ -47,10 +47,18 @@ function getEnrollmentTransactionsForInterval({ start_date, end_date, order_by =
     ).catch((error) => logger.error(`getEnrollmentTransactionsForInterval: ${error}`));
 }
 
+//freeze
+function updateEnrollmentTransactionVerificationById({ manually_verified, id }) {
+    return executeSQLQueryParameterized(`UPDATE ENROLLMENT_TRANSACTIONS SET manually_verified=? WHERE id=?`, [manually_verified, id]).catch((error) =>
+        logger.error(`getEnrollmentTransactionsForInterval: ${error}`),
+    );
+}
+
 module.exports = {
     addEnrollmentTransaction,
     getTransactionsByEnrollmentId,
     getEnrollmentTransactionById,
     updateEnrollmentTransactionInvoiceById,
     getEnrollmentTransactionsForInterval,
+    updateEnrollmentTransactionVerificationById,
 };

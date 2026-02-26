@@ -17,6 +17,7 @@ router.get("/users", async (req, res) => {
         active: booleanFilters,
         dues: booleanFilters,
         id: sortFilters,
+        inquiry: booleanFilters,
     });
 });
 

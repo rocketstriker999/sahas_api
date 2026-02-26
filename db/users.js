@@ -91,7 +91,7 @@ function prepareSearchLikeQuery(search, query) {
 }
 
 function prepareFiltersWhereQuery(appliedFilters, search, query) {
-    const { roles, branches, active } = appliedFilters;
+    const { roles, branches, active, inquiry } = appliedFilters;
 
     if (roles || branches || active) {
         //if priviously search is applied then we need to add AND
@@ -109,6 +109,10 @@ function prepareFiltersWhereQuery(appliedFilters, search, query) {
 
         if (active) {
             filterQueries.push(`USERS.active in (${active})`);
+        }
+
+        if (inquiry) {
+            filterQueries.push(`INQUIRIES.active in (${inquiry})`);
         }
 
         query.push(filterQueries.join(" AND "));
@@ -135,7 +139,7 @@ function prepareOrderByQuery(appliedFilters, query) {
 }
 
 function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
-    const query = [`SELECT DISTINCT USERS.* FROM USERS LEFT JOIN USER_ROLES ON USERS.id=USER_ROLES.user_id`];
+    const query = [`SELECT DISTINCT USERS.* FROM USERS LEFT JOIN USER_ROLES ON USERS.id=USER_ROLES.user_id LEFT JOIN INQUIRIES ON USERS.id=INQUIRIES.user_id`];
     const parameters = [];
 
     prepareSearchLikeQuery(search, query);

@@ -93,6 +93,8 @@ function prepareSearchLikeQuery(search, query) {
 function prepareFiltersWhereQuery(appliedFilters, search, query) {
     const { roles, branches, active, inquiry } = appliedFilters;
 
+    logger.info(JSON.stringify(appliedFilters));
+
     if (roles || branches || active) {
         //if priviously search is applied then we need to add AND
         query.push(!!search ? "AND" : "WHERE");
@@ -170,8 +172,6 @@ function getCountUsersBySearchAndFilters(search, appliedFilters) {
     prepareSearchLikeQuery(search, query);
 
     prepareFiltersWhereQuery(appliedFilters, search, query, parameters);
-
-    logger.info(`query - ${JSON.stringify(query)}`);
 
     return executeSQLQueryParameterized(query.join(" "), parameters)
         .then(([result]) => result.count)

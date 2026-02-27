@@ -94,6 +94,7 @@ function prepareFiltersWhereQuery(appliedFilters, search, query) {
     const { roles, branches, active, inquiry } = appliedFilters;
 
     logger.info(JSON.stringify(appliedFilters));
+    logger.info(`inquiry ${inquiry}`);
 
     if (roles || branches || active) {
         //if priviously search is applied then we need to add AND

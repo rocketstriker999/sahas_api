@@ -1,5 +1,6 @@
 const { executeSQLQueryParameterized } = require("../libs/db");
 const { logger } = require("sahas_utils");
+const { getInquiriesByUserId } = require("./inquiries");
 
 //tested
 function getUserByEmail({ email }) {
@@ -138,10 +139,8 @@ function prepareOrderByQuery(appliedFilters, query) {
     }
 }
 
-function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
-    const query = [
-        `SELECT DISTINCT USERS.*,INQUIRIES.active as active_inquiry FROM USERS LEFT JOIN USER_ROLES ON USERS.id=USER_ROLES.user_id LEFT JOIN INQUIRIES ON USERS.id=INQUIRIES.user_id`,
-    ];
+async function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
+    const query = [`SELECT DISTINCT USERS.* FROM USERS LEFT JOIN USER_ROLES ON USERS.id=USER_ROLES.user_id LEFT JOIN INQUIRIES ON USERS.id=INQUIRIES.user_id`];
     const parameters = [];
 
     prepareSearchLikeQuery(search, query);
@@ -157,10 +156,11 @@ function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
         parameters.push(offSet);
     }
 
-    return executeSQLQueryParameterized(query.join(" "), parameters).catch((error) => {
-        logger.error(`getAllUsersBySearchAndFilters: ${error}`);
-        return [];
-    });
+    const users = executeSQLQueryParameterized(query.join(" "), parameters);
+
+    for (const user of users) {
+        user.inquiries = await getInquiriesByUserId({ user_id: user.id });
+    }
 }
 
 function getCountUsersBySearchAndFilters(search, appliedFilters) {

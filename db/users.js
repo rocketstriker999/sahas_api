@@ -156,11 +156,13 @@ async function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, lim
         parameters.push(offSet);
     }
 
-    const users = executeSQLQueryParameterized(query.join(" "), parameters);
+    const users = await executeSQLQueryParameterized(query.join(" "), parameters);
 
     for (const user of users) {
         user.inquiries = await getInquiriesByUserId({ user_id: user.id });
     }
+
+    return users;
 }
 
 function getCountUsersBySearchAndFilters(search, appliedFilters) {

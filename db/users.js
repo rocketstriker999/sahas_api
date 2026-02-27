@@ -117,7 +117,7 @@ function prepareFiltersWhereQuery(appliedFilters, search, query) {
         }
 
         if (inquiry_branches) {
-            filterQueries.push(`INQUIRIES.branch in (${inquiry_branches})`);
+            filterQueries.push(`INQUIRIES.branch_id in (${inquiry_branches})`);
         }
 
         query.push(filterQueries.join(" AND "));

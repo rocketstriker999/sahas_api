@@ -139,7 +139,9 @@ function prepareOrderByQuery(appliedFilters, query) {
 }
 
 function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
-    const query = [`SELECT DISTINCT USERS.* FROM USERS LEFT JOIN USER_ROLES ON USERS.id=USER_ROLES.user_id LEFT JOIN INQUIRIES ON USERS.id=INQUIRIES.user_id`];
+    const query = [
+        `SELECT DISTINCT USERS.*,INQUIRIES.active as active_inquiry FROM USERS LEFT JOIN USER_ROLES ON USERS.id=USER_ROLES.user_id LEFT JOIN INQUIRIES ON USERS.id=INQUIRIES.user_id`,
+    ];
     const parameters = [];
 
     prepareSearchLikeQuery(search, query);
@@ -154,8 +156,6 @@ function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
         query.push(`OFFSET ?`);
         parameters.push(offSet);
     }
-
-    logger.info(JSON.stringify(query));
 
     return executeSQLQueryParameterized(query.join(" "), parameters).catch((error) => {
         logger.error(`getAllUsersBySearchAndFilters: ${error}`);

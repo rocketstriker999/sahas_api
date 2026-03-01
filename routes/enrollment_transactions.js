@@ -139,53 +139,54 @@ router.post("/", async (req, res) => {
         const enrollmentTransaction = await getEnrollmentTransactionById({ id: enrollmentTransactionId });
         const enrollmentUser = await getUserById({ id: enrollment.user_id });
 
-        //generate invoice
-        await requestService({
-            requestServiceName: process.env.SERVICE_MEDIA,
-            onRequestStart: () => logger.info("Generating Invoice"),
-            requestPath: "templated/pdf",
-            requestMethod: "POST",
-            requestPostBody: {
-                template: "invoice",
-                injects: {
-                    invoice_date: getFormattedDate({ date: enrollmentTransaction.created_on, format: "DD-MM-YY" }), //
-                    transaction_id: enrollmentTransactionId, //
-                    course_title: enrollmentCourses.map(({ title }) => title).join(","), //
+        if (validatedRequestBody?.type !== "SCH")
+            //generate invoice
+            await requestService({
+                requestServiceName: process.env.SERVICE_MEDIA,
+                onRequestStart: () => logger.info("Generating Invoice"),
+                requestPath: "templated/pdf",
+                requestMethod: "POST",
+                requestPostBody: {
+                    template: "invoice",
+                    injects: {
+                        invoice_date: getFormattedDate({ date: enrollmentTransaction.created_on, format: "DD-MM-YY" }), //
+                        transaction_id: enrollmentTransactionId, //
+                        course_title: enrollmentCourses.map(({ title }) => title).join(","), //
 
-                    user_name: `${enrollmentUser?.full_name}`, //
-                    user_email: enrollmentUser?.email, //
-                    user_phone: enrollmentUser?.phone, //
-                    validity: getFormattedDate({ date: enrollment?.end_date, format: "DD-MM-YY" }), //
+                        user_name: `${enrollmentUser?.full_name}`, //
+                        user_email: enrollmentUser?.email, //
+                        user_phone: enrollmentUser?.phone, //
+                        validity: getFormattedDate({ date: enrollment?.end_date, format: "DD-MM-YY" }), //
 
-                    payment_date: getFormattedDate({ date: enrollmentTransaction.created_on, format: "DD-MM-YY HH:mm:ss" }), //
-                    cgst_percentage: cgst, //
-                    sgst_percentage: sgst, //
-                    price_original: enrollmentTransaction?.original, //
-                    price_pre_tax: enrollmentTransaction?.original, //
-                    discount: enrollmentTransaction?.discount, //
-                    coupon_code: "No Coupon Code", //
-                    total_tax: (Number(enrollmentTransaction?.cgst) + Number(enrollmentTransaction?.sgst)).toFixed(2), //
-                    cgst: enrollmentTransaction?.cgst, //
-                    sgst: enrollmentTransaction?.sgst, //
-                    price_pay: validatedRequestBody?.amount, //
-                    price_pay_words: libNumbersToWords.toWords(validatedRequestBody?.amount).toUpperCase(), //
-                    received_by: req.user?.full_name,
-                    mode_payment: enrollmentTransaction.type,
-                    note: enrollmentTransaction.note,
+                        payment_date: getFormattedDate({ date: enrollmentTransaction.created_on, format: "DD-MM-YY HH:mm:ss" }), //
+                        cgst_percentage: cgst, //
+                        sgst_percentage: sgst, //
+                        price_original: enrollmentTransaction?.original, //
+                        price_pre_tax: enrollmentTransaction?.original, //
+                        discount: enrollmentTransaction?.discount, //
+                        coupon_code: "No Coupon Code", //
+                        total_tax: (Number(enrollmentTransaction?.cgst) + Number(enrollmentTransaction?.sgst)).toFixed(2), //
+                        cgst: enrollmentTransaction?.cgst, //
+                        sgst: enrollmentTransaction?.sgst, //
+                        price_pay: validatedRequestBody?.amount, //
+                        price_pay_words: libNumbersToWords.toWords(validatedRequestBody?.amount).toUpperCase(), //
+                        received_by: req.user?.full_name,
+                        mode_payment: enrollmentTransaction.type,
+                        note: enrollmentTransaction.note,
+                    },
                 },
-            },
-            onResponseReceieved: (generatedInvoice, responseCode) => {
-                if (generatedInvoice?.cdn_url && responseCode === 201) {
-                    logger.success(`Invoice For Transaction - ${enrollmentTransactionId} Generated !`);
-                    updateEnrollmentTransactionInvoiceById({ id: enrollmentTransactionId, invoice: generatedInvoice.cdn_url });
-                    enrollmentTransaction.invoice = generatedInvoice.cdn_url;
-                } else {
-                    logger.error(
-                        `Failed To Generate Invoice For Transaction - ${enrollmentTransactionId} - Media Responded With ${JSON.stringify(generatedInvoice)}`,
-                    );
-                }
-            },
-        });
+                onResponseReceieved: (generatedInvoice, responseCode) => {
+                    if (generatedInvoice?.cdn_url && responseCode === 201) {
+                        logger.success(`Invoice For Transaction - ${enrollmentTransactionId} Generated !`);
+                        updateEnrollmentTransactionInvoiceById({ id: enrollmentTransactionId, invoice: generatedInvoice.cdn_url });
+                        enrollmentTransaction.invoice = generatedInvoice.cdn_url;
+                    } else {
+                        logger.error(
+                            `Failed To Generate Invoice For Transaction - ${enrollmentTransactionId} - Media Responded With ${JSON.stringify(generatedInvoice)}`,
+                        );
+                    }
+                },
+            });
 
         res.status(201).json(enrollmentTransaction);
     } else {

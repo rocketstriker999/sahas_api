@@ -23,6 +23,8 @@
         "number-to-words": "^1.2.4",
         "sahas_utils": "^1.0.27",
         "sequelize": "^6.37.5",
+        "swagger-jsdoc": "^6.2.8",
+        "swagger-ui-express": "^5.0.1",
         "uuid": "^11.1.0",
         "validator": "^13.12.0"
     }

@@ -10,7 +10,30 @@ const router = libExpress.Router();
 const { v4: uuidv4 } = require("uuid");
 const { getAllChapterTypes } = require("../db/chapter_types");
 
-//Template Config
+/**
+ * @swagger
+ * tags:
+ *   name: TemplateConfig
+ *   description: Template configuration management
+ */
+
+/**
+ * @swagger
+ * /template-configs:
+ *   get:
+ *     summary: Get template configuration
+ *     tags: [TemplateConfig]
+ *     security:
+ *       - DeviceFingerPrint: []
+ *       - AuthenticationToken: []
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ */
 router.get("/", async (req, res) => {
     let config = {};
     //configs
@@ -28,6 +51,35 @@ router.get("/", async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /template-configs/dashboard/carousel-images:
+ *   post:
+ *     summary: Add dashboard carousel image
+ *     tags: [TemplateConfig]
+ *     security:
+ *       - DeviceFingerPrint: []
+ *       - AuthenticationToken: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - click_link
+ *               - source
+ *             properties:
+ *               click_link:
+ *                 type: string
+ *               source:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Created
+ *       400:
+ *         description: Bad Request
+ */
 router.post("/dashboard/carousel-images", async (req, res) => {
     const requiredBodyFields = ["click_link", "source"];
 
@@ -48,6 +100,44 @@ router.post("/dashboard/carousel-images", async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /template-configs/dashboard/dialog:
+ *   put:
+ *     summary: Update dashboard dialog
+ *     tags: [TemplateConfig]
+ *     security:
+ *       - DeviceFingerPrint: []
+ *       - AuthenticationToken: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - description
+ *               - heading
+ *               - media_url
+ *               - note
+ *               - title
+ *             properties:
+ *               description:
+ *                 type: string
+ *               heading:
+ *                 type: string
+ *               media_url:
+ *                 type: string
+ *               note:
+ *                 type: string
+ *               title:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Success
+ *       400:
+ *         description: Bad Request
+ */
 router.put("/dashboard/dialog", async (req, res) => {
     const requiredBodyFields = ["description", "heading", "media_url", "note", "title"];
 
@@ -67,6 +157,27 @@ router.put("/dashboard/dialog", async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /template-configs/dashboard/carousel-images/{id}:
+ *   delete:
+ *     summary: Delete dashboard carousel image
+ *     tags: [TemplateConfig]
+ *     security:
+ *       - DeviceFingerPrint: []
+ *       - AuthenticationToken: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       204:
+ *         description: No Content
+ *       400:
+ *         description: Bad Request
+ */
 router.delete("/dashboard/carousel-images/:id", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Carousel Image Id" });

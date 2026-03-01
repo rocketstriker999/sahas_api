@@ -1,6 +1,8 @@
 const libExpress = require("express");
 const { logger } = require("sahas_utils");
 const cors = require("cors");
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./swagger");
 const { ROUTE_NOT_FOUND } = require("./constants");
 
 //Required Middlewares #7
@@ -24,6 +26,9 @@ sahasAPI.use(libExpress.urlencoded({ extended: true }));
 
 //Apply Middlewares
 sahasAPI.use(requiresNoMaintenance);
+
+// Swagger Documentation
+sahasAPI.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 //api end points and routers
 const routers = {

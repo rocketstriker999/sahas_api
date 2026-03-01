@@ -16,13 +16,63 @@ const { AUTHORITIES } = require("../constants");
 
 const router = libExpress.Router();
 
-//tested
+/**
+ * @swagger
+ * tags:
+ *   name: CourseCategories
+ *   description: Course category management
+ */
+
+/**
+ * @swagger
+ * /course-categories:
+ *   get:
+ *     summary: Get all course categories
+ *     tags: [CourseCategories]
+ *     security:
+ *       - DeviceFingerPrint: []
+ *       - AuthenticationToken: []
+ *     responses:
+ *       200:
+ *         description: Success
+ */
 router.get("/", requires_authority(AUTHORITIES.READ_COURSE_CATEGORY), async (req, res) => {
     //provide all the product categories
     res.status(200).json(await getAllCourseCategories());
 });
 
-//tested
+/**
+ * @swagger
+ * /course-categories:
+ *   post:
+ *     summary: Create a new course category
+ *     tags: [CourseCategories]
+ *     security:
+ *       - DeviceFingerPrint: []
+ *       - AuthenticationToken: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - title
+ *               - image
+ *               - view_index
+ *             properties:
+ *               title:
+ *                 type: string
+ *               image:
+ *                 type: string
+ *               view_index:
+ *                 type: integer
+ *     responses:
+ *       201:
+ *         description: Created
+ *       400:
+ *         description: Bad Request
+ */
 router.post(
     "/",
     requires_authority(AUTHORITIES.CREATE_COURSE_CATEGORY),
@@ -47,7 +97,27 @@ router.post(
     }
 );
 
-//tested
+/**
+ * @swagger
+ * /course-categories/{id}:
+ *   delete:
+ *     summary: Delete a course category
+ *     tags: [CourseCategories]
+ *     security:
+ *       - DeviceFingerPrint: []
+ *       - AuthenticationToken: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       204:
+ *         description: No Content
+ *       400:
+ *         description: Bad Request
+ */
 router.delete("/:id", requires_authority(AUTHORITIES.DELETE_COURSE_CATEGORY), async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Course Category Id" });
@@ -58,7 +128,37 @@ router.delete("/:id", requires_authority(AUTHORITIES.DELETE_COURSE_CATEGORY), as
     res.sendStatus(204);
 });
 
-//tested
+/**
+ * @swagger
+ * /course-categories/view_indexes:
+ *   patch:
+ *     summary: Update view indexes for multiple course categories
+ *     tags: [CourseCategories]
+ *     security:
+ *       - DeviceFingerPrint: []
+ *       - AuthenticationToken: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: array
+ *             items:
+ *               type: object
+ *               required:
+ *                 - id
+ *                 - view_index
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                 view_index:
+ *                   type: integer
+ *     responses:
+ *       200:
+ *         description: Success
+ *       400:
+ *         description: Bad Request
+ */
 router.patch("/view_indexes", requires_authority(AUTHORITIES.UPDATE_COURSE_CATEGORY_VIEW_INDEX), async (req, res) => {
     if (req.body?.length) {
         req.body.forEach(updateCourseCategoryViewIndexById);
@@ -68,7 +168,27 @@ router.patch("/view_indexes", requires_authority(AUTHORITIES.UPDATE_COURSE_CATEG
     return res.status(400).json({ error: "Missing Course Categories" });
 });
 
-//tested
+/**
+ * @swagger
+ * /course-categories/{id}/courses:
+ *   get:
+ *     summary: Get courses by category ID
+ *     tags: [CourseCategories]
+ *     security:
+ *       - DeviceFingerPrint: []
+ *       - AuthenticationToken: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Success
+ *       400:
+ *         description: Bad Request
+ */
 router.get("/:id/courses", requires_authority(AUTHORITIES.READ_COURSE_BY_CATEGORY), async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Course Category Id" });

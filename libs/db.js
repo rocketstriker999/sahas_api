@@ -120,6 +120,7 @@ async function generateDBTables() {
             on_site_access BOOLEAN NOT NULL DEFAULT TRUE,
             digital_access BOOLEAN NOT NULL DEFAULT TRUE,
             handler  VARCHAR(256) NOT NULL,
+            note VARCHAR(256) NULL,
             created_by INT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

@@ -23,8 +23,9 @@ function getEnrollmentsAmountByEnrollmentIds({ enrollment_ids }) {
 }
 
 //freeze
-function updateEnrollmentById({ id, start_date, end_date, on_site_access = false, digital_access = false }) {
-    return executeSQLQueryParameterized("UPDATE ENROLLMENTS SET start_date=?,end_date=?,on_site_access=?,digital_access=? WHERE id=?", [
+function updateEnrollmentById({ id, amount, start_date, end_date, on_site_access = false, digital_access = false }) {
+    return executeSQLQueryParameterized("UPDATE ENROLLMENTS SET amount=?,start_date=?,end_date=?,on_site_access=?,digital_access=? WHERE id=?", [
+        amount,
         start_date,
         end_date,
         on_site_access,

@@ -19,6 +19,8 @@ const { getDevicesByUserId } = require("../db/devices");
 const { getCourseSubjectsByCourseId } = require("../db/course_subjects");
 const { getTestAttainableChaptersBySubjectId } = require("../db/chapters");
 const { requestService } = require("sahas_utils");
+const { getAllBranches, getBranchById } = require("../db/branches");
+const { getAllCourses } = require("../db/courses");
 
 const router = libExpress.Router();
 
@@ -41,6 +43,27 @@ router.get("/download", async (req, res) => {
     const { search, ...appliedFilters } = req.query;
     logger.info(`Searching Users - search : ${search} | filters : ${JSON.stringify(appliedFilters)} `);
 
+    const users = await getAllUsersBySearchAndFilters(search, appliedFilters);
+
+    const branchSelector = {};
+    const courseSelector = {};
+
+    const branches = await getAllBranches();
+    const courses = await getAllCourses();
+
+    for (const branch of branches) branchSelector[branch?.id] = branch?.title;
+    for (const course of courses) courseSelector[course?.id] = course?.title;
+
+    for (const user of users) {
+        if (!!user?.branch_id) {
+            user.branch = branches[user?.branch_id];
+        }
+
+        if (!!user?.inquiries?.length) {
+            user.branch = user?.inquiries?.map((inquiry) => `${courseSelector[inquiry?.course_id]} at ${branchSelector[inquiry?.branch_id]}`)?.join("|");
+        }
+    }
+
     await requestService({
         requestServiceName: process.env.SERVICE_MEDIA,
         onRequestStart: () => logger.info("Generating Users"),
@@ -48,7 +71,7 @@ router.get("/download", async (req, res) => {
         requestMethod: "POST",
         requestPostBody: {
             template: "users",
-            injects: await getAllUsersBySearchAndFilters(search, appliedFilters),
+            injects: users,
         },
         onResponseReceieved: (generatedUsers, responseCode) => {
             if (generatedUsers?.cdn_url && responseCode === 201) logger.success(`Users Sheet Generated !`);

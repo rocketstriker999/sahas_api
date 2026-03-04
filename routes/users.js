@@ -56,7 +56,7 @@ router.get("/download", async (req, res) => {
 
     for (const user of users) {
         if (!!user?.branch_id) {
-            user.branch = branches[user?.branch_id];
+            user.branch = branchSelector[user?.branch_id];
         }
 
         if (!!user?.inquiries?.length) {

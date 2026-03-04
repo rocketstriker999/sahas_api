@@ -51,13 +51,8 @@ router.get("/download", async (req, res) => {
             injects: await getAllUsersBySearchAndFilters(search, appliedFilters),
         },
         onResponseReceieved: (generatedUsers, responseCode) => {
-            if (generatedUsers?.cdn_url && responseCode === 201) {
-                logger.success(`Users Sheet Generated !`);
-            } else {
-                logger.error(
-                    `Failed To Generate Invoice For Transaction - ${enrollmentTransactionId} - Media Responded With ${JSON.stringify(generatedInvoice)}`,
-                );
-            }
+            if (generatedUsers?.cdn_url && responseCode === 201) logger.success(`Users Sheet Generated !`);
+            else logger.error(`Failed To Generate Users - Media Responded With ${JSON.stringify(generatedUsers)} - ${responseCode}`);
             return res.status(responseCode).json(generatedUsers);
         },
     });

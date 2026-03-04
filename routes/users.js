@@ -18,6 +18,7 @@ const { getEnrollmentCoursesByUserId, getEnrollmentCoursesByEnrollmentId } = req
 const { getDevicesByUserId } = require("../db/devices");
 const { getCourseSubjectsByCourseId } = require("../db/course_subjects");
 const { getTestAttainableChaptersBySubjectId } = require("../db/chapters");
+const { requestService } = require("sahas_utils");
 
 const router = libExpress.Router();
 

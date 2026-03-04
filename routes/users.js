@@ -60,7 +60,9 @@ router.get("/download", async (req, res) => {
         }
 
         if (!!user?.inquiries?.length) {
-            user.inquiries = user?.inquiries?.map((inquiry) => `${courseSelector[inquiry?.course_id]} at ${branchSelector[inquiry?.branch_id]}`)?.join(" | ");
+            user.inquiries = user?.inquiries
+                ?.map((inquiry) => `${courseSelector[inquiry?.course_id]} at ${branchSelector[inquiry?.branch_id]} [${inquiry?.active}]`)
+                ?.join(" | ");
         }
     }
 

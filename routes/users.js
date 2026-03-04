@@ -12,7 +12,6 @@ const {
 const { getInquiriesByUserId } = require("../db/inquiries");
 const { validateRequestBody } = require("sahas_utils");
 const { getEnrollmentsByUserId } = require("../db/enrollments");
-
 const { getWalletTransactionsByUserId } = require("../db/wallet_transactions");
 const { getUserRolesByUserId } = require("../db/user_roles");
 const { getEnrollmentCoursesByUserId, getEnrollmentCoursesByEnrollmentId } = require("../db/enrollment_courses");
@@ -34,6 +33,33 @@ router.get("/", async (req, res) => {
     };
 
     res.status(200).json(users);
+});
+
+//tested
+router.get("/download", async (req, res) => {
+    const { search, ...appliedFilters } = req.query;
+    logger.info(`Searching Users - search : ${search} | filters : ${JSON.stringify(appliedFilters)} `);
+
+    await requestService({
+        requestServiceName: process.env.SERVICE_MEDIA,
+        onRequestStart: () => logger.info("Generating Users"),
+        requestPath: "templated/sheet",
+        requestMethod: "POST",
+        requestPostBody: {
+            template: "users",
+            injects: await getAllUsersBySearchAndFilters(search, appliedFilters),
+        },
+        onResponseReceieved: (generatedUsers, responseCode) => {
+            if (generatedUsers?.cdn_url && responseCode === 201) {
+                logger.success(`Users Sheet Generated !`);
+            } else {
+                logger.error(
+                    `Failed To Generate Invoice For Transaction - ${enrollmentTransactionId} - Media Responded With ${JSON.stringify(generatedInvoice)}`,
+                );
+            }
+            return res.status(responseCode).json(generatedUsers);
+        },
+    });
 });
 
 //tested

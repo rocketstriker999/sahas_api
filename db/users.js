@@ -170,7 +170,9 @@ async function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, lim
 }
 
 function getCountUsersBySearchAndFilters(search, appliedFilters) {
-    const query = [`SELECT COUNT(DISTINCT USERS.id) AS count FROM USERS LEFT JOIN USER_ROLES ON USERS.id=USER_ROLES.user_id`];
+    const query = [
+        `SELECT COUNT(DISTINCT USERS.id) AS count FROM USERS LEFT JOIN USER_ROLES ON USERS.id=USER_ROLES.user_id LEFT JOIN INQUIRIES ON USERS.id=INQUIRIES.user_id`,
+    ];
     const parameters = [];
 
     prepareSearchLikeQuery(search, query);

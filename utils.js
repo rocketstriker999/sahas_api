@@ -107,6 +107,10 @@ function hasRequiredAuthority(authorities, requiredAuthority) {
     return authorities?.includes(requiredAuthority);
 }
 
+
+
+
+
 module.exports = {
     prepareDirectories,
     generateToken,

@@ -12,13 +12,15 @@ const {
 const { getInquiriesByUserId } = require("../db/inquiries");
 const { validateRequestBody } = require("sahas_utils");
 const { getEnrollmentsByUserId } = require("../db/enrollments");
-
 const { getWalletTransactionsByUserId } = require("../db/wallet_transactions");
 const { getUserRolesByUserId } = require("../db/user_roles");
 const { getEnrollmentCoursesByUserId, getEnrollmentCoursesByEnrollmentId } = require("../db/enrollment_courses");
 const { getDevicesByUserId } = require("../db/devices");
 const { getCourseSubjectsByCourseId } = require("../db/course_subjects");
 const { getTestAttainableChaptersBySubjectId } = require("../db/chapters");
+const { requestService } = require("sahas_utils");
+const { getAllBranches, getBranchById } = require("../db/branches");
+const { getAllCourses } = require("../db/courses");
 
 const router = libExpress.Router();
 
@@ -34,6 +36,49 @@ router.get("/", async (req, res) => {
     };
 
     res.status(200).json(users);
+});
+
+//tested
+router.get("/download", async (req, res) => {
+    const { search, ...appliedFilters } = req.query;
+    logger.info(`Searching Users - search : ${search} | filters : ${JSON.stringify(appliedFilters)} `);
+
+    const users = await getAllUsersBySearchAndFilters(search, appliedFilters);
+
+    const branchSelector = {};
+    const courseSelector = {};
+
+    const branches = await getAllBranches();
+    const courses = await getAllCourses();
+
+    for (const branch of branches) branchSelector[branch?.id] = branch?.title;
+    for (const course of courses) courseSelector[course?.id] = course?.title;
+
+    for (const user of users) {
+        if (!!user?.branch_id) {
+            user.branch = branchSelector[user?.branch_id];
+        }
+
+        if (!!user?.inquiries?.length) {
+            user.inquiries = user?.inquiries?.map((inquiry) => `${courseSelector[inquiry?.course_id]} at ${branchSelector[inquiry?.branch_id]}`)?.join(" | ");
+        }
+    }
+
+    await requestService({
+        requestServiceName: process.env.SERVICE_MEDIA,
+        onRequestStart: () => logger.info("Generating Users"),
+        requestPath: "templated/sheet",
+        requestMethod: "POST",
+        requestPostBody: {
+            template: "users",
+            injects: users,
+        },
+        onResponseReceieved: (generatedUsers, responseCode) => {
+            if (generatedUsers?.cdn_url && responseCode === 201) logger.success(`Users Sheet Generated !`);
+            else logger.error(`Failed To Generate Users - Media Responded With ${JSON.stringify(generatedUsers)} - ${responseCode}`);
+            return res.status(responseCode).json(generatedUsers);
+        },
+    });
 });
 
 //tested

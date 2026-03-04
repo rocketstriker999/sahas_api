@@ -15,7 +15,7 @@ const { getEnrollmentsByUserId } = require("../db/enrollments");
 
 const { getWalletTransactionsByUserId } = require("../db/wallet_transactions");
 const { getUserRolesByUserId } = require("../db/user_roles");
-const { getEnrollmentCoursesByUserId } = require("../db/enrollment_courses");
+const { getEnrollmentCoursesByUserId, getEnrollmentCoursesByEnrollmentId } = require("../db/enrollment_courses");
 const { getDevicesByUserId } = require("../db/devices");
 const { getCourseSubjectsByCourseId } = require("../db/course_subjects");
 const { getTestAttainableChaptersBySubjectId } = require("../db/chapters");
@@ -138,7 +138,14 @@ router.get("/:id/enrollments", async (req, res) => {
         return res.status(400).json({ error: "Missing User Id" });
     }
 
-    return res.status(200).json(await getEnrollmentsByUserId({ user_id: req.params.id }));
+    const enrollments = await getEnrollmentsByUserId({ user_id: req.params.id });
+
+    for (const enrollment of enrollments) {
+        const courses = await getEnrollmentCoursesByEnrollmentId({ enrollment_id: enrollment?.id });
+        enrollment.courses = courses?.map(({ title }) => title);
+    }
+
+    return res.status(200).json(enrollments);
 });
 
 //tested

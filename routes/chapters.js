@@ -48,17 +48,22 @@ router.get("/test", async (req, res) => {
 
     const chapters = [].concat(req.query.chapters || []);
 
-    logger.info(chapters);
+    logger.info(`chapters -> ${chapters}`);
 
     for (const chapterId of chapters) {
         const chapter = await getChapterById({ id: chapterId });
-        logger.info(JSON.stringify(chapter));
-        const response = await axios.get(chapter.test_questions_pool);
+
+        const response = await axios.get(chapter?.test_questions_pool);
+
+        logger.info(JSON.stringify(response));
+
         const records = parse(response.data, {
             columns: true,
             skip_empty_lines: true,
             trim: true,
         });
+        logger.info(JSON.stringify(records));
+
         testQuestions.push(...records);
     }
 

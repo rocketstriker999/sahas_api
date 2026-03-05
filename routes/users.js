@@ -228,8 +228,6 @@ router.post("/", async (req, res) => {
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
-    logger.info(JSON.stringify(validatedRequestBody));
-
     if (isRequestBodyValid) {
         if ((userId = await addUser({ ...validatedRequestBody }))) {
             return res.status(201).json(await getUserById({ id: userId }));

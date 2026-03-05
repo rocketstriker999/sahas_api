@@ -55,14 +55,15 @@ router.get("/test", async (req, res) => {
 
         const response = await axios.get(chapter?.test_questions_pool);
 
-        logger.info(JSON.stringify(response));
+        logger.info(`response -> ${JSON.stringify(response)}`);
 
         const records = parse(response.data, {
             columns: true,
             skip_empty_lines: true,
             trim: true,
         });
-        logger.info(JSON.stringify(records));
+
+        logger.info(`records -> ${JSON.stringify(records)}`);
 
         testQuestions.push(...records);
     }

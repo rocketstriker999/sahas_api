@@ -44,11 +44,13 @@ router.get("/test", async (req, res) => {
 
     const { test_timer_minutes, test_size } = await getSubjectById({ id: req.query.subject });
 
+    if (!!test_timer_minutes || !!test_size) {
+        return res.status(400).json({ error: "Missing Test Minutes or Test Size" });
+    }
+
     const testQuestions = [];
 
     const chapters = [].concat(req.query.chapters || []);
-
-    logger.info(`chapters -> ${chapters}`);
 
     for (const chapterId of chapters) {
         const chapter = await getChapterById({ id: chapterId });

@@ -24,6 +24,34 @@ async function populateRolesAndAuthorities(user) {
     user.authorities = authorities?.map((authority) => authority.title);
 }
 
+/**
+ * @swagger
+ * /authentication-tokens:
+ *   patch:
+ *     summary: Activate authentication token using OTP
+ *     tags: [Authentication]
+ *     security:
+ *       - DeviceFingerPrint: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - otp
+ *               - authentication_token
+ *             properties:
+ *               otp:
+ *                 type: string
+ *               authentication_token:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Success - Returns user object
+ *       400:
+ *         description: Invalid Token or Missing Parameters
+ */
 router.patch("/", async (req, res) => {
     if (!req.body.otp || !req.body.authentication_token) {
         return res.status(400).json({ error: "Missing Required Parameters - OTP or Token" });
@@ -39,6 +67,34 @@ router.patch("/", async (req, res) => {
     return res.status(400).json({ error: "Invalid Token" });
 });
 
+/**
+ * @swagger
+ * /authentication-tokens:
+ *   post:
+ *     summary: Request authentication token (sends OTP to email)
+ *     tags: [Authentication]
+ *     security:
+ *       - DeviceFingerPrint: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *     responses:
+ *       201:
+ *         description: Created - returns authentication_token
+ *       400:
+ *         description: Missing or Invalid Email
+ *       500:
+ *         description: Internal Server Error
+ */
 router.post("/", async (req, res) => {
     const { authentication: { token_validity, otp_validity } = {} } = await readConfig("app");
 
@@ -92,6 +148,21 @@ router.post("/", async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /authentication-tokens:
+ *   get:
+ *     summary: Get current authenticated user details
+ *     tags: [Authentication]
+ *     security:
+ *       - DeviceFingerPrint: []
+ *       - AuthenticationToken: []
+ *     responses:
+ *       200:
+ *         description: Success
+ *       401:
+ *         description: Invalid Token
+ */
 router.get("/", async (req, res) => {
     if ((user = req?.user)) {
         await populateRolesAndAuthorities(user);

@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const { updateEnrollmentById, getEnrollmentById, addEnrollment } = require("../db/enrollments");
+const { updateEnrollmentById, getEnrollmentById, addEnrollment, deleteEnrollmentById } = require("../db/enrollments");
 const { validateRequestBody } = require("sahas_utils");
 const { addEnrollmentCourse, getEnrollmentCoursesByEnrollmentId } = require("../db/enrollment_courses");
 const { getTransactionsByEnrollmentId } = require("../db/enrollment_transactions");
@@ -9,8 +9,10 @@ const { AUTHORITIES } = require("../constants");
 const router = libExpress.Router();
 
 //tested
-router.patch("/", requires_authority(AUTHORITIES.UPDATE_ENROLLMENT), async (req, res) => {
-    const requiredBodyFields = ["id", "start_date", "end_date"];
+
+
+router.patch("/",requires_authority(AUTHORITIES.UPDATE_ENROLLMENT), async (req, res) => {
+    const requiredBodyFields = ["id", "amount", "digital_access", "on_site_access", "start_date", "end_date"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
@@ -31,7 +33,7 @@ router.post("/", requires_authority(AUTHORITIES.CREATE_ENROLLMENT), async (req, 
     if (isRequestBodyValid) {
         const enrollmentId = await addEnrollment({ created_by: req.user.id, ...validatedRequestBody });
         validatedRequestBody?.courses?.forEach((course) =>
-            addEnrollmentCourse({ created_by: req.user.id, enrollment_id: enrollmentId, course_id: course?.id })
+            addEnrollmentCourse({ created_by: req.user.id, enrollment_id: enrollmentId, course_id: course?.id }),
         );
 
         res.status(201).json(await getEnrollmentById({ id: enrollmentId }));
@@ -54,6 +56,15 @@ router.get("/:id/courses", requires_authority(AUTHORITIES.READ_ENROLLMENT_COURSE
         return res.status(400).json({ error: "Missing Enrollment Id" });
     }
     res.status(200).json(await getEnrollmentCoursesByEnrollmentId({ enrollment_id: req.params.id }));
+});
+
+//tested
+router.delete("/:id", async (req, res) => {
+    if (!req.params.id) {
+        return res.status(400).json({ error: "Missing Enrollment Id" });
+    }
+    deleteEnrollmentById(req.params);
+    res.sendStatus(204);
 });
 
 module.exports = router;

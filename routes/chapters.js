@@ -42,21 +42,27 @@ router.get("/test", requires_authority(AUTHORITIES.READ_CHAPTERS_TEST), async (r
 
     const { test_timer_minutes, test_size } = await getSubjectById({ id: req.query.subject });
 
+    if (!test_timer_minutes || !test_size) {
+        return res.status(400).json({ error: "Missing Test Minutes or Test Size" });
+    }
+
     const testQuestions = [];
 
     const chapters = [].concat(req.query.chapters || []);
 
-    logger.info(chapters);
-
     for (const chapterId of chapters) {
         const chapter = await getChapterById({ id: chapterId });
-        logger.info(JSON.stringify(chapter));
-        const response = await axios.get(chapter.test_questions_pool);
+
+        const response = await axios.get(chapter?.test_questions_pool);
+
         const records = parse(response.data, {
             columns: true,
             skip_empty_lines: true,
             trim: true,
         });
+
+        logger.info(`records -> ${JSON.stringify(records)}`);
+
         testQuestions.push(...records);
     }
 

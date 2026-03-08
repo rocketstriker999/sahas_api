@@ -1,5 +1,6 @@
 const { executeSQLQueryParameterized } = require("../libs/db");
 const { logger } = require("sahas_utils");
+const { getInquiriesByUserId } = require("./inquiries");
 
 //tested
 function getUserByEmail({ email }) {
@@ -91,11 +92,11 @@ function prepareSearchLikeQuery(search, query) {
 }
 
 function prepareFiltersWhereQuery(appliedFilters, search, query) {
-    if (Object.keys(appliedFilters).length) {
+    const { roles, branches, active, inquiry, inquiry_branches } = appliedFilters;
+
+    if (roles || branches || active || inquiry || inquiry_branches) {
         //if priviously search is applied then we need to add AND
         query.push(!!search ? "AND" : "WHERE");
-
-        const { roles, branches, active } = appliedFilters;
 
         const filterQueries = [];
 
@@ -111,19 +112,46 @@ function prepareFiltersWhereQuery(appliedFilters, search, query) {
             filterQueries.push(`USERS.active in (${active})`);
         }
 
+        if (inquiry) {
+            filterQueries.push(`INQUIRIES.active in (${inquiry})`);
+        }
+
+        if (inquiry_branches) {
+            filterQueries.push(`INQUIRIES.branch_id in (${inquiry_branches})`);
+        }
+
         query.push(filterQueries.join(" AND "));
     }
 }
 
-function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
-    const query = [`SELECT DISTINCT USERS.* FROM USERS LEFT JOIN USER_ROLES ON USERS.id=USER_ROLES.user_id`];
+function prepareOrderByQuery(appliedFilters, query) {
+    const { id } = appliedFilters;
+
+    if (id) {
+        query.push("ORDER BY");
+
+        const orderByQueries = [];
+
+        if (!!id) {
+            orderByQueries.push(`USERS.id ${id}`);
+        }
+
+        query.push(orderByQueries.join(" , "));
+    } else {
+        //default sorting order if no sorting is given
+        query.push("ORDER BY USERS.id DESC");
+    }
+}
+
+async function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
+    const query = [`SELECT DISTINCT USERS.* FROM USERS LEFT JOIN USER_ROLES ON USERS.id=USER_ROLES.user_id LEFT JOIN INQUIRIES ON USERS.id=INQUIRIES.user_id`];
     const parameters = [];
 
     prepareSearchLikeQuery(search, query);
 
     prepareFiltersWhereQuery(appliedFilters, search, query);
 
-    query.push("ORDER BY id");
+    prepareOrderByQuery(appliedFilters, query);
 
     if (offSet && limit) {
         query.push(`LIMIT ?`);
@@ -132,14 +160,19 @@ function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
         parameters.push(offSet);
     }
 
-    return executeSQLQueryParameterized(query.join(" "), parameters).catch((error) => {
-        logger.error(`getAllUsersBySearchAndFilters: ${error}`);
-        return [];
-    });
+    const users = await executeSQLQueryParameterized(query.join(" "), parameters);
+
+    for (const user of users) {
+        user.inquiries = await getInquiriesByUserId({ user_id: user.id });
+    }
+
+    return users;
 }
 
 function getCountUsersBySearchAndFilters(search, appliedFilters) {
-    const query = [`SELECT COUNT(DISTINCT USERS.id) AS count FROM USERS LEFT JOIN USER_ROLES ON USERS.id=USER_ROLES.user_id`];
+    const query = [
+        `SELECT COUNT(DISTINCT USERS.id) AS count FROM USERS LEFT JOIN USER_ROLES ON USERS.id=USER_ROLES.user_id LEFT JOIN INQUIRIES ON USERS.id=INQUIRIES.user_id`,
+    ];
     const parameters = [];
 
     prepareSearchLikeQuery(search, query);
@@ -181,7 +214,7 @@ function patchUserPhoneById({ id, phone }) {
 }
 
 //tested
-function addUser({ email, full_name, phone, image, address, branch_id }) {
+function addUser({ email, full_name, phone, image = null, address, branch_id }) {
     return executeSQLQueryParameterized(`INSERT  INTO USERS(email,full_name, phone, image, address, branch_id) VALUES(?,?,?,?,?,?)`, [
         email?.toLowerCase(),
         full_name,

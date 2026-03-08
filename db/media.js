@@ -4,7 +4,7 @@ const { logger } = require("sahas_utils");
 //tested
 function getMediaByChapterId({ chapter_id }) {
     return executeSQLQueryParameterized(`SELECT * FROM CHAPTER_MEDIA WHERE chapter_id=? ORDER BY view_index ASC,updated_at DESC`, [chapter_id]).catch((error) =>
-        logger.error(`getMediaByChapterId: ${error}`)
+        logger.error(`getMediaByChapterId: ${error}`),
     );
 }
 
@@ -16,15 +16,11 @@ function getMediaById({ id }) {
 }
 
 //tested
-function addMedia({ chapter_id, title, cdn_url = null, type, external_url = null, view_index = 0 }) {
-    return executeSQLQueryParameterized(`INSERT INTO CHAPTER_MEDIA (chapter_id,title,cdn_url,type,external_url,view_index) VALUES(?,?,?,?,?,?)`, [
-        chapter_id,
-        title,
-        cdn_url,
-        type,
-        external_url,
-        view_index,
-    ])
+function addMedia({ chapter_id, title, cdn_url = null, type, external_url = null, downloadable = false, view_index = 0 }) {
+    return executeSQLQueryParameterized(
+        `INSERT INTO CHAPTER_MEDIA (chapter_id,title,cdn_url,type,external_url,downloadable,view_index) VALUES(?,?,?,?,?,?,?)`,
+        [chapter_id, title, cdn_url, type, external_url, downloadable, view_index],
+    )
         .then((result) => result.insertId)
         .catch((error) => logger.error(`addMedia: ${error}`));
 }
@@ -37,15 +33,19 @@ function deleteMediaById({ id }) {
 //tested
 function updateMediaViewIndexById({ id, view_index }) {
     return executeSQLQueryParameterized("UPDATE CHAPTER_MEDIA SET view_index=? WHERE id=?", [view_index, id]).catch((error) =>
-        logger.error(`updateMediaViewIndexById: ${error}`)
+        logger.error(`updateMediaViewIndexById: ${error}`),
     );
 }
 
 //freeze
-function updateMediaById({ id, title, cdn_url, external_url }) {
-    return executeSQLQueryParameterized("UPDATE CHAPTER_MEDIA SET title=?,cdn_url=?,external_url=? WHERE id=?", [title, cdn_url, external_url, id]).catch(
-        (error) => logger.error(`updateMediaById: ${error}`)
-    );
+function updateMediaById({ id, title, cdn_url, external_url, downloadable = false }) {
+    return executeSQLQueryParameterized("UPDATE CHAPTER_MEDIA SET title=?,cdn_url=?,external_url=?,downloadable=? WHERE id=?", [
+        title,
+        cdn_url,
+        external_url,
+        downloadable,
+        id,
+    ]).catch((error) => logger.error(`updateMediaById: ${error}`));
 }
 
 //freeze

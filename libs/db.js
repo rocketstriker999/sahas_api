@@ -302,6 +302,8 @@ async function generateDBTables() {
         ('READ_CHAPTERS_MEDIA','View Chapters Media'),
         ('UPDATE_CHAPTERS','Update Chapters'),
         ('CREATE_CHAPTERS','Create Chapters'),
+        ('READ_CHAPTERS','Read Chapters'),
+
 
         ('UPDATE_USER','Update User'),
         ('CREATE_USER','Create User'),

@@ -4,13 +4,18 @@ const { validateRequestBody } = require("sahas_utils");
 const { getEnrollmentByCourseIdAndUserId } = require("../db/enrollments");
 const { getCourseSubjectsByCourseId } = require("../db/course_subjects");
 const { removeBundledCoursesByCourseId, addBundledCourse, getBundledCoursesByCourseId } = require("../db/bundled_courses");
+const requires_authority = require("../middlewares/requires_authority");
+const { AUTHORITIES } = require("../constants");
 const { deleteCourseDialogByCourseId, addCourseDialog, getCourseDialogByCourseId } = require("../db/course_dialog");
+
+
 
 const router = libExpress.Router();
 
 //tested
 router.post(
     "/",
+    requires_authority(AUTHORITIES.CREATE_COURSE),
     async (req, res, next) => {
         const requiredBodyFields = ["category_id", "title", "description", "image", "fees", "view_index"];
         const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
@@ -46,7 +51,7 @@ router.post(
 );
 
 //tested
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", requires_authority(AUTHORITIES.DELETE_COURSE), async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Course Id" });
     }
@@ -55,7 +60,7 @@ router.delete("/:id", async (req, res) => {
 });
 
 //tested
-router.patch("/view_indexes", async (req, res) => {
+router.patch("/view_indexes", requires_authority(AUTHORITIES.UPDATE_COURSE_VIEW_INDEX), async (req, res) => {
     if (req.body?.length) {
         req.body.forEach(updateCourseViewIndexById);
         return res.sendStatus(200);
@@ -86,6 +91,7 @@ router.put("/dialog", async (req, res) => {
 //tested
 router.patch(
     "/",
+    requires_authority(AUTHORITIES.UPDATE_COURSE),
     async (req, res, next) => {
         const requiredBodyFields = ["id", "title", "description", "image", "fees"];
         const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
@@ -114,7 +120,7 @@ router.patch(
 );
 
 //tested
-router.get("/:id", async (req, res) => {
+router.get("/:id", requires_authority(AUTHORITIES.READ_COURSE), async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Course Id" });
     }

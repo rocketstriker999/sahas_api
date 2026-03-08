@@ -1,11 +1,13 @@
 const libExpress = require("express");
 const { validateRequestBody } = require("sahas_utils");
 const { addWalletTransaction, getWalletTransactionById } = require("../db/wallet_transactions");
+const requires_authority = require("../middlewares/requires_authority");
+const { AUTHORITIES } = require("../constants");
 
 const router = libExpress.Router();
 
 //tested
-router.post("/", async (req, res) => {
+router.post("/", requires_authority(AUTHORITIES.CREATE_WALLET_TRANSACTION), async (req, res) => {
     const requiredBodyFields = ["user_id", "amount", "note"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);

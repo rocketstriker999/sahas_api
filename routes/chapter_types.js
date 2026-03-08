@@ -1,11 +1,13 @@
 const libExpress = require("express");
 const { updateChapterTypeViewIndexById, deleteChapterTypeById, addChapterType, getChapterTypeById, updateChapterTypeById } = require("../db/chapter_types");
 const { validateRequestBody } = require("sahas_utils");
+const requires_authority = require("../middlewares/requires_authority");
+const { AUTHORITIES } = require("../constants");
 
 const router = libExpress.Router();
 
 //tested
-router.post("/", async (req, res) => {
+router.post("/", requires_authority(AUTHORITIES.CREATE_CHAPTER_TYPES), async (req, res) => {
     const requiredBodyFields = ["title"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
@@ -19,7 +21,7 @@ router.post("/", async (req, res) => {
 });
 
 //tested
-router.patch("/view_indexes", async (req, res) => {
+router.patch("/view_indexes", requires_authority(AUTHORITIES.UPDATE_CHAPTER_TYPES_VIEW_INDEXES), async (req, res) => {
     if (req.body?.length) {
         req.body.forEach(updateChapterTypeViewIndexById);
         return res.sendStatus(200);
@@ -29,7 +31,7 @@ router.patch("/view_indexes", async (req, res) => {
 });
 
 //tested
-router.patch("/", async (req, res) => {
+router.patch("/", requires_authority(AUTHORITIES.UPDATE_CHAPTER_TYPES), async (req, res) => {
     const requiredBodyFields = ["id", "title"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
@@ -43,7 +45,7 @@ router.patch("/", async (req, res) => {
 });
 
 //tested
-router.delete("/:id", (req, res) => {
+router.delete("/:id", requires_authority(AUTHORITIES.DELETE_CHAPTER_TYPES), (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Chapter Type Id" });
     }

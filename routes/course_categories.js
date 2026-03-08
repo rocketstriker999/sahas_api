@@ -10,11 +10,13 @@ const { validateRequestBody } = require("sahas_utils");
 const { getAllCourseCategories } = require("../db/course_categories");
 const { getCoursesByCategoryId } = require("../db/courses");
 const { getBundledCoursesByCourseId } = require("../db/bundled_courses");
+const requires_authority = require("../middlewares/requires_authority");
+const { AUTHORITIES } = require("../constants");
 
 const router = libExpress.Router();
 
 //tested
-router.get("/", async (req, res) => {
+router.get("/", requires_authority(AUTHORITIES.READ_COURSE_CATEGORY), async (req, res) => {
     //provide all the product categories
     res.status(200).json(await getAllCourseCategories());
 });
@@ -22,6 +24,7 @@ router.get("/", async (req, res) => {
 //tested
 router.post(
     "/",
+    requires_authority(AUTHORITIES.CREATE_COURSE_CATEGORY),
     async (req, res, next) => {
         const requiredBodyFields = ["title", "image", "view_index"];
         const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
@@ -44,7 +47,7 @@ router.post(
 );
 
 //tested
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", requires_authority(AUTHORITIES.DELETE_COURSE_CATEGORY), async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Course Category Id" });
     }
@@ -55,7 +58,7 @@ router.delete("/:id", async (req, res) => {
 });
 
 //tested
-router.patch("/view_indexes", async (req, res) => {
+router.patch("/view_indexes", requires_authority(AUTHORITIES.UPDATE_COURSE_CATEGORY_VIEW_INDEX), async (req, res) => {
     if (req.body?.length) {
         req.body.forEach(updateCourseCategoryViewIndexById);
         return res.sendStatus(200);
@@ -65,7 +68,7 @@ router.patch("/view_indexes", async (req, res) => {
 });
 
 //tested
-router.get("/:id/courses", async (req, res) => {
+router.get("/:id/courses", requires_authority(AUTHORITIES.READ_COURSE_BY_CATEGORY), async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Course Category Id" });
     }

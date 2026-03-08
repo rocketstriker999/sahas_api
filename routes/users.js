@@ -17,15 +17,18 @@ const { getUserRolesByUserId } = require("../db/user_roles");
 const { getEnrollmentCoursesByUserId, getEnrollmentCoursesByEnrollmentId } = require("../db/enrollment_courses");
 const { getDevicesByUserId } = require("../db/devices");
 const { getCourseSubjectsByCourseId } = require("../db/course_subjects");
+
 const { getTestAttainableChaptersBySubjectId } = require("../db/chapters");
 const { requestService } = require("sahas_utils");
-const { getAllBranches, getBranchById } = require("../db/branches");
+const { getAllBranches } = require("../db/branches");
 const { getAllCourses } = require("../db/courses");
+const requires_authority = require("../middlewares/requires_authority");
+const { AUTHORITIES } = require("../constants");
 
 const router = libExpress.Router();
 
 //tested
-router.get("/", async (req, res) => {
+router.get("/", requires_authority(AUTHORITIES.READ_USER), async (req, res) => {
     const { search, offSet, limit, ...appliedFilters } = req.query;
     logger.info(`Searching Users - search : ${search} | filters : ${JSON.stringify(appliedFilters)} | offSet : ${offSet} | limit : ${limit}`);
 
@@ -39,6 +42,7 @@ router.get("/", async (req, res) => {
 });
 
 //tested
+
 router.get("/download", async (req, res) => {
     const { search, ...appliedFilters } = req.query;
     logger.info(`Searching Users - search : ${search} | filters : ${JSON.stringify(appliedFilters)} `);
@@ -84,7 +88,7 @@ router.get("/download", async (req, res) => {
 });
 
 //tested
-router.get("/:id", async (req, res) => {
+router.get("/:id", requires_authority(AUTHORITIES.READ_USER), async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing User Id" });
     }
@@ -93,7 +97,7 @@ router.get("/:id", async (req, res) => {
 });
 
 //tested
-router.get("/:id/courses", async (req, res) => {
+router.get("/:id/courses", requires_authority(AUTHORITIES.READ_USER_ENROLLMENT_COURSES), async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing User Id" });
     }
@@ -102,7 +106,7 @@ router.get("/:id/courses", async (req, res) => {
 });
 
 //tested
-router.get("/:id/chapters-test-catalogue", async (req, res) => {
+router.get("/:id/chapters-test-catalogue", requires_authority(AUTHORITIES.READ_USER_CHAPTERS_TEST_CATALOGUE), async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing User Id" });
     }
@@ -121,7 +125,7 @@ router.get("/:id/chapters-test-catalogue", async (req, res) => {
 });
 
 //tested
-router.put("/", async (req, res) => {
+router.put("/", requires_authority(AUTHORITIES.UPDATE_USER), async (req, res) => {
     const requiredBodyFields = ["id", "email", "full_name", "phone", "address", "active"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
@@ -137,6 +141,7 @@ router.put("/", async (req, res) => {
 //tested
 router.patch(
     "/name",
+    requires_authority(AUTHORITIES.UPDATE_USER),
     async (req, res, next) => {
         const requiredBodyFields = ["id", "full_name"];
         const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
@@ -155,6 +160,7 @@ router.patch(
 //tested
 router.patch(
     "/phone",
+    requires_authority(AUTHORITIES.UPDATE_USER),
     async (req, res, next) => {
         const requiredBodyFields = ["id", "phone"];
         const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
@@ -171,7 +177,7 @@ router.patch(
 );
 
 //tested
-router.get("/:id/inquiries", async (req, res) => {
+router.get("/:id/inquiries", requires_authority(AUTHORITIES.READ_USER_INQUIRIES), async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing User Id" });
     }
@@ -180,7 +186,7 @@ router.get("/:id/inquiries", async (req, res) => {
 });
 
 //tested
-router.get("/:id/enrollments", async (req, res) => {
+router.get("/:id/enrollments", requires_authority(AUTHORITIES.READ_USER_ENROLLMENTS), async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing User Id" });
     }
@@ -196,7 +202,7 @@ router.get("/:id/enrollments", async (req, res) => {
 });
 
 //tested
-router.get("/:id/devices", async (req, res) => {
+router.get("/:id/devices", requires_authority(AUTHORITIES.READ_USER_DEVICES), async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing User Id" });
     }
@@ -205,7 +211,7 @@ router.get("/:id/devices", async (req, res) => {
 });
 
 //tested
-router.get("/:id/wallet-transactions", async (req, res) => {
+router.get("/:id/wallet-transactions", requires_authority(AUTHORITIES.READ_USER_WALLET_TRANSACTIONS), async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing User Id" });
     }
@@ -214,7 +220,7 @@ router.get("/:id/wallet-transactions", async (req, res) => {
 });
 
 //tested
-router.get("/:id/roles", async (req, res) => {
+router.get("/:id/roles", requires_authority(AUTHORITIES.READ_USER_ROLES), async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing User Id" });
     }
@@ -223,12 +229,10 @@ router.get("/:id/roles", async (req, res) => {
 });
 
 //tested
-router.post("/", async (req, res) => {
+router.post("/", requires_authority(AUTHORITIES.CREATE_USER), async (req, res) => {
     const requiredBodyFields = ["full_name", "email", "phone", "branch_id", "address"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
-
-    logger.info(JSON.stringify(validatedRequestBody));
 
     if (isRequestBodyValid) {
         if ((userId = await addUser({ ...validatedRequestBody }))) {

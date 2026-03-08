@@ -2,11 +2,13 @@ const libExpress = require("express");
 const { addDevice, updateUserDeviceStatusById, getUserDeviceById } = require("../db/devices");
 const { logger } = require("sahas_utils");
 const { validateRequestBody } = require("sahas_utils");
+const requires_authority = require("../middlewares/requires_authority");
+const { AUTHORITIES } = require("../constants");
 
 const router = libExpress.Router();
 
 //create a new device into datbase
-router.patch("/", async (req, res) => {
+router.patch("/", requires_authority(AUTHORITIES.UPDATE_USER_DEVICE), async (req, res) => {
     const requiredBodyFields = ["id", "active"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);

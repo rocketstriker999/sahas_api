@@ -20,9 +20,8 @@ const { getCourseSubjectsByCourseId } = require("../db/course_subjects");
 
 const { getTestAttainableChaptersBySubjectId } = require("../db/chapters");
 const { requestService } = require("sahas_utils");
-const { getAllBranches, getBranchById } = require("../db/branches");
+const { getAllBranches } = require("../db/branches");
 const { getAllCourses } = require("../db/courses");
-const { getChaptersBySubjectId, getQuizAttainableChaptersBySubjectId, getTestAttainableChaptersBySubjectId } = require("../db/chapters");
 const requires_authority = require("../middlewares/requires_authority");
 const { AUTHORITIES } = require("../constants");
 
@@ -90,7 +89,6 @@ router.get("/download", async (req, res) => {
 
 //tested
 router.get("/:id", requires_authority(AUTHORITIES.READ_USER), async (req, res) => {
-
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing User Id" });
     }

@@ -398,7 +398,6 @@ async function generateDBTables() {
         ('CREATE_AUTHORITIES','Create Authorities'),
         ('DELETE_AUTHORITIES','Delete Authorities and Role Authority')`,
 
-
         `INSERT IGNORE INTO ROLES (title) VALUES ('STUDENT')`,
         `INSERT IGNORE INTO ROLES (title) VALUES ('DEVELOPER')`,
 

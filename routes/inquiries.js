@@ -2,13 +2,11 @@ const libExpress = require("express");
 const { validateRequestBody } = require("sahas_utils");
 const { deleteInquiryById, updateInquiryStatusById, addInquiry, getInquiryById, updateInquiryById } = require("../db/inquiries");
 const { deleteInquiryNotesByInquiryId, getInquiryNotesByInquiryId, addInquiryNote, deleteInquiryNoteByInquiryNoteId } = require("../db/inquiry_notes");
-const requires_authority = require("../middlewares/requires_authority");
-const { AUTHORITIES } = require("../constants");
 
 const router = libExpress.Router();
 
 //tested
-router.post("/", requires_authority(AUTHORITIES.CREATE_INQUIRY), async (req, res) => {
+router.post("/", async (req, res) => {
     const requiredBodyFields = ["user_id", "course_id", "note", "branch_id"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
@@ -23,7 +21,7 @@ router.post("/", requires_authority(AUTHORITIES.CREATE_INQUIRY), async (req, res
 });
 
 //tested
-router.patch("/", requires_authority(AUTHORITIES.UPDATE_INQUIRY), async (req, res) => {
+router.patch("/", async (req, res) => {
     const requiredBodyFields = ["id", "active", "branch_id", "course_id"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
@@ -37,7 +35,7 @@ router.patch("/", requires_authority(AUTHORITIES.UPDATE_INQUIRY), async (req, re
 });
 
 //tested
-router.delete("/:id", requires_authority(AUTHORITIES.DELETE_INQUIRY), async (req, res) => {
+router.delete("/:id", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing inquiry id" });
     }
@@ -47,7 +45,7 @@ router.delete("/:id", requires_authority(AUTHORITIES.DELETE_INQUIRY), async (req
 });
 
 //tested
-router.get("/:id/notes", requires_authority(AUTHORITIES.READ_INQUIRY_NOTE), async (req, res) => {
+router.get("/:id/notes", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing inquiryId" });
     }

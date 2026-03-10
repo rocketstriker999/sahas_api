@@ -12,14 +12,12 @@ const {
     getChapterBySubjectIdAndTitle,
 } = require("../db/chapters");
 const { getMediaByChapterId } = require("../db/media");
-const requires_authority = require("../middlewares/requires_authority");
-const { AUTHORITIES } = require("../constants");
 
 const router = libExpress.Router();
 
 // //tested
 
-router.get("/:id/media", requires_authority(AUTHORITIES.READ_CHAPTERS_MEDIA), async (req, res) => {
+router.get("/:id/media", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Chapter id" });
     }
@@ -35,7 +33,7 @@ router.get("/:id/media", requires_authority(AUTHORITIES.READ_CHAPTERS_MEDIA), as
 });
 
 //tested
-router.get("/test", requires_authority(AUTHORITIES.READ_CHAPTERS_TEST), async (req, res) => {
+router.get("/test", async (req, res) => {
     if (!req.query?.chapters?.length || !req.query?.subject) {
         return res.status(400).json({ error: "Missing Chapters or Subject" });
     }
@@ -67,7 +65,7 @@ router.get("/test", requires_authority(AUTHORITIES.READ_CHAPTERS_TEST), async (r
 });
 
 //tested
-router.get("/:id", requires_authority(AUTHORITIES.READ_CHAPTERS), async (req, res) => {
+router.get("/:id", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Chapter Id" });
     }
@@ -79,7 +77,7 @@ router.get("/:id", requires_authority(AUTHORITIES.READ_CHAPTERS), async (req, re
 });
 
 //tested
-router.delete("/:id", requires_authority(AUTHORITIES.DELETE_CHAPTERS), async (req, res) => {
+router.delete("/:id", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Chapter Id" });
     }
@@ -88,7 +86,7 @@ router.delete("/:id", requires_authority(AUTHORITIES.DELETE_CHAPTERS), async (re
 });
 
 //tested
-router.patch("/view_indexes", requires_authority(AUTHORITIES.UPDATE_CHAPTERS_VIEW_INDEXES), async (req, res) => {
+router.patch("/view_indexes", async (req, res) => {
     if (req.body?.length) {
         req.body.forEach(updateChapterViewIndexById);
         return res.sendStatus(200);
@@ -100,7 +98,6 @@ router.patch("/view_indexes", requires_authority(AUTHORITIES.UPDATE_CHAPTERS_VIE
 //tested
 router.post(
     "/",
-    requires_authority(AUTHORITIES.CREATE_CHAPTERS),
     async (req, res, next) => {
         const requiredBodyFields = ["title", "subject_id", "type", "view_index"];
         const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
@@ -125,7 +122,6 @@ router.post(
 //tested
 router.patch(
     "/",
-    requires_authority(AUTHORITIES.UPDATE_CHAPTERS),
     async (req, res, next) => {
         const requiredBodyFields = ["id", "title", "type"];
         const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);

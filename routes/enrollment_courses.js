@@ -6,13 +6,11 @@ const {
     deleteEnrollmentCourseById,
 } = require("../db/enrollment_courses");
 const { validateRequestBody } = require("sahas_utils");
-const requires_authority = require("../middlewares/requires_authority");
-const { AUTHORITIES } = require("../constants");
 
 const router = libExpress.Router();
 
 //tested
-router.post("/", requires_authority(AUTHORITIES.CREATE_ENROLLMENT_COURSE), async (req, res) => {
+router.post("/", async (req, res) => {
     const requiredBodyFields = ["enrollment_id", "course_id"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
@@ -26,7 +24,7 @@ router.post("/", requires_authority(AUTHORITIES.CREATE_ENROLLMENT_COURSE), async
 });
 
 //tested
-router.delete("/:id", requires_authority(AUTHORITIES.DELETE_ENROLLMENT_COURSE), async (req, res) => {
+router.delete("/:id", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing enrollmentCourseId" });
     }

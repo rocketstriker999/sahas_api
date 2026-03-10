@@ -9,11 +9,9 @@ const {
 } = require("../db/coupon_code_courses");
 const router = libExpress.Router();
 const { logger } = require("sahas_utils");
-const requires_authority = require("../middlewares/requires_authority");
-const { AUTHORITIES } = require("../constants");
 
 //tested
-router.post("/", requires_authority(AUTHORITIES.CREATE_COUPON_CODE_COURSES), async (req, res) => {
+router.post("/", async (req, res) => {
     const requiredBodyFields = ["course_ids", "discount", "discount_type"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
@@ -30,7 +28,7 @@ router.post("/", requires_authority(AUTHORITIES.CREATE_COUPON_CODE_COURSES), asy
 });
 
 //tested
-router.delete("/:id", requires_authority(AUTHORITIES.DELETE_COUPON_CODE_COURSES), (req, res) => {
+router.delete("/:id", (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Coupon Code Course Id" });
     }
@@ -40,7 +38,7 @@ router.delete("/:id", requires_authority(AUTHORITIES.DELETE_COUPON_CODE_COURSES)
 });
 
 //tested
-router.patch("/", requires_authority(AUTHORITIES.UPDATE_COUPON_CODE_COURSES), async (req, res) => {
+router.patch("/", async (req, res) => {
     const requiredBodyFields = ["id", "discount", "discount_type"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);

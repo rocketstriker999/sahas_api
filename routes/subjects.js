@@ -11,13 +11,11 @@ const {
 } = require("../db/course_subjects");
 const { getChaptersBySubjectId } = require("../db/chapters");
 const { getTestConfigurationByChapterId } = require("../db/test_configurations");
-const requires_authority = require("../middlewares/requires_authority");
-const { AUTHORITIES } = require("../constants");
 
 const router = libExpress.Router();
 
 //tested
-router.patch("/", requires_authority(AUTHORITIES.UPDATE_SUBJECTS), async (req, res) => {
+router.patch("/", async (req, res) => {
     const requiredBodyFields = ["id", "title"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
@@ -31,13 +29,13 @@ router.patch("/", requires_authority(AUTHORITIES.UPDATE_SUBJECTS), async (req, r
 });
 
 //tested
-router.get("/", requires_authority(AUTHORITIES.READ_SUBJECTS), async (req, res) => {
+router.get("/", async (req, res) => {
     //provide all the subjects
     res.status(200).json(await getAllSubjects());
 });
 
 //tested
-router.get("/:id", requires_authority(AUTHORITIES.READ_SUBJECTS), async (req, res) => {
+router.get("/:id", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Subject id" });
     }
@@ -46,7 +44,7 @@ router.get("/:id", requires_authority(AUTHORITIES.READ_SUBJECTS), async (req, re
 });
 
 //tested
-router.get("/:id/chapters", requires_authority(AUTHORITIES.READ_SUBJECTS_CHAPTERS), async (req, res) => {
+router.get("/:id/chapters", async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing Subject id" });
     }
@@ -63,7 +61,6 @@ router.get("/:id/chapters", requires_authority(AUTHORITIES.READ_SUBJECTS_CHAPTER
 //tested
 router.post(
     "/",
-    requires_authority(AUTHORITIES.CREATE_COURSE_SUBJECTS),
     async (req, res, next) => {
         const requiredBodyFields = ["title", "course_id", "view_index"];
         const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);

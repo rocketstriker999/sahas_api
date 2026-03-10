@@ -2,13 +2,11 @@ const libExpress = require("express");
 
 const { deleteUserRoleById, addUserRole, getUserRoleById } = require("../db/user_roles");
 const { validateRequestBody } = require("sahas_utils");
-const requires_authority = require("../middlewares/requires_authority");
-const { AUTHORITIES } = require("../constants");
 
 const router = libExpress.Router();
 
 //tested
-router.post("/", requires_authority(AUTHORITIES.CREATE_USER_ROLES), async (req, res) => {
+router.post("/", async (req, res) => {
     const requiredBodyFields = ["user_id", "role_id"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
@@ -23,7 +21,7 @@ router.post("/", requires_authority(AUTHORITIES.CREATE_USER_ROLES), async (req, 
 });
 
 //tested
-router.delete("/:userRoleId", requires_authority(AUTHORITIES.DELETE_USER_ROLES), async (req, res) => {
+router.delete("/:userRoleId", async (req, res) => {
     if (!req.params.userRoleId) {
         return res.status(400).json({ error: "Missing User Role Id" });
     }

@@ -87,7 +87,7 @@ function getAuthoritiesByRoleIds(roleIds) {
 function prepareSearchLikeQuery(search, query) {
     if (!!search) {
         query.push("WHERE");
-        query.push(["full_name", "email", "phone"].map((key) => `${key} LIKE '%${search}%'`).join(" OR "));
+        query.push(`(${["full_name", "email", "phone"].map((key) => `${key} LIKE '%${search}%'`).join(" OR ")})`);
     }
 }
 

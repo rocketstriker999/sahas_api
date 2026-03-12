@@ -140,7 +140,9 @@ function prepareOrderByQuery(appliedFilters, query) {
 }
 
 async function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
-    const query = [`SELECT DISTINCT USERS.* FROM USERS LEFT JOIN USER_ROLES ON USERS.id=USER_ROLES.user_id LEFT JOIN INQUIRIES ON USERS.id=INQUIRIES.user_id`];
+    const query = [
+        `SELECT DISTINCT USERS.* FROM USERS LEFT JOIN USER_ROLES ON USERS.id=USER_ROLES.user_id LEFT JOIN INQUIRIES ON USERS.id=INQUIRIES.user_id LEFT JOIN ENROLLMENTS ON USERS.id=ENROLLMENTS.user_id LEFT JOIN ENROLLMENT_COURSES ON ENROLLMENTS.id=ENROLLMENT_COURSES.enrollment_id`,
+    ];
     const parameters = [];
 
     prepareSearchLikeQuery(search, query);

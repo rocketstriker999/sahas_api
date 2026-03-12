@@ -12,6 +12,7 @@ const sortFilters = [
     { title: "Oldest First", id: "ASC" },
 ];
 
+//filters for users management
 router.get("/users", async (req, res) => {
     res.status(200).json([
         { title: "Status Active", key: "active", options: booleanFilters, type: "MULTI_SELECT" },

@@ -42,7 +42,6 @@ router.get("/", requires_authority(AUTHORITIES.READ_USER), async (req, res) => {
 });
 
 //tested
-
 router.get("/download", async (req, res) => {
     const { search, ...appliedFilters } = req.query;
     logger.info(`Searching Users - search : ${search} | filters : ${JSON.stringify(appliedFilters)} `);

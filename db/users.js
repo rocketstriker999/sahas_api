@@ -92,9 +92,9 @@ function prepareSearchLikeQuery(search, query) {
 }
 
 function prepareFiltersWhereQuery(appliedFilters, search, query) {
-    const { roles, branches, active, inquiry, inquiry_branches } = appliedFilters;
+    const { roles, branches, active } = appliedFilters;
 
-    if (roles || branches || active || inquiry || inquiry_branches) {
+    if (roles || branches || active) {
         //if priviously search is applied then we need to add AND
         query.push(!!search ? "AND" : "WHERE");
 
@@ -110,14 +110,6 @@ function prepareFiltersWhereQuery(appliedFilters, search, query) {
 
         if (active) {
             filterQueries.push(`USERS.active in (${active})`);
-        }
-
-        if (inquiry) {
-            filterQueries.push(`INQUIRIES.active in (${inquiry})`);
-        }
-
-        if (inquiry_branches) {
-            filterQueries.push(`INQUIRIES.branch_id in (${inquiry_branches})`);
         }
 
         query.push(filterQueries.join(" AND "));

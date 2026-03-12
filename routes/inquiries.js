@@ -23,6 +23,20 @@ router.post("/", requires_authority(AUTHORITIES.CREATE_INQUIRY), async (req, res
 });
 
 //tested
+router.get("/", requires_authority(AUTHORITIES.READ_USER_INQUIRIES), async (req, res) => {
+    const { search, offSet, limit, ...appliedFilters } = req.query;
+    logger.info(`Searching Inquiries - search : ${search} | filters : ${JSON.stringify(appliedFilters)} | offSet : ${offSet} | limit : ${limit}`);
+
+    //get All Inquiries
+    const inquiries = {
+        recordsCount: await getCountUsersBySearchAndFilters(search, appliedFilters),
+        dataSet: await getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit),
+    };
+
+    res.status(200).json(inquiries);
+});
+
+//tested
 router.patch("/", requires_authority(AUTHORITIES.UPDATE_INQUIRY), async (req, res) => {
     const requiredBodyFields = ["id", "active", "branch_id", "course_id"];
 

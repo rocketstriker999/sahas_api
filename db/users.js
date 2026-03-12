@@ -94,7 +94,7 @@ function prepareSearchLikeQuery(search, query) {
 function prepareFiltersWhereQuery(appliedFilters, search, query) {
     const { roles, branches, active, courses, dues } = appliedFilters;
 
-    if ((roles || branches || active || courses, dues)) {
+    if (roles || branches || active || courses || dues) {
         //if priviously search is applied then we need to add AND
         query.push(!!search ? "AND" : "WHERE");
 

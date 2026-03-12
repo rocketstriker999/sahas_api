@@ -92,9 +92,9 @@ function prepareSearchLikeQuery(search, query) {
 }
 
 function prepareFiltersWhereQuery(appliedFilters, search, query) {
-    const { roles, branches, active } = appliedFilters;
+    const { roles, branches, active, course } = appliedFilters;
 
-    if (roles || branches || active) {
+    if (roles || branches || active || course) {
         //if priviously search is applied then we need to add AND
         query.push(!!search ? "AND" : "WHERE");
 
@@ -110,6 +110,10 @@ function prepareFiltersWhereQuery(appliedFilters, search, query) {
 
         if (active) {
             filterQueries.push(`USERS.active in (${active})`);
+        }
+
+        if (course) {
+            filterQueries.push(`ENROLLMENT_COURSES.course_id in (${course})`);
         }
 
         query.push(filterQueries.join(" AND "));
@@ -163,7 +167,7 @@ async function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, lim
 
 function getCountUsersBySearchAndFilters(search, appliedFilters) {
     const query = [
-        `SELECT COUNT(DISTINCT USERS.id) AS count FROM USERS LEFT JOIN USER_ROLES ON USERS.id=USER_ROLES.user_id LEFT JOIN INQUIRIES ON USERS.id=INQUIRIES.user_id`,
+        `SELECT COUNT(DISTINCT USERS.id) AS count FROM USERS LEFT JOIN USER_ROLES ON USERS.id=USER_ROLES.user_id LEFT JOIN INQUIRIES ON USERS.id=INQUIRIES.user_id LEFT JOIN ENROLLMENTS ON USERS.id=ENROLLMENTS.user_id LEFT JOIN ENROLLMENT_COURSES ON ENROLLMENTS.id=ENROLLMENT_COURSES.enrollment_id`,
     ];
     const parameters = [];
 

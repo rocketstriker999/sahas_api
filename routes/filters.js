@@ -13,11 +13,11 @@ const sortFilters = [
 ];
 
 router.get("/users", async (req, res) => {
-    res.status(200).json({
-        active: booleanFilters,
-        dues: booleanFilters,
-        id: sortFilters,
-    });
+    res.status(200).json([
+        { title: "Status Active", key: "active", options: booleanFilters, type: "MULTI_SELECT" },
+        { title: "Fees Due", key: "dues", options: booleanFilters, type: "MULTI_SELECT" },
+        { title: "Sort Order", options: sortFilters, type: "DROP_DOWN" },
+    ]);
 });
 
 router.get("/inquiries", async (req, res) => {

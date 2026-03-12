@@ -20,6 +20,13 @@ router.get("/users", async (req, res) => {
     });
 });
 
+router.get("/inquiries", async (req, res) => {
+    res.status(200).json({
+        active: booleanFilters,
+        id: sortFilters,
+    });
+});
+
 router.get("/reports", async (req, res) => {
     //we will technically return the filters needed for this screen
 });

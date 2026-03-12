@@ -21,6 +21,7 @@ router.get("/users", async (req, res) => {
     ]);
 });
 
+//filters for inquiry management
 router.get("/inquiries", async (req, res) => {
     res.status(200).json({
         active: booleanFilters,

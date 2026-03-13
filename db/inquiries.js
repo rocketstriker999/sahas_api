@@ -1,6 +1,5 @@
 const { executeSQLQueryParameterized } = require("../libs/db");
 const { logger } = require("sahas_utils");
-const { getFormattedDate } = require("../utils");
 
 //freeze
 function addInquiry({ user_id, created_by, branch_id, course_id }) {
@@ -86,9 +85,7 @@ function prepareFiltersWhereQuery(appliedFilters, search, query) {
 
         if (range) {
             const dates = range.split(",");
-            filterQueries.push(
-                `INQUIRIES.created_at>='${getFormattedDate({ date: dates[0] })}' AND INQUIRIES.created_at<='${getFormattedDate({ date: dates[1] })}'`,
-            );
+            filterQueries.push(`INQUIRIES.created_at BETWEEN '${getFormattedDate({ date: dates[0] })}' AND '${getFormattedDate({ date: dates[1] })}'`);
         }
 
         query.push(filterQueries.join(" AND "));

@@ -1,5 +1,5 @@
 const libExpress = require("express");
-const { validateRequestBody, logger } = require("sahas_utils");
+const { validateRequestBody, logger, requestService } = require("sahas_utils");
 const {
     deleteInquiryById,
     addInquiry,
@@ -11,6 +11,8 @@ const {
 const { deleteInquiryNotesByInquiryId, getInquiryNotesByInquiryId, addInquiryNote } = require("../db/inquiry_notes");
 const requires_authority = require("../middlewares/requires_authority");
 const { AUTHORITIES } = require("../constants");
+const { getAllBranches } = require("../db/branches");
+const { getAllCourses } = require("../db/courses");
 
 const router = libExpress.Router();
 

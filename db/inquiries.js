@@ -65,7 +65,7 @@ function prepareSearchLikeQuery(search, query) {
 function prepareFiltersWhereQuery(appliedFilters, search, query) {
     const { roles, branches, active, courses } = appliedFilters;
 
-    if (roles || branches || active || courses) {
+    if (roles || branches || active || courses || range) {
         //if priviously search is applied then we need to add AND
         query.push(!!search ? "AND" : "WHERE");
 
@@ -81,6 +81,11 @@ function prepareFiltersWhereQuery(appliedFilters, search, query) {
 
         if (courses) {
             filterQueries.push(`INQUIRIES.course_id in (${courses})`);
+        }
+
+        if (range) {
+            const dates = range.split(",");
+            filterQueries.push(`INQUIRIES.created_on BETWEEN '${getFormattedDate({ date: dates[0] })}' AND '${getFormattedDate({ date: dates[1] })}'`);
         }
 
         query.push(filterQueries.join(" AND "));

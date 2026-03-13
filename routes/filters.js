@@ -32,6 +32,7 @@ router.get("/inquiries", async (req, res) => {
     res.status(200).json([
         { title: "Status Active", key: "active", options: booleanFilters, type: "MULTI_SELECT" },
         { title: "Sort Order", key: "id", options: sortFilters, type: "DROP_DOWN" },
+        { title: "Range", key: "range", type: "DATE_RANGE_PICKER" },
     ]);
 });
 

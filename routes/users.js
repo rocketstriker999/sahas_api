@@ -61,12 +61,6 @@ router.get("/download", async (req, res) => {
         if (!!user?.branch_id) {
             user.branch = branchSelector[user?.branch_id];
         }
-
-        if (!!user?.inquiries?.length) {
-            user.inquiries = user?.inquiries
-                ?.map((inquiry) => `${courseSelector[inquiry?.course_id]} at ${branchSelector[inquiry?.branch_id]} [${inquiry?.active}]`)
-                ?.join(" | ");
-        }
     }
 
     await requestService({

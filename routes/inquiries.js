@@ -44,6 +44,45 @@ router.get("/", requires_authority(AUTHORITIES.READ_USER_INQUIRIES), async (req,
 });
 
 //tested
+router.get("/download", async (req, res) => {
+    const { search, ...appliedFilters } = req.query;
+    logger.info(`Searching Inquiries - search : ${search} | filters : ${JSON.stringify(appliedFilters)} | offSet : ${offSet} | limit : ${limit}`);
+
+    const inquiries = await getAllInquiriesBySearchAndFilters(search, appliedFilters);
+
+    const branchSelector = {};
+    const courseSelector = {};
+
+    const branches = await getAllBranches();
+    const courses = await getAllCourses();
+
+    for (const branch of branches) branchSelector[branch?.id] = branch?.title;
+    for (const course of courses) courseSelector[course?.id] = course?.title;
+
+    for (const inquiry of inquiries) {
+        if (!!inquiry?.branch_id) {
+            inquiry.branch = branchSelector[inquiry?.branch_id];
+        }
+    }
+
+    await requestService({
+        requestServiceName: process.env.SERVICE_MEDIA,
+        onRequestStart: () => logger.info("Generating Users"),
+        requestPath: "templated/sheet",
+        requestMethod: "POST",
+        requestPostBody: {
+            template: "inquiries",
+            injects: inquiries,
+        },
+        onResponseReceieved: (generatedInquiries, responseCode) => {
+            if (generatedInquiries?.cdn_url && responseCode === 201) logger.success(`Users Sheet Generated !`);
+            else logger.error(`Failed To Generate Users - Media Responded With ${JSON.stringify(generatedInquiries)} - ${responseCode}`);
+            return res.status(responseCode).json(generatedInquiries);
+        },
+    });
+});
+
+//tested
 router.patch("/", requires_authority(AUTHORITIES.UPDATE_INQUIRY), async (req, res) => {
     const requiredBodyFields = ["id", "active", "branch_id", "course_id"];
 

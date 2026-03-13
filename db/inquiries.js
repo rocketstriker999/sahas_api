@@ -108,7 +108,7 @@ function prepareOrderByQuery(appliedFilters, query) {
 
 async function getAllInquiriesBySearchAndFilters(search, appliedFilters, offSet, limit) {
     const query = [
-        `SELECT DISTINCT INQUIRIES.*, USERS.id AS user_id,USERS.email,USERS.full_name,USERS.phone,CREATED_BY_USERS.full_name AS created_by_name FROM INQUIRIES LEFT JOIN USERS ON INQUIRIES.user_id = USERS.id LEFT JOIN USERS CREATED_BY_USERS ON INQUIRIES.created_by = CREATED_BY_USERS.id`,
+        `SELECT DISTINCT INQUIRIES.*, USERS.id AS user_id,USERS.email,USERS.full_name,USERS.phone,CREATED_BY_USERS.full_name AS created_by_full_name FROM INQUIRIES LEFT JOIN USERS ON INQUIRIES.user_id = USERS.id LEFT JOIN USERS CREATED_BY_USERS ON INQUIRIES.created_by = CREATED_BY_USERS.id`,
     ];
     const parameters = [];
 

@@ -107,7 +107,7 @@ function prepareOrderByQuery(appliedFilters, query) {
 }
 
 async function getAllInquiriesBySearchAndFilters(search, appliedFilters, offSet, limit) {
-    const query = [`SELECT DISTINCT USERS.* FROM USERS INNER JOIN INQUIRIES ON USERS.id=INQUIRIES.user_id`];
+    const query = [`SELECT DISTINCT INQUIRIES.* FROM INQUIRIES LEFT JOIN USERS ON INQUIRIES.user_id=USERS.id`];
     const parameters = [];
 
     prepareSearchLikeQuery(search, query);
@@ -127,7 +127,7 @@ async function getAllInquiriesBySearchAndFilters(search, appliedFilters, offSet,
 }
 
 function getCountInquiriesBySearchAndFilters(search, appliedFilters) {
-    const query = [`SELECT COUNT(DISTINCT USERS.id) AS count FROM USERS INNER JOIN INQUIRIES ON USERS.id=INQUIRIES.user_id`];
+    const query = [`SELECT COUNT(DISTINCT INQUIRIES.id) AS count FROM INQUIRIES.* FROM INQUIRIES LEFT JOIN USERS ON INQUIRIES.user_id=USERS.id`];
     const parameters = [];
 
     prepareSearchLikeQuery(search, query);

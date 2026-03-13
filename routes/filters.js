@@ -23,7 +23,7 @@ router.get("/users", async (req, res) => {
         { title: "Status Active", key: "active", options: booleanFilters, type: "MULTI_SELECT" },
         { title: "Fees Due", key: "dues", options: comparisionFilters, type: "DROP_DOWN" },
         { title: "Sort Order", key: "id", options: sortFilters, type: "DROP_DOWN" },
-        { title: "Range", key: "range_created_on", type: "DATE_RANGE_PICKER" },
+        { title: "Range", key: "range", type: "DATE_RANGE_PICKER" },
     ]);
 });
 

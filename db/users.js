@@ -92,9 +92,9 @@ function prepareSearchLikeQuery(search, query) {
 }
 
 function prepareFiltersWhereQuery(appliedFilters, search, query) {
-    const { roles, branches, active, courses, dues } = appliedFilters;
+    const { roles, branches, active, courses, dues, range } = appliedFilters;
 
-    if (roles || branches || active || courses || dues) {
+    if (roles || branches || active || courses || dues || range) {
         //if priviously search is applied then we need to add AND
         query.push(!!search ? "AND" : "WHERE");
 
@@ -120,6 +120,10 @@ function prepareFiltersWhereQuery(appliedFilters, search, query) {
             filterQueries.push(
                 `EXISTS (SELECT 1 FROM ENROLLMENTS LEFT JOIN ENROLLMENT_TRANSACTIONS ON ENROLLMENTS.id = ENROLLMENT_TRANSACTIONS.enrollment_id WHERE ENROLLMENTS.user_id = USERS.id GROUP BY ENROLLMENTS.id HAVING COALESCE(SUM(ENROLLMENT_TRANSACTIONS.amount),0) ${dues} ENROLLMENTS.amount)`,
             );
+        }
+
+        if (range) {
+            filterQueries.push(`USERS.created_on BETWEEN ${range?.[0]} AND ${range?.[1]}`);
         }
 
         query.push(filterQueries.join(" AND "));

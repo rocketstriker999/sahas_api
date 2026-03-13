@@ -1,6 +1,5 @@
 const { executeSQLQueryParameterized } = require("../libs/db");
 const { logger } = require("sahas_utils");
-const { getUserById } = require("./users");
 
 //freeze
 function addInquiry({ user_id, created_by, branch_id, course_id }) {
@@ -109,7 +108,7 @@ function prepareOrderByQuery(appliedFilters, query) {
 
 async function getAllInquiriesBySearchAndFilters(search, appliedFilters, offSet, limit) {
     const query = [
-        `SELECT DISTINCT INQUIRIES.*, USERS.id as user_id,USERS.email,USERS.full_name,USERS.phone FROM INQUIRIES LEFT JOIN USERS ON INQUIRIES.user_id=USERS.id`,
+        `SELECT DISTINCT INQUIRIES.*, U1.id AS user_id,U1.email,U1.full_name,U1.phone,U2.full_name AS created_by_name FROM INQUIRIES LEFT JOIN USERS U1 ON INQUIRIES.user_id = U1.id LEFT JOIN USERS U2 ON INQUIRIES.created_by = U2.id`,
     ];
     const parameters = [];
 
@@ -124,13 +123,7 @@ async function getAllInquiriesBySearchAndFilters(search, appliedFilters, offSet,
         parameters.push(offSet);
     }
 
-    const inquries = await executeSQLQueryParameterized(query.join(" "), parameters);
-
-    for (const inquiry of inquries) {
-        inquiry.created_by_full_name = await getUserById({ id: inquiry?.created_by });
-    }
-
-    return inquries;
+    return await executeSQLQueryParameterized(query.join(" "), parameters);
 }
 
 function getCountInquiriesBySearchAndFilters(search, appliedFilters) {

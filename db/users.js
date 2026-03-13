@@ -1,6 +1,7 @@
 const { executeSQLQueryParameterized } = require("../libs/db");
 const { logger } = require("sahas_utils");
 const { getInquiriesByUserId } = require("./inquiries");
+const { getFormattedDate } = require("../utils");
 
 //tested
 function getUserByEmail({ email }) {
@@ -122,10 +123,9 @@ function prepareFiltersWhereQuery(appliedFilters, search, query) {
             );
         }
 
-        logger.info(range);
-
         if (range) {
-            filterQueries.push(`USERS.created_on BETWEEN ${range?.[0]} AND ${range?.[1]}`);
+            const dates = range.split(",");
+            filterQueries.push(`USERS.created_on BETWEEN ${getFormattedDate({ date: dates[0] })} AND ${getFormattedDate({ date: dates[1] })}`);
         }
 
         query.push(filterQueries.join(" AND "));

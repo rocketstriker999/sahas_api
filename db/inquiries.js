@@ -134,7 +134,7 @@ async function getAllInquiriesBySearchAndFilters(search, appliedFilters, offSet,
 }
 
 function getCountInquiriesBySearchAndFilters(search, appliedFilters) {
-    const query = [`SELECT COUNT(DISTINCT INQUIRIES.id) AS count FROM INQUIRIES.* FROM INQUIRIES LEFT JOIN USERS ON INQUIRIES.user_id=USERS.id`];
+    const query = [`SELECT COUNT(DISTINCT INQUIRIES.id) AS count FROM INQUIRIES LEFT JOIN USERS ON INQUIRIES.user_id=USERS.id`];
     const parameters = [];
 
     prepareSearchLikeQuery(search, query);

@@ -96,13 +96,13 @@ function prepareOrderByQuery(appliedFilters, query) {
         const orderByQueries = [];
 
         if (!!id) {
-            orderByQueries.push(`USERS.id ${id}`);
+            orderByQueries.push(`INQUIRIES.id ${id}`);
         }
 
         query.push(orderByQueries.join(" , "));
     } else {
         //default sorting order if no sorting is given
-        query.push("ORDER BY USERS.id DESC");
+        query.push("ORDER BY INQUIRIES.id DESC");
     }
 }
 

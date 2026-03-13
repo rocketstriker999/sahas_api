@@ -1,6 +1,13 @@
 const libExpress = require("express");
 const { validateRequestBody, logger } = require("sahas_utils");
-const { deleteInquiryById, addInquiry, getInquiryById, updateInquiryById, getAllInquiriesBySearchAndFilters } = require("../db/inquiries");
+const {
+    deleteInquiryById,
+    addInquiry,
+    getInquiryById,
+    updateInquiryById,
+    getAllInquiriesBySearchAndFilters,
+    getCountInquiriesBySearchAndFilters,
+} = require("../db/inquiries");
 const { deleteInquiryNotesByInquiryId, getInquiryNotesByInquiryId, addInquiryNote } = require("../db/inquiry_notes");
 const requires_authority = require("../middlewares/requires_authority");
 const { AUTHORITIES } = require("../constants");
@@ -29,7 +36,7 @@ router.get("/", requires_authority(AUTHORITIES.READ_USER_INQUIRIES), async (req,
 
     //get All Inquiries
     const inquiries = {
-        recordsCount: await getCountUsersBySearchAndFilters(search, appliedFilters),
+        recordsCount: await getCountInquiriesBySearchAndFilters(search, appliedFilters),
         dataSet: await getAllInquiriesBySearchAndFilters(search, appliedFilters, offSet, limit),
     };
 

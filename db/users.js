@@ -117,7 +117,9 @@ function prepareFiltersWhereQuery(appliedFilters, search, query) {
         }
 
         if (dues) {
-            filterQueries.push(`ENROLLMENT_COURSES.course_id in (${dues})`);
+            filterQueries.push(
+                `EXISTS (SELECT 1 FROM ENROLLMENTS LEFT JOIN ENROLLMENT_TRANSACTIONS ON ENROLLMENTS.id = ENROLLMENT_TRANSACTIONS.enrollment_id WHERE ENROLLMENTS.user_id = USERS.id GROUP BY ENROLLMENTS.id HAVING COALESCE(SUM(ENROLLMENT_TRANSACTIONS.amount),0) ${dues} ENROLLMENTS.amount)`,
+            );
         }
 
         query.push(filterQueries.join(" AND "));

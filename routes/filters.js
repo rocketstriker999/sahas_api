@@ -7,6 +7,11 @@ const booleanFilters = [
     { title: "No", id: "FALSE" },
 ];
 
+const comparisionFilters = [
+    { title: "Yes", id: "<" },
+    { title: "No", id: ">" },
+];
+
 const sortFilters = [
     { title: "Latest First", id: "DESC" },
     { title: "Oldest First", id: "ASC" },

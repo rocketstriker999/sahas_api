@@ -1,6 +1,7 @@
 const { executeSQLQueryParameterized } = require("../libs/db");
 const { logger } = require("sahas_utils");
 const { getInquiriesByUserId } = require("./inquiries");
+const { getFormattedDate } = require("../utils");
 
 //tested
 function getUserByEmail({ email }) {
@@ -87,14 +88,14 @@ function getAuthoritiesByRoleIds(roleIds) {
 function prepareSearchLikeQuery(search, query) {
     if (!!search) {
         query.push("WHERE");
-        query.push(["full_name", "email", "phone"].map((key) => `${key} LIKE '%${search}%'`).join(" OR "));
+        query.push(`(${["full_name", "email", "phone"].map((key) => `${key} LIKE '%${search}%'`).join(" OR ")})`);
     }
 }
 
 function prepareFiltersWhereQuery(appliedFilters, search, query) {
-    const { roles, branches, active, inquiry, inquiry_branches } = appliedFilters;
+    const { roles, branches, active, courses, dues, range } = appliedFilters;
 
-    if (roles || branches || active || inquiry || inquiry_branches) {
+    if (roles || branches || active || courses || dues || range) {
         //if priviously search is applied then we need to add AND
         query.push(!!search ? "AND" : "WHERE");
 
@@ -112,12 +113,19 @@ function prepareFiltersWhereQuery(appliedFilters, search, query) {
             filterQueries.push(`USERS.active in (${active})`);
         }
 
-        if (inquiry) {
-            filterQueries.push(`INQUIRIES.active in (${inquiry})`);
+        if (courses) {
+            filterQueries.push(`ENROLLMENT_COURSES.course_id in (${courses})`);
         }
 
-        if (inquiry_branches) {
-            filterQueries.push(`INQUIRIES.branch_id in (${inquiry_branches})`);
+        if (dues) {
+            filterQueries.push(
+                `EXISTS (SELECT 1 FROM ENROLLMENTS LEFT JOIN ENROLLMENT_TRANSACTIONS ON ENROLLMENTS.id = ENROLLMENT_TRANSACTIONS.enrollment_id WHERE ENROLLMENTS.user_id = USERS.id GROUP BY ENROLLMENTS.id HAVING COALESCE(SUM(ENROLLMENT_TRANSACTIONS.amount),0) ${dues} ENROLLMENTS.amount)`,
+            );
+        }
+
+        if (range) {
+            const dates = range.split(",");
+            filterQueries.push(`USERS.created_on BETWEEN '${getFormattedDate({ date: dates[0] })}' AND '${getFormattedDate({ date: dates[1] })}'`);
         }
 
         query.push(filterQueries.join(" AND "));
@@ -144,7 +152,9 @@ function prepareOrderByQuery(appliedFilters, query) {
 }
 
 async function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, limit) {
-    const query = [`SELECT DISTINCT USERS.* FROM USERS LEFT JOIN USER_ROLES ON USERS.id=USER_ROLES.user_id LEFT JOIN INQUIRIES ON USERS.id=INQUIRIES.user_id`];
+    const query = [
+        `SELECT DISTINCT USERS.* FROM USERS LEFT JOIN USER_ROLES ON USERS.id=USER_ROLES.user_id LEFT JOIN INQUIRIES ON USERS.id=INQUIRIES.user_id LEFT JOIN ENROLLMENTS ON USERS.id=ENROLLMENTS.user_id LEFT JOIN ENROLLMENT_COURSES ON ENROLLMENTS.id=ENROLLMENT_COURSES.enrollment_id`,
+    ];
     const parameters = [];
 
     prepareSearchLikeQuery(search, query);
@@ -171,7 +181,7 @@ async function getAllUsersBySearchAndFilters(search, appliedFilters, offSet, lim
 
 function getCountUsersBySearchAndFilters(search, appliedFilters) {
     const query = [
-        `SELECT COUNT(DISTINCT USERS.id) AS count FROM USERS LEFT JOIN USER_ROLES ON USERS.id=USER_ROLES.user_id LEFT JOIN INQUIRIES ON USERS.id=INQUIRIES.user_id`,
+        `SELECT COUNT(DISTINCT USERS.id) AS count FROM USERS LEFT JOIN USER_ROLES ON USERS.id=USER_ROLES.user_id LEFT JOIN INQUIRIES ON USERS.id=INQUIRIES.user_id LEFT JOIN ENROLLMENTS ON USERS.id=ENROLLMENTS.user_id LEFT JOIN ENROLLMENT_COURSES ON ENROLLMENTS.id=ENROLLMENT_COURSES.enrollment_id`,
     ];
     const parameters = [];
 

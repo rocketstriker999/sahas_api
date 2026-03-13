@@ -1,9 +1,18 @@
 const libExpress = require("express");
-const { validateRequestBody } = require("sahas_utils");
-const { deleteInquiryById, updateInquiryStatusById, addInquiry, getInquiryById, updateInquiryById } = require("../db/inquiries");
-const { deleteInquiryNotesByInquiryId, getInquiryNotesByInquiryId, addInquiryNote, deleteInquiryNoteByInquiryNoteId } = require("../db/inquiry_notes");
+const { validateRequestBody, logger, requestService } = require("sahas_utils");
+const {
+    deleteInquiryById,
+    addInquiry,
+    getInquiryById,
+    updateInquiryById,
+    getAllInquiriesBySearchAndFilters,
+    getCountInquiriesBySearchAndFilters,
+} = require("../db/inquiries");
+const { deleteInquiryNotesByInquiryId, getInquiryNotesByInquiryId, addInquiryNote } = require("../db/inquiry_notes");
 const requires_authority = require("../middlewares/requires_authority");
 const { AUTHORITIES } = require("../constants");
+const { getAllBranches } = require("../db/branches");
+const { getAllCourses } = require("../db/courses");
 
 const router = libExpress.Router();
 
@@ -20,6 +29,61 @@ router.post("/", requires_authority(AUTHORITIES.CREATE_INQUIRY), async (req, res
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }
+});
+
+//tested
+router.get("/", requires_authority(AUTHORITIES.READ_USER_INQUIRIES), async (req, res) => {
+    const { search, offSet, limit, ...appliedFilters } = req.query;
+    logger.info(`Searching Inquiries - search : ${search} | filters : ${JSON.stringify(appliedFilters)} | offSet : ${offSet} | limit : ${limit}`);
+
+    //get All Inquiries
+    const inquiries = {
+        recordsCount: await getCountInquiriesBySearchAndFilters(search, appliedFilters),
+        dataSet: await getAllInquiriesBySearchAndFilters(search, appliedFilters, offSet, limit),
+    };
+
+    res.status(200).json(inquiries);
+});
+
+//tested
+router.get("/download", async (req, res) => {
+    const { search, ...appliedFilters } = req.query;
+    logger.info(`Searching Inquiries - search : ${search} | filters : ${JSON.stringify(appliedFilters)} `);
+
+    const inquiries = await getAllInquiriesBySearchAndFilters(search, appliedFilters);
+
+    const branchSelector = {};
+    const courseSelector = {};
+
+    const branches = await getAllBranches();
+    const courses = await getAllCourses();
+
+    for (const branch of branches) branchSelector[branch?.id] = branch?.title;
+    for (const course of courses) courseSelector[course?.id] = course?.title;
+
+    for (const inquiry of inquiries) {
+        if (!!inquiry?.branch_id) {
+            inquiry.branch = branchSelector[inquiry?.branch_id];
+            inquiry.course = courseSelector[inquiry?.course_id];
+            inquiry.status = !!inquiry?.active ? "Open" : "Closed";
+        }
+    }
+
+    await requestService({
+        requestServiceName: process.env.SERVICE_MEDIA,
+        onRequestStart: () => logger.info("Generating Inquiries"),
+        requestPath: "templated/sheet",
+        requestMethod: "POST",
+        requestPostBody: {
+            template: "inquiries",
+            injects: inquiries,
+        },
+        onResponseReceieved: (generatedInquiries, responseCode) => {
+            if (generatedInquiries?.cdn_url && responseCode === 201) logger.success(`Inquiries Sheet Generated !`);
+            else logger.error(`Failed To Generate Inquiries - Media Responded With ${JSON.stringify(generatedInquiries)} - ${responseCode}`);
+            return res.status(responseCode).json(generatedInquiries);
+        },
+    });
 });
 
 //tested

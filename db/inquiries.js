@@ -63,7 +63,7 @@ function prepareSearchLikeQuery(search, query) {
 }
 
 function prepareFiltersWhereQuery(appliedFilters, search, query) {
-    const { roles, branches, active, courses } = appliedFilters;
+    const { roles, branches, active, courses, range } = appliedFilters;
 
     if (roles || branches || active || courses || range) {
         //if priviously search is applied then we need to add AND

@@ -122,6 +122,8 @@ function prepareFiltersWhereQuery(appliedFilters, search, query) {
             );
         }
 
+        console.log(range);
+
         if (range) {
             filterQueries.push(`USERS.created_on BETWEEN ${range?.[0]} AND ${range?.[1]}`);
         }

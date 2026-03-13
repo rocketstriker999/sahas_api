@@ -125,7 +125,7 @@ function prepareFiltersWhereQuery(appliedFilters, search, query) {
 
         if (range) {
             const dates = range.split(",");
-            filterQueries.push(`USERS.created_on BETWEEN '${getFormattedDate({ date: dates[0] })}' AND '${getFormattedDate({ date: dates[1] })}'`);
+            filterQueries.push(`USERS.created_on>='${getFormattedDate({ date: dates[0] })}' AND USERS.created_on<='${getFormattedDate({ date: dates[1] })}'`);
         }
 
         query.push(filterQueries.join(" AND "));

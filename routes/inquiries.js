@@ -65,6 +65,7 @@ router.get("/download", async (req, res) => {
         if (!!inquiry?.branch_id) {
             inquiry.branch = branchSelector[inquiry?.branch_id];
             inquiry.course = courseSelector[inquiry?.course_id];
+            inquiry.status = !!inquiry?.active ? "Open" : "Closed";
         }
     }
 

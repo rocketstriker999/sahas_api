@@ -1,5 +1,6 @@
 const { executeSQLQueryParameterized } = require("../libs/db");
 const { logger } = require("sahas_utils");
+const { getFormattedDate } = require("../utils");
 
 //freeze
 function addInquiry({ user_id, created_by, branch_id, course_id }) {

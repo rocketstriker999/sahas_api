@@ -1,5 +1,6 @@
 const { executeSQLQueryParameterized } = require("../libs/db");
 const { logger } = require("sahas_utils");
+const { getUserById } = require("./users");
 
 //freeze
 function addInquiry({ user_id, created_by, branch_id, course_id }) {
@@ -123,7 +124,13 @@ async function getAllInquiriesBySearchAndFilters(search, appliedFilters, offSet,
         parameters.push(offSet);
     }
 
-    return await executeSQLQueryParameterized(query.join(" "), parameters);
+    const inquries = await executeSQLQueryParameterized(query.join(" "), parameters);
+
+    for (const inquiry of inquries) {
+        inquiry.created_by_full_name = await getUserById({ id: inquiry?.created_by });
+    }
+
+    return inquries;
 }
 
 function getCountInquiriesBySearchAndFilters(search, appliedFilters) {

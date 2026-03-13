@@ -46,7 +46,7 @@ router.get("/", requires_authority(AUTHORITIES.READ_USER_INQUIRIES), async (req,
 //tested
 router.get("/download", async (req, res) => {
     const { search, ...appliedFilters } = req.query;
-    logger.info(`Searching Inquiries - search : ${search} | filters : ${JSON.stringify(appliedFilters)} | offSet : ${offSet} | limit : ${limit}`);
+    logger.info(`Searching Inquiries - search : ${search} | filters : ${JSON.stringify(appliedFilters)} `);
 
     const inquiries = await getAllInquiriesBySearchAndFilters(search, appliedFilters);
 

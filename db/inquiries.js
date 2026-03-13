@@ -111,9 +111,7 @@ async function getAllInquiriesBySearchAndFilters(search, appliedFilters, offSet,
     const parameters = [];
 
     prepareSearchLikeQuery(search, query);
-
     prepareFiltersWhereQuery(appliedFilters, search, query);
-
     prepareOrderByQuery(appliedFilters, query);
 
     if (offSet && limit) {
@@ -131,7 +129,6 @@ function getCountInquiriesBySearchAndFilters(search, appliedFilters) {
     const parameters = [];
 
     prepareSearchLikeQuery(search, query);
-
     prepareFiltersWhereQuery(appliedFilters, search, query, parameters);
 
     return executeSQLQueryParameterized(query.join(" "), parameters)

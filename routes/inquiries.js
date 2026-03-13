@@ -71,7 +71,7 @@ router.get("/download", async (req, res) => {
 
     await requestService({
         requestServiceName: process.env.SERVICE_MEDIA,
-        onRequestStart: () => logger.info("Generating Users"),
+        onRequestStart: () => logger.info("Generating Inquiries"),
         requestPath: "templated/sheet",
         requestMethod: "POST",
         requestPostBody: {
@@ -79,8 +79,8 @@ router.get("/download", async (req, res) => {
             injects: inquiries,
         },
         onResponseReceieved: (generatedInquiries, responseCode) => {
-            if (generatedInquiries?.cdn_url && responseCode === 201) logger.success(`Users Sheet Generated !`);
-            else logger.error(`Failed To Generate Users - Media Responded With ${JSON.stringify(generatedInquiries)} - ${responseCode}`);
+            if (generatedInquiries?.cdn_url && responseCode === 201) logger.success(`Inquiries Sheet Generated !`);
+            else logger.error(`Failed To Generate Inquiries - Media Responded With ${JSON.stringify(generatedInquiries)} - ${responseCode}`);
             return res.status(responseCode).json(generatedInquiries);
         },
     });

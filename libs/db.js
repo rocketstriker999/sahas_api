@@ -262,6 +262,25 @@ async function generateDBTables() {
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             UNIQUE KEY unique_chapter_type_title (chapter_id,type, title)
         )`,
+        `CREATE TABLE IF NOT EXISTS GLOBAL_NOTES (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            user_id INT NOT NULL,
+            note VARCHAR(256) NOT NULL,
+            created_by INT NOT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            CONSTRAINT fk_global_notes_user
+                FOREIGN KEY (user_id)
+                REFERENCES USERS(id)
+                ON DELETE CASCADE
+                ON UPDATE CASCADE,
+            CONSTRAINT fk_global_notes_created_by
+                FOREIGN KEY (created_by)
+                REFERENCES USERS(id)
+                ON DELETE CASCADE
+                ON UPDATE CASCADE
+        )`,
+
         `INSERT IGNORE INTO BRANCHES (id, title, address, description, active, created_on, updated_at) VALUES
         (1, 'Head Office', '123 Main Street, Mumbai', 'Main corporate branch', 1, '2025-08-10 23:05:32', '2025-08-10 23:05:32'),
         (2, 'Ahmedabad Branch', '45 Riverfront Road, Ahmedabad', 'Serves Gujarat region', 1, '2025-08-10 23:05:32', '2025-08-10 23:05:32'),
@@ -390,7 +409,12 @@ async function generateDBTables() {
         ('DELETE_CHAPTER_TYPES','Delete Chapter Types'),
 
         ('CREATE_AUTHORITIES','Create Authorities'),
-        ('DELETE_AUTHORITIES','Delete Authorities and Role Authority')`,
+        ('DELETE_AUTHORITIES','Delete Authorities and Role Authority'),
+
+        ('CREATE_USER_NOTE', 'Create User Note'),
+        ('READ_USER_NOTE', 'Read User Note'),
+        ('UPDATE_USER_NOTE', 'Update User Note'),
+        ('DELETE_USER_NOTE', 'Delete User Note')`,
 
         `INSERT IGNORE INTO ROLES (title) VALUES ('STUDENT')`,
         `INSERT IGNORE INTO ROLES (title) VALUES ('DEVELOPER')`,

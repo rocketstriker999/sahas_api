@@ -25,7 +25,7 @@ const { getAllCourses } = require("../db/courses");
 const { getGlobalNotesByUserId } = require("../db/global_notes");
 const requires_authority = require("../middlewares/requires_authority");
 const { AUTHORITIES } = require("../constants");
-const { addUserHistory, getUserHistoryById } = require("../db/user_history");
+const { addUserHistory, getUserHistoryById, updateUserHistoryById } = require("../db/user_history");
 
 const router = libExpress.Router();
 
@@ -140,7 +140,12 @@ router.put("/", requires_authority(AUTHORITIES.UPDATE_USER), async (req, res) =>
 
     if (isRequestBodyValid) {
         await updateUserById({ ...validatedRequestBody });
-        res.status(200).json(await getUserById({ ...validatedRequestBody }));
+        await updateUserHistoryById({ id: validatedRequestBody.id, ...validatedRequestBody?.history });
+
+        const user = await getUserById({ ...validatedRequestBody });
+        user.history = await getUserHistoryById({ user_id: user.id });
+
+        res.status(200).json(user);
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }
@@ -246,7 +251,10 @@ router.post("/", requires_authority(AUTHORITIES.CREATE_USER), async (req, res) =
         if ((userId = await addUser({ ...validatedRequestBody }))) {
             await addUserHistory({ user_id: userId, ...validatedRequestBody?.history });
 
-            return res.status(201).json(await getUserById({ id: userId }));
+            const user = await getUserById({ id: userId });
+            user.history = await getUserHistoryById({ user_id: user.id });
+
+            return res.status(201).json(user);
         }
         res.status(400).json({ error: "Unable To Add User - User Might Already Exist" });
     } else {

@@ -244,7 +244,7 @@ router.post("/", requires_authority(AUTHORITIES.CREATE_USER), async (req, res) =
 
     if (isRequestBodyValid) {
         if ((userId = await addUser({ ...validatedRequestBody }))) {
-            await addUserHistory({ user_id, ...validatedRequestBody?.history });
+            await addUserHistory({ user_id: userId, ...validatedRequestBody?.history });
 
             return res.status(201).json(await getUserById({ id: userId }));
         }

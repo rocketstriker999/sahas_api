@@ -30,6 +30,21 @@ async function generateDBTables() {
             created_by INT NULL
           )
         `,
+        `CREATE TABLE IF NOT EXISTS USER_HISTORY (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            user_id INT NOT NULL,
+            institute VARCHAR(64) NULL,
+            course VARCHAR(64) NULL,
+            refered_by VARCHAR(64) NULL,
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            CONSTRAINT fk_history_user
+                FOREIGN KEY (user_id)
+                REFERENCES USERS(id)
+                ON DELETE CASCADE
+                ON UPDATE CASCADE
+          )
+        `,
         `CREATE TABLE IF NOT EXISTS WALLET_TRANSACTIONS(
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,

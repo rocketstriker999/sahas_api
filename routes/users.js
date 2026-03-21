@@ -25,6 +25,7 @@ const { getAllCourses } = require("../db/courses");
 const { getGlobalNotesByUserId } = require("../db/global_notes");
 const requires_authority = require("../middlewares/requires_authority");
 const { AUTHORITIES } = require("../constants");
+const { addUserHistory, getUserHistoryById } = require("../db/user_history");
 
 const router = libExpress.Router();
 
@@ -87,7 +88,10 @@ router.get("/:id", requires_authority(AUTHORITIES.READ_USER), async (req, res) =
         return res.status(400).json({ error: "Missing User Id" });
     }
 
-    return res.status(200).json(await getUserById({ ...req.params }));
+    const user = await getUserById({ ...req.params });
+    user.history = await getUserHistoryById({ user_id: user.id });
+
+    return res.status(200).json(user);
 });
 
 //tested
@@ -240,6 +244,8 @@ router.post("/", requires_authority(AUTHORITIES.CREATE_USER), async (req, res) =
 
     if (isRequestBodyValid) {
         if ((userId = await addUser({ ...validatedRequestBody }))) {
+            await addUserHistory({ user_id, ...validatedRequestBody?.history });
+
             return res.status(201).json(await getUserById({ id: userId }));
         }
         res.status(400).json({ error: "Unable To Add User - User Might Already Exist" });

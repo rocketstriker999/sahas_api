@@ -52,7 +52,7 @@ function getEnrollmentTransactionsForInterval({ start_date, end_date, order_by =
             ENROLLMENT_TRANSACTIONS.manually_verified, 
             ENROLLMENT_TRANSACTIONS.created_on, 
             USERS.full_name,
-            CREATORS.id as created_by_id
+            CREATORS.id as created_by_id,
             CREATORS.full_name as created_by_full_name
         FROM ENROLLMENT_TRANSACTIONS 
         LEFT JOIN ENROLLMENTS 

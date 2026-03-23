@@ -296,6 +296,14 @@ async function generateDBTables() {
                 ON UPDATE CASCADE
         )`,
 
+        `CREATE TABLE IF NOT EXISTS POLICIES (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            title VARCHAR(255) NOT NULL,
+            description VARCHAR(256),
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        )`,
+
         `INSERT IGNORE INTO BRANCHES (id, title, address, description, active, created_on, updated_at) VALUES
         (1, 'Head Office', '123 Main Street, Mumbai', 'Main corporate branch', 1, '2025-08-10 23:05:32', '2025-08-10 23:05:32'),
         (2, 'Ahmedabad Branch', '45 Riverfront Road, Ahmedabad', 'Serves Gujarat region', 1, '2025-08-10 23:05:32', '2025-08-10 23:05:32'),

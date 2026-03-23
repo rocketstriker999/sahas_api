@@ -19,8 +19,8 @@ router.post("/", requires_authority(AUTHORITIES.CREATE_POLICY), async (req, res)
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
     if (isRequestBodyValid) {
-        await addPolicy(validatedRequestBody);
-        res.status(201).json(await getPolicyById({ id: validatedRequestBody.id }));
+        const policyId = await addPolicy(validatedRequestBody);
+        res.status(201).json(await getPolicyById({ id: policyId }));
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

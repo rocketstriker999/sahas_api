@@ -11,9 +11,9 @@ function getAllPolicies() {
 
 // Update policy by ID
 function addPolicy({ title, description }) {
-    return executeSQLQueryParameterized("INSERT INTO POLICIES (title, description) VALUES(?,?)", [title, description]).catch((error) =>
-        logger.error(`addPolicy: ${error}`),
-    );
+    return executeSQLQueryParameterized("INSERT INTO POLICIES (title, description) VALUES(?,?)", [title, description])
+        .then((result) => result.insertId)
+        .catch((error) => logger.error(`addPolicy: ${error}`));
 }
 
 // Update policy by ID

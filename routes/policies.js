@@ -2,6 +2,7 @@ const libExpress = require("express");
 const { getAllPolicies, updatePolicyById, deletePolicyById, getPolicyById, addPolicy, updatePolicyViewIndexById } = require("../db/policies");
 const { validateRequestBody } = require("sahas_utils");
 const { AUTHORITIES } = require("../constants");
+const requires_authority = require("../middlewares/requires_authority");
 
 const router = libExpress.Router();
 

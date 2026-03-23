@@ -14,7 +14,7 @@ router.get("/", async (req, res) => {
 
 // Post the Policy
 router.post("/", requires_authority(AUTHORITIES.CREATE_POLICY), async (req, res) => {
-    const requiredBodyFields = ["id", "title", "description"];
+    const requiredBodyFields = ["title", "description"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 

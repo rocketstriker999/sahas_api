@@ -296,7 +296,6 @@ async function generateDBTables() {
                 ON DELETE CASCADE
                 ON UPDATE CASCADE
         )`,
-
         `CREATE TABLE IF NOT EXISTS POLICIES (
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(255) NOT NULL UNIQUE,
@@ -305,7 +304,6 @@ async function generateDBTables() {
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
-
         `CREATE TABLE IF NOT EXISTS STREAM_SELECTION_QUESTIONS (
             id INT AUTO_INCREMENT PRIMARY KEY,
             question VARCHAR(255) NOT NULL UNIQUE,
@@ -316,7 +314,7 @@ async function generateDBTables() {
         `CREATE TABLE IF NOT EXISTS STREAM_SELECTION_QUESTION_OPTIONS (
             id INT AUTO_INCREMENT PRIMARY KEY,
             question_id INT NOT NULL,
-            option VARCHAR(255) NOT NULL,
+            \`option\` VARCHAR(255) NOT NULL,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,

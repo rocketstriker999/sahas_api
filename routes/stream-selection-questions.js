@@ -24,7 +24,6 @@ router.post("/", requires_authority(AUTHORITIES.CREATE_STREAM_SELECTION_TEST), a
             for (const option of validatedRequestBody?.options) {
                 await addStreamSelectionQuestionOption({ question_id: questionId, option });
             }
-
             const streamSelectionQuestion = await getStreamSelectionQuestionById({ id: questionId });
             streamSelectionQuestion.options = await getStreamSelectionQuestionOptionByQuestionId({ question_id: questionId });
 

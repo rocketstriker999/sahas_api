@@ -127,7 +127,7 @@ const routers = {
     },
     "/stream-selection-questions": {
         middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
-        router: require("./routes/policies"),
+        router: require("./routes/stream_selection_questions"),
     },
 };
 

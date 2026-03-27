@@ -10,7 +10,7 @@ function addStreamSelectionQuestion({ question }) {
 
 //freeze
 function getStreamSelectionQuestionById({ id }) {
-    return executeSQLQueryParameterized("SELECT * STREAM_SELECTION_QUESTIONS  WHERE id=?", [id])
+    return executeSQLQueryParameterized("SELECT * FROM STREAM_SELECTION_QUESTIONS  WHERE id=?", [id])
         .then((result) => (result.length > 0 ? result[0] : false))
         .catch((error) => logger.error(`getStreamSelectionQuestionById: ${error}`));
 }
@@ -24,7 +24,7 @@ function addStreamSelectionQuestionOption({ question_id, option }) {
 
 //freeze
 function getStreamSelectionQuestionOptionByQuestionId({ question_id }) {
-    return executeSQLQueryParameterized("SELECT * STREAM_SELECTION_QUESTION_OPTIONS  WHERE question_id=?", [question_id]).catch((error) =>
+    return executeSQLQueryParameterized("SELECT * FROM STREAM_SELECTION_QUESTION_OPTIONS WHERE question_id=?", [question_id]).catch((error) =>
         logger.error(`getStreamSelectionQuestionOptionByQuestionId: ${error}`),
     );
 }

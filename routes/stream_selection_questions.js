@@ -34,3 +34,5 @@ router.post("/", requires_authority(AUTHORITIES.CREATE_STREAM_SELECTION_TEST), a
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }
 });
+
+module.exports = router;

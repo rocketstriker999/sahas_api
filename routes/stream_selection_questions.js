@@ -9,9 +9,21 @@ const {
     addStreamSelectionQuestionOption,
     getStreamSelectionQuestionById,
     getStreamSelectionQuestionOptionByQuestionId,
+    getAllStreamSelectionQuestions,
 } = require("../db/stream_selection_questions");
 
 const router = libExpress.Router();
+
+//tested
+router.get("/", async (req, res) => {
+    const streamSelectionQuestions = await getAllStreamSelectionQuestions();
+
+    for (const streamSelectionQuestion of streamSelectionQuestions) {
+        streamSelectionQuestion = await getStreamSelectionQuestionOptionByQuestionId({ question_id: streamSelectionQuestion?.id });
+    }
+
+    return res.status(200).json(streamSelectionQuestions);
+});
 
 //tested
 router.post("/", requires_authority(AUTHORITIES.CREATE_STREAM_SELECTION_TEST), async (req, res) => {

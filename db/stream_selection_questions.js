@@ -16,6 +16,14 @@ function getStreamSelectionQuestionById({ id }) {
 }
 
 //freeze
+function getAllStreamSelectionQuestions() {
+    return executeSQLQueryParameterized("SELECT * FROM STREAM_SELECTION_QUESTIONS ").catch((error) => {
+        logger.error(`getStreamSelectionQuestionById: ${error}`);
+        return [];
+    });
+}
+
+//freeze
 function addStreamSelectionQuestionOption({ question_id, option }) {
     return executeSQLQueryParameterized("INSERT INTO STREAM_SELECTION_QUESTION_OPTIONS(question_id,\`option\`) VALUES(?,?)", [question_id, option])
         .then((result) => result.insertId)
@@ -29,4 +37,10 @@ function getStreamSelectionQuestionOptionByQuestionId({ question_id }) {
     );
 }
 
-module.exports = { addStreamSelectionQuestion, addStreamSelectionQuestionOption, getStreamSelectionQuestionById, getStreamSelectionQuestionOptionByQuestionId };
+module.exports = {
+    addStreamSelectionQuestion,
+    addStreamSelectionQuestionOption,
+    getStreamSelectionQuestionById,
+    getStreamSelectionQuestionOptionByQuestionId,
+    getAllStreamSelectionQuestions,
+};

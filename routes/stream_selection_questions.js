@@ -28,19 +28,29 @@ router.get("/", async (req, res) => {
 });
 
 //tested
-router.delete("/:id", requires_authority(AUTHORITIES.DELETE_AUTHORITIES), async (req, res) => {
-    if (!req.params.id) {
-        return res.status(400).json({ error: "Missing authorityId" });
+router.post("/", requires_authority(AUTHORITIES.CREATE_STREAM_SELECTION_TEST), async (req, res) => {
+    const requiredBodyFields = ["question", "options"];
+
+    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+
+    if (isRequestBodyValid) {
+        if (validatedRequestBody?.options?.length > 0 && (questionId = await addStreamSelectionQuestion({ ...validatedRequestBody }))) {
+            for (const option of validatedRequestBody?.options) {
+                await addStreamSelectionQuestionOption({ question_id: questionId, option });
+            }
+            const streamSelectionQuestion = await getStreamSelectionQuestionById({ id: questionId });
+            streamSelectionQuestion.options = await getStreamSelectionQuestionOptionsByQuestionId({ question_id: questionId });
+
+            return res.status(201).json(streamSelectionQuestion);
+        }
+        res.status(400).json({ error: "Unable To Add Stream Selection Question" });
+    } else {
+        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }
-    //delete authority
-    deleteAuthorityById({ id: req.params.id });
-    //this authority needs to go away from roleauthorities
-    deleteRoleAuthoritiesByAuthorityId({ authority_id: req.params.id });
-    res.sendStatus(204);
 });
 
 //tested
-router.post("/:id", requires_authority(AUTHORITIES.DELETE_STREAM_SELECTION_TEST), async (req, res) => {
+router.delete("/:id", requires_authority(AUTHORITIES.DELETE_STREAM_SELECTION_TEST), async (req, res) => {
     if (!req.params?.id) {
         return res.status(400).json({ error: "Missing Question Id" });
     }

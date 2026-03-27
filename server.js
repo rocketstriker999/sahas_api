@@ -110,7 +110,6 @@ const routers = {
         middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
         router: require("./routes/coupon_code_courses"),
     },
-
     "/roles": { middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest], router: require("./routes/roles") },
     "/user-roles": { middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest], router: require("./routes/user_roles") },
 
@@ -123,6 +122,10 @@ const routers = {
         router: require("./routes/role_authorities"),
     },
     "/policies": {
+        middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
+        router: require("./routes/policies"),
+    },
+    "/stream-selection-questions": {
         middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
         router: require("./routes/policies"),
     },

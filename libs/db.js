@@ -24,6 +24,7 @@ async function generateDBTables() {
             image VARCHAR(64) NULL UNIQUE,
             address VARCHAR(256) NULL,
             branch_id INT NULL,
+            stream_selection_test_taken BOOLEAN NOT NULL DEFAULT FALSE,
             active BOOLEAN NOT NULL DEFAULT TRUE,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -299,8 +300,23 @@ async function generateDBTables() {
         `CREATE TABLE IF NOT EXISTS POLICIES (
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(255) NOT NULL UNIQUE,
-            description VARCHAR(256) NOT NULL UNIQUE,
+            description VARCHAR(1024) NOT NULL UNIQUE,
             view_index INT NOT NULL DEFAULT 0,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        )`,
+
+        `CREATE TABLE IF NOT EXISTS STREAM_SELECTION_QUESTIONS (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            question VARCHAR(255) NOT NULL UNIQUE,
+            view_index INT NOT NULL DEFAULT 0,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        )`,
+        `CREATE TABLE IF NOT EXISTS STREAM_SELECTION_QUESTION_OPTIONS (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            question_id INT NOT NULL,
+            option VARCHAR(255) NOT NULL,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,

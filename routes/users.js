@@ -262,4 +262,13 @@ router.post("/", requires_authority(AUTHORITIES.CREATE_USER), async (req, res) =
     }
 });
 
+//tested
+router.get("/:id/stream-selection-test-results", requires_authority(AUTHORITIES.READ_USER_ROLES), async (req, res) => {
+    if (!req.params.id) {
+        return res.status(400).json({ error: "Missing User Id" });
+    }
+
+    res.status(200).json(await getUserRolesByUserId({ user_id: req.params.id }));
+});
+
 module.exports = router;

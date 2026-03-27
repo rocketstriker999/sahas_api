@@ -37,10 +37,26 @@ function getStreamSelectionQuestionOptionsByQuestionId({ question_id }) {
     );
 }
 
+//freeze
+function deleteStreamSelectionQuestionById({ id }) {
+    return executeSQLQueryParameterized("DELETE FROM STREAM_SELECTION_QUESTIONS WHERE id=?", [id]).catch((error) =>
+        logger.error(`deleteStreamSelectionQuestionById: ${error}`),
+    );
+}
+
+//freeze
+function deleteStreamSelectionQuestionOptionsByQuestionId({ question_id }) {
+    return executeSQLQueryParameterized("DELETE FROM STREAM_SELECTION_QUESTION_OPTIONS WHERE question_id=?", [question_id]).catch((error) =>
+        logger.error(`deleteStreamSelectionQuestionById: ${error}`),
+    );
+}
+
 module.exports = {
     addStreamSelectionQuestion,
     addStreamSelectionQuestionOption,
     getStreamSelectionQuestionById,
     getStreamSelectionQuestionOptionsByQuestionId,
     getAllStreamSelectionQuestions,
+    deleteStreamSelectionQuestionById,
+    deleteStreamSelectionQuestionOptionsByQuestionId,
 };

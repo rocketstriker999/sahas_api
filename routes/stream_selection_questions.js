@@ -46,7 +46,6 @@ router.post("/:id", requires_authority(AUTHORITIES.DELETE_STREAM_SELECTION_TEST)
     }
 
     deleteStreamSelectionQuestionById(req.params);
-    deleteStreamSelectionQuestionOptionsByQuestionId({ question_id: req.params.id });
 
     res.sendStatus(204);
 });

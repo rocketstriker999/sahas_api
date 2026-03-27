@@ -317,7 +317,12 @@ async function generateDBTables() {
             \`option\` VARCHAR(255) NOT NULL,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-            UNIQUE KEY unique_question_option (question_id, \`option\`)
+            UNIQUE KEY unique_question_option (question_id, \`option\`),
+              CONSTRAINT fk_question_option
+                FOREIGN KEY (question_id)
+                REFERENCES STREAM_SELECTION_QUESTIONS(id)
+                ON DELETE CASCADE
+                ON UPDATE CASCADE
         )`,
 
         `INSERT IGNORE INTO BRANCHES (id, title, address, description, active, created_on, updated_at) VALUES

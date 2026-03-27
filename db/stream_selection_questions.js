@@ -17,7 +17,7 @@ function getStreamSelectionQuestionById({ id }) {
 
 //freeze
 function addStreamSelectionQuestionOption({ question_id, option }) {
-    return executeSQLQueryParameterized("INSERT INTO STREAM_SELECTION_QUESTION_OPTIONS(question_id,option) VALUES(?,?)", [question_id, option])
+    return executeSQLQueryParameterized("INSERT INTO STREAM_SELECTION_QUESTION_OPTIONS(question_id,\`option\`) VALUES(?,?)", [question_id, option])
         .then((result) => result.insertId)
         .catch((error) => logger.error(`addStreamSelectionQuestionOption: ${error}`));
 }

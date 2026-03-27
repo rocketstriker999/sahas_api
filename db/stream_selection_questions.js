@@ -31,9 +31,9 @@ function addStreamSelectionQuestionOption({ question_id, option }) {
 }
 
 //freeze
-function getStreamSelectionQuestionOptionByQuestionId({ question_id }) {
+function getStreamSelectionQuestionOptionsByQuestionId({ question_id }) {
     return executeSQLQueryParameterized("SELECT * FROM STREAM_SELECTION_QUESTION_OPTIONS WHERE question_id=?", [question_id]).catch((error) =>
-        logger.error(`getStreamSelectionQuestionOptionByQuestionId: ${error}`),
+        logger.error(`getStreamSelectionQuestionOptionsByQuestionId: ${error}`),
     );
 }
 
@@ -41,6 +41,6 @@ module.exports = {
     addStreamSelectionQuestion,
     addStreamSelectionQuestionOption,
     getStreamSelectionQuestionById,
-    getStreamSelectionQuestionOptionByQuestionId,
+    getStreamSelectionQuestionOptionsByQuestionId,
     getAllStreamSelectionQuestions,
 };

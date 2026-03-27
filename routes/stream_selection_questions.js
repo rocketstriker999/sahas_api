@@ -8,7 +8,7 @@ const {
     addStreamSelectionQuestion,
     addStreamSelectionQuestionOption,
     getStreamSelectionQuestionById,
-    getStreamSelectionQuestionOptionByQuestionId,
+    getStreamSelectionQuestionOptionsByQuestionId,
     getAllStreamSelectionQuestions,
 } = require("../db/stream_selection_questions");
 
@@ -19,7 +19,7 @@ router.get("/", async (req, res) => {
     const streamSelectionQuestions = await getAllStreamSelectionQuestions();
 
     for (const streamSelectionQuestion of streamSelectionQuestions) {
-        streamSelectionQuestion = await getStreamSelectionQuestionOptionByQuestionId({ question_id: streamSelectionQuestion?.id });
+        streamSelectionQuestion.options = await getStreamSelectionQuestionOptionsByQuestionId({ question_id: streamSelectionQuestion?.id });
     }
 
     return res.status(200).json(streamSelectionQuestions);
@@ -37,7 +37,7 @@ router.post("/", requires_authority(AUTHORITIES.CREATE_STREAM_SELECTION_TEST), a
                 await addStreamSelectionQuestionOption({ question_id: questionId, option });
             }
             const streamSelectionQuestion = await getStreamSelectionQuestionById({ id: questionId });
-            streamSelectionQuestion.options = await getStreamSelectionQuestionOptionByQuestionId({ question_id: questionId });
+            streamSelectionQuestion.options = await getStreamSelectionQuestionOptionsByQuestionId({ question_id: questionId });
 
             return res.status(201).json(streamSelectionQuestion);
         }

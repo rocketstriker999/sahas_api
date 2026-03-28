@@ -9,7 +9,7 @@ function addStreamSelectionTest({ user_id }) {
 }
 
 function addStreamSelectionTestAnswer({ stream_selection_test_id, question, answer }) {
-    return executeSQLQueryParameterized("INSERT INTO STREAM_SELECTION_TEST_ANSWERS(stream_selection_test_id,question,answer) VALUES(?)", [
+    return executeSQLQueryParameterized("INSERT INTO STREAM_SELECTION_TEST_ANSWERS(stream_selection_test_id,question,answer) VALUES(?,?,?)", [
         stream_selection_test_id,
         question,
         answer,

@@ -16,7 +16,21 @@ function addStreamSelectionTestAnswer({ stream_selection_test_id, question, answ
     ]).catch((error) => logger.error(`addStreamSelectionTestAnswer: ${error}`));
 }
 
+function updateStreamSelectionTestResultById({ id, result }) {
+    return executeSQLQueryParameterized("UPDATE STREAM_SELECTION_TESTS set result=? WHERE id=?", [result, id]).catch((error) =>
+        logger.error(`updateStreamSelectionTestResultById: ${error}`),
+    );
+}
+
+function getLatestStreamSelectionTestByUserId({ user_id }) {
+    return executeSQLQueryParameterized("SELECT * FROM STREAM_SELECTION_TESTS WHERE user_id=? ORDER BY id DESC LIMIT 1", [result, id])
+        .then((result) => (result.length > 0 ? result[0] : false))
+        .catch((error) => logger.error(`getLatestStreamSelectionTestByUserId: ${error}`));
+}
+
 module.exports = {
     addStreamSelectionTest,
     addStreamSelectionTestAnswer,
+    updateStreamSelectionTestResultById,
+    getLatestStreamSelectionTestByUserId,
 };

@@ -23,7 +23,7 @@ function updateStreamSelectionTestResultById({ id, result }) {
 }
 
 function getLatestStreamSelectionTestByUserId({ user_id }) {
-    return executeSQLQueryParameterized("SELECT * FROM STREAM_SELECTION_TESTS WHERE user_id=? ORDER BY id DESC LIMIT 1", [result, id])
+    return executeSQLQueryParameterized("SELECT * FROM STREAM_SELECTION_TESTS WHERE user_id=? ORDER BY id DESC LIMIT 1", [user_id])
         .then((result) => (result.length > 0 ? result[0] : false))
         .catch((error) => logger.error(`getLatestStreamSelectionTestByUserId: ${error}`));
 }

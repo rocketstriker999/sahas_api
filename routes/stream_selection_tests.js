@@ -18,7 +18,7 @@ router.post("/", async (req, res) => {
 
         const response = await openai.responses.create({
             model: "gpt-4.1",
-            input: "Hello from router",
+            input: "Guide me which stream will be beteer for me ? Science or Commerce , give me output within 500 characters only",
         });
 
         await updateStreamSelectionTestResultById({ id: streamSelectionTestId, result: response.output[0].content[0].text });

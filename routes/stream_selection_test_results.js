@@ -1,10 +1,5 @@
 const libExpress = require("express");
-const {
-    addStreamSelectionTest,
-    addStreamSelectionTestAnswer,
-    updateStreamSelectionTestResultById,
-    getLatestStreamSelectionTestByUserId,
-} = require("../db/stream_selection_tests");
+const { getLatestStreamSelectionTestByUserId } = require("../db/stream_selection_tests");
 const { openai } = require("../libs/openai");
 
 const router = libExpress.Router();

@@ -1,6 +1,7 @@
 const libExpress = require("express");
 const { addStreamSelectionTest, addStreamSelectionTestAnswer, updateStreamSelectionTestResultById } = require("../db/stream_selection_tests");
 const openai = require("../libs/openai");
+const { updateStreamSelectionTestByUserId } = require("../db/users");
 const router = libExpress.Router();
 
 //tested
@@ -23,7 +24,8 @@ router.post("/", async (req, res) => {
 
         await updateStreamSelectionTestResultById({ id: streamSelectionTestId, result: response.output[0].content[0].text });
 
-        // res.json(response.output[0].content[0].text);
+        //update user that stream selection test is taken
+        updateStreamSelectionTestByUserId({ stream_selection_test_taken: true, user_id: req.user.id });
 
         return res.sendStatus(201);
     }

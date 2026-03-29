@@ -28,9 +28,23 @@ function getLatestStreamSelectionTestByUserId({ user_id }) {
         .catch((error) => logger.error(`getLatestStreamSelectionTestByUserId: ${error}`));
 }
 
+function getStreamSelectionTestsByUserId({ user_id }) {
+    return executeSQLQueryParameterized("SELECT * FROM STREAM_SELECTION_TESTS WHERE user_id=? ORDER BY id DESC ", [user_id]).catch((error) =>
+        logger.error(`getLatestStreamSelectionTestByUserId: ${error}`),
+    );
+}
+
+function getStreamSelectionTestAnswersByStreamSelectionTestId({ stream_selection_test_id }) {
+    return executeSQLQueryParameterized("SELECT * FROM STREAM_SELECTION_TEST_ANSWERS WHERE stream_selection_test_id=? ORDER BY id DESC ", [
+        stream_selection_test_id,
+    ]).catch((error) => logger.error(`getLatestStreamSelectionTestByUserId: ${error}`));
+}
+
 module.exports = {
     addStreamSelectionTest,
     addStreamSelectionTestAnswer,
     updateStreamSelectionTestResultById,
     getLatestStreamSelectionTestByUserId,
+    getStreamSelectionTestsByUserId,
+    getStreamSelectionTestAnswersByStreamSelectionTestId,
 };

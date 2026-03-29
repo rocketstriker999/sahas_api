@@ -88,6 +88,22 @@ router.get("/download", async (req, res) => {
 });
 
 //tested
+router.get("/stream-selection-test-results/latest", async (req, res) => {
+    const streamSelectionTest = await getLatestStreamSelectionTestByUserId({ user_id: req?.user?.id });
+    res.status(200).json(streamSelectionTest);
+});
+
+//tested
+router.get("/stream-selection-test-results", async (req, res) => {
+    const streamSelectionTests = await getStreamSelectionTestsByUserId({ user_id: req?.user?.id });
+
+    for (const streamSelectionTest of streamSelectionTests) {
+        streamSelectionTest.answers = await getStreamSelectionTestAnswersByStreamSelectionTestId({ stream_selection_test_id: streamSelectionTest?.id });
+    }
+    res.status(200).json(streamSelectionTests);
+});
+
+//tested
 router.get("/:id", requires_authority(AUTHORITIES.READ_USER), async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing User Id" });
@@ -265,22 +281,6 @@ router.post("/", requires_authority(AUTHORITIES.CREATE_USER), async (req, res) =
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }
-});
-
-//tested
-router.get("/stream-selection-test-results/latest", async (req, res) => {
-    const streamSelectionTest = await getLatestStreamSelectionTestByUserId({ user_id: req?.user?.id });
-    res.status(200).json(streamSelectionTest);
-});
-
-//tested
-router.get("/stream-selection-test-results", async (req, res) => {
-    const streamSelectionTests = await getStreamSelectionTestsByUserId({ user_id: req?.user?.id });
-
-    for (const streamSelectionTest of streamSelectionTests) {
-        streamSelectionTest.answers = await getStreamSelectionTestAnswersByStreamSelectionTestId({ stream_selection_test_id: streamSelectionTest?.id });
-    }
-    res.status(200).json(streamSelectionTests);
 });
 
 module.exports = router;

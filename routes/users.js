@@ -26,6 +26,11 @@ const { getGlobalNotesByUserId } = require("../db/global_notes");
 const requires_authority = require("../middlewares/requires_authority");
 const { AUTHORITIES } = require("../constants");
 const { addUserHistory, getUserHistoryById, updateUserHistoryById } = require("../db/user_history");
+const {
+    getLatestStreamSelectionTestByUserId,
+    getStreamSelectionTestsByUserId,
+    getStreamSelectionTestAnswersByStreamSelectionTestId,
+} = require("../db/stream_selection_tests");
 
 const router = libExpress.Router();
 
@@ -80,6 +85,22 @@ router.get("/download", async (req, res) => {
             return res.status(responseCode).json(generatedUsers);
         },
     });
+});
+
+//tested
+router.get("/stream-selection-test-results/latest", async (req, res) => {
+    const streamSelectionTest = await getLatestStreamSelectionTestByUserId({ user_id: req?.user?.id });
+    res.status(200).json(streamSelectionTest);
+});
+
+//tested
+router.get("/stream-selection-test-results", async (req, res) => {
+    const streamSelectionTests = await getStreamSelectionTestsByUserId({ user_id: req?.user?.id });
+
+    for (const streamSelectionTest of streamSelectionTests) {
+        streamSelectionTest.answers = await getStreamSelectionTestAnswersByStreamSelectionTestId({ stream_selection_test_id: streamSelectionTest?.id });
+    }
+    res.status(200).json(streamSelectionTests);
 });
 
 //tested

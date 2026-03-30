@@ -90,6 +90,7 @@ router.get("/download", async (req, res) => {
 //tested
 router.get("/stream-selection-test-results/latest", async (req, res) => {
     const streamSelectionTest = await getLatestStreamSelectionTestByUserId({ user_id: req?.user?.id });
+    streamSelectionTest.answers = await getStreamSelectionTestAnswersByStreamSelectionTestId({ stream_selection_test_id: streamSelectionTest?.id });
     res.status(200).json(streamSelectionTest);
 });
 

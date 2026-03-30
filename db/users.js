@@ -230,7 +230,14 @@ function patchUserPhoneById({ id, phone }) {
     return executeSQLQueryParameterized(`UPDATE USERS SET phone=? WHERE id = ?`, [phone, id]).catch((error) => logger.error(`patchUserPhoneById: ${error}`));
 }
 
-//tested
+//freeze
+function patchUserStreamSelectionTakenById({ id, stream_selection_test_taken }) {
+    return executeSQLQueryParameterized(`UPDATE USERS SET stream_selection_test_taken=? WHERE id = ?`, [stream_selection_test_taken, id]).catch((error) =>
+        logger.error(`patchUserStreamSelectionTakenById: ${error}`),
+    );
+}
+
+//freeze
 function addUser({ email, full_name, phone, image = null, address, branch_id }) {
     return executeSQLQueryParameterized(`INSERT  INTO USERS(email,full_name, phone, image, address, branch_id) VALUES(?,?,?,?,?,?)`, [
         email?.toLowerCase(),
@@ -262,4 +269,5 @@ module.exports = {
     patchUserFullNameById,
     patchUserPhoneById,
     updateStreamSelectionTestByUserId,
+    patchUserStreamSelectionTakenById,
 };

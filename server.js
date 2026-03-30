@@ -133,6 +133,10 @@ const routers = {
         middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
         router: require("./routes/stream_selection_tests"),
     },
+    "/stream-selection-invites": {
+        middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
+        router: require("./routes/stream_selection_test_invites"),
+    },
 };
 
 //apply all routes

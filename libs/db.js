@@ -339,6 +339,14 @@ async function generateDBTables() {
                 ON DELETE CASCADE
                 ON UPDATE CASCADE
         )`,
+        `CREATE TABLE IF NOT EXISTS STREAM_SELECTION_TEST_INVITES (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            title VARCHAR(128) NOT NULL,
+            active BOOLEAN NOT NULL DEFAULT TRUE,
+            qr_url VARCHAR(128) NULL UNIQUE,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        )`,
 
         `INSERT IGNORE INTO BRANCHES (id, title, address, description, active, created_on, updated_at) VALUES
         (1, 'Head Office', '123 Main Street, Mumbai', 'Main corporate branch', 1, '2025-08-10 23:05:32', '2025-08-10 23:05:32'),
@@ -480,7 +488,7 @@ async function generateDBTables() {
 
         `INSERT IGNORE INTO ROLE_AUTHORITIES (role_id, authority_id) SELECT 2, id FROM AUTHORITIES`,
 
-        `INSERT IGNORE  INTO USERS (full_name, email ) VALUES ('Nisarg', 'hammerbyte.nisarg@gmail.com');`,
+        `INSERT IGNORE INTO USERS (full_name, email ) VALUES ('Nisarg', 'hammerbyte.nisarg@gmail.com');`,
         `INSERT IGNORE INTO USER_ROLES (user_id, role_id) VALUES (1, 2);`,
         `INSERT IGNORE INTO USER_ROLES (user_id, role_id) VALUES (3, 2);`,
         `INSERT IGNORE INTO USER_ROLES (user_id, role_id) VALUES (5, 2);`,

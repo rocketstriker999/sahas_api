@@ -10,8 +10,6 @@ const {
     getStreamSelectionQuestionOptionsByQuestionId,
     getAllStreamSelectionQuestions,
     deleteStreamSelectionQuestionById,
-    deleteStreamSelectionQuestionOptionsById,
-    deleteStreamSelectionQuestionOptionsByQuestionId,
 } = require("../db/stream_selection_questions");
 
 const router = libExpress.Router();
@@ -28,7 +26,7 @@ router.get("/", async (req, res) => {
 });
 
 //tested
-router.post("/", requires_authority(AUTHORITIES.CREATE_STREAM_SELECTION_TEST), async (req, res) => {
+router.post("/", requires_authority(AUTHORITIES.CREATE_STREAM_SELECTION_TEST_QUESTION), async (req, res) => {
     const requiredBodyFields = ["question", "options"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
@@ -50,7 +48,7 @@ router.post("/", requires_authority(AUTHORITIES.CREATE_STREAM_SELECTION_TEST), a
 });
 
 //tested
-router.delete("/:id", requires_authority(AUTHORITIES.DELETE_STREAM_SELECTION_TEST), async (req, res) => {
+router.delete("/:id", requires_authority(AUTHORITIES.DELETE_STREAM_SELECTION_TEST_QUESTION), async (req, res) => {
     if (!req.params?.id) {
         return res.status(400).json({ error: "Missing Question Id" });
     }

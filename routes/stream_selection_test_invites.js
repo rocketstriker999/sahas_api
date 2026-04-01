@@ -41,9 +41,9 @@ router.get("/:id/attend", async (req, res) => {
 
     if (invite && invite.active) {
         await updateStreamSelectionTestByUserId({ user_id: req.user.id, stream_selection_test_taken: false });
-        res.status(200).json({ message: "Attendance marked successfully" });
+        res.sendStatus(200);
     } else {
-        res.status(404).json({ error: "Invite not found or inactive" });
+        res.status(400).json({ error: "Invite not found or inactive" });
     }
 });
 

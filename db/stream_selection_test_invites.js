@@ -20,10 +20,7 @@ function updateStreamSelectionTestInviteById({ id, title, active }) {
 function getStreamSelectionTestInviteById({ id }) {
     return executeSQLQueryParameterized("SELECT * FROM STREAM_SELECTION_TEST_INVITES WHERE id = ?", [id])
         .then((result) => (result.length > 0 ? result[0] : false))
-        .catch((error) => {
-            logger.error(`getStreamSelectionTestInviteById: ${error}`);
-            return false;
-        });
+        .catch((error) => logger.error(`getStreamSelectionTestInviteById: ${error}`));
 }
 
 function addStreamSelectionTestInvite({ title }) {

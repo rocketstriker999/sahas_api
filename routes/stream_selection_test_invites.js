@@ -22,7 +22,7 @@ router.post("/", async (req, res) => {
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
     if (isRequestBodyValid) {
-        const streamSelectionTestInviteId = await addStreamSelectionTestInvite(validateRequestBody);
+        const streamSelectionTestInviteId = await addStreamSelectionTestInvite(validatedRequestBody);
         res.status(201).json(await getStreamSelectionTestInviteById({ id: streamSelectionTestInviteId }));
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });

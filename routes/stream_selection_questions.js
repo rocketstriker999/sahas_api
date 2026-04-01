@@ -58,4 +58,6 @@ router.delete("/:id", requires_authority(AUTHORITIES.DELETE_STREAM_SELECTION_TES
     res.sendStatus(204);
 });
 
+router.put("/", requires_authority(AUTHORITIES.UPDATE_STREAM_SELECTION_TEST_QUESTION), async (req, res) => {});
+
 module.exports = router;

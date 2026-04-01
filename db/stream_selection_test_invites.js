@@ -12,7 +12,7 @@ function getAllStreamSelectionTestInvites() {
 // Update stream selection test invite by ID
 function updateStreamSelectionTestInviteById({ id, title, active }) {
     return executeSQLQueryParameterized("UPDATE STREAM_SELECTION_TEST_INVITES SET title=?, active=? WHERE id=?", [title, active, id]).catch((error) =>
-        logger.error(`updateStreamSelectionTestInviteById: ${error}`)
+        logger.error(`updateStreamSelectionTestInviteById: ${error}`),
     );
 }
 
@@ -26,4 +26,13 @@ function getStreamSelectionTestInviteById({ id }) {
         });
 }
 
-module.exports = { getAllStreamSelectionTestInvites, updateStreamSelectionTestInviteById, getStreamSelectionTestInviteById };
+function addStreamSelectionTestInvite({ title }) {
+    return executeSQLQueryParameterized("INSERT INTO STREAM_SELECTION_TEST_INVITES(title) VALUES(?) ", [title])
+        .then((result) => result.insertId)
+        .catch((error) => {
+            logger.error(`getStreamSelectionTestInviteById: ${error}`);
+            return false;
+        });
+}
+
+module.exports = { getAllStreamSelectionTestInvites, updateStreamSelectionTestInviteById, getStreamSelectionTestInviteById, addStreamSelectionTestInvite };

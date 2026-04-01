@@ -63,7 +63,7 @@ async function generateDBTables() {
         )`,
         `CREATE TABLE IF NOT EXISTS AUTHORITIES(
             id INT AUTO_INCREMENT PRIMARY KEY,
-            title VARCHAR(36) UNIQUE NOT NULL,
+            title VARCHAR(72) UNIQUE NOT NULL,
             description VARCHAR(128) NOT NULL,
             created_by INT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -343,7 +343,6 @@ async function generateDBTables() {
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(128) NOT NULL,
             active BOOLEAN NOT NULL DEFAULT TRUE,
-            qr_url VARCHAR(128) NULL UNIQUE,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,

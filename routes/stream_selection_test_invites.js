@@ -27,8 +27,6 @@ router.post("/", async (req, res) => {
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }
-
-    res.status(201).json(invites);
 });
 
 // Attend stream selection test

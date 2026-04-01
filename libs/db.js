@@ -341,7 +341,7 @@ async function generateDBTables() {
         )`,
         `CREATE TABLE IF NOT EXISTS STREAM_SELECTION_TEST_INVITES (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            title VARCHAR(128) NOT NULL,
+            title VARCHAR(128) NOT NULL UNIQUE,
             active BOOLEAN NOT NULL DEFAULT TRUE,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

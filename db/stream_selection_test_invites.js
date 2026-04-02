@@ -23,8 +23,8 @@ function getStreamSelectionTestInviteById({ id }) {
         .catch((error) => logger.error(`getStreamSelectionTestInviteById: ${error}`));
 }
 
-function addStreamSelectionTestInvite({ title }) {
-    return executeSQLQueryParameterized("INSERT INTO STREAM_SELECTION_TEST_INVITES(title) VALUES(?) ", [title])
+function addStreamSelectionTestInvite({ title, active }) {
+    return executeSQLQueryParameterized("INSERT INTO STREAM_SELECTION_TEST_INVITES(title,active) VALUES(?,?) ", [title, active])
         .then((result) => result.insertId)
         .catch((error) => {
             logger.error(`getStreamSelectionTestInviteById: ${error}`);

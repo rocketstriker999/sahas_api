@@ -19,7 +19,7 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", requires_authority(AUTHORITIES.CREATE_STREAM_SELECTION_TEST_INVITE), async (req, res) => {
-    const requiredBodyFields = ["title"];
+    const requiredBodyFields = ["title", "active"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
@@ -50,7 +50,7 @@ router.get("/:id/attend", async (req, res) => {
 });
 
 // Update stream selection test invite
-router.put("/", requires_authority(AUTHORITIES.UPDATE_STREAM_SELECTION_TEST_INVITE), async (req, res) => {
+router.patch("/", requires_authority(AUTHORITIES.UPDATE_STREAM_SELECTION_TEST_INVITE), async (req, res) => {
     const requiredBodyFields = ["id", "title", "active"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);

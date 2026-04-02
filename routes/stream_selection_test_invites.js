@@ -4,6 +4,7 @@ const {
     getStreamSelectionTestInviteById,
     updateStreamSelectionTestInviteById,
     addStreamSelectionTestInvite,
+    deleteStreamSelectionTestInviteById,
 } = require("../db/stream_selection_test_invites");
 const { updateStreamSelectionTestByUserId } = require("../db/users");
 const { validateRequestBody } = require("sahas_utils");
@@ -67,10 +68,10 @@ router.patch("/", requires_authority(AUTHORITIES.UPDATE_STREAM_SELECTION_TEST_IN
 //tested
 router.delete("/:id", requires_authority(AUTHORITIES.DELETE_STREAM_SELECTION_TEST_INVITE), async (req, res) => {
     if (!req.params?.id) {
-        return res.status(400).json({ error: "Missing Question Id" });
+        return res.status(400).json({ error: "Missing Invite Id" });
     }
 
-    deleteStreamSelectionQuestionById(req.params);
+    deleteStreamSelectionTestInviteById(req.params);
 
     res.sendStatus(204);
 });

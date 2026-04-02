@@ -16,6 +16,13 @@ function getStreamSelectionQuestionById({ id }) {
 }
 
 //freeze
+function getStreamSelectionQuestionsByCategoryId({ category_id }) {
+    return executeSQLQueryParameterized("SELECT * FROM STREAM_SELECTION_QUESTIONS  WHERE category_id=?", [category_id]).catch((error) =>
+        logger.error(`getStreamSelectionQuestionById: ${error}`),
+    );
+}
+
+//freeze
 function getAllStreamSelectionQuestions() {
     return executeSQLQueryParameterized("SELECT * FROM STREAM_SELECTION_QUESTIONS ").catch((error) => {
         logger.error(`getStreamSelectionQuestionById: ${error}`);
@@ -59,4 +66,5 @@ module.exports = {
     getAllStreamSelectionQuestions,
     deleteStreamSelectionQuestionById,
     deleteStreamSelectionQuestionOptionsByQuestionId,
+    getStreamSelectionQuestionsByCategoryId,
 };

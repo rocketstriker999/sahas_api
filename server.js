@@ -125,6 +125,10 @@ const routers = {
         middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
         router: require("./routes/policies"),
     },
+    "/stream-selection-question-categories": {
+        middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
+        router: require("./routes/stream_selection_questions"),
+    },
     "/stream-selection-questions": {
         middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
         router: require("./routes/stream_selection_questions"),

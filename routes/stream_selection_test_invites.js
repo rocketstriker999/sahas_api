@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
     res.status(200).json(invites);
 });
 
-router.post("/", async (req, res) => {
+router.post("/", requires_authority(AUTHORITIES.CREATE_STREAM_SELECTION_TEST_INVITE), async (req, res) => {
     const requiredBodyFields = ["title"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
@@ -48,7 +48,7 @@ router.get("/:id/attend", async (req, res) => {
 });
 
 // Update stream selection test invite
-router.put("/", async (req, res) => {
+router.put("/", requires_authority(AUTHORITIES.UPDATE_STREAM_SELECTION_TEST_INVITE), async (req, res) => {
     const requiredBodyFields = ["id", "title", "active"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
@@ -59,6 +59,17 @@ router.put("/", async (req, res) => {
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }
+});
+
+//tested
+router.delete("/:id", requires_authority(AUTHORITIES.DELETE_STREAM_SELECTION_TEST_INVITE), async (req, res) => {
+    if (!req.params?.id) {
+        return res.status(400).json({ error: "Missing Question Id" });
+    }
+
+    deleteStreamSelectionQuestionById(req.params);
+
+    res.sendStatus(204);
 });
 
 module.exports = router;

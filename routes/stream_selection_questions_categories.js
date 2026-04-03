@@ -30,6 +30,7 @@ router.get("/", async (req, res) => {
         for (const question of questions) {
             question.options = await getStreamSelectionQuestionOptionsByQuestionId({ question_id: question?.id });
         }
+        category.questions = questions;
     }
 
     return res.status(200).json(streamSelectionQuestionCategories);

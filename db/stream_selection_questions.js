@@ -2,8 +2,8 @@ const { executeSQLQueryParameterized } = require("../libs/db");
 const { logger } = require("sahas_utils");
 
 //freeze
-function addStreamSelectionQuestion({ question }) {
-    return executeSQLQueryParameterized("INSERT INTO STREAM_SELECTION_QUESTIONS(question) VALUES(?)", [question])
+function addStreamSelectionQuestion({ category_id, question }) {
+    return executeSQLQueryParameterized("INSERT INTO STREAM_SELECTION_QUESTIONS(category_id,question) VALUES(?,?)", [category_id, question])
         .then((result) => result.insertId)
         .catch((error) => logger.error(`addStreamSelectionQuestion: ${error}`));
 }

@@ -57,7 +57,7 @@ router.put("/", requires_authority(AUTHORITIES.UPDATE_STREAM_SELECTION_TEST_QUES
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
 
     if (isRequestBodyValid) {
-        if (validatedRequestBody?.options?.length > 0 && (questionId = await updateStreamSelectionQuestionById({ ...validatedRequestBody }))) {
+        if (validatedRequestBody?.options?.length > 0 && (await updateStreamSelectionQuestionById({ ...validatedRequestBody }))) {
             await removeStreamSelectionQuestionOptionByQuestionId({ question_id: questionId });
 
             for (const option of validatedRequestBody?.options) {

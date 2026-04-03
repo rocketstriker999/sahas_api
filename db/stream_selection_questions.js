@@ -9,10 +9,10 @@ function addStreamSelectionQuestion({ category_id, question }) {
 }
 
 //freeze
-function updateStreamSelectionQuestionById({ id, question, active }) {
-    return executeSQLQueryParameterized("UPDATE STREAM_SELECTION_QUESTIONS SET question=?,active=? WHERE id=?", [question, active, id])
-        .then((result) => result.insertId)
-        .catch((error) => logger.error(`addStreamSelectionQuestion: ${error}`));
+function updateStreamSelectionQuestionById({ id, question }) {
+    return executeSQLQueryParameterized("UPDATE STREAM_SELECTION_QUESTIONS SET question=? WHERE id=?", [question, id]).catch((error) =>
+        logger.error(`updateStreamSelectionQuestionById: ${error}`),
+    );
 }
 
 //freeze

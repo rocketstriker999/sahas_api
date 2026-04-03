@@ -9,6 +9,13 @@ function addStreamSelectionQuestion({ category_id, question }) {
 }
 
 //freeze
+function updateStreamSelectionQuestionById({ id, question, active }) {
+    return executeSQLQueryParameterized("UPDATE STREAM_SELECTION_QUESTIONS SET question=?,active=? WHERE id=?", [question, active, id])
+        .then((result) => result.insertId)
+        .catch((error) => logger.error(`addStreamSelectionQuestion: ${error}`));
+}
+
+//freeze
 function getStreamSelectionQuestionById({ id }) {
     return executeSQLQueryParameterized("SELECT * FROM STREAM_SELECTION_QUESTIONS  WHERE id=?", [id])
         .then((result) => (result.length > 0 ? result[0] : false))
@@ -33,6 +40,13 @@ function getAllStreamSelectionQuestions() {
 //freeze
 function addStreamSelectionQuestionOption({ question_id, option }) {
     return executeSQLQueryParameterized("INSERT INTO STREAM_SELECTION_QUESTION_OPTIONS(question_id,\`option\`) VALUES(?,?)", [question_id, option])
+        .then((result) => result.insertId)
+        .catch((error) => logger.error(`addStreamSelectionQuestionOption: ${error}`));
+}
+
+//freeze
+function removeStreamSelectionQuestionOptionByQuestionId({ question_id }) {
+    return executeSQLQueryParameterized("DELETE FROM STREAM_SELECTION_QUESTION_OPTIONS WHERE question_id=?", [question_id])
         .then((result) => result.insertId)
         .catch((error) => logger.error(`addStreamSelectionQuestionOption: ${error}`));
 }
@@ -67,4 +81,6 @@ module.exports = {
     deleteStreamSelectionQuestionById,
     deleteStreamSelectionQuestionOptionsByQuestionId,
     getStreamSelectionQuestionsByCategoryId,
+    updateStreamSelectionQuestionById,
+    removeStreamSelectionQuestionOptionByQuestionId,
 };

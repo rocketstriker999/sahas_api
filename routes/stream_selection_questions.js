@@ -11,6 +11,8 @@ const {
     getAllStreamSelectionQuestions,
     deleteStreamSelectionQuestionById,
     getStreamSelectionQuestionsByCategoryId,
+    updateStreamSelectionQuestionById,
+    removeStreamSelectionQuestionOptionByQuestionId,
 } = require("../db/stream_selection_questions");
 const { getAllStreamSelectionQuestionCategories } = require("../db/stream_selection_question_categories");
 
@@ -49,6 +51,27 @@ router.delete("/:id", requires_authority(AUTHORITIES.DELETE_STREAM_SELECTION_TES
     res.sendStatus(204);
 });
 
-router.put("/", requires_authority(AUTHORITIES.UPDATE_STREAM_SELECTION_TEST_QUESTION), async (req, res) => {});
+router.put("/", requires_authority(AUTHORITIES.UPDATE_STREAM_SELECTION_TEST_QUESTION), async (req, res) => {
+    const requiredBodyFields = ["id", "question", "options"];
+
+    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+
+    if (isRequestBodyValid) {
+        if (validatedRequestBody?.options?.length > 0 && (questionId = await updateStreamSelectionQuestionById({ ...validatedRequestBody }))) {
+            await removeStreamSelectionQuestionOptionByQuestionId({ question_id: questionId });
+
+            for (const option of validatedRequestBody?.options) {
+                await addStreamSelectionQuestionOption({ question_id: questionId, option });
+            }
+            const streamSelectionQuestion = await getStreamSelectionQuestionById({ id: questionId });
+            streamSelectionQuestion.options = await getStreamSelectionQuestionOptionsByQuestionId({ question_id: questionId });
+
+            return res.status(200).json(streamSelectionQuestion);
+        }
+        res.status(400).json({ error: "Unable To Update Stream Selection Question - Missing Options" });
+    } else {
+        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+    }
+});
 
 module.exports = router;

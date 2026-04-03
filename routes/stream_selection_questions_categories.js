@@ -9,6 +9,7 @@ const {
     getStreamSelectionQuestionById,
     getStreamSelectionQuestionOptionsByQuestionId,
     deleteStreamSelectionQuestionById,
+    getStreamSelectionQuestionsByCategoryId,
 } = require("../db/stream_selection_questions");
 const {
     getAllStreamSelectionQuestionCategories,
@@ -23,6 +24,14 @@ const router = libExpress.Router();
 //tested
 router.get("/", async (req, res) => {
     const streamSelectionQuestionCategories = await getAllStreamSelectionQuestionCategories();
+
+    for (const category of streamSelectionQuestionCategories) {
+        const questions = await getStreamSelectionQuestionsByCategoryId({ category_id: category?.id });
+        for (const question of questions) {
+            question.options = await getStreamSelectionQuestionOptionsByQuestionId({ question_id: question?.id });
+        }
+    }
+
     return res.status(200).json(streamSelectionQuestionCategories);
 });
 

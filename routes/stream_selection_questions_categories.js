@@ -33,7 +33,6 @@ router.post("/", requires_authority(AUTHORITIES.CREATE_STREAM_SELECTION_QUESTION
 
     if (isRequestBodyValid) {
         const categoryId = await addStreamSelectionQuestionCategory(validatedRequestBody);
-
         const category = await getStreamSelectionQuestionCategoryById({ id: categoryId });
         category.questions = await getStreamSelectionQuestionsCountByCategoryId({ category_id: category?.id });
 
@@ -55,7 +54,7 @@ router.delete("/:id", requires_authority(AUTHORITIES.DELETE_STREAM_SELECTION_QUE
 });
 
 //tested
-router.put("/", requires_authority(AUTHORITIES.UPDATE_STREAM_SELECTION_QUESTION_CATEGORY), async (req, res) => {
+router.patch("/", requires_authority(AUTHORITIES.UPDATE_STREAM_SELECTION_QUESTION_CATEGORY), async (req, res) => {
     const requiredBodyFields = ["id", "title", "active"];
 
     const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);

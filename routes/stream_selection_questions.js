@@ -8,13 +8,10 @@ const {
     addStreamSelectionQuestionOption,
     getStreamSelectionQuestionById,
     getStreamSelectionQuestionOptionsByQuestionId,
-    getAllStreamSelectionQuestions,
     deleteStreamSelectionQuestionById,
-    getStreamSelectionQuestionsByCategoryId,
     updateStreamSelectionQuestionById,
     removeStreamSelectionQuestionOptionByQuestionId,
 } = require("../db/stream_selection_questions");
-const { getAllStreamSelectionQuestionCategories } = require("../db/stream_selection_question_categories");
 
 const router = libExpress.Router();
 

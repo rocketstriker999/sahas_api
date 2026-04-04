@@ -25,13 +25,13 @@ const router = libExpress.Router();
 router.get("/", async (req, res) => {
     const streamSelectionQuestionCategories = await getAllStreamSelectionQuestionCategories();
 
-    for (const category of streamSelectionQuestionCategories) {
-        const questions = await getStreamSelectionQuestionsByCategoryId({ category_id: category?.id });
-        for (const question of questions) {
-            question.options = await getStreamSelectionQuestionOptionsByQuestionId({ question_id: question?.id });
-        }
-        category.questions = questions;
-    }
+    // for (const category of streamSelectionQuestionCategories) {
+    //     const questions = await getStreamSelectionQuestionsByCategoryId({ category_id: category?.id });
+    //     for (const question of questions) {
+    //         question.options = await getStreamSelectionQuestionOptionsByQuestionId({ question_id: question?.id });
+    //     }
+    //     category.questions = questions;
+    // }
 
     return res.status(200).json(streamSelectionQuestionCategories);
 });

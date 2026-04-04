@@ -3,15 +3,7 @@ const libExpress = require("express");
 const { validateRequestBody } = require("sahas_utils");
 const requires_authority = require("../middlewares/requires_authority");
 const { AUTHORITIES } = require("../constants");
-const {
-    addStreamSelectionQuestion,
-    addStreamSelectionQuestionOption,
-    getStreamSelectionQuestionById,
-    getStreamSelectionQuestionOptionsByQuestionId,
-    deleteStreamSelectionQuestionById,
-    getStreamSelectionQuestionsByCategoryId,
-    getStreamSelectionQuestionsCountByCategoryId,
-} = require("../db/stream_selection_questions");
+const { getStreamSelectionQuestionsCountByCategoryId } = require("../db/stream_selection_questions");
 const {
     getAllStreamSelectionQuestionCategories,
     addStreamSelectionQuestionCategory,
@@ -41,7 +33,11 @@ router.post("/", requires_authority(AUTHORITIES.CREATE_STREAM_SELECTION_QUESTION
 
     if (isRequestBodyValid) {
         const categoryId = await addStreamSelectionQuestionCategory(validatedRequestBody);
-        res.status(201).json(await getStreamSelectionQuestionCategoryById({ id: categoryId }));
+
+        const category = await getStreamSelectionQuestionCategoryById({ id: categoryId });
+        category.questions = await getStreamSelectionQuestionsCountByCategoryId({ category_id: category?.id });
+
+        res.status(201).json(category);
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
     }

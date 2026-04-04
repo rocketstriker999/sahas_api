@@ -62,10 +62,8 @@ router.put("/", requires_authority(AUTHORITIES.UPDATE_STREAM_SELECTION_QUESTION_
 
     if (isRequestBodyValid) {
         await updateStreamSelectionQuestionCategoryById(validatedRequestBody);
-
-        const category = await getStreamSelectionQuestionCategoryById({ id: validatedRequestBody?.id });
+        const category = await getStreamSelectionQuestionCategoryById(validatedRequestBody);
         category.questions = await getStreamSelectionQuestionsCountByCategoryId({ category_id: category?.id });
-
         res.status(200).json(category);
     } else {
         res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });

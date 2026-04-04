@@ -30,6 +30,13 @@ function getStreamSelectionQuestionsByCategoryId({ category_id }) {
 }
 
 //freeze
+function getStreamSelectionQuestionsCountByCategoryId({ category_id }) {
+    return executeSQLQueryParameterized("SELECT COUNT(*) as count FROM STREAM_SELECTION_QUESTIONS  WHERE category_id=?", [category_id])
+        .then(([result]) => result.count)
+        .catch((error) => logger.error(`getStreamSelectionQuestionById: ${error}`));
+}
+
+//freeze
 function getAllStreamSelectionQuestions() {
     return executeSQLQueryParameterized("SELECT * FROM STREAM_SELECTION_QUESTIONS ").catch((error) => {
         logger.error(`getStreamSelectionQuestionById: ${error}`);
@@ -83,4 +90,5 @@ module.exports = {
     getStreamSelectionQuestionsByCategoryId,
     updateStreamSelectionQuestionById,
     removeStreamSelectionQuestionOptionByQuestionId,
+    getStreamSelectionQuestionsCountByCategoryId,
 };

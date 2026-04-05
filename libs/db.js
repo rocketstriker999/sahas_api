@@ -316,6 +316,7 @@ async function generateDBTables() {
             id INT AUTO_INCREMENT PRIMARY KEY,
             category_id INT NOT NULL,
             question VARCHAR(255) NOT NULL UNIQUE,
+            media_url VARCHAR(128) NULL UNIQUE,
             view_index INT NOT NULL DEFAULT 0,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

@@ -2,8 +2,12 @@ const { executeSQLQueryParameterized } = require("../libs/db");
 const { logger } = require("sahas_utils");
 
 //freeze
-function addStreamSelectionQuestion({ category_id, question }) {
-    return executeSQLQueryParameterized("INSERT INTO STREAM_SELECTION_QUESTIONS(category_id,question) VALUES(?,?)", [category_id, question])
+function addStreamSelectionQuestion({ category_id, question, media_url = null }) {
+    return executeSQLQueryParameterized("INSERT INTO STREAM_SELECTION_QUESTIONS(category_id,question,media_url) VALUES(?,?,?)", [
+        category_id,
+        question,
+        media_url,
+    ])
         .then((result) => result.insertId)
         .catch((error) => logger.error(`addStreamSelectionQuestion: ${error}`));
 }
@@ -16,8 +20,8 @@ function updatetreamSelectionQuestionViewIndexById({ id, view_index }) {
 }
 
 //freeze
-function updateStreamSelectionQuestionById({ id, question }) {
-    return executeSQLQueryParameterized("UPDATE STREAM_SELECTION_QUESTIONS SET question=? WHERE id=?", [question, id]).catch((error) =>
+function updateStreamSelectionQuestionById({ id, question, media_url = null }) {
+    return executeSQLQueryParameterized("UPDATE STREAM_SELECTION_QUESTIONS SET question=?,media_url=? WHERE id=?", [question, media_url, id]).catch((error) =>
         logger.error(`updateStreamSelectionQuestionById: ${error}`),
     );
 }

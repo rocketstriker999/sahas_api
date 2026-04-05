@@ -31,14 +31,14 @@ function getStreamSelectionQuestionById({ id }) {
 
 //freeze
 function getStreamSelectionQuestionsByCategoryId({ category_id }) {
-    return executeSQLQueryParameterized("SELECT * FROM STREAM_SELECTION_QUESTIONS  WHERE category_id=?", [category_id]).catch((error) =>
+    return executeSQLQueryParameterized("SELECT * FROM STREAM_SELECTION_QUESTIONS  WHERE category_id=? ORDER BY view_index ASC", [category_id]).catch((error) =>
         logger.error(`getStreamSelectionQuestionById: ${error}`),
     );
 }
 
 //freeze
 function getStreamSelectionQuestionsCountByCategoryId({ category_id }) {
-    return executeSQLQueryParameterized("SELECT COUNT(*) as count FROM STREAM_SELECTION_QUESTIONS  WHERE category_id=?", [category_id])
+    return executeSQLQueryParameterized("SELECT COUNT(*) as count FROM STREAM_SELECTION_QUESTIONS  WHERE category_id=? ", [category_id])
         .then(([result]) => result.count)
         .catch((error) => logger.error(`getStreamSelectionQuestionById: ${error}`));
 }

@@ -31,7 +31,7 @@ router.get("/", async (req, res) => {
 });
 
 //tested
-router.patch("/view_indexes", requires_authority(AUTHORITIES.UPDATE_CHAPTER_TYPES_VIEW_INDEXES), async (req, res) => {
+router.patch("/view_indexes", requires_authority(AUTHORITIES.UPDATE_STREAM_SELECTION_QUESTION_CATEGORY), async (req, res) => {
     if (req.body?.length) {
         req.body.forEach(updatetreamSelectionQuestionCategoryViewIndexById);
         return res.sendStatus(200);

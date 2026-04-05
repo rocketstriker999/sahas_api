@@ -27,7 +27,9 @@ router.post("/", async (req, res) => {
         //update user that stream selection test is taken
         updateStreamSelectionTestByUserId({ stream_selection_test_taken: true, user_id: req.user.id });
 
-        return setTimeout(() => res.sendStatus(201), 10000);
+        await setTimeout(() => {
+            return res.sendStatus(201);
+        }, 10000);
     }
 
     return res.status(400).json({ error: "Missing Test Questions" });

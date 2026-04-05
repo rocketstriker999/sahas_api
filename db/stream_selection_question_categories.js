@@ -39,10 +39,18 @@ function updateStreamSelectionQuestionCategoryById({ id, title, active }) {
     );
 }
 
+//freeze
+function updatetreamSelectionQuestionCategoryViewIndexById({ id, view_index }) {
+    return executeSQLQueryParameterized("UPDATE STREAM_SELECTION_QUESTION_CATEGORIES SET view_index=? WHERE id=?", [view_index, id]).catch((error) =>
+        logger.error(`updatetreamSelectionQuestionCategoryViewIndexById: ${error}`),
+    );
+}
+
 module.exports = {
     getAllStreamSelectionQuestionCategories,
     addStreamSelectionQuestionCategory,
     getStreamSelectionQuestionCategoryById,
     deleteStreamSelectionQuestionCategoryById,
     updateStreamSelectionQuestionCategoryById,
+    updatetreamSelectionQuestionCategoryViewIndexById,
 };

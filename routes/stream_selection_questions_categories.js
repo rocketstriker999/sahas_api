@@ -14,6 +14,7 @@ const {
     getStreamSelectionQuestionCategoryById,
     deleteStreamSelectionQuestionCategoryById,
     updateStreamSelectionQuestionCategoryById,
+    updatetreamSelectionQuestionCategoryViewIndexById,
 } = require("../db/stream_selection_question_categories");
 
 const router = libExpress.Router();
@@ -27,6 +28,16 @@ router.get("/", async (req, res) => {
     }
 
     return res.status(200).json(streamSelectionQuestionCategories);
+});
+
+//tested
+router.patch("/view_indexes", requires_authority(AUTHORITIES.UPDATE_CHAPTER_TYPES_VIEW_INDEXES), async (req, res) => {
+    if (req.body?.length) {
+        req.body.forEach(updatetreamSelectionQuestionCategoryViewIndexById);
+        return res.sendStatus(200);
+    }
+
+    return res.status(400).json({ error: "Missing Chapter Types" });
 });
 
 //tested

@@ -3,6 +3,7 @@ const { addStreamSelectionTest, addStreamSelectionTestAnswer, updateStreamSelect
 const openai = require("../libs/openai");
 const { updateStreamSelectionTestByUserId } = require("../db/users");
 const router = libExpress.Router();
+const { setTimeout } = require("timers/promises");
 
 //tested
 router.post("/", async (req, res) => {
@@ -27,9 +28,10 @@ router.post("/", async (req, res) => {
         //update user that stream selection test is taken
         updateStreamSelectionTestByUserId({ stream_selection_test_taken: true, user_id: req.user.id });
 
-        await setTimeout(() => {
-            return res.sendStatus(201);
-        }, 10000);
+        //Fale Delay
+        await setTimeout(10000);
+
+        return res.sendStatus(201);
     }
 
     return res.status(400).json({ error: "Missing Test Questions" });

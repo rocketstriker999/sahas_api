@@ -33,7 +33,7 @@ router.get("/", async (req, res) => {
         question.options = await getStreamSelectionQuestionOptionsByQuestionId({ question_id: question?.id });
     }
 
-    return res.status(400).json(questions);
+    return res.status(200).json(questions);
 });
 
 //tested

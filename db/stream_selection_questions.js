@@ -9,6 +9,13 @@ function addStreamSelectionQuestion({ category_id, question }) {
 }
 
 //freeze
+function updatetreamSelectionQuestionViewIndexById({ id, view_index }) {
+    return executeSQLQueryParameterized("UPDATE STREAM_SELECTION_QUESTIONS SET view_index=? WHERE id=?", [view_index, id]).catch((error) =>
+        logger.error(`updatetreamSelectionQuestionViewIndexById: ${error}`),
+    );
+}
+
+//freeze
 function updateStreamSelectionQuestionById({ id, question }) {
     return executeSQLQueryParameterized("UPDATE STREAM_SELECTION_QUESTIONS SET question=? WHERE id=?", [question, id]).catch((error) =>
         logger.error(`updateStreamSelectionQuestionById: ${error}`),
@@ -91,4 +98,5 @@ module.exports = {
     updateStreamSelectionQuestionById,
     removeStreamSelectionQuestionOptionByQuestionId,
     getStreamSelectionQuestionsCountByCategoryId,
+    updatetreamSelectionQuestionViewIndexById,
 };

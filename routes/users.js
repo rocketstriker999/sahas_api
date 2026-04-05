@@ -8,6 +8,7 @@ const {
     addUser,
     patchUserFullNameById,
     patchUserPhoneById,
+    patchUserStreamSelectionTakenById,
 } = require("../db/users");
 const { getInquiriesByUserId } = require("../db/inquiries");
 const { validateRequestBody } = require("sahas_utils");
@@ -26,6 +27,11 @@ const { getGlobalNotesByUserId } = require("../db/global_notes");
 const requires_authority = require("../middlewares/requires_authority");
 const { AUTHORITIES } = require("../constants");
 const { addUserHistory, getUserHistoryById, updateUserHistoryById } = require("../db/user_history");
+const {
+    getLatestStreamSelectionTestByUserId,
+    getStreamSelectionTestsByUserId,
+    getStreamSelectionTestAnswersByStreamSelectionTestId,
+} = require("../db/stream_selection_tests");
 
 const router = libExpress.Router();
 
@@ -80,6 +86,23 @@ router.get("/download", async (req, res) => {
             return res.status(responseCode).json(generatedUsers);
         },
     });
+});
+
+//tested
+router.get("/stream-selection-test-results/latest", async (req, res) => {
+    const streamSelectionTest = await getLatestStreamSelectionTestByUserId({ user_id: req?.user?.id });
+    streamSelectionTest.answers = await getStreamSelectionTestAnswersByStreamSelectionTestId({ stream_selection_test_id: streamSelectionTest?.id });
+    res.status(200).json(streamSelectionTest);
+});
+
+//tested
+router.get("/stream-selection-test-results", async (req, res) => {
+    const streamSelectionTests = await getStreamSelectionTestsByUserId({ user_id: req?.user?.id });
+
+    for (const streamSelectionTest of streamSelectionTests) {
+        streamSelectionTest.answers = await getStreamSelectionTestAnswersByStreamSelectionTestId({ stream_selection_test_id: streamSelectionTest?.id });
+    }
+    res.status(200).json(streamSelectionTests);
 });
 
 //tested
@@ -189,12 +212,29 @@ router.patch(
     },
 );
 
+router.patch(
+    "/stream-selection-test-taken",
+    requires_authority(AUTHORITIES.UPDATE_USER),
+    async (req, res, next) => {
+        const requiredBodyFields = ["id", "stream_selection_test_taken"];
+        const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+        if (!isRequestBodyValid) {
+            return res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+        }
+        req.body = validatedRequestBody;
+        next();
+    },
+    async (req, res) => {
+        await patchUserStreamSelectionTakenById({ ...req.body });
+        res.status(200).json(await getUserById({ id: req.body.id }));
+    },
+);
+
 //tested
 router.get("/:id/inquiries", requires_authority(AUTHORITIES.READ_USER_INQUIRIES), async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ error: "Missing User Id" });
     }
-
     res.status(200).json(await getInquiriesByUserId({ user_id: req.params.id }));
 });
 

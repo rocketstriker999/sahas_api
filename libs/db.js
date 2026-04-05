@@ -24,6 +24,7 @@ async function generateDBTables() {
             image VARCHAR(64) NULL UNIQUE,
             address VARCHAR(256) NULL,
             branch_id INT NULL,
+            stream_selection_test_taken BOOLEAN NOT NULL DEFAULT FALSE,
             active BOOLEAN NOT NULL DEFAULT TRUE,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -62,7 +63,7 @@ async function generateDBTables() {
         )`,
         `CREATE TABLE IF NOT EXISTS AUTHORITIES(
             id INT AUTO_INCREMENT PRIMARY KEY,
-            title VARCHAR(36) UNIQUE NOT NULL,
+            title VARCHAR(72) UNIQUE NOT NULL,
             description VARCHAR(128) NOT NULL,
             created_by INT NULL,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -295,12 +296,68 @@ async function generateDBTables() {
                 ON DELETE CASCADE
                 ON UPDATE CASCADE
         )`,
-
         `CREATE TABLE IF NOT EXISTS POLICIES (
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(255) NOT NULL UNIQUE,
-            description VARCHAR(256) NOT NULL UNIQUE,
+            description VARCHAR(1024) NOT NULL UNIQUE,
             view_index INT NOT NULL DEFAULT 0,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        )`,
+        `CREATE TABLE IF NOT EXISTS STREAM_SELECTION_QUESTION_CATEGORIES (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            title VARCHAR(255) NOT NULL UNIQUE,
+            active BOOLEAN NOT NULL DEFAULT TRUE,
+            view_index INT NOT NULL DEFAULT 0,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        )`,
+        `CREATE TABLE IF NOT EXISTS STREAM_SELECTION_QUESTIONS (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            category_id INT NOT NULL,
+            question VARCHAR(255) NOT NULL UNIQUE,
+            media_url VARCHAR(128) NULL UNIQUE,
+            view_index INT NOT NULL DEFAULT 0,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+             CONSTRAINT fk_category_question
+                FOREIGN KEY (category_id)
+                REFERENCES STREAM_SELECTION_QUESTION_CATEGORIES(id)
+                ON DELETE CASCADE
+                ON UPDATE CASCADE
+        )`,
+        `CREATE TABLE IF NOT EXISTS STREAM_SELECTION_TESTS (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            user_id INT NOT NULL,
+            result VARCHAR(512) NULL ,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        )`,
+        `CREATE TABLE IF NOT EXISTS STREAM_SELECTION_TEST_ANSWERS (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            stream_selection_test_id INT NOT NULL,
+            question VARCHAR(255) NOT NULL,
+            answer VARCHAR(255) NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        )`,
+        `CREATE TABLE IF NOT EXISTS STREAM_SELECTION_QUESTION_OPTIONS (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            question_id INT NOT NULL,
+            \`option\` VARCHAR(255) NOT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            UNIQUE KEY unique_question_option (question_id, \`option\`),
+              CONSTRAINT fk_question_option
+                FOREIGN KEY (question_id)
+                REFERENCES STREAM_SELECTION_QUESTIONS(id)
+                ON DELETE CASCADE
+                ON UPDATE CASCADE
+        )`,
+        `CREATE TABLE IF NOT EXISTS STREAM_SELECTION_TEST_INVITES (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            title VARCHAR(128) NOT NULL UNIQUE,
+            active BOOLEAN NOT NULL DEFAULT TRUE,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
@@ -445,7 +502,7 @@ async function generateDBTables() {
 
         `INSERT IGNORE INTO ROLE_AUTHORITIES (role_id, authority_id) SELECT 2, id FROM AUTHORITIES`,
 
-        `INSERT IGNORE  INTO USERS (full_name, email ) VALUES ('Nisarg', 'hammerbyte.nisarg@gmail.com');`,
+        `INSERT IGNORE INTO USERS (full_name, email ) VALUES ('Nisarg', 'hammerbyte.nisarg@gmail.com');`,
         `INSERT IGNORE INTO USER_ROLES (user_id, role_id) VALUES (1, 2);`,
         `INSERT IGNORE INTO USER_ROLES (user_id, role_id) VALUES (3, 2);`,
         `INSERT IGNORE INTO USER_ROLES (user_id, role_id) VALUES (5, 2);`,

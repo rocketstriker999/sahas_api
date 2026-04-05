@@ -212,6 +212,13 @@ function updateUserById({ id, email, full_name, phone, image, address, branch_id
 }
 
 //freeze
+function updateStreamSelectionTestByUserId({ user_id, stream_selection_test_taken }) {
+    return executeSQLQueryParameterized(`UPDATE USERS SET stream_selection_test_taken=? WHERE id = ?`, [stream_selection_test_taken, user_id]).catch((error) =>
+        logger.error(`updateStreamSelectionTestByUserId: ${error}`),
+    );
+}
+
+//freeze
 function patchUserFullNameById({ id, full_name }) {
     return executeSQLQueryParameterized(`UPDATE USERS SET full_name=? WHERE id = ?`, [full_name, id]).catch((error) =>
         logger.error(`patchUserFullNameById: ${error}`),
@@ -223,7 +230,14 @@ function patchUserPhoneById({ id, phone }) {
     return executeSQLQueryParameterized(`UPDATE USERS SET phone=? WHERE id = ?`, [phone, id]).catch((error) => logger.error(`patchUserPhoneById: ${error}`));
 }
 
-//tested
+//freeze
+function patchUserStreamSelectionTakenById({ id, stream_selection_test_taken }) {
+    return executeSQLQueryParameterized(`UPDATE USERS SET stream_selection_test_taken=? WHERE id = ?`, [stream_selection_test_taken, id]).catch((error) =>
+        logger.error(`patchUserStreamSelectionTakenById: ${error}`),
+    );
+}
+
+//freeze
 function addUser({ email, full_name, phone, image = null, address, branch_id }) {
     return executeSQLQueryParameterized(`INSERT  INTO USERS(email,full_name, phone, image, address, branch_id) VALUES(?,?,?,?,?,?)`, [
         email?.toLowerCase(),
@@ -254,4 +268,6 @@ module.exports = {
     addUser,
     patchUserFullNameById,
     patchUserPhoneById,
+    updateStreamSelectionTestByUserId,
+    patchUserStreamSelectionTakenById,
 };

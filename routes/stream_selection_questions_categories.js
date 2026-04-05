@@ -1,0 +1,102 @@
+const libExpress = require("express");
+
+const { validateRequestBody } = require("sahas_utils");
+const requires_authority = require("../middlewares/requires_authority");
+const { AUTHORITIES } = require("../constants");
+const {
+    getStreamSelectionQuestionsCountByCategoryId,
+    getStreamSelectionQuestionsByCategoryId,
+    getStreamSelectionQuestionOptionsByQuestionId,
+} = require("../db/stream_selection_questions");
+const {
+    getAllStreamSelectionQuestionCategories,
+    addStreamSelectionQuestionCategory,
+    getStreamSelectionQuestionCategoryById,
+    deleteStreamSelectionQuestionCategoryById,
+    updateStreamSelectionQuestionCategoryById,
+    updatetreamSelectionQuestionCategoryViewIndexById,
+} = require("../db/stream_selection_question_categories");
+
+const router = libExpress.Router();
+
+//tested
+router.get("/", async (req, res) => {
+    const streamSelectionQuestionCategories = await getAllStreamSelectionQuestionCategories();
+
+    for (const category of streamSelectionQuestionCategories) {
+        category.questions = await getStreamSelectionQuestionsCountByCategoryId({ category_id: category?.id });
+    }
+
+    return res.status(200).json(streamSelectionQuestionCategories);
+});
+
+//tested
+router.patch("/view_indexes", requires_authority(AUTHORITIES.UPDATE_CHAPTER_TYPES_VIEW_INDEXES), async (req, res) => {
+    if (req.body?.length) {
+        req.body.forEach(updatetreamSelectionQuestionCategoryViewIndexById);
+        return res.sendStatus(200);
+    }
+
+    return res.status(400).json({ error: "Missing Chapter Types" });
+});
+
+//tested
+router.get("/:id/questions", async (req, res) => {
+    if (!req.params?.id) {
+        return res.status(400).json({ error: "Missing Category Id" });
+    }
+
+    const questions = await getStreamSelectionQuestionsByCategoryId({ category_id: req.params?.id });
+
+    for (const question of questions) {
+        question.options = await getStreamSelectionQuestionOptionsByQuestionId({ question_id: question?.id });
+    }
+
+    return res.status(200).json(questions);
+});
+
+//tested
+router.post("/", requires_authority(AUTHORITIES.CREATE_STREAM_SELECTION_QUESTION_CATEGORY), async (req, res) => {
+    const requiredBodyFields = ["title", "active"];
+
+    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+
+    if (isRequestBodyValid) {
+        const categoryId = await addStreamSelectionQuestionCategory(validatedRequestBody);
+        const category = await getStreamSelectionQuestionCategoryById({ id: categoryId });
+        category.questions = await getStreamSelectionQuestionsCountByCategoryId({ category_id: category?.id });
+
+        res.status(201).json(category);
+    } else {
+        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+    }
+});
+
+//tested
+router.delete("/:id", requires_authority(AUTHORITIES.DELETE_STREAM_SELECTION_QUESTION_CATEGORY), async (req, res) => {
+    if (!req.params?.id) {
+        return res.status(400).json({ error: "Missing Question Id" });
+    }
+
+    deleteStreamSelectionQuestionCategoryById(req.params);
+
+    res.sendStatus(204);
+});
+
+//tested
+router.patch("/", requires_authority(AUTHORITIES.UPDATE_STREAM_SELECTION_QUESTION_CATEGORY), async (req, res) => {
+    const requiredBodyFields = ["id", "title", "active"];
+
+    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+
+    if (isRequestBodyValid) {
+        await updateStreamSelectionQuestionCategoryById(validatedRequestBody);
+        const category = await getStreamSelectionQuestionCategoryById(validatedRequestBody);
+        category.questions = await getStreamSelectionQuestionsCountByCategoryId({ category_id: category?.id });
+        res.status(200).json(category);
+    } else {
+        res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+    }
+});
+
+module.exports = router;

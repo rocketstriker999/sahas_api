@@ -3,7 +3,7 @@ const libExpress = require("express");
 const { validateRequestBody } = require("sahas_utils");
 const requires_authority = require("../middlewares/requires_authority");
 const { AUTHORITIES } = require("../constants");
-const { getStreamSelectionQuestionsCountByCategoryId } = require("../db/stream_selection_questions");
+const { getStreamSelectionQuestionsCountByCategoryId, getStreamSelectionQuestionsByCategoryId } = require("../db/stream_selection_questions");
 const {
     getAllStreamSelectionQuestionCategories,
     addStreamSelectionQuestionCategory,
@@ -23,6 +23,15 @@ router.get("/", async (req, res) => {
     }
 
     return res.status(200).json(streamSelectionQuestionCategories);
+});
+
+//tested
+router.get("/:id/questions", async (req, res) => {
+    if (!req.params?.id) {
+        return res.status(400).json({ error: "Missing Question Id" });
+    }
+
+    return res.status(200).json(await getStreamSelectionQuestionsByCategoryId({ category_id: req.params?.id }));
 });
 
 //tested

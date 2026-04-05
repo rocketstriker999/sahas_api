@@ -32,7 +32,7 @@ router.get("/", async (req, res) => {
 //tested
 router.get("/:id/questions", async (req, res) => {
     if (!req.params?.id) {
-        return res.status(400).json({ error: "Missing Question Id" });
+        return res.status(400).json({ error: "Missing Category Id" });
     }
 
     const questions = await getStreamSelectionQuestionsByCategoryId({ category_id: req.params?.id });

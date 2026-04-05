@@ -12,6 +12,7 @@ const {
     updateStreamSelectionQuestionById,
     removeStreamSelectionQuestionOptionByQuestionId,
     updatetreamSelectionQuestionViewIndexById,
+    getAllStreamSelectionQuestions,
 } = require("../db/stream_selection_questions");
 
 const router = libExpress.Router();
@@ -22,6 +23,12 @@ router.patch("/view_indexes", requires_authority(AUTHORITIES.UPDATE_CHAPTER_TYPE
         req.body.forEach(updatetreamSelectionQuestionViewIndexById);
         return res.sendStatus(200);
     }
+
+    return res.status(400).json({ error: "Missing Chapter Types" });
+});
+
+router.get("/", async (req, res) => {
+    const questions = await getAllStreamSelectionQuestions();
 
     return res.status(400).json({ error: "Missing Chapter Types" });
 });

@@ -45,7 +45,9 @@ function getStreamSelectionQuestionsCountByCategoryId({ category_id }) {
 
 //freeze
 function getAllStreamSelectionQuestions() {
-    return executeSQLQueryParameterized("SELECT * FROM STREAM_SELECTION_QUESTIONS ").catch((error) => {
+    return executeSQLQueryParameterized(
+        "SELECT STREAM_SELECTION_QUESTIONS.*,STREAM_SELECTION_QUESTION_CATEGORIES.title as category FROM STREAM_SELECTION_QUESTIONS LEFT JOIN STREAM_SELECTION_QUESTION_CATEGORIES ON STREAM_SELECTION_QUESTIONS.category_id=STREAM_SELECTION_QUESTION_CATEGORIES.id ORDER BY STREAM_SELECTION_QUESTION_CATEGORIES.view_index ASC,STREAM_SELECTION_QUESTIONS.view_index ASC",
+    ).catch((error) => {
         logger.error(`getStreamSelectionQuestionById: ${error}`);
         return [];
     });

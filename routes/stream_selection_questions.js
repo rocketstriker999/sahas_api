@@ -29,8 +29,11 @@ router.patch("/view_indexes", requires_authority(AUTHORITIES.UPDATE_CHAPTER_TYPE
 
 router.get("/", async (req, res) => {
     const questions = await getAllStreamSelectionQuestions();
+    for (const question of questions) {
+        question.options = await getStreamSelectionQuestionOptionsByQuestionId({ question_id: question?.id });
+    }
 
-    return res.status(400).json({ error: "Missing Chapter Types" });
+    return res.status(400).json(questions);
 });
 
 //tested

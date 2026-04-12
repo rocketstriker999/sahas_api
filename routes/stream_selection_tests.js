@@ -82,7 +82,7 @@ router.post("/", async (req, res) => {
 
             ### NOW ANALYZE THE RESPONSES AND RETURN JSON ONLY.`
 
-        logger.input(`Applying Input to AI - ${aiInput}`)
+        logger.info(`Applying Input to AI - ${aiInput}`)
 
         const response = await openai.responses.create({
             model: "gpt-4.1",

@@ -27,7 +27,7 @@ router.post("/", async (req, res) => {
             Below is a list of questions and answers collected from the student:
 
             ${req.body
-                    .map(({ question, option }) => `Q: ${question}\nA: ${option}`)
+                    .map(({ question, answer }) => `Q: ${question}\nA: ${answer?.option}`)
                     .join("\n\n")
                 }
 

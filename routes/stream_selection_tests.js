@@ -27,9 +27,9 @@ router.post("/", async (req, res) => {
             Below is a list of questions and answers collected from the student:
 
             ${req.body
-                    .map(({ question, answer }) => `Q: ${question}\nA: ${answer?.option}`)
-                    .join("\n\n")
-                }
+            .map(({ question, answer }) => `Q: ${question}\nA: ${answer?.option}`)
+            .join("\n\n")
+            }
 
             ### INSTRUCTIONS:
             1. Carefully interpret the student's personality, interests, and academic strengths from the responses.
@@ -57,19 +57,25 @@ router.post("/", async (req, res) => {
 
             ### OUTPUT RULES:
             - Return ONLY valid JSON (no explanation outside JSON)
-            - Keep suggestion under 50 words
-            - Keep each stream feedback under 20 words
+            - Keep suggestion under 75 words
+            - Each feedback item must be 15-20 words
+            - Provide 2-3 feedback points per stream
             - Use simple, student-friendly language
             - Be realistic, not overly motivational
 
             ### OUTPUT FORMAT:
             {
             "suggestion": "<direct advice to student>",
+            "suitable_stream": "<stream with highest percentage>",
             "analysis": [
                 {
                 "stream": "<stream name>",
                 "score": "<percentage>",
-                "feedback": "<short reason>"
+                "feedback": [
+                    "<feedback point 1>",
+                    "<feedback point 2>",
+                    "<feedback point 3>"
+                ]
                 }
             ]
             }
@@ -78,7 +84,9 @@ router.post("/", async (req, res) => {
             - Total score must equal 100%
             - Include ALL 4 streams
             - Order by score (highest first)
+            - "suitable_stream" must match the stream with highest score
             - Do not skip any stream
+            - Do not return empty feedback arrays
 
             ### NOW ANALYZE THE RESPONSES AND RETURN JSON ONLY.`
 

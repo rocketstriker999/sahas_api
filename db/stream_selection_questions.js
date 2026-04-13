@@ -73,7 +73,7 @@ function removeStreamSelectionQuestionOptionByQuestionId({ question_id }) {
 
 //freeze
 function getStreamSelectionQuestionOptionsByQuestionId({ question_id }) {
-    return executeSQLQueryParameterized("SELECT * FROM STREAM_SELECTION_QUESTION_OPTIONS WHERE question_id=?", [question_id]).catch((error) =>
+    return executeSQLQueryParameterized("SELECT * FROM STREAM_SELECTION_QUESTION_OPTIONS WHERE question_id=? ORDER BY id ASC", [question_id]).catch((error) =>
         logger.error(`getStreamSelectionQuestionOptionsByQuestionId: ${error}`),
     );
 }

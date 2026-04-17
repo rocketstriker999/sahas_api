@@ -26,10 +26,7 @@ router.post("/", async (req, res) => {
         ### STUDENT RESPONSES:
         Below is a list of questions and answers collected from the student:
 
-        ${req.body
-                        .map(({ question, answer }) => `Q: ${question}\nA: ${answer?.option}`)
-                        .join("\n\n")
-                    }
+        ${req.body.map(({ question, answer }) => `Q: ${question}\nA: ${answer?.option}`).join("\n\n")}
 
         ### ALLOWED STREAMS:
         - Science

@@ -21,74 +21,126 @@ router.post("/", async (req, res) => {
 
         const aiInput = `You are a career guidance expert specializing in stream selection for students after 10th standard.
 
-            Your task is to analyze a student's responses and recommend the most suitable stream.
+        Your task is to analyze a student's responses and recommend the most suitable stream.
 
-            ### STUDENT RESPONSES:
-            Below is a list of questions and answers collected from the student:
+        ### STUDENT RESPONSES:
+        Below is a list of questions and answers collected from the student:
 
-            ${req.body
-            .map(({ question, answer }) => `Q: ${question}\nA: ${answer?.option}`)
-            .join("\n\n")
-            }
+        ${req.body
+                        .map(({ question, answer }) => `Q: ${question}\nA: ${answer?.option}`)
+                        .join("\n\n")
+                    }
 
-            ### INSTRUCTIONS:
-            1. Carefully interpret the student's personality, interests, and academic strengths from the responses.
-            2. Identify signals related to:
-            - Interests (sports, subjects, activities)
-            - Academic strengths/weaknesses (especially Maths)
-            - Practical vs theoretical preference
-            - Career inclination (if hinted)
-            - Family background (low importance unless clearly relevant)
-            3. Do NOT assume missing information.
-            4. If Maths ability is unclear, treat it as neutral.
+        ### ALLOWED STREAMS:
+        - Science
+        - Commerce
+        - Diploma
+        - Arts
 
-            ### ALLOWED STREAMS:
-            - Science
-            - Commerce
-            - Diploma
-            - Engineering
+        ### CORE ANALYSIS INSTRUCTIONS:
+        1. Carefully interpret student's:
+        - Interests
+        - Academic strengths/weaknesses (especially Maths & Science)
+        - Personality traits
+        - Study behavior (hours, pressure tolerance)
+        - Career inclination
+        2. Do NOT assume missing information.
+        3. If something is unclear, treat it as neutral.
 
-            ### DECISION LOGIC:
-            - Strong interest alignment → highest weight
-            - Weak Maths → penalize Science & Engineering
-            - Strong Maths → boost Science & Engineering
-            - Practical inclination → favor Diploma
-            - Business/finance inclination → favor Commerce
+        ---
 
-            ### OUTPUT RULES:
-            - Return ONLY valid JSON (no explanation outside JSON)
-            - Keep suggestion under 75 words
-            - Each feedback item must be 15-20 words
-            - Provide 2-3 feedback points per stream
-            - Use simple, student-friendly language
-            - Be realistic, not overly motivational
+        ### DECISION LOGIC (VERY IMPORTANT)
 
-            ### OUTPUT FORMAT:
+        [a] COMMERCE SIGNALS:
+        If answers indicate:
+        - Business, money, finance, management, profit thinking
+        - Moderate/less study hours preference
+        - Conceptual understanding over rote learning
+        - Leadership, people management
+        - Interest in CA, MBA, finance, business
+        - Corporate jobs or own business goals
+        - Avoids pressure, enjoys social life, likes shows like Shark Tank
+
+        → STRONGLY FAVOR COMMERCE
+
+        ---
+
+        [b] SCIENCE SIGNALS:
+        If answers indicate:
+        - Interest in Physics, Chemistry, Maths, Biology
+        - Willingness for long study hours
+        - Comfort with equations, problem-solving
+        - Interest in engineering, medical, research
+        - Likes labs, machines, human body, science content
+
+        → STRONGLY FAVOR SCIENCE
+
+        ---
+
+        [c] ARTS SIGNALS:
+        If answers indicate:
+        - Creativity, writing, reading, history
+        - Psychology, human behavior
+        - Artistic or expressive interests
+
+        → FAVOR ARTS
+
+        ---
+
+        [d] DIPLOMA SIGNALS:
+        If answers indicate:
+        - Interest in machines, tools, repairing, practical work
+        - Hands-on learning preference over theory
+
+        → FAVOR DIPLOMA
+
+        ---
+
+        [e] DEFAULT BIAS:
+        - If signals are mixed or unclear → slightly favor COMMERCE
+
+        ---
+
+        ### OUTPUT RULES:
+        - Return ONLY valid JSON (no explanation outside JSON)
+        - Suggestion must be under 50 words
+        - Each feedback item must be 15–20 words
+        - Provide 2–3 feedback points per stream
+        - Use simple, student-friendly language
+        - Be practical and realistic
+
+        ---
+
+        ### OUTPUT FORMAT:
+        {
+        "suggestion": "<direct advice to student>",
+        "suitable_stream": "<stream with highest percentage>",
+        "analysis": [
             {
-            "suggestion": "<direct advice to student>",
-            "suitable_stream": "<stream with highest percentage>",
-            "analysis": [
-                {
-                "stream": "<stream name>",
-                "score": "<percentage>",
-                "feedback": [
-                    "<feedback point 1>",
-                    "<feedback point 2>",
-                    "<feedback point 3>"
-                ]
-                }
+            "stream": "<stream name>",
+            "score": "<percentage>",
+            "feedback": [
+                "<feedback point 1>",
+                "<feedback point 2>",
+                "<feedback point 3>"
             ]
             }
+        ]
+        }
 
-            ### STRICT CONSTRAINTS:
-            - Total score must equal 100%
-            - Include ALL 4 streams
-            - Order by score (highest first)
-            - "suitable_stream" must match the stream with highest score
-            - Do not skip any stream
-            - Do not return empty feedback arrays
+        ---
 
-            ### NOW ANALYZE THE RESPONSES AND RETURN JSON ONLY.`
+        ### STRICT CONSTRAINTS:
+        - Total score must equal 100%
+        - Include ALL 4 streams
+        - Order by score (highest first)
+        - "suitable_stream" must match highest score stream
+        - Do not skip any stream
+        - Do not return empty feedback arrays
+
+        ---
+
+        ### NOW ANALYZE THE RESPONSES AND RETURN JSON ONLY.`
 
         logger.info(`Applying Input to AI - ${aiInput}`)
 

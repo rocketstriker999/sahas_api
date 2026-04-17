@@ -8,7 +8,7 @@ const {
     addUser,
     patchUserFullNameById,
     patchUserPhoneById,
-    patchUserStreamSelectionTakenById,
+    patchUserStreamSelectionTestAllowedById,
 } = require("../db/users");
 const { getInquiriesByUserId } = require("../db/inquiries");
 const { validateRequestBody } = require("sahas_utils");
@@ -213,10 +213,10 @@ router.patch(
 );
 
 router.patch(
-    "/stream-selection-test-taken",
+    "/stream-selection-test-allowed",
     requires_authority(AUTHORITIES.UPDATE_USER),
     async (req, res, next) => {
-        const requiredBodyFields = ["id", "stream_selection_test_taken"];
+        const requiredBodyFields = ["id", "stream_selection_test_allowed"];
         const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
         if (!isRequestBodyValid) {
             return res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
@@ -225,7 +225,7 @@ router.patch(
         next();
     },
     async (req, res) => {
-        await patchUserStreamSelectionTakenById({ ...req.body });
+        await patchUserStreamSelectionTestAllowedById({ ...req.body });
         res.status(200).json(await getUserById({ id: req.body.id }));
     },
 );

@@ -1,10 +1,10 @@
 const libExpress = require("express");
 const { addStreamSelectionTest, addStreamSelectionTestAnswer, updateStreamSelectionTestResultById } = require("../db/stream_selection_tests");
 const openai = require("../libs/openai");
-const { updateStreamSelectionTestByUserId } = require("../db/users");
 const router = libExpress.Router();
 const { setTimeout } = require("timers/promises");
 const { logger } = require("sahas_utils");
+const { patchUserStreamSelectionTestAllowedById } = require("../db/users");
 
 //tested
 router.post("/", async (req, res) => {
@@ -101,8 +101,8 @@ router.post("/", async (req, res) => {
         ### OUTPUT RULES:
         - Return ONLY valid JSON (no explanation outside JSON)
         - Suggestion must be under 50 words
-        - Each feedback item must be 15–20 words
-        - Provide 2–3 feedback points per stream
+        - Each feedback item must be 15-20 words
+        - Provide 2-3 feedback points per stream
         - Use simple, student-friendly language
         - Be practical and realistic
 
@@ -149,7 +149,7 @@ router.post("/", async (req, res) => {
         await updateStreamSelectionTestResultById({ id: streamSelectionTestId, result: response.output[0].content[0].text });
 
         //update user that stream selection test is taken
-        updateStreamSelectionTestByUserId({ stream_selection_test_taken: true, user_id: req.user.id });
+        patchUserStreamSelectionTestAllowedById({ stream_selection_test_allowed: false, id: req.user.id });
 
         //Fake Delay
         await setTimeout(10000);

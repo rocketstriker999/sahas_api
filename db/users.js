@@ -211,12 +211,6 @@ function updateUserById({ id, email, full_name, phone, image, address, branch_id
     ]).catch((error) => logger.error(`updateUserById: ${error}`));
 }
 
-//freeze
-function updateStreamSelectionTestByUserId({ user_id, stream_selection_test_taken }) {
-    return executeSQLQueryParameterized(`UPDATE USERS SET stream_selection_test_taken=? WHERE id = ?`, [stream_selection_test_taken, user_id]).catch((error) =>
-        logger.error(`updateStreamSelectionTestByUserId: ${error}`),
-    );
-}
 
 //freeze
 function patchUserFullNameById({ id, full_name }) {
@@ -231,9 +225,9 @@ function patchUserPhoneById({ id, phone }) {
 }
 
 //freeze
-function patchUserStreamSelectionTakenById({ id, stream_selection_test_taken }) {
-    return executeSQLQueryParameterized(`UPDATE USERS SET stream_selection_test_taken=? WHERE id = ?`, [stream_selection_test_taken, id]).catch((error) =>
-        logger.error(`patchUserStreamSelectionTakenById: ${error}`),
+function patchUserStreamSelectionTestAllowedById({ id, stream_selection_test_allowed }) {
+    return executeSQLQueryParameterized(`UPDATE USERS SET stream_selection_test_allowed=? WHERE id = ?`, [stream_selection_test_allowed, id]).catch((error) =>
+        logger.error(`patchUserStreamSelectionTestAllowedById: ${error}`),
     );
 }
 
@@ -268,6 +262,5 @@ module.exports = {
     addUser,
     patchUserFullNameById,
     patchUserPhoneById,
-    updateStreamSelectionTestByUserId,
-    patchUserStreamSelectionTakenById,
+    patchUserStreamSelectionTestAllowedById,
 };

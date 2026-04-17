@@ -6,11 +6,10 @@ const {
     addStreamSelectionTestInvite,
     deleteStreamSelectionTestInviteById,
 } = require("../db/stream_selection_test_invites");
-const { updateStreamSelectionTestByUserId } = require("../db/users");
+const {  patchUserStreamSelectionTestAllowedById } = require("../db/users");
 const { validateRequestBody } = require("sahas_utils");
 const requires_authority = require("../middlewares/requires_authority");
 const { AUTHORITIES } = require("../constants");
-const { deleteStreamSelectionQuestionById } = require("../db/stream_selection_questions");
 
 const router = libExpress.Router();
 
@@ -44,7 +43,7 @@ router.get("/:id/attend", async (req, res) => {
     const invite = await getStreamSelectionTestInviteById({ id });
 
     if (invite && invite.active) {
-        await updateStreamSelectionTestByUserId({ user_id: req.user.id, stream_selection_test_taken: false });
+        await patchUserStreamSelectionTestAllowedById({ id: req.user.id, stream_selection_test_allowed: true });
         res.sendStatus(200);
     } else {
         res.status(400).json({ error: "Invite not found or inactive" });

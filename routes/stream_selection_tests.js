@@ -149,7 +149,7 @@ router.post("/", async (req, res) => {
         await updateStreamSelectionTestResultById({ id: streamSelectionTestId, result: response.output[0].content[0].text });
 
         //update user that stream selection test is taken
-        patchUserStreamSelectionTestAllowedById({ stream_selection_test_allowed: true, id: req.user.id });
+        patchUserStreamSelectionTestAllowedById({ stream_selection_test_allowed: false, id: req.user.id });
 
         //Fake Delay
         await setTimeout(10000);

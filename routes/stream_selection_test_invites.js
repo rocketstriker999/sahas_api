@@ -43,7 +43,7 @@ router.get("/:id/attend", async (req, res) => {
     const invite = await getStreamSelectionTestInviteById({ id });
 
     if (invite && invite.active) {
-        await patchUserStreamSelectionTestAllowedById({ id: req.user.id, stream_selection_test_allowed: false });
+        await patchUserStreamSelectionTestAllowedById({ id: req.user.id, stream_selection_test_allowed: true });
         res.sendStatus(200);
     } else {
         res.status(400).json({ error: "Invite not found or inactive" });

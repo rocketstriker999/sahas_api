@@ -96,6 +96,20 @@ router.get("/stream-selection-test-results/latest", async (req, res) => {
 });
 
 //tested
+router.get("/:id/stream-selection-test-results", async (req, res) => {
+    if (!req.params.id) {
+        return res.status(400).json({ error: "Missing User Id" });
+    }
+
+    const streamSelectionTests = await getStreamSelectionTestsByUserId({ user_id: req.params.id });
+
+    for (const streamSelectionTest of streamSelectionTests) {
+        streamSelectionTest.answers = await getStreamSelectionTestAnswersByStreamSelectionTestId({ stream_selection_test_id: streamSelectionTest?.id });
+    }
+    res.status(200).json(streamSelectionTests);
+});
+
+//tested
 router.get("/stream-selection-test-results", async (req, res) => {
     const streamSelectionTests = await getStreamSelectionTestsByUserId({ user_id: req?.user?.id });
 

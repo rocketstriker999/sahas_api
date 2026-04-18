@@ -198,19 +198,12 @@ function getCountUsersBySearchAndFilters(search, appliedFilters) {
 }
 
 //freeze
-function updateUserById({ id, email, full_name, phone, image, address, branch_id, active }) {
-    return executeSQLQueryParameterized(`UPDATE USERS SET email=?, full_name=?,phone=?,image=?,address=?,branch_id=?,active=? WHERE id = ?`, [
-        email?.toLowerCase(),
-        full_name,
-        phone,
-        image || null,
-        address,
-        branch_id,
-        active,
-        id,
-    ]).catch((error) => logger.error(`updateUserById: ${error}`));
+function updateUserById({ id, email, full_name, phone, image, address, branch_id, stream_selection_test_allowed = false, active }) {
+    return executeSQLQueryParameterized(
+        `UPDATE USERS SET email=?, full_name=?,phone=?,image=?,address=?,branch_id=?,stream_selection_test_allowed=?,active=? WHERE id = ?`,
+        [email?.toLowerCase(), full_name, phone, image || null, address, branch_id, stream_selection_test_allowed, active, id],
+    ).catch((error) => logger.error(`updateUserById: ${error}`));
 }
-
 
 //freeze
 function patchUserFullNameById({ id, full_name }) {

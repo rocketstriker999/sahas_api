@@ -96,6 +96,20 @@ router.get("/stream-selection-test-results/latest", async (req, res) => {
 });
 
 //tested
+router.get("/:id/stream-selection-test-results", async (req, res) => {
+    if (!req.params.id) {
+        return res.status(400).json({ error: "Missing User Id" });
+    }
+
+    const streamSelectionTests = await getStreamSelectionTestsByUserId({ user_id: req.params.id });
+
+    for (const streamSelectionTest of streamSelectionTests) {
+        streamSelectionTest.answers = await getStreamSelectionTestAnswersByStreamSelectionTestId({ stream_selection_test_id: streamSelectionTest?.id });
+    }
+    res.status(200).json(streamSelectionTests);
+});
+
+//tested
 router.get("/stream-selection-test-results", async (req, res) => {
     const streamSelectionTests = await getStreamSelectionTestsByUserId({ user_id: req?.user?.id });
 
@@ -212,23 +226,23 @@ router.patch(
     },
 );
 
-router.patch(
-    "/stream-selection-test-allowed",
-    requires_authority(AUTHORITIES.UPDATE_USER),
-    async (req, res, next) => {
-        const requiredBodyFields = ["id", "stream_selection_test_allowed"];
-        const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
-        if (!isRequestBodyValid) {
-            return res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
-        }
-        req.body = validatedRequestBody;
-        next();
-    },
-    async (req, res) => {
-        await patchUserStreamSelectionTestAllowedById({ ...req.body });
-        res.status(200).json(await getUserById({ id: req.body.id }));
-    },
-);
+// router.patch(
+//     "/stream-selection-test-allowed",
+//     requires_authority(AUTHORITIES.UPDATE_USER),
+//     async (req, res, next) => {
+//         const requiredBodyFields = ["id", "stream_selection_test_allowed"];
+//         const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+//         if (!isRequestBodyValid) {
+//             return res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+//         }
+//         req.body = validatedRequestBody;
+//         next();
+//     },
+//     async (req, res) => {
+//         await patchUserStreamSelectionTestAllowedById({ ...req.body });
+//         res.status(200).json(await getUserById({ id: req.body.id }));
+//     },
+// );
 
 //tested
 router.get("/:id/inquiries", requires_authority(AUTHORITIES.READ_USER_INQUIRIES), async (req, res) => {

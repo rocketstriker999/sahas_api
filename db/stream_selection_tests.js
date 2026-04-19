@@ -8,7 +8,7 @@ function addStreamSelectionTest({ user_id }) {
         .catch((error) => logger.error(`addStreamSelectionTest: ${error}`));
 }
 
-function addStreamSelectionTestAnswer({ stream_selection_test_id, question, answer }) {
+function addStreamSelectionTestAnswer({ stream_selection_test_id, question, answer=null }) {
     return executeSQLQueryParameterized("INSERT INTO STREAM_SELECTION_TEST_ANSWERS(stream_selection_test_id,question,answer) VALUES(?,?,?)", [
         stream_selection_test_id,
         question,

@@ -143,7 +143,7 @@ router.post("/", requires_authority(AUTHORITIES.CREATE_ENROLLMENT_TRANSACTION), 
         const enrollmentTransaction = await getEnrollmentTransactionById({ id: enrollmentTransactionId });
         const enrollmentUser = await getUserById({ id: enrollment.user_id });
 
-        if (validatedRequestBody?.type !== "SCH")
+        if (!["SCH", "DIS"].includes(validatedRequestBody?.type))
             //generate invoice
             await requestService({
                 requestServiceName: process.env.SERVICE_MEDIA,

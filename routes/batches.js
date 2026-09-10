@@ -20,6 +20,8 @@ const {
     addBatchAttendanceRecords,
     getBatchUserIds,
 } = require("../db/batches");
+const { addGlobalNotesForUsers } = require("../db/global_notes");
+const { addCounselingNotesForUsers } = require("../db/counseling_notes");
 
 const router = libExpress.Router();
 
@@ -124,6 +126,71 @@ router.post("/:id/attendance", requires_authority(AUTHORITIES.UPDATE_BATCH), asy
 
     const students = await getBatchAttendanceByDate({ batch_id: req.params.id, attendance_date });
     return res.status(200).json({ attendance_date, students });
+});
+
+router.post("/:id/global-notes", requires_authority(AUTHORITIES.CREATE_GLOBAL_NOTE), async (req, res) => {
+    if (!req.params.id) {
+        return res.status(400).json({ error: "Missing Batch Id" });
+    }
+
+    const requiredBodyFields = ["note"];
+    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+
+    if (!isRequestBodyValid) {
+        return res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+    }
+
+    const batch = await getBatchById({ id: req.params.id });
+    if (!batch) {
+        return res.status(400).json({ error: "Batch Not Exist" });
+    }
+
+    const user_ids = await getBatchUserIds({ batch_id: req.params.id });
+    if (!user_ids.length) {
+        return res.status(400).json({ error: "No Students In Batch" });
+    }
+
+    const count = await addGlobalNotesForUsers({
+        user_ids,
+        note: validatedRequestBody.note,
+        type: req.body.type ?? null,
+        created_by: req.user.id,
+    });
+
+    return res.status(201).json({ count });
+});
+
+router.post("/:id/counseling-notes", requires_authority(AUTHORITIES.CREATE_COUNSELING_NOTE), async (req, res) => {
+    if (!req.params.id) {
+        return res.status(400).json({ error: "Missing Batch Id" });
+    }
+
+    const requiredBodyFields = ["note"];
+    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+
+    if (!isRequestBodyValid) {
+        return res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+    }
+
+    const batch = await getBatchById({ id: req.params.id });
+    if (!batch) {
+        return res.status(400).json({ error: "Batch Not Exist" });
+    }
+
+    const user_ids = await getBatchUserIds({ batch_id: req.params.id });
+    if (!user_ids.length) {
+        return res.status(400).json({ error: "No Students In Batch" });
+    }
+
+    const count = await addCounselingNotesForUsers({
+        user_ids,
+        note: validatedRequestBody.note,
+        type: req.body.type ?? null,
+        attachment: req.body.attachment ?? null,
+        created_by: req.user.id,
+    });
+
+    return res.status(201).json({ count });
 });
 
 router.post("/:id/users", requires_authority(AUTHORITIES.UPDATE_BATCH), async (req, res) => {

@@ -40,6 +40,25 @@ async function addCounselingNote({ user_id, note, type = null, attachment = null
         });
 }
 
+async function addCounselingNotesForUsers({ user_ids, note, type = null, attachment = null, created_by }) {
+    if (!user_ids?.length) {
+        return 0;
+    }
+
+    const placeholders = user_ids.map(() => "(?,?,?,?,?)").join(",");
+    const parameters = [];
+    for (const user_id of user_ids) {
+        parameters.push(user_id, note, type, attachment, created_by);
+    }
+
+    return executeSQLQueryParameterized(`INSERT INTO COUNSELING_NOTES(user_id, note, type, attachment, created_by) VALUES ${placeholders}`, parameters)
+        .then((result) => result.affectedRows)
+        .catch((error) => {
+            logger.error(`addCounselingNotesForUsers: ${error}`);
+            return 0;
+        });
+}
+
 function updateCounselingNoteById({ id, note, type = null, attachment = null }) {
     return executeSQLQueryParameterized("UPDATE COUNSELING_NOTES SET note=?, type=?, attachment=? WHERE id=?", [note, type, attachment, id]).catch((error) => {
         logger.error(`updateCounselingNoteById: ${error}`);
@@ -51,5 +70,6 @@ module.exports = {
     getCounselingNoteById,
     deleteCounselingNoteById,
     addCounselingNote,
+    addCounselingNotesForUsers,
     updateCounselingNoteById,
 };

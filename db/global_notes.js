@@ -34,10 +34,29 @@ async function addGlobalNote({ user_id, note, type=null, created_by }) {
         });
 }
 
+async function addGlobalNotesForUsers({ user_ids, note, type = null, created_by }) {
+    if (!user_ids?.length) {
+        return 0;
+    }
+
+    const placeholders = user_ids.map(() => "(?,?,?,?)").join(",");
+    const parameters = [];
+    for (const user_id of user_ids) {
+        parameters.push(user_id, note, type, created_by);
+    }
+
+    return executeSQLQueryParameterized(`INSERT INTO GLOBAL_NOTES(user_id, note, type, created_by) VALUES ${placeholders}`, parameters)
+        .then((result) => result.affectedRows)
+        .catch((error) => {
+            logger.error(`addGlobalNotesForUsers: ${error}`);
+            return 0;
+        });
+}
+
 function updateGlobalNoteById({ id, note ,type=null}) {
     return executeSQLQueryParameterized("UPDATE GLOBAL_NOTES SET note=?, type=? WHERE id=?", [note, type, id]).catch((error) => {
         logger.error(`updateGlobalNoteById: ${error}`);
     });
 }
 
-module.exports = { getGlobalNotesByUserId, getGlobalNoteById, deleteGlobalNoteById, addGlobalNote, updateGlobalNoteById };
+module.exports = { getGlobalNotesByUserId, getGlobalNoteById, deleteGlobalNoteById, addGlobalNote, addGlobalNotesForUsers, updateGlobalNoteById };

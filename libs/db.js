@@ -767,21 +767,6 @@ async function generateDBTables() {
     ];
 
     await Promise.all(createUserTableQuery.map((query) => executeSQLQueryRaw(query)));
-
-    const alterUserColumns = [
-        "ALTER TABLE USERS ADD COLUMN prn_gr VARCHAR(64) NULL",
-        "ALTER TABLE USERS ADD COLUMN roll_no VARCHAR(64) NULL",
-    ];
-
-    for (const query of alterUserColumns) {
-        try {
-            await executeSQLQueryRaw(query);
-        } catch (error) {
-            if (error.code !== "ER_DUP_FIELDNAME") {
-                logger.error(`Failed To Alter Users Table ${query} - ${error.message}`);
-            }
-        }
-    }
 }
 
 // Utility function to execute SQL queries using promises

@@ -134,6 +134,10 @@ const routers = {
         middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
         router: require("./routes/policies"),
     },
+    "/batches": {
+        middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
+        router: require("./routes/batches"),
+    },
     "/exam-series": {
         middlewares: [requiresDeviceFingerPrint, parseAuthenticationToken, parseUserDevice, logRequest],
         router: require("./routes/exam_series"),

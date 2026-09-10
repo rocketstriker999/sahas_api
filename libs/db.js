@@ -24,6 +24,8 @@ async function generateDBTables() {
             image VARCHAR(64) NULL UNIQUE,
             address VARCHAR(256) NULL,
             branch_id INT NULL,
+            prn_gr VARCHAR(64) NULL,
+            roll_no VARCHAR(64) NULL,
             stream_selection_test_allowed BOOLEAN NOT NULL DEFAULT FALSE,
             active BOOLEAN NOT NULL DEFAULT TRUE,
             created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -566,6 +568,40 @@ async function generateDBTables() {
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`,
+        `CREATE TABLE IF NOT EXISTS BATCHES (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            title VARCHAR(96) NOT NULL,
+            description VARCHAR(512) NULL,
+            branch_id INT NULL,
+            start_date DATE NULL,
+            end_date DATE NULL,
+            active BOOLEAN NOT NULL DEFAULT TRUE,
+            created_by INT NULL,
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        )`,
+        `CREATE TABLE IF NOT EXISTS BATCH_USERS (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            batch_id INT NOT NULL,
+            user_id INT NOT NULL,
+            created_by INT NULL,
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE KEY unique_batch_user (batch_id, user_id),
+            INDEX idx_batch_users_batch (batch_id),
+            INDEX idx_batch_users_user (user_id)
+        )`,
+        `CREATE TABLE IF NOT EXISTS BATCH_ATTENDANCE (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            batch_id INT NOT NULL,
+            user_id INT NOT NULL,
+            attendance_date DATE NOT NULL,
+            status ENUM('PRESENT', 'ABSENT') NOT NULL,
+            created_by INT NULL,
+            created_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            UNIQUE KEY unique_batch_user_date (batch_id, user_id, attendance_date),
+            INDEX idx_batch_attendance_batch_date (batch_id, attendance_date)
+        )`,
 
         `INSERT IGNORE INTO CONFIGS (config_key, config_value) VALUES
         ('under_maintenance', 'false'),
@@ -591,6 +627,10 @@ async function generateDBTables() {
         ('USE_EMPLOYEE_CORNER', 'Employee Corner Visibility'),
         ('USE_PAGE_MY_EXPENSES', 'Page For Expense Submission'),
         ('USE_PAGE_MANAGE_EXAMS', 'Page For Exam Paper'),
+        ('USE_PAGE_MANAGE_BATCHES', 'Page For Managing Batches'),
+        ('CREATE_BATCH', 'Create Batch'),
+        ('UPDATE_BATCH', 'Update Batch'),
+        ('DELETE_BATCH', 'Delete Batch'),
         ('USE_ADMIN_CORNER', 'Admin Corner Visibility'),
         ('USE_PAGE_MANAGE_BRANCHES', 'Page For Managing Branches'),
         ('USE_PAGE_MANAGE_STREAMING_DEVICES_REQUESTS', 'Page For Managing Streaming Device Requests'),
@@ -727,6 +767,21 @@ async function generateDBTables() {
     ];
 
     await Promise.all(createUserTableQuery.map((query) => executeSQLQueryRaw(query)));
+
+    const alterUserColumns = [
+        "ALTER TABLE USERS ADD COLUMN prn_gr VARCHAR(64) NULL",
+        "ALTER TABLE USERS ADD COLUMN roll_no VARCHAR(64) NULL",
+    ];
+
+    for (const query of alterUserColumns) {
+        try {
+            await executeSQLQueryRaw(query);
+        } catch (error) {
+            if (error.code !== "ER_DUP_FIELDNAME") {
+                logger.error(`Failed To Alter Users Table ${query} - ${error.message}`);
+            }
+        }
+    }
 }
 
 // Utility function to execute SQL queries using promises

@@ -648,6 +648,11 @@ async function generateDBTables() {
         ('READ_USER_GLOBAL_NOTES', 'View User Global Notes'),
         ('READ_USER_COUNSELING_NOTES', 'View User Counseling Notes'),
 
+        ('CREATE_GLOBAL_NOTE', 'Create Global Note'),
+        ('READ_GLOBAL_NOTE', 'Read Global Note'),
+        ('UPDATE_GLOBAL_NOTE', 'Update Global Note'),
+        ('DELETE_GLOBAL_NOTE', 'Delete Global Note'),
+
         ('CREATE_COUNSELING_NOTE', 'Create Counseling Note'),
         ('READ_COUNSELING_NOTE', 'Read Counseling Note'),
         ('UPDATE_COUNSELING_NOTE', 'Update Counseling Note'),
@@ -749,6 +754,33 @@ async function generateDBTables() {
 
         ('CREATE_AUTHORITIES','Create Authorities'),
         ('DELETE_AUTHORITIES','Delete Authorities and Role Authority'),
+
+        ('CREATE_POLICY', 'Create Policy'),
+        ('UPDATE_POLICY', 'Update Policy'),
+        ('DELETE_POLICY', 'Delete Policy'),
+        ('UPDATE_POLICY_VIEW_INDEX', 'Update Policy View Index'),
+
+        ('CREATE_STREAM_SELECTION_TEST_QUESTION', 'Create Stream Selection Test Question'),
+        ('UPDATE_STREAM_SELECTION_TEST_QUESTION', 'Update Stream Selection Test Question'),
+        ('DELETE_STREAM_SELECTION_TEST_QUESTION', 'Delete Stream Selection Test Question'),
+
+        ('CREATE_STREAM_SELECTION_QUESTION_CATEGORY', 'Create Stream Selection Question Category'),
+        ('UPDATE_STREAM_SELECTION_QUESTION_CATEGORY', 'Update Stream Selection Question Category'),
+        ('DELETE_STREAM_SELECTION_QUESTION_CATEGORY', 'Delete Stream Selection Question Category'),
+
+        ('CREATE_STREAM_SELECTION_TEST_INVITE', 'Create Stream Selection Test Invite'),
+        ('UPDATE_STREAM_SELECTION_TEST_INVITE', 'Update Stream Selection Test Invite'),
+        ('DELETE_STREAM_SELECTION_TEST_INVITE', 'Delete Stream Selection Test Invite'),
+
+        ('WRITE_USER_BASICS', 'Write User Basic Profile'),
+        ('READ_USER_BASICS', 'Read User Basic Profile'),
+        ('UPDATE_USER_ENROLLMENTS', 'Update User Enrollments'),
+        ('USE_PAGE_INQUIRIES', 'Page For Managing Inquiries'),
+        ('UPDATE_COURSE_SUBJECT', 'Update Course Subject'),
+        ('ASSIGN_COURSE_SUBJECT', 'Assign Course Subject'),
+        ('READ_MEDIA_UPDATE', 'Read Media For Update'),
+        ('UPDATE_MEDIA_VIEW_INDEX', 'Update Media View Index'),
+        ('MANAGE_USER_STREAMING_DEVICES', 'Manage User Streaming Devices'),
 
         ('CREATE_USER_NOTE', 'Create User Note'),
         ('READ_USER_NOTE', 'Read User Note'),

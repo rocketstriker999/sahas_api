@@ -156,6 +156,57 @@ function removeUserFromBatch({ batch_id, user_id }) {
         .catch((error) => logger.error(`removeUserFromBatch: ${error}`));
 }
 
+function getBatchAttendanceByDate({ batch_id, attendance_date }) {
+    return executeSQLQueryParameterized(
+        `SELECT USERS.id AS user_id, USERS.full_name, USERS.roll_no, BATCH_ATTENDANCE.status
+         FROM BATCH_USERS
+         INNER JOIN USERS ON USERS.id = BATCH_USERS.user_id
+         LEFT JOIN BATCH_ATTENDANCE
+           ON BATCH_ATTENDANCE.batch_id = BATCH_USERS.batch_id
+          AND BATCH_ATTENDANCE.user_id = BATCH_USERS.user_id
+          AND BATCH_ATTENDANCE.attendance_date = ?
+         WHERE BATCH_USERS.batch_id = ?
+         ORDER BY USERS.full_name ASC`,
+        [attendance_date, batch_id],
+    ).catch((error) => {
+        logger.error(`getBatchAttendanceByDate: ${error}`);
+        return [];
+    });
+}
+
+function deleteBatchAttendanceByDate({ batch_id, attendance_date }) {
+    return executeSQLQueryParameterized(`DELETE FROM BATCH_ATTENDANCE WHERE batch_id=? AND attendance_date=?`, [batch_id, attendance_date]).catch((error) =>
+        logger.error(`deleteBatchAttendanceByDate: ${error}`),
+    );
+}
+
+function addBatchAttendanceRecords({ batch_id, attendance_date, records, created_by = null }) {
+    if (!records?.length) {
+        return Promise.resolve();
+    }
+
+    const placeholders = records.map(() => "(?,?,?,?,?)").join(",");
+    const parameters = [];
+
+    for (const record of records) {
+        parameters.push(batch_id, record.user_id, attendance_date, record.status, created_by);
+    }
+
+    return executeSQLQueryParameterized(
+        `INSERT INTO BATCH_ATTENDANCE (batch_id, user_id, attendance_date, status, created_by) VALUES ${placeholders}`,
+        parameters,
+    ).catch((error) => logger.error(`addBatchAttendanceRecords: ${error}`));
+}
+
+function getBatchUserIds({ batch_id }) {
+    return executeSQLQueryParameterized(`SELECT user_id FROM BATCH_USERS WHERE batch_id = ?`, [batch_id])
+        .then((result) => result.map((row) => row.user_id))
+        .catch((error) => {
+            logger.error(`getBatchUserIds: ${error}`);
+            return [];
+        });
+}
+
 module.exports = {
     getAllBatches,
     getBatchById,
@@ -170,4 +221,8 @@ module.exports = {
     isUserInBatch,
     addUserToBatch,
     removeUserFromBatch,
+    getBatchAttendanceByDate,
+    deleteBatchAttendanceByDate,
+    addBatchAttendanceRecords,
+    getBatchUserIds,
 };

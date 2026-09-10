@@ -15,6 +15,10 @@ const {
     isUserInBatch,
     addUserToBatch,
     removeUserFromBatch,
+    getBatchAttendanceByDate,
+    deleteBatchAttendanceByDate,
+    addBatchAttendanceRecords,
+    getBatchUserIds,
 } = require("../db/batches");
 
 const router = libExpress.Router();
@@ -52,6 +56,74 @@ router.get("/:id/assignable-users", requires_authority(AUTHORITIES.USE_PAGE_MANA
     }
 
     return res.status(200).json(await getAssignableUsersForBatch({ batch_id: req.params.id, search, limit: 10 }));
+});
+
+router.get("/:id/attendance", requires_authority(AUTHORITIES.USE_PAGE_MANAGE_BATCHES), async (req, res) => {
+    if (!req.params.id) {
+        return res.status(400).json({ error: "Missing Batch Id" });
+    }
+
+    const attendance_date = typeof req.query.date === "string" ? req.query.date.trim() : "";
+    if (!attendance_date) {
+        return res.status(400).json({ error: "Missing Attendance Date" });
+    }
+
+    const batch = await getBatchById({ id: req.params.id });
+    if (!batch) {
+        return res.status(400).json({ error: "Batch Not Exist" });
+    }
+
+    const students = await getBatchAttendanceByDate({ batch_id: req.params.id, attendance_date });
+    return res.status(200).json({ attendance_date, students });
+});
+
+router.post("/:id/attendance", requires_authority(AUTHORITIES.UPDATE_BATCH), async (req, res) => {
+    if (!req.params.id) {
+        return res.status(400).json({ error: "Missing Batch Id" });
+    }
+
+    const requiredBodyFields = ["attendance_date", "records"];
+    const { isRequestBodyValid, missingRequestBodyFields, validatedRequestBody } = validateRequestBody(req.body, requiredBodyFields);
+
+    if (!isRequestBodyValid) {
+        return res.status(400).json({ error: `Missing ${missingRequestBodyFields?.join(",")}` });
+    }
+
+    const { attendance_date, records } = validatedRequestBody;
+    if (!Array.isArray(records)) {
+        return res.status(400).json({ error: "Records Must Be An Array" });
+    }
+
+    for (const record of records) {
+        if (!record?.user_id || !["PRESENT", "ABSENT"].includes(record?.status)) {
+            return res.status(400).json({ error: "Invalid Attendance Record" });
+        }
+    }
+
+    const batch = await getBatchById({ id: req.params.id });
+    if (!batch) {
+        return res.status(400).json({ error: "Batch Not Exist" });
+    }
+
+    const batchUserIds = await getBatchUserIds({ batch_id: req.params.id });
+    const batchUserIdSet = new Set(batchUserIds.map((id) => Number(id)));
+
+    for (const record of records) {
+        if (!batchUserIdSet.has(Number(record.user_id))) {
+            return res.status(400).json({ error: "User Not In Batch" });
+        }
+    }
+
+    await deleteBatchAttendanceByDate({ batch_id: req.params.id, attendance_date });
+    await addBatchAttendanceRecords({
+        batch_id: req.params.id,
+        attendance_date,
+        records,
+        created_by: req.user?.id,
+    });
+
+    const students = await getBatchAttendanceByDate({ batch_id: req.params.id, attendance_date });
+    return res.status(200).json({ attendance_date, students });
 });
 
 router.post("/:id/users", requires_authority(AUTHORITIES.UPDATE_BATCH), async (req, res) => {

@@ -207,6 +207,20 @@ function getBatchUserIds({ batch_id }) {
         });
 }
 
+function getAssignableBatchesForUser({ user_id }) {
+    return executeSQLQueryParameterized(
+        `SELECT BATCHES.*, BRANCHES.title AS branch_title
+         FROM BATCHES
+         LEFT JOIN BRANCHES ON BATCHES.branch_id = BRANCHES.id
+         WHERE BATCHES.id NOT IN (SELECT batch_id FROM BATCH_USERS WHERE user_id = ?)
+         ORDER BY BATCHES.id DESC`,
+        [user_id],
+    ).catch((error) => {
+        logger.error(`getAssignableBatchesForUser: ${error}`);
+        return [];
+    });
+}
+
 module.exports = {
     getAllBatches,
     getBatchById,
@@ -217,6 +231,7 @@ module.exports = {
     getUsersByBatchId,
     getBatchUserById,
     getAssignableUsersForBatch,
+    getAssignableBatchesForUser,
     isUserAssignable,
     isUserInBatch,
     addUserToBatch,

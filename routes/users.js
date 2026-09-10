@@ -35,7 +35,7 @@ const { hasRequiredAuthority } = require("../utils");
 const requires_authority = require("../middlewares/requires_authority");
 const { AUTHORITIES } = require("../constants");
 const { addUserHistory, getUserHistoryById, updateUserHistoryById } = require("../db/user_history");
-const { getBatchesByUserId } = require("../db/batches");
+const { getBatchesByUserId, getAssignableBatchesForUser } = require("../db/batches");
 const {
     getLatestStreamSelectionTestByUserId,
     getStreamSelectionTestsByUserId,
@@ -265,6 +265,20 @@ router.get("/:id/batches", requires_authority(AUTHORITIES.READ_USER), async (req
     }
 
     res.status(200).json(await getBatchesByUserId({ user_id: id }));
+});
+
+router.get("/:id/assignable-batches", requires_authority(AUTHORITIES.UPDATE_BATCH), async (req, res) => {
+    const { id } = req.params;
+    if (!id) {
+        return res.status(400).json({ error: "Missing User Id" });
+    }
+
+    const user = await getUserById({ id });
+    if (!user) {
+        return res.status(400).json({ error: "User Not Exist" });
+    }
+
+    res.status(200).json(await getAssignableBatchesForUser({ user_id: id }));
 });
 
 // Get all counseling notes for a specific user
